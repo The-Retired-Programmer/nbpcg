@@ -1,0 +1,41 @@
+ DEPENDENCY INFORMATION for NBPCG Generated Modules.
+ 
+ NBPCG does not currently setup dependencies for the generated modules
+ (either on NBPCG support libraries or Netbean Platform modules). The
+ following documentation details the dependencies that exist and should
+ be added to the various generated modules.
+ 
+                                  Datamodel  NodeModel NodeViewer      NodeEditor 
+ NETBEANS PLATFORM
+ Explorer & Property Sheet API                    x           x
+ Lookup API                           x                       x               x 
+ Nodes API                                        x           x               x           
+ UI Utilities API                                             x               x 
+ Utilities API                                    x           x               x
+ Window System API                                            x               x
+
+ NBPCG LIBS
+ MySQL                                x                                         
+ NBPCG Data Support Lib               x           x           x               x
+ NBPCG Form Support Lib                                                       x
+ NBPCG Node Support Lib                           x           x               x
+ NBPCG Support Lib                    x           x           x               x           
+ NBPCG TopComponent Support Lib                               x               x
+ 
+ GENERATED MODULES
+ XX DataModel                                     x           x               x
+ XX NodeModel                                                 x               x
+ XX NodeEditor                                                x
+ 
+ 
+ If you are using table aliases to access other tables the you will need to add addition dependencies to those modules.
+ 
+ ALIAS MODULES
+ AA DataModel                         x           x           x                x
+ 
+ 
+ If you are using custom actions then you will need to add additional dependencies to those modules.
+ 
+ CUSTOM ACTION MODULES
+ XX                                               x
+     

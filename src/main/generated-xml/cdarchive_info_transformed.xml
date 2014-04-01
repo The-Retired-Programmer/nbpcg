@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nbpcginfo name="CD Archive">
+    <entityinfo key="Cd" name="Cd" dbservice="CdarchiveDBService" dbname="Cd" parent="CdRoot" parentcvu="Cd">
+        <field name="name" dbname="name" type="String" javatype="String" initialisation=" = &quot;&quot;" javarsget="getString" propertyclass="String" fieldclass="TextField" sqltype="VARCHAR(10)" nullsql="NOT NULL" uniquesql="" index="unique" min="1" max="10" rvid="name" rv="name" rvu="Name" rvallu="NAME" label="Name"/>
+        <field name="volumelabel" dbname="volumelabel" type="String" javatype="String" initialisation=" = &quot;&quot;" javarsget="getString" propertyclass="String" fieldclass="TextField" sqltype="VARCHAR(100)" nullsql="NOT NULL" uniquesql="" index="yes" min="1" max="100" rvid="volumelabel" rv="volumelabel" rvu="Volumelabel" rvallu="VOLUMELABEL" label="Volumelabel"/>
+        <field name="burndate" dbname="burndate" type="date" javatype="DateOnly" initialisation=" = new DateOnly()" javarsget="getString" propertyclass="DateOnly" fieldclass="TextField" sqltype="VARCHAR(8)" nullsql="NOT NULL" uniquesql="" index="yes" rvid="burndate" rv="burndate" rvu="Burndate" rvallu="BURNDATE" label="Burndate"/>
+        <field name="comment" dbname="comment" type="String" javatype="String" initialisation=" = &quot;&quot;" javarsget="getString" propertyclass="String" fieldclass="TextField" sqltype="VARCHAR(5000)" nullsql="NOT NULL" uniquesql="" min="1" max="5000" rvid="comment" rv="comment" rvu="Comment" rvallu="COMMENT" label="Comment"/>
+        <child name="folder" dbname="cd" references="Folder" cv="folder" cvu="Folder" cvallu="FOLDER" rvu="ParentCd"/>
+        <child name="file" dbname="cd" references="File" cv="file" cvu="File" cvallu="FILE" rvu="ParentCd"/>
+        <child name="ownedFolder" dbname="cd" references="Folder" cv="ownedFolder" cvu="OwnedFolder" cvallu="OWNEDFOLDER" rvu="OwningCd"/>
+        <child name="ownedFile" dbname="cd" references="File" cv="ownedFile" cvu="OwnedFile" cvallu="OWNEDFILE" rvu="OwningCd"/>
+    </entityinfo>
+    <entityinfo key="Folder" name="Folder" dbservice="CdarchiveDBService" dbname="Folder">
+        <field name="name" dbname="name" type="String" javatype="String" initialisation=" = &quot;&quot;" javarsget="getString" propertyclass="String" fieldclass="TextField" sqltype="VARCHAR(100)" nullsql="NOT NULL" uniquesql="" index="yes" min="1" max="100" rvid="name" rv="name" rvu="Name" rvallu="NAME" label="Name"/>
+        <field name="inarchive" dbname="inarchive" type="boolean" javatype="boolean" initialisation=" = false" javarsget="getBoolean" propertyclass="Boolean" fieldclass="CheckboxField" sqltype="BOOLEAN" nullsql="NOT NULL" uniquesql="" index="yes" rvid="inarchive" rv="inarchive" rvu="Inarchive" rvallu="INARCHIVE" label="Inarchive"/>
+        <field name="path" dbname="path" type="String" javatype="String" initialisation=" = &quot;&quot;" javarsget="getString" propertyclass="String" fieldclass="TextField" sqltype="VARCHAR(500)" nullsql="NOT NULL" uniquesql="" index="yes" min="1" max="500" rvid="path" rv="path" rvu="Path" rvallu="PATH" label="Path"/>
+        <field name="parentCd" dbname="parentCd" type="ref" references="Cd" parentfactory="Cd" pcvu="Cd" implements="CdChild" javatype="int" initialisation="" javarsget="getInt" propertyclass="String" fieldclass="ReferenceChoiceField" sqltype="MEDIUMINT UNSIGNED" nullsql="NULL" uniquesql="" optional="yes" rv="parentCd" rvu="ParentCd" rvallu="PARENTCD" rvid="parentCdId" cvu="Folder" label="Parent CD"/>
+        <field name="parentFolder" dbname="parentFolder" type="ref" references="Folder" parentfactory="CdChild" pprvu="Cd" pcvu="Folder" implements="FolderChild" javatype="int" initialisation="" javarsget="getInt" propertyclass="String" fieldclass="ReferenceChoiceField" sqltype="MEDIUMINT UNSIGNED" nullsql="NULL" uniquesql="" optional="yes" fkey="no" rv="parentFolder" rvu="ParentFolder" rvallu="PARENTFOLDER" rvid="parentFolderId" cvu="Folder" label="Parent Folder"/>
+        <field name="parentFile" dbname="parentFile" type="ref" references="File" parentfactory="CdChild" pprvu="Cd" pcvu="File" implements="FileChild" javatype="int" initialisation="" javarsget="getInt" propertyclass="String" fieldclass="ReferenceChoiceField" sqltype="MEDIUMINT UNSIGNED" nullsql="NULL" uniquesql="" optional="yes" fkey="no" rv="parentFile" rvu="ParentFile" rvallu="PARENTFILE" rvid="parentFileId" cvu="Folder" label="Parent File"/>
+        <field name="owningCd" dbname="owningCd" type="ref" references="Cd" parentfactory="Cd" pcvu="Cd" implements="CdChild" javatype="int" initialisation="" javarsget="getInt" propertyclass="String" fieldclass="ReferenceChoiceField" sqltype="MEDIUMINT UNSIGNED" nullsql="NOT NULL" uniquesql="" rv="owningCd" rvu="OwningCd" rvallu="OWNINGCD" rvid="owningCdId" cvu="OwnedFolder" label="Owning CD"/>
+        <child name="folder" dbname="folder" references="Folder" cv="folder" cvu="Folder" cvallu="FOLDER" rvu="ParentFolder"/>
+        <child name="file" dbname="folder" references="File" cv="file" cvu="File" cvallu="FILE" rvu="ParentFolder"/>
+    </entityinfo>
+    <entityinfo key="File" name="File" dbservice="CdarchiveDBService" dbname="File">
+        <field name="name" dbname="name" type="String" javatype="String" initialisation=" = &quot;&quot;" javarsget="getString" propertyclass="String" fieldclass="TextField" sqltype="VARCHAR(100)" nullsql="NOT NULL" uniquesql="" index="yes" min="1" max="100" rvid="name" rv="name" rvu="Name" rvallu="NAME" label="Name"/>
+        <field name="ext" dbname="ext" type="String" javatype="String" initialisation=" = &quot;&quot;" javarsget="getString" propertyclass="String" fieldclass="TextField" sqltype="VARCHAR(100)" nullsql="NOT NULL" uniquesql="" index="yes" min="1" max="100" rvid="ext" rv="ext" rvu="Ext" rvallu="EXT" label="Ext"/>
+        <field name="inarchive" dbname="inarchive" type="boolean" javatype="boolean" initialisation=" = false" javarsget="getBoolean" propertyclass="Boolean" fieldclass="CheckboxField" sqltype="BOOLEAN" nullsql="NOT NULL" uniquesql="" index="yes" rvid="inarchive" rv="inarchive" rvu="Inarchive" rvallu="INARCHIVE" label="Inarchive"/>
+        <field name="isarchive" dbname="isarchive" type="boolean" javatype="boolean" initialisation=" = false" javarsget="getBoolean" propertyclass="Boolean" fieldclass="CheckboxField" sqltype="BOOLEAN" nullsql="NOT NULL" uniquesql="" index="yes" rvid="isarchive" rv="isarchive" rvu="Isarchive" rvallu="ISARCHIVE" label="Isarchive"/>
+        <field name="path" dbname="path" type="String" javatype="String" initialisation=" = &quot;&quot;" javarsget="getString" propertyclass="String" fieldclass="TextField" sqltype="VARCHAR(500)" nullsql="NOT NULL" uniquesql="" index="yes" min="1" max="500" rvid="path" rv="path" rvu="Path" rvallu="PATH" label="Path"/>
+        <field name="filesize" dbname="filesize" type="long" javatype="long" initialisation=" = 0" javarsget="getLong" propertyclass="Long" fieldclass="TextField" sqltype="BIGINT" nullsql="NOT NULL" uniquesql="" index="yes" rvid="filesize" rv="filesize" rvu="Filesize" rvallu="FILESIZE" label="Filesize"/>
+        <field name="lastmodified" dbname="lastmodified" type="datetime" javatype="Timestamp" initialisation=" = new Timestamp()" javarsget="getString" propertyclass="Timestamp" fieldclass="TextField" sqltype="VARCHAR(14)" nullsql="NOT NULL" uniquesql="" index="yes" rvid="lastmodified" rv="lastmodified" rvu="Lastmodified" rvallu="LASTMODIFIED" label="Last Modified"/>
+        <field name="parentFolder" dbname="parentFolder" type="ref" references="Folder" parentfactory="CdChild" pprvu="Cd" pcvu="Folder" implements="FolderChild" javatype="int" initialisation="" javarsget="getInt" propertyclass="String" fieldclass="ReferenceChoiceField" sqltype="MEDIUMINT UNSIGNED" nullsql="NULL" uniquesql="" optional="yes" fkey="no" rv="parentFolder" rvu="ParentFolder" rvallu="PARENTFOLDER" rvid="parentFolderId" cvu="File" label="Parent Folder"/>
+        <field name="parentCd" dbname="parentCd" type="ref" references="Cd" parentfactory="Cd" pcvu="Cd" implements="CdChild" javatype="int" initialisation="" javarsget="getInt" propertyclass="String" fieldclass="ReferenceChoiceField" sqltype="MEDIUMINT UNSIGNED" nullsql="NULL" uniquesql="" optional="yes" rv="parentCd" rvu="ParentCd" rvallu="PARENTCD" rvid="parentCdId" cvu="File" label="Parent CD"/>
+        <field name="parentFile" dbname="parentFile" type="ref" references="File" parentfactory="CdChild" pprvu="Cd" pcvu="File" implements="FileChild" javatype="int" initialisation="" javarsget="getInt" propertyclass="String" fieldclass="ReferenceChoiceField" sqltype="MEDIUMINT UNSIGNED" nullsql="NULL" uniquesql="" optional="yes" fkey="no" rv="parentFile" rvu="ParentFile" rvallu="PARENTFILE" rvid="parentFileId" cvu="File" label="Parent File"/>
+        <field name="owningCd" dbname="owningCd" type="ref" references="Cd" parentfactory="Cd" pcvu="Cd" implements="CdChild" javatype="int" initialisation="" javarsget="getInt" propertyclass="String" fieldclass="ReferenceChoiceField" sqltype="MEDIUMINT UNSIGNED" nullsql="NOT NULL" uniquesql="" rv="owningCd" rvu="OwningCd" rvallu="OWNINGCD" rvid="owningCdId" cvu="OwnedFile" label="Owning CD"/>
+        <child name="folder" dbname="file" references="Folder" cv="folder" cvu="Folder" cvallu="FOLDER" rvu="ParentFile"/>
+        <child name="file" dbname="file" references="File" cv="file" cvu="File" cvallu="FILE" rvu="ParentFile"/>
+    </entityinfo>
+    <entityinfo key="Extensiongroup" name="Extensiongroup" dbservice="CdarchiveDBService" dbname="Extensiongroup" parent="ExtensiongroupRoot" parentcvu="Extensiongroup">
+        <field name="name" dbname="name" type="String" javatype="String" initialisation=" = &quot;&quot;" javarsget="getString" propertyclass="String" fieldclass="TextField" sqltype="VARCHAR(50)" nullsql="NOT NULL" uniquesql="" index="unique" min="1" max="50" rvid="name" rv="name" rvu="Name" rvallu="NAME" label="Name"/>
+        <field name="icon" dbname="icon" type="String" javatype="String" initialisation=" = &quot;&quot;" javarsget="getString" propertyclass="String" fieldclass="TextField" sqltype="VARCHAR(100)" nullsql="NOT NULL" uniquesql="" min="1" max="100" rvid="icon" rv="icon" rvu="Icon" rvallu="ICON" label="Icon"/>
+        <child name="extension" dbname="extensiongroup" references="Extension" cv="extension" cvu="Extension" cvallu="EXTENSION" rvu="Extensiongroup"/>
+    </entityinfo>
+    <entityinfo key="Extension" name="Extension" dbservice="CdarchiveDBService" dbname="Extension">
+        <field name="ext" dbname="ext" type="String" javatype="String" initialisation=" = &quot;&quot;" javarsget="getString" propertyclass="String" fieldclass="TextField" sqltype="VARCHAR(100)" nullsql="NOT NULL" uniquesql="" index="unique" min="1" max="100" rvid="ext" rv="ext" rvu="Ext" rvallu="EXT" label="Ext"/>
+        <field name="extensiongroup" dbname="extensiongroup" type="ref" references="Extensiongroup" parentfactory="Extensiongroup" pcvu="Extensiongroup" javatype="int" initialisation="" javarsget="getInt" propertyclass="String" fieldclass="ReferenceChoiceField" sqltype="MEDIUMINT UNSIGNED" nullsql="NOT NULL" uniquesql="" rv="extensiongroup" rvu="Extensiongroup" rvallu="EXTENSIONGROUP" rvid="extensiongroupId" cvu="Extension" label="Extensiongroup"/>
+    </entityinfo>
+    <entityinfo key="CdRoot" name="CdRoot">
+        <child name="cd" references="Cd" cv="cd" cvu="Cd" cvallu="CD"/>
+    </entityinfo>
+    <entityinfo key="ExtensiongroupRoot" name="ExtensiongroupRoot">
+        <child name="extensiongroup" references="Extensiongroup" cv="extensiongroup" cvu="Extensiongroup" cvallu="EXTENSIONGROUP"/>
+    </entityinfo>
+    <nodeinfo key="CdRoot" name="CdRoot" entity="CdRoot" label="Cds" viewers="Manager" icon="drive_cd" childname="Cd"/>
+    <nodeinfo key="Cd:CdRoot" name="Cd" entity="Cd" displaynameformat="{name}" label="CD" icon="cd" childname="CdChild" childisinterface="yes" displayname="Name" displaytype="String" displayclass=""/>
+    <nodeinfo key="ParentCd:Cd" name="ParentCd" entity="Folder" parentfactory="Cd" displaynameformat="{name}" label="Parent CD" icon="folder" childname="FolderChild" childisinterface="yes" displayname="Name" displaytype="String" displayclass=""/>
+    <nodeinfo key="ParentFolder:Folder" name="ParentFolder" entity="Folder" parentfactory="CdChild" displaynameformat="{name}" label="Parent Folder" icon="folder" childname="Folder" displayname="Name" displaytype="String" displayclass=""/>
+    <nodeinfo key="ParentFolder:Folder" name="ParentFolder" entity="File" parentfactory="CdChild" displaynameformat="{name}" label="Parent Folder" icon="page" childname="File" displayname="Name" displaytype="String" displayclass=""/>
+    <nodeinfo key="ParentCd:Cd" name="ParentCd" entity="File" parentfactory="Cd" displaynameformat="{name}" label="Parent CD" icon="page" childname="FileChild" childisinterface="yes" displayname="Name" displaytype="String" displayclass=""/>
+    <nodeinfo key="ParentFile:File" name="ParentFile" entity="Folder" parentfactory="CdChild" displaynameformat="{name}" label="Parent File" icon="folder" childname="Folder" displayname="Name" displaytype="String" displayclass=""/>
+    <nodeinfo key="ParentFile:File" name="ParentFile" entity="File" parentfactory="CdChild" displaynameformat="{name}" label="Parent File" icon="page" childname="File" displayname="Name" displaytype="String" displayclass=""/>
+    <nodeinfo key="OwningCd:Cd" name="OwningCd" entity="Folder" parentfactory="Cd" displaynameformat="{name}" label="Owning CD" icon="folder" childname="Folder" displayname="Name" displaytype="String" displayclass=""/>
+    <nodeinfo key="OwningCd:Cd" name="OwningCd" entity="File" parentfactory="Cd" displaynameformat="{name}" label="Owning CD" icon="page" childname="File" displayname="Name" displaytype="String" displayclass=""/>
+    <nodeinfo key="ExtensiongroupRoot" name="ExtensiongroupRoot" entity="ExtensiongroupRoot" label="Extensiongroups" viewers="Manager" icon="folder" childname="Extensiongroup"/>
+    <nodeinfo key="Extensiongroup:ExtensiongroupRoot" name="Extensiongroup" entity="Extensiongroup" displaynameformat="{name}" label="Extension Group" icon="folder_picture" childname="Extension" displayname="Name" displaytype="String" displayclass=""/>
+    <nodeinfo key="Extension:Extensiongroup" name="Extension" entity="Extension" parentfactory="Extensiongroup" displaynameformat="{ext}" label="Extension" icon="picture" childname="Extension" displayname="Ext" displaytype="String" displayclass=""/>
+    <nodestructureinfo key="CdRoot" usenodeinfo="CdRoot" useentityinfo="CdRoot">
+        <nodestructureinfo usenodeinfo="Cd:CdRoot" useentityinfo="Cd">
+            <nodestructureinfo usenodeinfo="Folder:Cd" useentityinfo="Folder">
+                <nodestructureinfo usenodeinfo="Folder:Folder" useentityinfo="Folder"/>
+                <nodestructureinfo usenodeinfo="File:Folder" useentityinfo="File"/></nodestructureinfo>
+            <nodestructureinfo usenodeinfo="File:Cd" useentityinfo="File">
+                <nodestructureinfo usenodeinfo="Folder:File" useentityinfo="Folder"/>
+                <nodestructureinfo usenodeinfo="File:File" useentityinfo="File"/></nodestructureinfo>
+            <nodestructureinfo usenodeinfo="Folder:Cd" useentityinfo="Folder"/>
+            <nodestructureinfo usenodeinfo="File:Cd" useentityinfo="File"/></nodestructureinfo>
+    </nodestructureinfo>
+    <nodestructureinfo key="ExtensiongroupRoot" usenodeinfo="ExtensiongroupRoot" useentityinfo="ExtensiongroupRoot">
+        <nodestructureinfo usenodeinfo="Extensiongroup:ExtensiongroupRoot" useentityinfo="Extensiongroup">
+            <nodestructureinfo usenodeinfo="Extension:Extensiongroup" useentityinfo="Extension"/></nodestructureinfo>
+    </nodestructureinfo>
+    <interfaceinfo key="CdChild" name="CdChild">
+        <member name="Folder" key="Folder:Cd"/>
+        <member name="File" key="File:Cd"/>
+        <member name="Folder" key="Folder:Cd"/>
+        <member name="File" key="File:Cd"/>
+    </interfaceinfo>
+    <interfaceinfo key="FolderChild" name="FolderChild">
+        <member name="Folder" key="Folder:Folder"/>
+        <member name="File" key="File:Folder"/>
+    </interfaceinfo>
+    <interfaceinfo key="FileChild" name="FileChild">
+        <member name="Folder" key="Folder:File"/>
+        <member name="File" key="File:File"/>
+    </interfaceinfo>
+    <dbinfo key="cdarchive" name="Cdarchive" db="MySQL" database="cdarchive">
+        <config type="development" connectionstring="jdbc:mysql://localhost:3306/cdarchive2" un="nbplatform" up="netbeans"/>
+        <config type="production" connectionstring="jdbc:mysql://linsdale.homedns.org:3306/cdarchive2" un="nbplatform" up="netbeans"/>
+        <table useentityinfo="Cd"/>
+        <table useentityinfo="Folder"/>
+        <table useentityinfo="File"/>
+        <table useentityinfo="Extensiongroup"/>
+        <table useentityinfo="Extension"/>
+    </dbinfo>
+</nbpcginfo>

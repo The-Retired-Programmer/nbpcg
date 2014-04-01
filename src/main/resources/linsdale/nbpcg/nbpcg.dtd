@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    SYSTEM ID  : nbres:/linsdale/nbpcg/nbpcg.dtd
+
+    Author     : Richard Linsdale (richard.linsdale at blueyonder.co.uk)
+-->
+
+<!ELEMENT nbpcg (build, node+, databases+) >
+    <!ATTLIST nbpcg
+        name CDATA #REQUIRED
+        >
+    <!ELEMENT build (project+) >
+        <!ATTLIST build
+            viewerroles CDATA #REQUIRED
+            >
+        <!ELEMENT project (generatesql?, generate*) >
+            <!ATTLIST project
+                name CDATA #REQUIRED
+                log CDATA #REQUIRED
+                version CDATA #REQUIRED
+                >
+            <!ELEMENT generatesql EMPTY>
+            <!ELEMENT generate EMPTY>
+                <!ATTLIST generate
+                    type (data|node|nodeviewer|nodeeditor) #REQUIRED
+                    package CDATA #REQUIRED
+                    >
+    <!ELEMENT node (node*)>
+        <!ATTLIST node
+            name CDATA #REQUIRED
+            view (both|icon|tree|none) #IMPLIED
+            viewers CDATA #IMPLIED
+            dbname CDATA #IMPLIED
+            rootlabel CDATA #IMPLIED
+            rooticon CDATA #IMPLIED
+            icon CDATA #IMPLIED
+            label CDATA #IMPLIED
+            orderable (yes) #IMPLIED
+            sort (yes) #IMPLIED
+            nullallowed (yes) #IMPLIED
+            fkey (no) #IMPLIED
+            displaynameformat CDATA #IMPLIED
+            displaytitleformat CDATA #IMPLIED
+            sortformat CDATA #IMPLIED
+            min CDATA #IMPLIED
+            max CDATA #IMPLIED
+            >
+    <!ELEMENT databases (database+)>
+        <!ELEMENT database (table+)>
+            <!ATTLIST database
+                name CDATA #REQUIRED
+                dbname CDATA #IMPLIED
+                db (MySQL) #IMPLIED
+                access (rw|ro) #IMPLIED
+                type (idkeyauto) #IMPLIED
+                withfields (idandstamp) #IMPLIED
+                usepackage CDATA #IMPLIED
+                >
+            <!ELEMENT table (field*,insert*)>
+                <!ATTLIST table
+                    name CDATA #REQUIRED
+                    dbname CDATA #IMPLIED
+                    access (rw|ro) #IMPLIED
+                    type (idkeyauto) #IMPLIED
+                    withfields (idandstamp) #IMPLIED>
+                <!ELEMENT field EMPTY>
+                    <!ATTLIST field
+                        name CDATA #REQUIRED
+                        dbname  CDATA #IMPLIED
+                        index (unique|yes) #IMPLIED
+                        unique (yes) #IMPLIED
+                        type (boolean|long|int|date|datetime|enum|reference) #IMPLIED
+                        nullallowed (yes) #IMPLIED
+                        label CDATA #IMPLIED
+                        references CDATA #IMPLIED
+                        fkey (no) #IMPLIED
+                        values CDATA #IMPLIED
+                        min CDATA #IMPLIED
+                        max CDATA #IMPLIED
+                        future (yes) #IMPLIED
+                        past (yes) #IMPLIED
+                        encodemethod CDATA #IMPLIED
+                        entryfield CDATA #IMPLIED
+                        >
+                <!ELEMENT insert EMPTY>
+                    <!ATTLIST insert values CDATA #REQUIRED>

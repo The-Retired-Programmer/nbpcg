@@ -1,0 +1,2 @@
+<#-- freemarker Template for $$ -->
+<#assign templateauthor = "aaaa bbbb (aaaa.bbbb at xxxxxx.yy.zz)" />

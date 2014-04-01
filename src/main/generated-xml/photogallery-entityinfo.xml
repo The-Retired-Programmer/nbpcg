@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?><nbpcg-entity-info name="Photogallery">
+    <entityinfo key="Album" name="Album" dbkey="photogallery" access="rw" dbtablename="Album" withfields="Idandstamp" type="Idkeyauto" ordercolumn="idx">
+        <field name="root" references="AlbumRoot" type="rootref" label="Root" rvid="root" javatype="int" initialisation="" javarsget="getInt"/>
+        <field name="title" nullsql="NOT NULL" uniquesql="" min="1" max="50" fieldclass="TextField" sqltype="VARCHAR(50)" type="String" dbname="title" label="Title" rvid="title" javatype="String" initialisation=" = &quot;&quot;" javarsget="getString"/>
+        <field name="albumpath" nullsql="NOT NULL" uniquesql="" min="1" max="100" fieldclass="TextField" sqltype="VARCHAR(100)" type="String" dbname="albumpath" label="Albumpath" rvid="albumpath" javatype="String" initialisation=" = &quot;&quot;" javarsget="getString"/>
+        <field name="owner" nullsql="NOT NULL" uniquesql="" min="1" max="100" fieldclass="TextField" sqltype="VARCHAR(100)" type="String" dbname="owner" label="Owner" rvid="owner" javatype="String" initialisation=" = &quot;&quot;" javarsget="getString"/>
+        <field name="image" nullsql="NULL" uniquesql="" fkey="no" fieldclass="ReferenceChoiceField" sqltype="MEDIUMINT UNSIGNED" references="Image" referencestable="Image" parentfactory="Album" selectfrom="Image" type="reference" dbname="image" label="Album Image" rvid="imageId" javatype="int" initialisation="" javarsget="getInt" optional="yes"/>
+        <field name="idx" type="idx" nullsql="NOT NULL" uniquesql="" index="yes" fieldclass="TextField" sqltype="MEDIUMINT UNSIGNED" dbname="idx" label="Idx" rvid="idx" javatype="int" initialisation=" = 0" javarsget="getInt"/>
+        <child name="image" dbname="album" references="Image" orderable="yes"/>
+        <child name="albumpermission" dbname="album" references="Albumpermission"/>
+        <child name="albumgrouppermission" dbname="album" references="Albumgrouppermission"/>
+    </entityinfo>
+    <entityinfo key="Albumpermission" name="Albumpermission" dbkey="photogallery" access="rw" dbtablename="Albumpermission" withfields="Idandstamp" type="Idkeyauto">
+        <field name="permission" nullsql="NOT NULL" uniquesql="" values="'View and Download', 'View', 'Download'" fieldclass="EnumChoiceField" sqltype="ENUM ('View and Download', 'View', 'Download')" type="enum" dbname="permission" label="Permission" rvid="permission" javatype="String" initialisation=" = &quot;&quot;" javarsget="getString"/>
+        <field name="album" references="Album" referencestable="Album" parentfactory="AlbumRoot" pprvu="Root" pcvu="Album" fieldclass="ReferenceChoiceField" sqltype="MEDIUMINT UNSIGNED" nullsql="NOT NULL" uniquesql="" type="ref" dbname="album" label="Album" rvid="albumId" javatype="int" initialisation="" javarsget="getInt"/>
+        <field name="user" references="User" referencestable="User" parentfactory="UserRoot" pprvu="Root" pcvu="User" fieldclass="ReferenceChoiceField" sqltype="MEDIUMINT UNSIGNED" nullsql="NOT NULL" uniquesql="" type="ref" dbname="grantedto" label="User" rvid="userId" javatype="int" initialisation="" javarsget="getInt"/>
+    </entityinfo>
+    <entityinfo key="Group" name="Group" dbkey="photogallery" access="rw" dbtablename="Group_" withfields="Idandstamp" type="Idkeyauto">
+        <field name="root" references="GroupRoot" type="rootref" label="Root" rvid="root" javatype="int" initialisation="" javarsget="getInt"/>
+        <field name="name" nullsql="NOT NULL" uniquesql="UNIQUE" unique="yes" min="1" max="100" fieldclass="TextField" sqltype="VARCHAR(100)" type="String" dbname="name" label="Name" rvid="name" javatype="String" initialisation=" = &quot;&quot;" javarsget="getString"/>
+        <child name="albumgrouppermission" dbname="grantedto" references="Albumgrouppermission" sort="yes"/>
+        <child name="groupuser" dbname="group_" references="Groupuser" sort="yes" copymovenode="UserRootChildFactory.UserNode" copymoveentity="User" copymovefield="user"/>
+    </entityinfo>
+    <entityinfo key="Albumgrouppermission" name="Albumgrouppermission" dbkey="photogallery" access="rw" dbtablename="Albumgrouppermission" withfields="Idandstamp" type="Idkeyauto">
+        <field name="permission" nullsql="NOT NULL" uniquesql="" values="'View and Download', 'View', 'Download'" fieldclass="EnumChoiceField" sqltype="ENUM ('View and Download', 'View', 'Download')" type="enum" dbname="permission" label="Permission" rvid="permission" javatype="String" initialisation=" = &quot;&quot;" javarsget="getString"/>
+        <field name="album" references="Album" referencestable="Album" parentfactory="AlbumRoot" pprvu="Root" pcvu="Album" fieldclass="ReferenceChoiceField" sqltype="MEDIUMINT UNSIGNED" nullsql="NOT NULL" uniquesql="" type="ref" dbname="album" label="Album" rvid="albumId" javatype="int" initialisation="" javarsget="getInt"/>
+        <field name="group" references="Group" referencestable="Group_" parentfactory="GroupRoot" pprvu="Root" pcvu="Group" fieldclass="ReferenceChoiceField" sqltype="MEDIUMINT UNSIGNED" nullsql="NOT NULL" uniquesql="" type="ref" dbname="grantedto" label="Group" rvid="groupId" javatype="int" initialisation="" javarsget="getInt"/>
+    </entityinfo>
+    <entityinfo key="Groupuser" name="Groupuser" dbkey="photogallery" access="rw" dbtablename="Groupuser" withfields="Idandstamp" type="Idkeyauto">
+        <field name="user" references="User" referencestable="User" parentfactory="UserRoot" pprvu="Root" pcvu="User" fieldclass="ReferenceChoiceField" sqltype="MEDIUMINT UNSIGNED" nullsql="NOT NULL" uniquesql="" type="ref" dbname="user" label="User" rvid="userId" javatype="int" initialisation="" javarsget="getInt"/>
+        <field name="group" references="Group" referencestable="Group_" parentfactory="GroupRoot" pprvu="Root" pcvu="Group" fieldclass="ReferenceChoiceField" sqltype="MEDIUMINT UNSIGNED" nullsql="NOT NULL" uniquesql="" type="ref" dbname="group_" label="Group" rvid="groupId" javatype="int" initialisation="" javarsget="getInt"/>
+    </entityinfo>
+    <entityinfo key="Image" name="Image" dbkey="photogallery" access="rw" dbtablename="Image" withfields="Idandstamp" type="Idkeyauto" ordercolumn="idx">
+        <field name="title" nullsql="NOT NULL" uniquesql="" min="1" max="50" fieldclass="TextField" sqltype="VARCHAR(50)" type="String" dbname="title" label="Title" rvid="title" javatype="String" initialisation=" = &quot;&quot;" javarsget="getString"/>
+        <field name="filename" nullsql="NOT NULL" uniquesql="" min="1" max="100" fieldclass="TextField" sqltype="VARCHAR(100)" type="String" dbname="filename" label="Filename" rvid="filename" javatype="String" initialisation=" = &quot;&quot;" javarsget="getString"/>
+        <field name="displayimage" nullsql="NOT NULL" uniquesql="" fieldclass="CheckboxField" sqltype="BOOLEAN" type="boolean" dbname="displayimage" label="Displayimage" rvid="displayimage" javatype="boolean" initialisation=" = false" javarsget="getBoolean"/>
+        <field name="allowndownload" nullsql="NOT NULL" uniquesql="" fieldclass="CheckboxField" sqltype="BOOLEAN" type="boolean" dbname="allowndownload" label="Allowndownload" rvid="allowndownload" javatype="boolean" initialisation=" = false" javarsget="getBoolean"/>
+        <field name="album" references="Album" referencestable="Album" parentfactory="AlbumRoot" pprvu="Root" pcvu="Album" fieldclass="ReferenceChoiceField" sqltype="MEDIUMINT UNSIGNED" nullsql="NOT NULL" uniquesql="" type="ref" dbname="album" label="Album" rvid="albumId" javatype="int" initialisation="" javarsget="getInt"/>
+        <field name="idx" type="idx" nullsql="NOT NULL" uniquesql="" index="yes" fieldclass="TextField" sqltype="MEDIUMINT UNSIGNED" dbname="idx" label="Idx" rvid="idx" javatype="int" initialisation=" = 0" javarsget="getInt"/>
+    </entityinfo>
+    <entityinfo key="AlbumRoot" name="AlbumRoot">
+        <child name="album" nodekey="AlbumRootChildFactory.AlbumNode" references="Album" isiconchild="" orderable="yes"/>
+    </entityinfo>
+    <entityinfo key="UserRoot" name="UserRoot">
+        <child name="user" nodekey="UserRootChildFactory.UserNode" references="User" sort="yes"/>
+    </entityinfo>
+    <entityinfo key="GroupRoot" name="GroupRoot">
+        <child name="group" nodekey="GroupRootChildFactory.GroupNode" references="Group"/>
+    </entityinfo>
+    <entityinfo key="User" name="User" dbkey="authentication" package="linsdale.authentication.dataobjects" access="ro" dbtablename="User" withfields="Idandstamp" type="Idkeyauto">
+        <field name="root" references="UserRoot" type="rootref" label="Root" rvid="root" javatype="int" initialisation="" javarsget="getInt"/>
+        <field name="username" type="String" dbname="username" label="Username" rvid="username" javatype="String" initialisation=" = &quot;&quot;" javarsget="getString"/>
+        <child name="albumpermission" dbname="grantedto" references="Albumpermission" sort="yes"/>
+        <child name="groupuser" dbname="user" references="Groupuser" sort="yes" copymovenode="GroupRootChildFactory.GroupNode" copymoveentity="Group" copymovefield="group"/>
+    </entityinfo>
+    <dbinfo key="photogallery" name="photogallery" db="MySQL">
+        <table name="Album"/>
+        <table name="Albumpermission"/>
+        <table name="Group"/>
+        <table name="Albumgrouppermission"/>
+        <table name="Groupuser"/>
+        <table name="Image"/>
+    </dbinfo>
+</nbpcg-entity-info>

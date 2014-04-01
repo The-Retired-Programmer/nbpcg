@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE nbpcg PUBLIC "-//linsdale/nbpcg/DTD DMC SCHEMA 1.0//EN"
+    "nbres:/linsdale/nbpcg/nbpcg.dtd" >
+
+<nbpcg>
+    
+    <build>
+        <project name="p" log="l" version="x.x.x" >
+            <generate type="z" package="p.p.p" />
+        </project>
+    </build>
+    
+    <node name="x" icon="y" rooticon="z" >
+        
+    </node>
+    
+    <databases>
+        <standard database="x" db="y" >
+            <config type="z" connectionstring="jdbc:xxx:yyy" un="u" up="p" />
+            <table name="x">
+                <field name="x"/>
+                <insert values="z" />
+            </table>
+        </standard>
+    </databases>
+</nbpcg>
