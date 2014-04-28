@@ -41,6 +41,7 @@ public final class RunNBPCGAction implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent ev) {
         FileObject fo = context.getPrimaryFile();
-        new NBPCG(fo).executeScriptInBackground(fo.getNameExt());
+        boolean isMaven = fo.getParent().getName().equals("nbpcg");
+        new NBPCG(fo.getNameExt(), fo, isMaven).executeScriptInBackground();
     }
 }

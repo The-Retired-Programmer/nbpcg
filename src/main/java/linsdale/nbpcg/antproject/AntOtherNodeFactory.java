@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package linsdale.nbpcg.basicproject;
+package linsdale.nbpcg.antproject;
 
 import org.netbeans.api.project.Project;
 import org.netbeans.spi.project.ui.support.NodeFactory;
@@ -24,22 +24,20 @@ import org.openide.loaders.DataObjectNotFoundException;
 import org.openide.util.Exceptions;
 
 /**
- *
  * @author Richard Linsdale (richard.linsdale at blueyonder.co.uk)
  */
 @NodeFactory.Registration(projectType = "org-netbeans-modules-apisupport-project")
-public class NBPCGNodeFactory implements NodeFactory {
+public class AntOtherNodeFactory implements NodeFactory {
 
     @Override
     public NodeList<?> createNodes(Project project) {
         try {
-            return project.getProjectDirectory().getFileObject("nbpcg-files") != null
-                    ? NodeFactorySupport.fixedNodeList(new NBPCGNode(project))
+            return project.getProjectDirectory().getFileObject("other-files") != null
+                    ? NodeFactorySupport.fixedNodeList(new AntOtherNode(project))
                     : NodeFactorySupport.fixedNodeList();
         } catch (DataObjectNotFoundException ex) {
             Exceptions.printStackTrace(ex);
         }
         return NodeFactorySupport.fixedNodeList();
-
     }
 }

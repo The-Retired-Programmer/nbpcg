@@ -37,7 +37,7 @@ import java.util.List;
 <#if ENTITYINFO.access = "rw" >
 import java.util.Map;
 </#if>
-import linsdale.lindos.configmanagement.PropertiesConfiguration;
+import linsdale.lindos.lifecycle.ApplicationProperties;
 <#if hassortchildren>
 import ${nodepackage}.*;
 </#if>
@@ -120,13 +120,13 @@ public class ${ENTITYINFO.name} extends Entity${ENTITYINFO.access?upper_case} {
     public ${ENTITYINFO.name}(int id, ${ENTITYINFO.name}.EM em) {
 <#if ENTITYINFO.access="rw" >
 <#if ENTITYINFO.ordercolumn??>
-        this(id, em, new  DBFieldsRWIndexed${ENTITYINFO.withfields}<${ENTITYINFO.name}>());
+        this(id, em, new  DBFieldsRWIndexed${ENTITYINFO.withfields}<>());
     }
 
     private ${ENTITYINFO.name}(int id, ${ENTITYINFO.name}.EM em, DBFieldsRWIndexed${ENTITYINFO.withfields}<${ENTITYINFO.name}> dbfields) {
         super("${ENTITYINFO.name}", id, em, dbfields);
 <#else>
-        this(id, em, new DBFieldsRW${ENTITYINFO.withfields}<${ENTITYINFO.name}>());
+        this(id, em, new DBFieldsRW${ENTITYINFO.withfields}<>());
     }
 
     private ${ENTITYINFO.name}(int id, ${ENTITYINFO.name}.EM em, DBFieldsRW${ENTITYINFO.withfields}<${ENTITYINFO.name}> dbfields) {
@@ -235,14 +235,10 @@ public class ${ENTITYINFO.name} extends Entity${ENTITYINFO.access?upper_case} {
         protected boolean ruleCheck() {
 <#list ENTITYINFO.field![] as pref>
 <#if pref.type="ref" || pref.type="rootref" >
-            for (${ENTITYINFO.name} e : get${pref.name?cap_first}().get${ENTITYINFO.name}s()) {
-                if (e != ${ENTITYINFO.name}.this && e.get${field.name?cap_first}().equals(${field.name})) {
-                    return false;
-                }
-            }
+            return get${pref.name?cap_first}().get${ENTITYINFO.name}s().stream().noneMatch((e) -> (e != ${ENTITYINFO.name}.this && e.get${field.name?cap_first}().equals(${field.name})));
+
 </#if>
 </#list>
-            return true;
         }
     }
 
@@ -768,12 +764,12 @@ public class ${ENTITYINFO.name} extends Entity${ENTITYINFO.access?upper_case} {
         protected final DataAccess${ENTITYINFO.access?upper_case} _createDataAccess() {
 <#if ENTITYINFO.access="rw" >
 <#if ENTITYINFO.ordercolumn??>
-            return new DataAccessRW${ENTITYINFO.type}("${ENTITYINFO.name}", "${ENTITYINFO.dbtablename}", "${ENTITYINFO.ordercolumn}", PropertiesConfiguration.getDataService("${ENTITYINFO.dbkey}"));
+            return new DataAccessRW${ENTITYINFO.type}("${ENTITYINFO.dbtablename}", "${ENTITYINFO.ordercolumn}", ApplicationProperties.get().getDataService("${ENTITYINFO.dbkey}"));
 <#else>
-            return new DataAccessRW${ENTITYINFO.type}("${ENTITYINFO.name}", "${ENTITYINFO.dbtablename}", PropertiesConfiguration.getDataService("${ENTITYINFO.dbkey}"));
+            return new DataAccessRW${ENTITYINFO.type}("${ENTITYINFO.dbtablename}", ApplicationProperties.get().getDataService("${ENTITYINFO.dbkey}"));
 </#if>
 <#else>
-            return new DataAccessRO${ENTITYINFO.type}("${ENTITYINFO.name}", "${ENTITYINFO.dbtablename}", PropertiesConfiguration.getDataService("${ENTITYINFO.dbkey}"));
+            return new DataAccessRO${ENTITYINFO.type}("${ENTITYINFO.dbtablename}", ApplicationProperties.get().getDataService("${ENTITYINFO.dbkey}"));
 </#if>
         }
     }
@@ -806,9 +802,9 @@ public class ${ENTITYINFO.name} extends Entity${ENTITYINFO.access?upper_case} {
 
     public static List<${ENTITYINFO.name}> getAll${ENTITYINFO.name}s() {
         List<${ENTITYINFO.name}> list = new ArrayList<>();
-        for (${ENTITYINFO.parentname} parent: ${ENTITYINFO.parentname}.getAll${ENTITYINFO.parentname}s()){
+        ${ENTITYINFO.parentname}.getAll${ENTITYINFO.parentname}s().stream().forEach((parent) -> {
             list.addAll(parent.get${ENTITYINFO.name}s());
-        }
+        });
         return list;
     }
 </#if>

@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package linsdale.nbpcg.basicproject;
+package linsdale.nbpcg.antproject;
 
 import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
@@ -33,10 +33,10 @@ import org.openide.util.Lookup;
 /**
  * @author Richard Linsdale (richard.linsdale at blueyonder.co.uk)
  */
-@ActionID(category = "Projects", id = "linsdale.nbpcg.basicproject.actions.build")
+@ActionID(category = "Projects", id = "linsdale.nbpcg.antproject.actions.build")
 @ActionRegistration(lazy=false, displayName = "xxx")
 @ActionReference(path = "Projects/Actions", position = -9999)
-public final class SimpleAction extends AbstractAction implements ContextAwareAction {
+public final class AntSimpleAction extends AbstractAction implements ContextAwareAction {
 
     @Override
     public Action createContextAwareInstance(Lookup context) {
@@ -63,7 +63,7 @@ public final class SimpleAction extends AbstractAction implements ContextAwareAc
         public void actionPerformed(ActionEvent e) {
             FileObject f = p.getProjectDirectory().getFileObject("nbpcg-files/nbpcg-script.xml");
             if (f != null) {
-                new NBPCG(f).executeScriptInBackground(ProjectUtils.getInformation(p).getDisplayName());
+                new NBPCG(ProjectUtils.getInformation(p).getDisplayName(), f,false).executeScriptInBackground();
             }
         }
     }

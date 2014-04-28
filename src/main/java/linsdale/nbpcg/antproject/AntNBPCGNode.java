@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package linsdale.nbpcg.basicproject;
+package linsdale.nbpcg.antproject;
 
 import java.awt.Image;
 import org.netbeans.api.annotations.common.StaticResource;
@@ -29,19 +29,19 @@ import org.openide.util.ImageUtilities;
 /**
  * @author Richard Linsdale (richard.linsdale at blueyonder.co.uk)
  */
-public class OtherNode extends FilterNode {
+public class AntNBPCGNode extends FilterNode {
 
     @StaticResource
-    private static final String IMAGE = "linsdale/nbpcg/basicproject/others.gif";
+    private static final String IMAGE = "linsdale/nbpcg/antproject/config.gif";
 
-    public OtherNode(Project proj) throws DataObjectNotFoundException {
+    public AntNBPCGNode(Project proj) throws DataObjectNotFoundException {
         super(DataObject.find(proj.getProjectDirectory().
-                getFileObject("other-files")).getNodeDelegate());
+                getFileObject("nbpcg-files")).getNodeDelegate());
     }
 
     @Override
     public String getDisplayName() {
-        return "Other Files";
+        return "NBPCG Files";
     }
 
     @Override

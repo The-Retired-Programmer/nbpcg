@@ -40,19 +40,20 @@ public final class NBPCG {
 
     private final static String INDENT = "    ";
     private final FileObject fo;
-    private String tabtext;
+    private final String tabtext;
+    private final boolean mavenProject;
 
-    public NBPCG(FileObject fo) {
+    public NBPCG(String tabtext, FileObject fo, boolean mavenProject) {
+        this.tabtext = tabtext;
         this.fo = fo;
+        this.mavenProject = mavenProject;
     }
 
-    public void executeScriptInBackground(String tabtext) {
-        this.tabtext = tabtext;
+    public void executeScriptInBackground() {
         new RequestProcessor(NBPCG.class).post(new CreateRunnable());
     }
 
-    public void executeScript(String tabtext) {
-        this.tabtext = tabtext;
+    public void executeScript() {
         new CreateRunnable().run();
     }
 
@@ -67,7 +68,8 @@ public final class NBPCG {
             try (OutputWriter msg = io.getOut(); OutputWriter err = io.getErr()) {
                 try {
                     msg.reset();
-                    msg.println("Running the NETBEANS PLATFORM CODE GENERATOR");
+                    msg.println("Running the NETBEANS PLATFORM CODE GENERATOR for a "
+                            + (mavenProject ? "Maven" : "Ant") + " project");
                     msg.println("Loading Definition File");
                     Element root;
                     try (InputStream in = fo.getInputStream()) {
@@ -97,7 +99,7 @@ public final class NBPCG {
                     FreemarkerListMap buildsqlfolders = buildmap.getFreemarkerListMap("sqlfolder");
                     if (buildsqlfolders != null) {
                         for (FreemarkerHashMap buildsqlfolder : buildsqlfolders) {
-                            folders.put("sql", findInConfigFolder(buildsqlfolder.getString("project"), "sql", openProjects));
+                            folders.put("sql", findInConfigFolder(buildsqlfolder.getString("project"), "generated-scripts", openProjects));
                         }
                     }
                     //
@@ -140,7 +142,7 @@ public final class NBPCG {
                 msg.println("BUILD " + (success ? "SUCCESSFUL" : "FAILED") + " (total time: " + Integer.toString(elapsed) + " seconds)");
             }
         }
-        
+
         private void processTemplate(FreemarkerHashMap command, FreemarkerHashMap infomodel,
                 Map<String, Freemarker> templates, Map<String, FileObject> folders,
                 Counter counter) throws Exception {
@@ -161,7 +163,7 @@ public final class NBPCG {
             if (p == null) {
                 throw new IOException("Required project is not open (" + project + ")");
             }
-            FileObject pfo = childfolder(p.getProjectDirectory(), "src");
+            FileObject pfo = childfolder(p.getProjectDirectory(), mavenProject ? "src/main/java" : "src");
             for (String name : pkage.split("\\.")) {
                 pfo = childfolder(pfo, name);
             }
@@ -177,7 +179,7 @@ public final class NBPCG {
             if (p == null) {
                 throw new IOException("Required project is not open (" + project + ")");
             }
-            FileObject pfo = childfolder(p.getProjectDirectory(), "nbpcg-files");
+            FileObject pfo = childfolder(p.getProjectDirectory(), mavenProject ? "src/main" :"nbpcg-files");
             pfo = childfolder(pfo, folder);
             // and empty folder of all contents prior to rebuilding code
             for (FileObject fd : pfo.getChildren()) {
@@ -190,7 +192,7 @@ public final class NBPCG {
             FileObject cfo = folder.getFileObject(name);
             return cfo != null ? cfo : folder.createFolder(name);
         }
-        
+
         private class Counter {
 
             private int count = 0;
@@ -202,7 +204,7 @@ public final class NBPCG {
                 countonline = 0;
                 this.msg = msg;
             }
-            
+
             public void startofline() {
                 if (countonline > 0) {
                     msg.println();
@@ -221,7 +223,7 @@ public final class NBPCG {
                     msg.print(INDENT);
                 }
             }
-            
+
             public int getCount() {
                 return count;
             }
