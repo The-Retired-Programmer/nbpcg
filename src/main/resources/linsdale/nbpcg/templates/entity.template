@@ -74,9 +74,15 @@ public class ${ENTITYINFO.name} extends Entity${ENTITYINFO.access?upper_case} {
 <#assign idx = 10 >
 <#list ENTITYINFO.field![] as field>
 <#if !(field.type == "rootref" || field.type == "idx") >
+    /**
+     * ${field.name?cap_first} field Id
+     */
     public static final IntWithDescription ${field.name?upper_case}FIELD = new IntWithDescription(${idx}, "${field.name?cap_first}");
 <#assign idx = idx + 1>
 <#if field.entryfield??>
+    /**
+     * ${field.entryfield?cap_first} field Id
+     */
     public static final IntWithDescription ${field.entryfield?upper_case}FIELD = new IntWithDescription(${idx}, "${field.entryfield?cap_first}");
 <#assign idx = idx + 1>
 </#if>
@@ -92,6 +98,9 @@ public class ${ENTITYINFO.name} extends Entity${ENTITYINFO.access?upper_case} {
 </#if>
 </#list>
 <#list ENTITYINFO.child![] as child>
+    /**
+     * ${child.name?cap_first}s field Id
+     */
     public static final IntWithDescription ${child.name?upper_case}SFIELD = new IntWithDescription(${idx}, "${child.name?cap_first}s");
 <#assign idx = idx + 1>
 <#if child.orderable??>
@@ -729,13 +738,23 @@ public class ${ENTITYINFO.name} extends Entity${ENTITYINFO.access?upper_case} {
     }
 </#if>
 
+    /**
+     * Get the ${ENTITYINFO.name} Entity Manager
+     * @return the ${ENTITYINFO.name} Entity Manager
+     */
     public static ${ENTITYINFO.name}.EM getEM() {
         return Lookup.getDefault().lookup(${ENTITYINFO.name}.EM.class);
     }
 
+    /**
+     * The ${ENTITYINFO.name} Entity Manager
+     */
     @ServiceProvider(service=${ENTITYINFO.name}.EM.class)
     public static class EM extends EntityManager${ENTITYINFO.access?upper_case}<${ENTITYINFO.name}> {
         
+        /**
+         * Constructor.
+         */
         public EM() {
             super("${ENTITYINFO.name}");
         }
@@ -800,7 +819,12 @@ public class ${ENTITYINFO.name} extends Entity${ENTITYINFO.access?upper_case} {
 </#if>
 <#if ENTITYINFO.parentname??>
 
-    public static List<${ENTITYINFO.name}> getAll${ENTITYINFO.name}s() {
+    /**
+     * Get the set of all ${ENTITYINFO.name}s.
+     * 
+     * @return the set of all ${ENTITYINFO.name}s
+     */
+public static List<${ENTITYINFO.name}> getAll${ENTITYINFO.name}s() {
         List<${ENTITYINFO.name}> list = new ArrayList<>();
         ${ENTITYINFO.parentname}.getAll${ENTITYINFO.parentname}s().stream().forEach((parent) -> {
             list.addAll(parent.get${ENTITYINFO.name}s());

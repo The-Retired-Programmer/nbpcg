@@ -54,14 +54,14 @@ public final class MavenSimpleAction extends AbstractAction implements ContextAw
 
         public ContextAction(Lookup context) {
             p = context.lookup(Project.class);
-            setEnabled(p.getProjectDirectory().getFileObject("src/main/nbpcg/nbpcg-script.xml") != null);
+            setEnabled(p.getProjectDirectory().getFileObject("src/main/nbpcg/script.xml") != null);
             putValue(DynamicMenuContent.HIDE_WHEN_DISABLED, true);
             putValue("popupText", "Execute NBPCG script");
         }
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            FileObject f = p.getProjectDirectory().getFileObject("src/main/nbpcg/nbpcg-script.xml");
+            FileObject f = p.getProjectDirectory().getFileObject("src/main/nbpcg/script.xml");
             if (f != null) {
                 new NBPCG(ProjectUtils.getInformation(p).getDisplayName(), f, true).executeScriptInBackground();
             }
