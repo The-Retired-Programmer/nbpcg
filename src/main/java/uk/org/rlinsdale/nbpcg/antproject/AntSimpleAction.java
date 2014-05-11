@@ -14,12 +14,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package linsdale.nbpcg.mavenproject;
+package uk.org.rlinsdale.nbpcg.antproject;
 
 import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
-import linsdale.nbpcg.impl.NBPCG;
+import uk.org.rlinsdale.nbpcg.impl.NBPCG;
 import org.netbeans.api.project.Project;
 import org.netbeans.api.project.ProjectUtils;
 import org.openide.awt.ActionID;
@@ -33,10 +33,10 @@ import org.openide.util.Lookup;
 /**
  * @author Richard Linsdale (richard.linsdale at blueyonder.co.uk)
  */
-@ActionID(category = "Projects", id = "linsdale.nbpcg.mavenproject.actions.build")
-@ActionRegistration(lazy = false, displayName = "xxx")
+@ActionID(category = "Projects", id = "uk.org.rlinsdale.nbpcg.antproject.actions.build")
+@ActionRegistration(lazy=false, displayName = "xxx")
 @ActionReference(path = "Projects/Actions", position = -9999)
-public final class MavenSimpleAction extends AbstractAction implements ContextAwareAction {
+public final class AntSimpleAction extends AbstractAction implements ContextAwareAction {
 
     @Override
     public Action createContextAwareInstance(Lookup context) {
@@ -54,16 +54,16 @@ public final class MavenSimpleAction extends AbstractAction implements ContextAw
 
         public ContextAction(Lookup context) {
             p = context.lookup(Project.class);
-            setEnabled(p.getProjectDirectory().getFileObject("src/main/nbpcg/script.xml") != null);
+            setEnabled(p.getProjectDirectory().getFileObject("nbpcg-files/script.xml") != null);
             putValue(DynamicMenuContent.HIDE_WHEN_DISABLED, true);
             putValue("popupText", "Execute NBPCG script");
         }
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            FileObject f = p.getProjectDirectory().getFileObject("src/main/nbpcg/script.xml");
+            FileObject f = p.getProjectDirectory().getFileObject("nbpcg-files/script.xml");
             if (f != null) {
-                new NBPCG(ProjectUtils.getInformation(p).getDisplayName(), f, true).executeScriptInBackground();
+                new NBPCG(ProjectUtils.getInformation(p).getDisplayName(), f,false).executeScriptInBackground();
             }
         }
     }

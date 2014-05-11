@@ -14,15 +14,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package linsdale.nbpcg.impl;
+package uk.org.rlinsdale.nbpcg.impl;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 import javax.xml.parsers.DocumentBuilderFactory;
-import linsdale.nbpcg.impl.FreemarkerMapFactory.FreemarkerHashMap;
-import linsdale.nbpcg.impl.FreemarkerMapFactory.FreemarkerListMap;
+import uk.org.rlinsdale.nbpcg.impl.FreemarkerMapFactory.FreemarkerHashMap;
+import uk.org.rlinsdale.nbpcg.impl.FreemarkerMapFactory.FreemarkerListMap;
 import org.netbeans.api.project.Project;
 import org.netbeans.api.project.ProjectUtils;
 import org.netbeans.api.project.ui.OpenProjects;

@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package linsdale.nbpcg.impl;
+package uk.org.rlinsdale.nbpcg.impl;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -27,7 +27,7 @@ import org.openide.loaders.DataObject;
 /**
  * @author Richard Linsdale (richard.linsdale at blueyonder.co.uk)
  */
-@ActionID(category = "Run", id = "linsdale.nbpcg.actions.BuildAction")
+@ActionID(category = "Run", id = "uk.org.rlinsdale.nbpcg.actions.BuildAction")
 @ActionRegistration(displayName = "Execute NBPCG script")
 @ActionReference(path = "Loaders/text/nbpcg+xml/Actions", position = 110, separatorBefore = 105)
 public final class RunNBPCGAction implements ActionListener {

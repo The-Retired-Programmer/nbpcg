@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package linsdale.nbpcg;
+package uk.org.rlinsdale.nbpcg;
 
 import java.io.IOException;
 import org.openide.awt.ActionID;
@@ -40,7 +40,7 @@ import org.openide.util.NbBundle.Messages;
         extension = {"template"})
 @DataObject.Registration(
         mimeType = "text/nbpcgtemplate",
-        iconBase = "linsdale/nbpcg/page_gear.png",
+        iconBase = "uk/org/rlinsdale/nbpcg/page_gear.png",
         displayName = "#LBL_Template_LOADER",
         position = 300)
 @ActionReferences({

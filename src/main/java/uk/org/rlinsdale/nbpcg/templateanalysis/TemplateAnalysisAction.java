@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package linsdale.nbpcg.templateanalysis;
+package uk.org.rlinsdale.nbpcg.templateanalysis;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -29,7 +29,7 @@ import org.openide.loaders.DataObject;
 /**
  * @author Richard Linsdale (richard.linsdale at blueyonder.co.uk)
  */
-@ActionID(category = "Run", id = "linsdale.nbpcg.actions.TemplateAnalysisAction")
+@ActionID(category = "Run", id = "uk.org.rlinsdale.nbpcg.actions.TemplateAnalysisAction")
 @ActionRegistration(displayName = "List Template Parameter usages")
 @ActionReference(path = "Loaders/text/nbpcgtemplate/Actions", position = 110, separatorBefore = 105)
 public final class TemplateAnalysisAction implements ActionListener {

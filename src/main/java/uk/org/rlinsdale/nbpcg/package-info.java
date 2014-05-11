@@ -38,7 +38,7 @@
     @TemplateRegistration(folder = "linsdale-nbpcg", displayName = "iconnodevieweraction", content = "templates/iconnodevieweraction.template", scriptEngine = "freemarker")
 })
 @TemplateRegistration(folder = "Other", displayName = "NBPCG Template File", content = "TemplateTemplate.template")
-package linsdale.nbpcg;
+package uk.org.rlinsdale.nbpcg;
 
 import org.netbeans.api.templates.TemplateRegistration;
 import org.netbeans.api.templates.TemplateRegistrations;

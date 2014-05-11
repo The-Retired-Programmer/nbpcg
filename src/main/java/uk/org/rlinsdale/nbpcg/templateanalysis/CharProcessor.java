@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package linsdale.nbpcg.templateanalysis;
+package uk.org.rlinsdale.nbpcg.templateanalysis;
 
 import java.util.ArrayList;
 import java.util.List;

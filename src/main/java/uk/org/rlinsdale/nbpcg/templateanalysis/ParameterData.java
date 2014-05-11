@@ -14,12 +14,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package linsdale.nbpcg.templateanalysis;
+package uk.org.rlinsdale.nbpcg.templateanalysis;
 
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import linsdale.nbpcg.templateanalysis.ValueData.ValueType;
+import uk.org.rlinsdale.nbpcg.templateanalysis.ValueData.ValueType;
 
 /**
  * @author Richard Linsdale (richard.linsdale at blueyonder.co.uk)

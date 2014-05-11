@@ -14,13 +14,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package linsdale.nbpcg.templateanalysis;
+package uk.org.rlinsdale.nbpcg.templateanalysis;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import linsdale.nbpcg.templateanalysis.CharProcessor.ItemType;
+import uk.org.rlinsdale.nbpcg.templateanalysis.CharProcessor.ItemType;
 import org.openide.filesystems.FileObject;
 import org.openide.util.RequestProcessor;
 import org.openide.windows.IOProvider;

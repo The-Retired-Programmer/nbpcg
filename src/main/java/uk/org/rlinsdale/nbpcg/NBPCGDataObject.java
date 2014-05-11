@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package linsdale.nbpcg;
+package uk.org.rlinsdale.nbpcg;
 
 import java.io.IOException;
 import org.netbeans.spi.xml.cookies.CheckXMLSupport;
@@ -46,7 +46,7 @@ import org.xml.sax.InputSource;
         elementName = "nbpcg")
 @DataObject.Registration(
         mimeType = "text/nbpcg+xml",
-        iconBase = "linsdale/nbpcg/script.png",
+        iconBase = "uk/org/rlinsdale/nbpcg/script.png",
         displayName = "#LBL_NBPCG_LOADER")
 @ActionReferences({
     @ActionReference(

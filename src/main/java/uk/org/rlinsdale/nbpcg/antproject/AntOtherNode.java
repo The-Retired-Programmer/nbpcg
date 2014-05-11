@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package linsdale.nbpcg.antproject;
+package uk.org.rlinsdale.nbpcg.antproject;
 
 import java.awt.Image;
 import org.netbeans.api.annotations.common.StaticResource;
@@ -32,7 +32,7 @@ import org.openide.util.ImageUtilities;
 public class AntOtherNode extends FilterNode {
 
     @StaticResource
-    private static final String IMAGE = "linsdale/nbpcg/antproject/others.gif";
+    private static final String IMAGE = "uk/org/rlinsdale/nbpcg/antproject/others.gif";
 
     public AntOtherNode(Project proj) throws DataObjectNotFoundException {
         super(DataObject.find(proj.getProjectDirectory().
