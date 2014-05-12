@@ -46,13 +46,13 @@ public class FreemarkerMapFactory {
         timestamp = ds.format(now);
     }
 
-    public FreemarkerHashMap createFreemarkerHashMapByTranformation(Element root, InputStream inxsl) throws Exception {
+    public FreemarkerHashMap createFreemarkerHashMapByTransformation(Element root, InputStream inxsl) throws Exception {
         FreemarkerHashMap hash =  createTopHash(transform(root, inxsl));
         addSpecials(hash);
         return hash;
     }
 
-    public FreemarkerHashMap createFreemarkerListMapByTranformation(Element root, InputStream inxsl) throws Exception {
+    public FreemarkerHashMap createFreemarkerListMapByTransformation(Element root, InputStream inxsl) throws Exception {
         FreemarkerHashMap hash =  createLowerHash(transform(root, inxsl));
         addSpecials(hash);
         return hash;

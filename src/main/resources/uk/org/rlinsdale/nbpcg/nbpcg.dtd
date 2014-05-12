@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-    SYSTEM ID  : nbres:/uk.org.rlinsdale/nbpcg/nbpcg.dtd
+    SYSTEM ID  : nbres:/uk/org/rlinsdale/nbpcg/nbpcg.dtd
 
     Author     : Richard Linsdale (richard.linsdale at blueyonder.co.uk)
 -->
@@ -17,6 +17,7 @@
             <!ATTLIST project
                 name CDATA #REQUIRED
                 log CDATA #REQUIRED
+                license (gpl30|lgpl21) #IMPLIED
                 >
             <!ELEMENT generatescripts EMPTY>
             <!ELEMENT generate EMPTY>

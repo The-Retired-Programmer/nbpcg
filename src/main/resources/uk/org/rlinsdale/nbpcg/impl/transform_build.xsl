@@ -24,7 +24,7 @@
 -->
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
-    <xsl:output method="xml" doctype-public="-//linsdale/nbpcgbuild/DTD DMC SCHEMA 1.0//EN" doctype-system="nbres:/linsdale/nbpcg/nbpcgbuild.dtd"/>
+    <xsl:output method="xml" doctype-public="-//uk/org/rlinsdale/nbpcgbuild/DTD NBPCGBUILD SCHEMA 1.0//EN" doctype-system="nbres:/uk/org/rlinsdale/nbpcg/nbpcgbuild.dtd"/>
     
     <xsl:template match="/nbpcg">
         <nbpcg-build name="{@name}">
@@ -548,7 +548,7 @@
         <xsl:for-each select="databases/database[not(@usepackage)]" >
             <execute action="entitytemplate" template="create" folder="script" filename="{@name}-createdb.sql" usedbinfo="{@name}">
                 <xsl:call-template name="setbuildattributes">
-                    <xsl:with-param name="type">sql</xsl:with-param>
+                    <xsl:with-param name="type">script</xsl:with-param>
                 </xsl:call-template>
             </execute>
         </xsl:for-each>
@@ -585,11 +585,19 @@
         <xsl:param name="type" />
         <xsl:choose>
             <xsl:when test="$type='script'" >
-                <xsl:for-each select="/nbpcg/build/project/generatescript" >
+                <xsl:for-each select="/nbpcg/build/project/generatescripts" >
                     <xsl:attribute name="log" >
                         <xsl:value-of select="../@log" />
                     </xsl:attribute>
                     <xsl:attribute name="package" >generated-scripts</xsl:attribute>
+                    <xsl:attribute name="license">
+                        <xsl:choose>
+                            <xsl:when test="../@license">
+                                <xsl:value-of select="../@license" />
+                            </xsl:when>
+                            <xsl:otherwise>gpl30</xsl:otherwise>
+                        </xsl:choose>
+                    </xsl:attribute>
                 </xsl:for-each>
             </xsl:when>
             <xsl:otherwise>
@@ -599,6 +607,14 @@
                     </xsl:attribute>
                     <xsl:attribute name="package" >
                         <xsl:value-of select="@package" />
+                    </xsl:attribute>
+                    <xsl:attribute name="license">
+                        <xsl:choose>
+                            <xsl:when test="../@license">
+                                <xsl:value-of select="../@license" />
+                            </xsl:when>
+                            <xsl:otherwise>gpl30</xsl:otherwise>
+                        </xsl:choose>
                     </xsl:attribute>
                 </xsl:for-each>
             </xsl:otherwise>

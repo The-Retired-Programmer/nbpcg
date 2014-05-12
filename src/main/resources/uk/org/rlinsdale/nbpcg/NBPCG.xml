@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE nbpcg PUBLIC "-//linsdale/nbpcg/DTD DMC SCHEMA 1.0//EN"
-    "nbres:/linsdale/nbpcg/nbpcg.dtd" >
+<!DOCTYPE nbpcg PUBLIC "-//uk/org/rlinsdale/nbpcg/DTD NBPCG SCHEMA 1.0//EN"
+    "nbres:/uk/org/rlinsdale/nbpcg/nbpcg.dtd" >
 
-<nbpcg>
+<nbpcg name="a" >
     
-    <build>
-        <project name="p" log="l" version="x.x.x" >
+    <build >
+        <project name="p" log="l">
             <generate type="z" package="p.p.p" />
         </project>
     </build>
@@ -15,8 +15,7 @@
     </node>
     
     <databases>
-        <standard database="x" db="y" >
-            <config type="z" connectionstring="jdbc:xxx:yyy" un="u" up="p" />
+        <database name="x" >
             <table name="x">
                 <field name="x"/>
                 <insert values="z" />

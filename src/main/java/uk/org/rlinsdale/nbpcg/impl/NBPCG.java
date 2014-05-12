@@ -78,11 +78,11 @@ public final class NBPCG {
                     FreemarkerMapFactory factory = new FreemarkerMapFactory(fo);
                     //
                     msg.println("Creating information definitions");
-                    FreemarkerHashMap entitymap = factory.createFreemarkerHashMapByTranformation(root, NBPCG.class.getResourceAsStream("transform_entityinfo.xsl"));
-                    FreemarkerHashMap nodemap = factory.createFreemarkerHashMapByTranformation(root, NBPCG.class.getResourceAsStream("transform_nodeinfo.xsl"));
+                    FreemarkerHashMap entitymap = factory.createFreemarkerHashMapByTransformation(root, NBPCG.class.getResourceAsStream("transform_entityinfo.xsl"));
+                    FreemarkerHashMap nodemap = factory.createFreemarkerHashMapByTransformation(root, NBPCG.class.getResourceAsStream("transform_nodeinfo.xsl"));
                     //
                     msg.println("Creating build definitions");
-                    FreemarkerHashMap buildmap = factory.createFreemarkerListMapByTranformation(root, NBPCG.class.getResourceAsStream("transform_build.xsl"));
+                    FreemarkerHashMap buildmap = factory.createFreemarkerListMapByTransformation(root, NBPCG.class.getResourceAsStream("transform_build.xsl"));
                     //
                     msg.println("Creating required source packages and removing any content");
                     Map<String, Project> openProjects = new HashMap<>();

@@ -1,18 +1,18 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE nbpcg-build PUBLIC "-//linsdale/nbpcgbuild/DTD DMC SCHEMA 1.0//EN" "nbres:/linsdale/nbpcg/nbpcgbuild.dtd">
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE nbpcg-build PUBLIC "-//uk/org/rlinsdale/nbpcgbuild/DTD NBPCGBUILD SCHEMA 1.0//EN" "nbres:/uk/org/rlinsdale/nbpcg/nbpcgbuild.dtd">
 <nbpcg-build name="Authentication">
     <folder name="data" project="LindosLifeCycleLibrary" package="uk.org.rlinsdale.lindos.authentication.dataobjects"/>
     <scriptfolder project="LindosLifeCycleLibrary"/>
-    <execute action="message" message="generating db files"/>
-    <execute action="entitytemplate" template="create" folder="script" filename="authentication-createdb.sql" usedbinfo="authentication"/>
-    <execute action="entitytemplate" template="backupscript" folder="script" filename="authentication-backupscript.sh" usedbinfo="authentication"/>
-    <execute action="entitytemplate" template="createtables" folder="script" filename="authentication-createtables.sql" usedbinfo="authentication"/>
+    <execute action="message" message="generating script files"/>
+    <execute action="entitytemplate" template="create" folder="script" filename="authentication-createdb.sql" usedbinfo="authentication" log="uk.org.rlinsdale.lindos.lifecycle" package="generated-scripts" license="gpl30"/>
+    <execute action="entitytemplate" template="backupscript" folder="script" filename="authentication-backupscript.sh" usedbinfo="authentication" log="uk.org.rlinsdale.lindos.lifecycle" package="generated-scripts" license="gpl30"/>
+    <execute action="entitytemplate" template="createtables" folder="script" filename="authentication-createtables.sql" usedbinfo="authentication" log="uk.org.rlinsdale.lindos.lifecycle" package="generated-scripts" license="gpl30"/>
     <execute action="message" message="generating data files"/>
-    <execute action="entitytemplate" template="rootentity" folder="data" filename="UserRoot.java" useentityinfo="UserRoot" nodepackage="" log="uk.org.rlinsdale.lindos.lifecycle" package="uk.org.rlinsdale.lindos.authentication.dataobjects"/>
-    <execute action="entitytemplate" template="rootentity" folder="data" filename="ApplicationRoot.java" useentityinfo="ApplicationRoot" nodepackage="" log="uk.org.rlinsdale.lindos.lifecycle" package="uk.org.rlinsdale.lindos.authentication.dataobjects"/>
-    <execute action="entitytemplate" template="entity" folder="data" filename="User.java" useentityinfo="User" nodepackage="" log="uk.org.rlinsdale.lindos.lifecycle" package="uk.org.rlinsdale.lindos.authentication.dataobjects"/>
-    <execute action="entitytemplate" template="entity" folder="data" filename="Application.java" useentityinfo="Application" nodepackage="" log="uk.org.rlinsdale.lindos.lifecycle" package="uk.org.rlinsdale.lindos.authentication.dataobjects"/>
-    <execute action="entitytemplate" template="entity" folder="data" filename="Role.java" useentityinfo="Role" nodepackage="" log="uk.org.rlinsdale.lindos.lifecycle" package="uk.org.rlinsdale.lindos.authentication.dataobjects"/>
-    <execute action="entitytemplate" template="entity" folder="data" filename="Permission.java" useentityinfo="Permission" nodepackage="" log="uk.org.rlinsdale.lindos.lifecycle" package="uk.org.rlinsdale.lindos.authentication.dataobjects"/>
-    <execute action="entitytemplate" template="entity" folder="data" filename="Userrole.java" useentityinfo="Userrole" nodepackage="" log="uk.org.rlinsdale.lindos.lifecycle" package="uk.org.rlinsdale.lindos.authentication.dataobjects"/>
-    <execute action="entitytemplate" template="entity" folder="data" filename="Userpermission.java" useentityinfo="Userpermission" nodepackage="" log="uk.org.rlinsdale.lindos.lifecycle" package="uk.org.rlinsdale.lindos.authentication.dataobjects"/>
+    <execute action="entitytemplate" template="rootentity" folder="data" filename="UserRoot.java" useentityinfo="UserRoot" nodepackage="" log="uk.org.rlinsdale.lindos.lifecycle" package="uk.org.rlinsdale.lindos.authentication.dataobjects" license="gpl30"/>
+    <execute action="entitytemplate" template="rootentity" folder="data" filename="ApplicationRoot.java" useentityinfo="ApplicationRoot" nodepackage="" log="uk.org.rlinsdale.lindos.lifecycle" package="uk.org.rlinsdale.lindos.authentication.dataobjects" license="gpl30"/>
+    <execute action="entitytemplate" template="entity" folder="data" filename="User.java" useentityinfo="User" nodepackage="" log="uk.org.rlinsdale.lindos.lifecycle" package="uk.org.rlinsdale.lindos.authentication.dataobjects" license="gpl30"/>
+    <execute action="entitytemplate" template="entity" folder="data" filename="Application.java" useentityinfo="Application" nodepackage="" log="uk.org.rlinsdale.lindos.lifecycle" package="uk.org.rlinsdale.lindos.authentication.dataobjects" license="gpl30"/>
+    <execute action="entitytemplate" template="entity" folder="data" filename="Role.java" useentityinfo="Role" nodepackage="" log="uk.org.rlinsdale.lindos.lifecycle" package="uk.org.rlinsdale.lindos.authentication.dataobjects" license="gpl30"/>
+    <execute action="entitytemplate" template="entity" folder="data" filename="Permission.java" useentityinfo="Permission" nodepackage="" log="uk.org.rlinsdale.lindos.lifecycle" package="uk.org.rlinsdale.lindos.authentication.dataobjects" license="gpl30"/>
+    <execute action="entitytemplate" template="entity" folder="data" filename="Userrole.java" useentityinfo="Userrole" nodepackage="" log="uk.org.rlinsdale.lindos.lifecycle" package="uk.org.rlinsdale.lindos.authentication.dataobjects" license="gpl30"/>
+    <execute action="entitytemplate" template="entity" folder="data" filename="Userpermission.java" useentityinfo="Userpermission" nodepackage="" log="uk.org.rlinsdale.lindos.lifecycle" package="uk.org.rlinsdale.lindos.authentication.dataobjects" license="gpl30"/>
 </nbpcg-build>
