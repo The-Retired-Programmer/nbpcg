@@ -24,7 +24,7 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import static javax.swing.Action.NAME;
 import ${nodepackage}.${NODEINFO.key};
-import linsdale.nbpcg.annotations.RegisterNodeAction;
+import uk.org.rlinsdale.nbpcg.annotations.RegisterNodeAction;
 import org.openide.util.ContextAwareAction;
 import org.openide.util.Lookup;
 

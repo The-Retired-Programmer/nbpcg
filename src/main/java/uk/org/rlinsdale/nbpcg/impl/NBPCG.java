@@ -96,10 +96,10 @@ public final class NBPCG {
                             folders.put(buildfolder.getString("name"), findFolder(buildfolder.getString("project"), buildfolder.getString("package"), openProjects));
                         }
                     }
-                    FreemarkerListMap buildsqlfolders = buildmap.getFreemarkerListMap("sqlfolder");
-                    if (buildsqlfolders != null) {
-                        for (FreemarkerHashMap buildsqlfolder : buildsqlfolders) {
-                            folders.put("sql", findInConfigFolder(buildsqlfolder.getString("project"), "generated-scripts", openProjects));
+                    FreemarkerListMap buildscriptfolders = buildmap.getFreemarkerListMap("scriptfolder");
+                    if (buildscriptfolders != null) {
+                        for (FreemarkerHashMap buildscriptfolder : buildscriptfolders) {
+                            folders.put("script", findInConfigFolder(buildscriptfolder.getString("project"), "generated-scripts", openProjects));
                         }
                     }
                     //

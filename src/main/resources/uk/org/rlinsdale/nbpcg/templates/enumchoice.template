@@ -25,10 +25,10 @@
 package ${package};
 
 import java.util.Arrays;
-import linsdale.nbpcg.formsupportlib.FormFieldChangeListenerParams;
-import linsdale.nbpcg.supportlib.IntWithDescription;
-import linsdale.nbpcg.supportlib.Listener;
-import linsdale.nbpcg.topcomponentsupportlib.EnumChoiceField;
+import uk.org.rlinsdale.nbpcg.formsupportlib.FormFieldChangeListenerParams;
+import uk.org.rlinsdale.nbpcg.supportlib.IntWithDescription;
+import uk.org.rlinsdale.nbpcg.supportlib.Listener;
+import uk.org.rlinsdale.nbpcg.topcomponentsupportlib.EnumChoiceField;
 
 /**
  * The ${field.name?cap_first} Enum Of ${NODEINFO.entity} Choice Field

@@ -23,13 +23,13 @@ import java.awt.datatransfer.DataFlavor;
 import java.util.List;
 import javax.swing.Action;
 import ${datapackage}.*;
-import linsdale.nbpcg.datasupportlib.entity.*;
-import linsdale.nbpcg.annotations.RegisterNodeSavedAction;
-import linsdale.nbpcg.annotations.RegisterNodeSavedActions;
-import linsdale.nbpcg.nodesupportlib.nodes.DataFlavorAndAction;
-import linsdale.nbpcg.nodesupportlib.nodes.RootNode;
-import linsdale.nbpcg.nodesupportlib.properties.StringReadonlyProperty;
-import linsdale.nbpcg.supportlib.LogicException;
+import uk.org.rlinsdale.nbpcg.datasupportlib.entity.*;
+import uk.org.rlinsdale.nbpcg.annotations.RegisterNodeSavedAction;
+import uk.org.rlinsdale.nbpcg.annotations.RegisterNodeSavedActions;
+import uk.org.rlinsdale.nbpcg.nodesupportlib.nodes.DataFlavorAndAction;
+import uk.org.rlinsdale.nbpcg.nodesupportlib.nodes.RootNode;
+import uk.org.rlinsdale.nbpcg.nodesupportlib.properties.StringReadonlyProperty;
+import uk.org.rlinsdale.nbpcg.supportlib.LogicException;
 import org.openide.nodes.*;
 
 /**

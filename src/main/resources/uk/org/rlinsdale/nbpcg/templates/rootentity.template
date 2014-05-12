@@ -32,11 +32,11 @@ import java.util.List;
 <#if hassortchildren >
 import ${nodepackage}.*;
 </#if>
-import linsdale.nbpcg.datasupportlib.entity.*;
-import linsdale.nbpcg.datasupportlib.entityreferences.*;
-import linsdale.nbpcg.supportlib.IntWithDescription;
+import uk.org.rlinsdale.nbpcg.datasupportlib.entity.*;
+import uk.org.rlinsdale.nbpcg.datasupportlib.entityreferences.*;
+import uk.org.rlinsdale.nbpcg.supportlib.IntWithDescription;
 <#if haschildren >
-import linsdale.nbpcg.supportlib.Listener;
+import uk.org.rlinsdale.nbpcg.supportlib.Listener;
 </#if>
 import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;

@@ -20,7 +20,7 @@
 package ${package};
 
 import ${nodepackage}.*;
-import linsdale.nbpcg.topcomponentsupportlib.ExplorerTopComponent;
+import uk.org.rlinsdale.nbpcg.topcomponentsupportlib.ExplorerTopComponent;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 <#if type="Tree">

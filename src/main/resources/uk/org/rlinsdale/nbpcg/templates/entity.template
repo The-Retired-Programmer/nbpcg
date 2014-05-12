@@ -37,18 +37,18 @@ import java.util.List;
 <#if ENTITYINFO.access = "rw" >
 import java.util.Map;
 </#if>
-import linsdale.lindos.lifecycle.ApplicationProperties;
+import org.openide.util.Lookup;
+import org.openide.util.lookup.ServiceProvider;
+import uk.org.rlinsdale.lindos.lifecycle.ApplicationProperties;
 <#if hassortchildren>
 import ${nodepackage}.*;
 </#if>
-import linsdale.nbpcg.datasupportlib.dataaccess.DataAccess${ENTITYINFO.access?upper_case};
-import linsdale.nbpcg.datasupportlib.dataaccess.${ENTITYINFO.type?lower_case}.*;
-import linsdale.nbpcg.datasupportlib.dbfields.${ENTITYINFO.withfields?lower_case}.*;
-import linsdale.nbpcg.datasupportlib.entity.*;
-import linsdale.nbpcg.datasupportlib.entityreferences.*;
-import linsdale.nbpcg.supportlib.*;
-import org.openide.util.Lookup;
-import org.openide.util.lookup.ServiceProvider;
+import uk.org.rlinsdale.nbpcg.datasupportlib.dataaccess.DataAccess${ENTITYINFO.access?upper_case};
+import uk.org.rlinsdale.nbpcg.datasupportlib.dataaccess.${ENTITYINFO.type?lower_case}.*;
+import uk.org.rlinsdale.nbpcg.datasupportlib.dbfields.${ENTITYINFO.withfields?lower_case}.*;
+import uk.org.rlinsdale.nbpcg.datasupportlib.entity.*;
+import uk.org.rlinsdale.nbpcg.datasupportlib.entityreferences.*;
+import uk.org.rlinsdale.nbpcg.supportlib.*;
 
 /**
  * The ${ENTITYINFO.name} Entity (${ENTITYINFO.access}).

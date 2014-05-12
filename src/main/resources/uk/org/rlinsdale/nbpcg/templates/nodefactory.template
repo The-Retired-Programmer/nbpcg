@@ -28,12 +28,12 @@ import java.awt.datatransfer.DataFlavor;
 import java.util.List;
 import javax.swing.Action;
 import  ${datapackage}.*;
-import linsdale.nbpcg.annotations.RegisterNodeSavedAction;
-import linsdale.nbpcg.annotations.RegisterNodeSavedActions;
-import linsdale.nbpcg.datasupportlib.entity.*;
-import linsdale.nbpcg.nodesupportlib.nodes.*;
-import linsdale.nbpcg.nodesupportlib.properties.*;
-import linsdale.nbpcg.supportlib.*;
+import uk.org.rlinsdale.nbpcg.annotations.RegisterNodeSavedAction;
+import uk.org.rlinsdale.nbpcg.annotations.RegisterNodeSavedActions;
+import uk.org.rlinsdale.nbpcg.datasupportlib.entity.*;
+import uk.org.rlinsdale.nbpcg.nodesupportlib.nodes.*;
+import uk.org.rlinsdale.nbpcg.nodesupportlib.properties.*;
+import uk.org.rlinsdale.nbpcg.supportlib.*;
 import org.openide.nodes.Node;
 import org.openide.nodes.PropertySupport;
 

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-    SYSTEM ID  : nbres:/linsdale/nbpcg/nbpcg.dtd
+    SYSTEM ID  : nbres:/uk.org.rlinsdale/nbpcg/nbpcg.dtd
 
     Author     : Richard Linsdale (richard.linsdale at blueyonder.co.uk)
 -->
@@ -13,13 +13,12 @@
         <!ATTLIST build
             viewerroles CDATA #REQUIRED
             >
-        <!ELEMENT project (generatesql?, generate*) >
+        <!ELEMENT project (generatescripts?, generate*) >
             <!ATTLIST project
                 name CDATA #REQUIRED
                 log CDATA #REQUIRED
-                version CDATA #REQUIRED
                 >
-            <!ELEMENT generatesql EMPTY>
+            <!ELEMENT generatescripts EMPTY>
             <!ELEMENT generate EMPTY>
                 <!ATTLIST generate
                     type (data|node|nodeviewer|nodeeditor) #REQUIRED

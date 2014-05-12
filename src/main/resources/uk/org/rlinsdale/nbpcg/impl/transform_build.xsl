@@ -31,11 +31,11 @@
             <xsl:for-each select="build/project/generate">
                 <folder name="{@type}" project="{../@name}" package="{@package}" />
             </xsl:for-each>
-            <xsl:for-each select="build/project/generatesql">
-                <sqlfolder project="{../@name}"/>
+            <xsl:for-each select="build/project/generatescripts">
+                <scriptfolder project="{../@name}"/>
             </xsl:for-each>
-            <execute action="message" message="generating db files" />
-            <xsl:if test="build/project/generatesql">
+            <execute action="message" message="generating script files" />
+            <xsl:if test="build/project/generatescripts">
                 <xsl:call-template name="createdatabase"/>
                 <xsl:call-template name="backupscript"/>
                 <xsl:call-template name="createstandardtables"/>
@@ -546,7 +546,7 @@
     
     <xsl:template name="createdatabase">
         <xsl:for-each select="databases/database[not(@usepackage)]" >
-            <execute action="entitytemplate" template="create" folder="sql" filename="{@name}-createdb.sql" usedbinfo="{@name}">
+            <execute action="entitytemplate" template="create" folder="script" filename="{@name}-createdb.sql" usedbinfo="{@name}">
                 <xsl:call-template name="setbuildattributes">
                     <xsl:with-param name="type">sql</xsl:with-param>
                 </xsl:call-template>
@@ -561,9 +561,9 @@
                     <xsl:with-param name="string" select="@name" />
                 </xsl:call-template>
             </xsl:variable>      
-            <execute action="entitytemplate" template="backupscript" folder="sql" filename="{@name}-backupscript.sh" usedbinfo="{@name}">
+            <execute action="entitytemplate" template="backupscript" folder="script" filename="{@name}-backupscript.sh" usedbinfo="{@name}">
                 <xsl:call-template name="setbuildattributes">
-                    <xsl:with-param name="type">sql</xsl:with-param>
+                    <xsl:with-param name="type">script</xsl:with-param>
                 </xsl:call-template>
             </execute>
         </xsl:for-each>
@@ -571,9 +571,9 @@
     
     <xsl:template name="createstandardtables">
         <xsl:for-each select="databases/database[not(@usepackage)]" > 
-            <execute action="entitytemplate" template="createtables" folder="sql" filename="{@name}-createtables.sql" usedbinfo="{@name}">
+            <execute action="entitytemplate" template="createtables" folder="script" filename="{@name}-createtables.sql" usedbinfo="{@name}">
                 <xsl:call-template name="setbuildattributes">
-                    <xsl:with-param name="type">sql</xsl:with-param>
+                    <xsl:with-param name="type">script</xsl:with-param>
                 </xsl:call-template>
             </execute>
         </xsl:for-each>
@@ -584,24 +584,18 @@
     <xsl:template name="setbuildattributes" >
         <xsl:param name="type" />
         <xsl:choose>
-            <xsl:when test="$type='sql'" >
-                <xsl:for-each select="/nbpcg/build/project/generatesql" >
+            <xsl:when test="$type='script'" >
+                <xsl:for-each select="/nbpcg/build/project/generatescript" >
                     <xsl:attribute name="log" >
                         <xsl:value-of select="../@log" />
                     </xsl:attribute>
-                    <xsl:attribute name="version" >
-                        <xsl:value-of select="../@version" />
-                    </xsl:attribute>
-                    <xsl:attribute name="package" >nbpcg-files/sql</xsl:attribute>
+                    <xsl:attribute name="package" >generated-scripts</xsl:attribute>
                 </xsl:for-each>
             </xsl:when>
             <xsl:otherwise>
                 <xsl:for-each select="/nbpcg/build/project/generate[@type=$type]" >
                     <xsl:attribute name="log" >
                         <xsl:value-of select="../@log" />
-                    </xsl:attribute>
-                    <xsl:attribute name="version" >
-                        <xsl:value-of select="../@version" />
                     </xsl:attribute>
                     <xsl:attribute name="package" >
                         <xsl:value-of select="@package" />

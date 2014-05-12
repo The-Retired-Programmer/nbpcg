@@ -29,8 +29,8 @@ import ${datapackage}.${NODEINFO.entity};
 <#if !PARENTNODEINFO.isroot??>
 import ${nodepackage}.${NODEINFO.parentnodeandfactory};
 </#if>
-import linsdale.nbpcg.annotations.RegisterNodeAction;
-import linsdale.nbpcg.supportlib.Log;
+import uk.org.rlinsdale.nbpcg.annotations.RegisterNodeAction;
+import uk.org.rlinsdale.nbpcg.supportlib.Log;
 import org.openide.util.ContextAwareAction;
 import org.openide.util.Lookup;
 
