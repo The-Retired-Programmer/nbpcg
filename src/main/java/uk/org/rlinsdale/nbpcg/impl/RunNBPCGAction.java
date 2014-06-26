@@ -25,6 +25,9 @@ import org.openide.filesystems.FileObject;
 import org.openide.loaders.DataObject;
 
 /**
+ * Action to execute a NBPCG script (Both ANT and Maven projects are
+ * covered by this action).
+ *
  * @author Richard Linsdale (richard.linsdale at blueyonder.co.uk)
  */
 @ActionID(category = "Run", id = "uk.org.rlinsdale.nbpcg.actions.BuildAction")
@@ -34,6 +37,11 @@ public final class RunNBPCGAction implements ActionListener {
 
     private final DataObject context;
 
+    /**
+     * Constructor
+     * 
+     * @param context the NBPCG script data object
+     */
     public RunNBPCGAction(DataObject context) {
         this.context = context;
     }

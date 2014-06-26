@@ -19,22 +19,48 @@ package uk.org.rlinsdale.nbpcg.templateanalysis;
 import uk.org.rlinsdale.nbpcg.templateanalysis.CharProcessor.ItemType;
 
 /**
+ *
+ * A Callback object. the call back object includes a list of item types which
+ * control the callback action (only called if type is defined in list)
+ *
  * @author Richard Linsdale (richard.linsdale at blueyonder.co.uk)
  */
 public abstract class Callback {
 
     private ItemType[] types;
 
+    /**
+     * The call back function.
+     *
+     * @param type the item type associated with this callback
+     * @param item the item value
+     */
     public abstract void action(ItemType type, String item);
 
+    /**
+     * Set the item type to be supported by this callback
+     *
+     * @param type the item type associated with this callback
+     */
     public final void setItemType(ItemType type) {
         types = new ItemType[]{type};
     }
 
+    /**
+     * Set a set of item types to be supported by this callback
+     *
+     * @param types the set of items types associated with this callback
+     */
     public final void setItemTypes(ItemType[] types) {
         this.types = types;
     }
 
+    /**
+     * Test if the callback action should be called with a particlar item type.
+     *
+     * @param type the item type to be tested
+     * @return true if callback action should be called
+     */
     public final boolean isCallable(ItemType type) {
         for (ItemType t : types) {
             if (type == t) {

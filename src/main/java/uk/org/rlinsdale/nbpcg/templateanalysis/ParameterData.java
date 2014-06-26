@@ -22,13 +22,21 @@ import java.util.Map;
 import uk.org.rlinsdale.nbpcg.templateanalysis.ValueData.ValueType;
 
 /**
+ *
+ * This class manages all variables which have been found when parsing the NBPCG
+ * freemarker template.
+ *
  * @author Richard Linsdale (richard.linsdale at blueyonder.co.uk)
  */
 public class ParameterData {
 
     private final Map<String, ValueData> parameterdata = new HashMap<>();
 
-
+    /**
+     * Add a usage for a variable
+     *
+     * @param name the variable name
+     */
     public void addUsage(String name) {
         if (parameterdata.containsKey(name)) {
             parameterdata.get(name).additionalUsage();
@@ -36,11 +44,22 @@ public class ParameterData {
             parameterdata.put(name, new ValueData(name, ValueType.ISUSAGE));
         }
     }
-    
+
+    /**
+     * Add a function usage for a variable
+     *
+     * @param name the variable name
+     * @param function the function name
+     */
     public void addFunction(String name, String function) {
-            parameterdata.get(name).additionalFunction(function);
+        parameterdata.get(name).additionalFunction(function);
     }
 
+    /**
+     * Add a definition for a variable
+     *
+     * @param name the variable name
+     */
     public void addDefinition(String name) {
         if (parameterdata.containsKey(name)) {
             parameterdata.get(name).additionalDefinition();
@@ -49,6 +68,11 @@ public class ParameterData {
         }
     }
 
+    /**
+     * Get the set of all variable ValueData objects
+     *
+     * @return set of all variable ValueData objects
+     */
     public Collection<ValueData> get() {
         return parameterdata.values();
     }

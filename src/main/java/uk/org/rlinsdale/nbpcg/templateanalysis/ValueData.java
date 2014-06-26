@@ -21,16 +21,38 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * Records the state of a variable - usage and definition counts, and function
+ * usages.
+ *
  * @author Richard Linsdale (richard.linsdale at blueyonder.co.uk)
  */
 public class ValueData {
 
-    public enum ValueType{ISDEFINITION, ISUSAGE};
+    /**
+     * Type of the ValueData
+     */
+    public enum ValueType {
+
+        /**
+         * is a Definition
+         */
+        ISDEFINITION,
+        /**
+         * is a Usage
+         */
+        ISUSAGE
+    };
     private final String name;
     private int usages;
     private int definitions;
     private final Map<String, ValueData> functiondata = new HashMap<>();
 
+    /**
+     * Constructor
+     *
+     * @param name defines the name of this variable
+     * @param type defines the usage type of this variable
+     */
     public ValueData(String name, ValueType type) {
         this.name = name;
         if (type == ValueType.ISDEFINITION) {
@@ -42,11 +64,19 @@ public class ValueData {
         }
     }
 
+    /**
+     * Increment the usage count of this variable
+     */
     public void additionalUsage() {
         usages++;
     }
-    
-    public void additionalFunction(String function){
+
+    /**
+     * Increment the function count for this variable.
+     *
+     * @param function the function count to be incremented
+     */
+    public void additionalFunction(String function) {
         if (functiondata.containsKey(function)) {
             functiondata.get(function).additionalUsage();
         } else {
@@ -54,26 +84,54 @@ public class ValueData {
         }
     }
 
+    /**
+     * Increment the definition count of this variable
+     */
     public void additionalDefinition() {
         definitions++;
     }
 
+    /**
+     * Get the name of this variable
+     *
+     * @return the name of this variable
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Get the usage count for this variable
+     *
+     * @return the usage count
+     */
     public int getUsages() {
         return usages;
     }
 
+    /**
+     * Get the definition count for this variable
+     *
+     * @return the definition count
+     */
     public int getDefinitions() {
         return definitions;
     }
 
+    /**
+     * Get the set of function valuedata objects for this variable
+     *
+     * @return the set of function valuedata objects
+     */
     public Collection<ValueData> getFunctionData() {
         return functiondata.values();
     }
 
+    /**
+     * Test if the variable has functions.
+     *
+     * @return true if it has one or more functions
+     */
     public boolean hasFunctions() {
         return !functiondata.isEmpty();
     }

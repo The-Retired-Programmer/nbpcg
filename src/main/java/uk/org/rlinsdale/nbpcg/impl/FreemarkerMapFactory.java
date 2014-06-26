@@ -21,7 +21,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
+import static javax.xml.transform.TransformerFactory.newInstance;
 import javax.xml.transform.dom.DOMResult;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamSource;
@@ -29,6 +29,11 @@ import org.openide.filesystems.FileObject;
 import org.w3c.dom.*;
 
 /**
+ * A factory which create FreeMarkerMaps. These are the representation of all
+ * parameters to be used in a freemarker template expansion. For full details of
+ * these parameter structures (variables, hashes and lists) please see the
+ * freemarker documentation.
+ *
  * @author Richard Linsdale (richard.linsdale at blueyonder.co.uk)
  */
 public class FreemarkerMapFactory {
@@ -37,6 +42,11 @@ public class FreemarkerMapFactory {
     private final String today;
     private final String deffile;
 
+    /**
+     * Constructor
+     *
+     * @param fo the file object (ie the script file)
+     */
     public FreemarkerMapFactory(FileObject fo) {
         deffile = fo.getNameExt();
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
@@ -46,20 +56,42 @@ public class FreemarkerMapFactory {
         timestamp = ds.format(now);
     }
 
+    /**
+     * Create a freemarker hash map - which is the top level of the parameter
+     * structure. An XML document will first be transformed and then the
+     * resulting XML document will be parsed to extract parameter to create the
+     * top level freemarker Hashmap.
+     *
+     * @param root the root element of the XML to be transformed
+     * @param inxsl the transform to be applied
+     * @return the freemarker hashmap
+     * @throws Exception if problems
+     */
     public FreemarkerHashMap createFreemarkerHashMapByTransformation(Element root, InputStream inxsl) throws Exception {
-        FreemarkerHashMap hash =  createTopHash(transform(root, inxsl));
+        FreemarkerHashMap hash = createTopHash(transform(root, inxsl));
         addSpecials(hash);
         return hash;
     }
 
+    /**
+     * Create a freemarker hash map - which is the top level of the parameter
+     * structure. An XML document will first be transformed and then the
+     * resulting XML document will be parsed to extract parameter to create the
+     * top level freemarker list map.
+     *
+     * @param root the root element of the XML to be transformed
+     * @param inxsl the transform to be applied
+     * @return the freemarker hashmap
+     * @throws Exception if problems
+     */
     public FreemarkerHashMap createFreemarkerListMapByTransformation(Element root, InputStream inxsl) throws Exception {
-        FreemarkerHashMap hash =  createLowerHash(transform(root, inxsl));
+        FreemarkerHashMap hash = createLowerHash(transform(root, inxsl));
         addSpecials(hash);
         return hash;
     }
 
     private Element transform(Element root, InputStream inxsl) throws Exception {
-        Transformer tr = TransformerFactory.newInstance().newTransformer(new StreamSource(inxsl));
+        Transformer tr = newInstance().newTransformer(new StreamSource(inxsl));
         inxsl.close();
         DOMSource ds = new DOMSource(root);
         DOMResult dr = new DOMResult();
@@ -93,7 +125,7 @@ public class FreemarkerMapFactory {
         return hash;
     }
 
-    private FreemarkerHashMap createLowerHash(Element element){
+    private FreemarkerHashMap createLowerHash(Element element) {
         FreemarkerHashMap hash = new FreemarkerHashMap();
         NamedNodeMap atts = element.getAttributes();
         for (int i = 0; i < atts.getLength(); i++) {
@@ -114,29 +146,50 @@ public class FreemarkerMapFactory {
         }
         return hash;
     }
-    
-    private void addSpecials(FreemarkerHashMap hash) throws Exception {
-            hash.put("TODAY", today);
-            hash.put("NOW", timestamp);
-            hash.put("DEFINITION_FILE", deffile);
-            hash.put("USER", "NetBeans Platform Code Generator");
-            hash.put("USERCODE", "nbcg");
-        }
 
+    private void addSpecials(FreemarkerHashMap hash) throws Exception {
+        hash.put("TODAY", today);
+        hash.put("NOW", timestamp);
+        hash.put("DEFINITION_FILE", deffile);
+        hash.put("USER", "NetBeans Platform Code Generator");
+        hash.put("USERCODE", "nbcg");
+    }
+
+    /**
+     * The Freemarker Hash Map
+     */
     public class FreemarkerHashMap extends LinkedHashMap<String, Object> {
 
+        /**
+         * Constructor
+         */
         protected FreemarkerHashMap() {
         }
 
+        /**
+         * Get a value from the hash map, looked up by key
+         *
+         * @param key the key to be used in the lookup
+         * @return the value
+         */
         public String getString(String key) {
             return (String) get(key);
         }
 
+        /**
+         * Get a Freemarker ListMap from the hashmap, looked up by key
+         *
+         * @param key the key to be used in the lookup
+         * @return the freemarker ListMap
+         */
         public FreemarkerListMap getFreemarkerListMap(String key) {
             return (FreemarkerListMap) get(key);
         }
     }
 
+    /**
+     * The FreeMarker List Map
+     */
     public class FreemarkerListMap extends ArrayList<FreemarkerHashMap> {
     }
 }

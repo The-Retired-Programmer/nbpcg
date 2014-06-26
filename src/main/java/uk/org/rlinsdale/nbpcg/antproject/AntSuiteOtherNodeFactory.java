@@ -18,12 +18,15 @@ package uk.org.rlinsdale.nbpcg.antproject;
 
 import org.netbeans.api.project.Project;
 import org.netbeans.spi.project.ui.support.NodeFactory;
-import org.netbeans.spi.project.ui.support.NodeFactorySupport;
+import static org.netbeans.spi.project.ui.support.NodeFactorySupport.fixedNodeList;
 import org.netbeans.spi.project.ui.support.NodeList;
 import org.openide.loaders.DataObjectNotFoundException;
-import org.openide.util.Exceptions;
+import static org.openide.util.Exceptions.printStackTrace;
 
 /**
+ * The Node factory for the Ant Project Suite which includes NBPCG other-files
+ * element(s).
+ * 
  * @author Richard Linsdale (richard.linsdale at blueyonder.co.uk)
  */
 @NodeFactory.Registration(projectType = "org-netbeans-modules-apisupport-project-suite")
@@ -33,11 +36,11 @@ public class AntSuiteOtherNodeFactory implements NodeFactory {
     public NodeList<?> createNodes(Project project) {
         try {
             return project.getProjectDirectory().getFileObject("other-files") != null
-                    ? NodeFactorySupport.fixedNodeList(new AntOtherNode(project))
-                    : NodeFactorySupport.fixedNodeList();
+                    ? fixedNodeList(new AntOtherNode(project))
+                    : fixedNodeList();
         } catch (DataObjectNotFoundException ex) {
-            Exceptions.printStackTrace(ex);
+            printStackTrace(ex);
         }
-        return NodeFactorySupport.fixedNodeList();
+        return fixedNodeList();
     }
 }

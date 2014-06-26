@@ -18,13 +18,13 @@ package uk.org.rlinsdale.nbpcg.impl;
 
 import java.io.IOException;
 import java.io.InputStream;
+import static java.lang.Math.round;
+import static java.lang.System.currentTimeMillis;
 import java.util.HashMap;
 import java.util.Map;
-import javax.xml.parsers.DocumentBuilderFactory;
-import uk.org.rlinsdale.nbpcg.impl.FreemarkerMapFactory.FreemarkerHashMap;
-import uk.org.rlinsdale.nbpcg.impl.FreemarkerMapFactory.FreemarkerListMap;
+import static javax.xml.parsers.DocumentBuilderFactory.newInstance;
 import org.netbeans.api.project.Project;
-import org.netbeans.api.project.ProjectUtils;
+import static org.netbeans.api.project.ProjectUtils.getInformation;
 import org.netbeans.api.project.ui.OpenProjects;
 import org.openide.filesystems.FileObject;
 import org.openide.util.RequestProcessor;
@@ -32,8 +32,12 @@ import org.openide.windows.IOProvider;
 import org.openide.windows.InputOutput;
 import org.openide.windows.OutputWriter;
 import org.w3c.dom.Element;
+import uk.org.rlinsdale.nbpcg.impl.FreemarkerMapFactory.FreemarkerHashMap;
+import uk.org.rlinsdale.nbpcg.impl.FreemarkerMapFactory.FreemarkerListMap;
 
 /**
+ * The worker which executes the NBPCG script and generates the required files.
+ *
  * @author Richard Linsdale (richard.linsdale at blueyonder.co.uk)
  */
 public final class NBPCG {
@@ -43,16 +47,29 @@ public final class NBPCG {
     private final String tabtext;
     private final boolean mavenProject;
 
+    /**
+     * Constructor
+     *
+     * @param tabtext the text to be displayed in the output tab
+     * @param fo the NBPCG script file object
+     * @param mavenProject true if this is a Maven project
+     */
     public NBPCG(String tabtext, FileObject fo, boolean mavenProject) {
         this.tabtext = tabtext;
         this.fo = fo;
         this.mavenProject = mavenProject;
     }
 
+    /**
+     * Execute the script on a background thread
+     */
     public void executeScriptInBackground() {
         new RequestProcessor(NBPCG.class).post(new CreateRunnable());
     }
 
+    /**
+     * Execute the script on this thread
+     */
     public void executeScript() {
         new CreateRunnable().run();
     }
@@ -62,7 +79,7 @@ public final class NBPCG {
         @Override
         public final void run() {
             boolean success = true;
-            long start = System.currentTimeMillis();
+            long start = currentTimeMillis();
             InputOutput io = IOProvider.getDefault().getIO("NBPCG - " + tabtext, false);
             io.select();
             try (OutputWriter msg = io.getOut(); OutputWriter err = io.getErr()) {
@@ -73,7 +90,7 @@ public final class NBPCG {
                     msg.println("Loading Definition File");
                     Element root;
                     try (InputStream in = fo.getInputStream()) {
-                        root = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(in).getDocumentElement();
+                        root = newInstance().newDocumentBuilder().parse(in).getDocumentElement();
                     }
                     FreemarkerMapFactory factory = new FreemarkerMapFactory(fo);
                     //
@@ -87,7 +104,7 @@ public final class NBPCG {
                     msg.println("Creating required source packages and removing any content");
                     Map<String, Project> openProjects = new HashMap<>();
                     for (Project project : OpenProjects.getDefault().getOpenProjects()) {
-                        openProjects.put(ProjectUtils.getInformation(project).getDisplayName(), project);
+                        openProjects.put(getInformation(project).getDisplayName(), project);
                     }
                     Map<String, FileObject> folders = new HashMap<>();
                     FreemarkerListMap buildfolders = buildmap.getFreemarkerListMap("folder");
@@ -138,7 +155,7 @@ public final class NBPCG {
                         ex.printStackTrace(err);
                     }
                 }
-                int elapsed = Math.round((System.currentTimeMillis() - start) / 1000F);
+                int elapsed = round((currentTimeMillis() - start) / 1000F);
                 msg.println("BUILD " + (success ? "SUCCESSFUL" : "FAILED") + " (total time: " + Integer.toString(elapsed) + " seconds)");
             }
         }
@@ -179,7 +196,7 @@ public final class NBPCG {
             if (p == null) {
                 throw new IOException("Required project is not open (" + project + ")");
             }
-            FileObject pfo = childfolder(p.getProjectDirectory(), mavenProject ? "src/main" :"nbpcg-files");
+            FileObject pfo = childfolder(p.getProjectDirectory(), mavenProject ? "src/main" : "nbpcg-files");
             pfo = childfolder(pfo, folder);
             // and empty folder of all contents prior to rebuilding code
             for (FileObject fd : pfo.getChildren()) {

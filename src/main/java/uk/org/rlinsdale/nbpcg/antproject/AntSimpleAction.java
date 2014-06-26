@@ -21,7 +21,7 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import uk.org.rlinsdale.nbpcg.impl.NBPCG;
 import org.netbeans.api.project.Project;
-import org.netbeans.api.project.ProjectUtils;
+import static org.netbeans.api.project.ProjectUtils.getInformation;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.awt.ActionRegistration;
@@ -31,10 +31,13 @@ import org.openide.util.ContextAwareAction;
 import org.openide.util.Lookup;
 
 /**
+ * Action which is added to an ANT project, if it includes a NBPCG script. This
+ * action execute the NBPCG code generation (on a background thread).
+ *
  * @author Richard Linsdale (richard.linsdale at blueyonder.co.uk)
  */
 @ActionID(category = "Projects", id = "uk.org.rlinsdale.nbpcg.antproject.actions.build")
-@ActionRegistration(lazy=false, displayName = "xxx")
+@ActionRegistration(lazy = false, displayName = "xxx")
 @ActionReference(path = "Projects/Actions", position = -9999)
 public final class AntSimpleAction extends AbstractAction implements ContextAwareAction {
 
@@ -52,6 +55,11 @@ public final class AntSimpleAction extends AbstractAction implements ContextAwar
 
         private final Project p;
 
+        /**
+         * Constructor
+         *
+         * @param context the project lookup
+         */
         public ContextAction(Lookup context) {
             p = context.lookup(Project.class);
             setEnabled(p.getProjectDirectory().getFileObject("nbpcg-files/script.xml") != null);
@@ -63,7 +71,7 @@ public final class AntSimpleAction extends AbstractAction implements ContextAwar
         public void actionPerformed(ActionEvent e) {
             FileObject f = p.getProjectDirectory().getFileObject("nbpcg-files/script.xml");
             if (f != null) {
-                new NBPCG(ProjectUtils.getInformation(p).getDisplayName(), f,false).executeScriptInBackground();
+                new NBPCG(getInformation(p).getDisplayName(), f, false).executeScriptInBackground();
             }
         }
     }

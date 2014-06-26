@@ -20,13 +20,39 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ *
+ * The character stream processor - extracts tokens from input string and calls
+ * relevant callback routines.
+ *
  * @author Richard Linsdale (richard.linsdale at blueyonder.co.uk)
  */
 public class CharProcessor {
 
+    /**
+     *
+     */
     public enum ItemType {
 
-        VARIABLE, LITERAL, NUMBER, FUNCTION, OTHER
+        /**
+         * a variable token
+         */
+        VARIABLE,
+        /**
+         * a literal token
+         */
+        LITERAL,
+        /**
+         * a number token
+         */
+        NUMBER,
+        /**
+         * a function token
+         */
+        FUNCTION,
+        /**
+         * other tokens
+         */
+        OTHER
     };
 
     private enum CharType {
@@ -38,16 +64,29 @@ public class CharProcessor {
     private int next;
     private int eot;
 
+    /**
+     * define the string to be scanned to extract tokens
+     * 
+     * @param expression the text
+     */
     public void setExpression(String expression) {
         this.expression = expression + " ";
         next = 0;
         eot = expression.length() + 1;
     }
 
+    /**
+     * Add a call back to be called whenever a token is extracted
+     * 
+     * @param callback the callback object
+     */
     public void addCallback(Callback callback) {
         callbacks.add(callback);
     }
 
+    /**
+     * Extract tokens from the defined text string
+     */
     public void extract() {
         while (next < eot) {
             switch (getCharType(expression.charAt(next))) {
@@ -113,11 +152,9 @@ public class CharProcessor {
     }
 
     private void executeCallbacks(ItemType type, String item) {
-        for (Callback callback : callbacks) {
-            if (callback.isCallable(type)) {
-                callback.action(type, item);
-            }
-        }
+        callbacks.stream().filter((callback) -> (callback.isCallable(type))).forEach((Callback callback) -> {
+            callback.action(type, item);
+        });
     }
 
     private CharType getCharType(char c) {
@@ -128,7 +165,7 @@ public class CharProcessor {
             return CharType.ALPHA;
         }
         //if (c == '.' || c == '[' || c == ']') {
-        if (c == '.' ) {
+        if (c == '.') {
             return CharType.ALPHAEXT;
         }
         if (c >= '0' && c <= '9') {

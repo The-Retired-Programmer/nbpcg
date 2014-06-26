@@ -15,6 +15,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 /**
+ * Registration of templates used by NBPCG.
+ * 
  * @author Richard Linsdale (richard.linsdale at blueyonder.co.uk)
  */
 @TemplateRegistrations({

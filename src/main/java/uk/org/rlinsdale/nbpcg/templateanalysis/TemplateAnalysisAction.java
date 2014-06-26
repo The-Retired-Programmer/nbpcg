@@ -27,6 +27,9 @@ import org.openide.filesystems.FileObject;
 import org.openide.loaders.DataObject;
 
 /**
+ * 
+ * Action on any NBPCG template files (.template) to start the template analysis action.
+ * 
  * @author Richard Linsdale (richard.linsdale at blueyonder.co.uk)
  */
 @ActionID(category = "Run", id = "uk.org.rlinsdale.nbpcg.actions.TemplateAnalysisAction")
@@ -36,6 +39,11 @@ public final class TemplateAnalysisAction implements ActionListener {
 
     private final List<DataObject> context;
 
+    /**
+     * Constructor
+     * 
+     * @param context the list of data objects selected
+     */
     public TemplateAnalysisAction(List<DataObject> context) {
         this.context = context;
     }
@@ -43,9 +51,9 @@ public final class TemplateAnalysisAction implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent ev) {
         List<FileObject> folist = new ArrayList<>();
-        for (DataObject dataobj: context){
+        context.stream().forEach((dataobj) -> {
             folist.add(dataobj.getPrimaryFile());
-        }
+        });
         (new TemplateAnalysis(folist)).executeScriptInBackground();
     }
 }

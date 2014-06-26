@@ -18,12 +18,13 @@ package uk.org.rlinsdale.nbpcg.antproject;
 
 import org.netbeans.api.project.Project;
 import org.netbeans.spi.project.ui.support.NodeFactory;
-import org.netbeans.spi.project.ui.support.NodeFactorySupport;
+import static org.netbeans.spi.project.ui.support.NodeFactorySupport.fixedNodeList;
 import org.netbeans.spi.project.ui.support.NodeList;
 import org.openide.loaders.DataObjectNotFoundException;
-import org.openide.util.Exceptions;
+import static org.openide.util.Exceptions.printStackTrace;
 
 /**
+ * The Node factory for the Ant Project which includes NBPCG script element(s).
  *
  * @author Richard Linsdale (richard.linsdale at blueyonder.co.uk)
  */
@@ -34,12 +35,12 @@ public class AntNBPCGNodeFactory implements NodeFactory {
     public NodeList<?> createNodes(Project project) {
         try {
             return project.getProjectDirectory().getFileObject("nbpcg-files") != null
-                    ? NodeFactorySupport.fixedNodeList(new AntNBPCGNode(project))
-                    : NodeFactorySupport.fixedNodeList();
+                    ? fixedNodeList(new AntNBPCGNode(project))
+                    : fixedNodeList();
         } catch (DataObjectNotFoundException ex) {
-            Exceptions.printStackTrace(ex);
+            printStackTrace(ex);
         }
-        return NodeFactorySupport.fixedNodeList();
+        return fixedNodeList();
 
     }
 }

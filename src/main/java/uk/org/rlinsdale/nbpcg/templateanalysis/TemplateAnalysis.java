@@ -16,18 +16,22 @@
  */
 package uk.org.rlinsdale.nbpcg.templateanalysis;
 
+import static java.lang.Math.round;
+import static java.lang.System.currentTimeMillis;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
+import static java.util.Collections.sort;
 import java.util.List;
 import uk.org.rlinsdale.nbpcg.templateanalysis.CharProcessor.ItemType;
 import org.openide.filesystems.FileObject;
 import org.openide.util.RequestProcessor;
-import org.openide.windows.IOProvider;
+import static org.openide.windows.IOProvider.getDefault;
 import org.openide.windows.InputOutput;
 import org.openide.windows.OutputWriter;
 
 /**
+ * Worker to process template analysis - looking for definitions and usages.
+ * 
  * @author Richard Linsdale (richard.linsdale at blueyonder.co.uk)
  */
 public final class TemplateAnalysis {
@@ -35,14 +39,25 @@ public final class TemplateAnalysis {
     private final static String INDENT = "    ";
     private final List<FileObject> folist;
 
+    /**
+     * Constructor
+     * 
+     * @param folist list of file objects (templates) to be analysed
+     */
     public TemplateAnalysis(List<FileObject> folist) {
         this.folist = folist;
     }
 
+    /**
+     * execute the analysis on a background thread
+     */
     public void executeScriptInBackground() {
         new RequestProcessor(TemplateAnalysis.class).post(new CreateRunnable());
     }
 
+    /**
+     * Execute the analysis on the current thread
+     */
     public void executeScript() {
         new CreateRunnable().run();
     }
@@ -52,8 +67,8 @@ public final class TemplateAnalysis {
         @Override
         public final void run() {
             boolean success = true;
-            long start = System.currentTimeMillis();
-            InputOutput io = IOProvider.getDefault().getIO("Template Analysis", false);
+            long start = currentTimeMillis();
+            InputOutput io = getDefault().getIO("Template Analysis", false);
             io.select();
             try (OutputWriter msg = io.getOut(); OutputWriter err = io.getErr()) {
                 try {
@@ -187,7 +202,7 @@ public final class TemplateAnalysis {
                         }
                         sortablelist.add(new Sortable(name, sb.toString()));
                     });
-                    Collections.sort(sortablelist);
+                    sort(sortablelist);
                     sortablelist.stream().forEach((s) -> {
                         msg.println(INDENT + s.getSortableString() + s.getRemainderString());
                     });
@@ -202,7 +217,7 @@ public final class TemplateAnalysis {
                         ex.printStackTrace(err);
                     }
                 }
-                int elapsed = Math.round((System.currentTimeMillis() - start) / 1000F);
+                int elapsed = round((currentTimeMillis() - start) / 1000F);
                 msg.println("BUILD " + (success ? "SUCCESSFUL" : "FAILED") + " (total time: " + Integer.toString(elapsed) + " seconds)");
             }
         }

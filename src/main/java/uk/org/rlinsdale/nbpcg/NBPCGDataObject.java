@@ -18,7 +18,8 @@ package uk.org.rlinsdale.nbpcg;
 
 import java.io.IOException;
 import org.netbeans.spi.xml.cookies.CheckXMLSupport;
-import org.netbeans.spi.xml.cookies.DataObjectAdapters;
+import static org.netbeans.spi.xml.cookies.DataObjectAdapters.inputSource;
+import static org.netbeans.spi.xml.cookies.DataObjectAdapters.source;
 import org.netbeans.spi.xml.cookies.TransformableSupport;
 import org.netbeans.spi.xml.cookies.ValidateXMLSupport;
 import org.openide.awt.ActionID;
@@ -35,6 +36,9 @@ import org.openide.util.NbBundle.Messages;
 import org.xml.sax.InputSource;
 
 /**
+ * 
+ * The Data Object for the NBPCG script file.
+ * 
  * @author Richard Linsdale (richard.linsdale at blueyonder.co.uk)
  */
 @Messages({
@@ -96,15 +100,23 @@ import org.xml.sax.InputSource;
 })
 public class NBPCGDataObject extends MultiDataObject {
 
+    /**
+     * Constructor
+     * 
+     * @param pf the file
+     * @param loader the loader
+     * @throws DataObjectExistsException if problems
+     * @throws IOException if problems
+     */
     @SuppressWarnings("LeakingThisInConstructor")
     public NBPCGDataObject(FileObject pf, MultiFileLoader loader) throws DataObjectExistsException, IOException {
         super(pf, loader);
         registerEditor("text/nbpcg+xml", false);
         CookieSet cookies = getCookieSet();
-        InputSource in = DataObjectAdapters.inputSource(this);
+        InputSource in = inputSource(this);
         cookies.add(new CheckXMLSupport(in));
         cookies.add(new ValidateXMLSupport(in));
-        cookies.add(new TransformableSupport(DataObjectAdapters.source(this)));
+        cookies.add(new TransformableSupport(source(this)));
     }
 
     @Override

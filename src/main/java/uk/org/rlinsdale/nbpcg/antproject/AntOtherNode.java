@@ -19,14 +19,19 @@ package uk.org.rlinsdale.nbpcg.antproject;
 import java.awt.Image;
 import org.netbeans.api.annotations.common.StaticResource;
 import org.netbeans.api.project.Project;
-import org.openide.filesystems.FileUtil;
+import static org.openide.filesystems.FileUtil.getConfigRoot;
 import org.openide.loaders.DataFolder;
-import org.openide.loaders.DataObject;
+import static org.openide.loaders.DataFolder.findFolder;
+import static org.openide.loaders.DataObject.find;
 import org.openide.loaders.DataObjectNotFoundException;
 import org.openide.nodes.FilterNode;
-import org.openide.util.ImageUtilities;
+import static org.openide.util.ImageUtilities.loadImage;
+import static org.openide.util.ImageUtilities.mergeImages;
 
 /**
+ * A Node for Ant projects which includes "other-files" which are supporting the
+ * NBPCG actions.
+ *
  * @author Richard Linsdale (richard.linsdale at blueyonder.co.uk)
  */
 public class AntOtherNode extends FilterNode {
@@ -34,8 +39,14 @@ public class AntOtherNode extends FilterNode {
     @StaticResource
     private static final String IMAGE = "uk/org/rlinsdale/nbpcg/antproject/others.gif";
 
+    /**
+     * Constructor
+     * 
+     * @param proj the project
+     * @throws DataObjectNotFoundException if problems
+     */
     public AntOtherNode(Project proj) throws DataObjectNotFoundException {
-        super(DataObject.find(proj.getProjectDirectory().
+        super(find(proj.getProjectDirectory().
                 getFileObject("other-files")).getNodeDelegate());
     }
 
@@ -46,18 +57,18 @@ public class AntOtherNode extends FilterNode {
 
     @Override
     public Image getIcon(int type) {
-        DataFolder root = DataFolder.findFolder(FileUtil.getConfigRoot());
+        DataFolder root = findFolder(getConfigRoot());
         Image original = root.getNodeDelegate().getIcon(type);
-        return ImageUtilities.mergeImages(original,
-                ImageUtilities.loadImage(IMAGE), 7, 7);
+        return mergeImages(original,
+                loadImage(IMAGE), 7, 7);
     }
 
     @Override
     public Image getOpenedIcon(int type) {
-        DataFolder root = DataFolder.findFolder(FileUtil.getConfigRoot());
+        DataFolder root = findFolder(getConfigRoot());
         Image original = root.getNodeDelegate().getOpenedIcon(type);
-        return ImageUtilities.mergeImages(original,
-                ImageUtilities.loadImage(IMAGE), 7, 7);
+        return mergeImages(original,
+                loadImage(IMAGE), 7, 7);
     }
 
 }

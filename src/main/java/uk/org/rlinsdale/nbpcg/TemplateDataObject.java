@@ -29,6 +29,9 @@ import org.openide.loaders.MultiFileLoader;
 import org.openide.util.NbBundle.Messages;
 
 /**
+ * The Data Object for a template file (Freemarker template format - used by
+ * NBPCG to generate files)
+ *
  * @author Richard Linsdale (richard.linsdale at blueyonder.co.uk)
  */
 @Messages({
@@ -46,57 +49,65 @@ import org.openide.util.NbBundle.Messages;
 @ActionReferences({
     @ActionReference(
             path = "Loaders/text/nbpcgtemplate/Actions",
-            id =
-            @ActionID(category = "System", id = "org.openide.actions.OpenAction"),
+            id
+            = @ActionID(category = "System", id = "org.openide.actions.OpenAction"),
             position = 100,
             separatorAfter = 200),
     @ActionReference(
             path = "Loaders/text/nbpcgtemplate/Actions",
-            id =
-            @ActionID(category = "Edit", id = "org.openide.actions.CutAction"),
+            id
+            = @ActionID(category = "Edit", id = "org.openide.actions.CutAction"),
             position = 300),
     @ActionReference(
             path = "Loaders/text/nbpcgtemplate/Actions",
-            id =
-            @ActionID(category = "Edit", id = "org.openide.actions.CopyAction"),
+            id
+            = @ActionID(category = "Edit", id = "org.openide.actions.CopyAction"),
             position = 400,
             separatorAfter = 500),
     @ActionReference(
             path = "Loaders/text/nbpcgtemplate/Actions",
-            id =
-            @ActionID(category = "Edit", id = "org.openide.actions.DeleteAction"),
+            id
+            = @ActionID(category = "Edit", id = "org.openide.actions.DeleteAction"),
             position = 600),
     @ActionReference(
             path = "Loaders/text/nbpcgtemplate/Actions",
-            id =
-            @ActionID(category = "System", id = "org.openide.actions.RenameAction"),
+            id
+            = @ActionID(category = "System", id = "org.openide.actions.RenameAction"),
             position = 700,
             separatorAfter = 800),
     @ActionReference(
             path = "Loaders/text/nbpcgtemplate/Actions",
-            id =
-            @ActionID(category = "System", id = "org.openide.actions.SaveAsTemplateAction"),
+            id
+            = @ActionID(category = "System", id = "org.openide.actions.SaveAsTemplateAction"),
             position = 900,
             separatorAfter = 1000),
     @ActionReference(
             path = "Loaders/text/nbpcgtemplate/Actions",
-            id =
-            @ActionID(category = "System", id = "org.openide.actions.FileSystemAction"),
+            id
+            = @ActionID(category = "System", id = "org.openide.actions.FileSystemAction"),
             position = 1100,
             separatorAfter = 1200),
     @ActionReference(
             path = "Loaders/text/nbpcgtemplate/Actions",
-            id =
-            @ActionID(category = "System", id = "org.openide.actions.ToolsAction"),
+            id
+            = @ActionID(category = "System", id = "org.openide.actions.ToolsAction"),
             position = 1300),
     @ActionReference(
             path = "Loaders/text/nbpcgtemplate/Actions",
-            id =
-            @ActionID(category = "System", id = "org.openide.actions.PropertiesAction"),
+            id
+            = @ActionID(category = "System", id = "org.openide.actions.PropertiesAction"),
             position = 1400)
 })
 public class TemplateDataObject extends MultiDataObject {
 
+    /**
+     * Constructor
+     *
+     * @param pf the file object
+     * @param loader the loader
+     * @throws DataObjectExistsException if problems
+     * @throws IOException if problems
+     */
     public TemplateDataObject(FileObject pf, MultiFileLoader loader) throws DataObjectExistsException, IOException {
         super(pf, loader);
         registerEditor("text/nbpcgtemplate", false);
