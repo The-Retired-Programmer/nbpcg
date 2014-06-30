@@ -10,6 +10,17 @@
             </folder>
         </folder>
     </folder>
+    <folder name="Services">
+        <folder name="AutoupdateType">
+            <file name="uk_org_rlinsdale_nbpcg_NBPCG_update_center.instance">
+                <attr name="displayName" bundlevalue="uk.org.rlinsdale.nbpcg.Bundle#Services/AutoupdateType/uk_org_rlinsdale_nbpcg_NBPCG_update_center.instance"/>
+                <attr name="enabled" boolvalue="true"/>
+                <attr name="instanceCreate" methodvalue="org.netbeans.modules.autoupdate.updateprovider.AutoupdateCatalogFactory.createUpdateProvider"/>
+                <attr name="instanceOf" stringvalue="org.netbeans.spi.autoupdate.UpdateProvider"/>
+                <attr name="url" bundlevalue="uk.org.rlinsdale.nbpcg.Bundle#uk_org_rlinsdale_nbpcg_NBPCG_update_center"/>
+            </file>
+        </folder>
+    </folder>
     <folder name="Templates">
         <folder name="linsdale-nbpcg">
             <attr name="simple" boolvalue="false"/> 

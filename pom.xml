@@ -3,8 +3,14 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>uk.org.rlinsdale.nbpcg</groupId>
     <artifactId>NBPCG</artifactId>
-    <version>4.0.0</version>
+    <version>4.0.1</version>
     <packaging>nbm</packaging>
+    
+    <organization>
+        <name>Richard Linsdale</name>
+        <url>http://www.rlinsdale.org.uk/</url>
+    </organization>
+    
     <build>
         <plugins>
             <plugin>
@@ -12,6 +18,18 @@
                 <artifactId>nbm-maven-plugin</artifactId>
                 <version>3.13</version>
                 <extensions>true</extensions>
+                <configuration>
+                    <licenseName>GPL3.0</licenseName>
+                    <licenseFile>LICENSE</licenseFile>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>extra</id>
+                        <goals>
+                            <goal>autoupdate</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -100,6 +118,11 @@
             <artifactId>org-openide-util-lookup</artifactId>
             <groupId>org.netbeans.api</groupId>
             <type>jar</type>
+            <version>RELEASE80</version>
+        </dependency>
+        <dependency>
+            <groupId>org.netbeans.api</groupId>
+            <artifactId>org-netbeans-modules-autoupdate-services</artifactId>
             <version>RELEASE80</version>
         </dependency>
     </dependencies>
