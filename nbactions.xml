@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<actions>
+        <action>
+            <actionName>CUSTOM-Generate aggregated Javadoc jar</actionName>
+            <displayName>Generate aggregated Javadoc jar</displayName>
+            <goals>
+                <goal>generate-sources</goal>
+                <goal>javadoc:aggregate-jar</goal>
+            </goals>
+        </action>
+    </actions>
