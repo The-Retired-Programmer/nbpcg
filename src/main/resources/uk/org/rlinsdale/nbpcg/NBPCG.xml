@@ -1,25 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE nbpcg PUBLIC "-//uk/org/rlinsdale/nbpcg/DTD NBPCG SCHEMA 1.0//EN"
-    "nbres:/uk/org/rlinsdale/nbpcg/nbpcg.dtd" >
+"nbres:/uk/org/rlinsdale/nbpcg/nbpcg.dtd" >
 
-<nbpcg name="a" >
+<nbpcg name="?">
     
-    <build >
-        <project name="p" log="l">
-            <generate type="z" package="p.p.p" />
+    <build viewerroles="?">
+        <project name="?" log="?.?.?">
+            <generatescripts/>
+            <generate type="?" package="p.p.p" />
         </project>
     </build>
     
-    <node name="x" icon="y" rooticon="z" >
+    <node name="x">
         
     </node>
     
     <databases>
-        <database name="x" >
-            <table name="x">
-                <field name="x"/>
-                <insert values="z" />
+        <database name="?">
+            <table name="?">
+                <field name="?"/>
+                <insert values="?" />
             </table>
-        </standard>
+        </database>
     </databases>
 </nbpcg>
