@@ -210,6 +210,7 @@ public final class TemplateAnalysis {
                 } catch (Exception ex) {
                     success = false;
                     String m = ex.getMessage();
+                    err.println();
                     if (m != null) {
                         err.println(ex.getMessage());
                     } else {
