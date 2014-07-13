@@ -328,7 +328,10 @@
                     <xsl:if test="(@view='both') or (@view='icon')" >
                         <xsl:attribute name="isiconchild" />
                     </xsl:if>
-                    <xsl:copy-of select="@orderable|@sort" />
+                    <xsl:copy-of select="@orderable" />
+                    <xsl:if test="@sortformat">
+                        <xsl:attribute name="sort" />
+                    </xsl:if>
                 </child>
             </entityinfo>
         </xsl:for-each>
@@ -517,7 +520,10 @@
                     <xsl:value-of select="@name"/>
                 </xsl:attribute>
                 <xsl:copy-of select="@min|@max"/>
-                <xsl:copy-of select="@orderable|@sort"/>
+                <xsl:copy-of select="@orderable" />
+                    <xsl:if test="@sortformat">
+                        <xsl:attribute name="sort" />
+                    </xsl:if>
                 <xsl:variable name="childname" select="@name" />
                 <xsl:for-each select="/nbpcg/databases/database/table[@name=$childname]" >
                     <xsl:if test="count(field) = 1 and field[@type='reference']" >

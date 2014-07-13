@@ -329,11 +329,13 @@
                 <field name="idx" type="idx" fieldclass="TextField" label="Idx"/>
             </xsl:if>
             <xsl:if test="@sortformat" >
-                <sortformat>
-                    <xsl:call-template name="display">
-                        <xsl:with-param name="displayformat" select="@sortformat" />
-                    </xsl:call-template>
-                </sortformat> 
+                <xsl:if test="not (@sortformat = '')">
+                    <sortformat>
+                        <xsl:call-template name="display">
+                            <xsl:with-param name="displayformat" select="@sortformat" />
+                        </xsl:call-template>
+                    </sortformat>
+                </xsl:if> 
             </xsl:if>
             <xsl:if test="@displaytitleformat" >
                 <displaytitleformat>

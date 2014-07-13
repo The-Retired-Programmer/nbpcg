@@ -57,7 +57,7 @@ public class CharProcessor {
 
     private enum CharType {
 
-        WHITESPACE, ALPHA, ALPHAEXT, NUMERIC, QUOTE, OTHER
+        WHITESPACE, ALPHA, ALPHAEXT, NUMERIC, QUOTE, ESCAPE,  OTHER
     };
     private final List<Callback> callbacks = new ArrayList<>();
     private String expression;
@@ -116,7 +116,16 @@ public class CharProcessor {
                 case QUOTE:
                     next++;
                     int qtextstart = next;
-                    while (getCharType(expression.charAt(next)) != CharType.QUOTE) {
+                    boolean inliteral = true;
+                    while (inliteral) {
+                        switch (getCharType(expression.charAt(next))) {
+                            case QUOTE:
+                                inliteral = false;
+                                break;
+                            case ESCAPE:
+                                next++;
+                                break;
+                        }
                         next++;
                     }
                     String qtext = expression.substring(qtextstart, next);
@@ -142,6 +151,7 @@ public class CharProcessor {
                     }
                     break;
                 case ALPHAEXT:
+                case ESCAPE:
                     executeCallbacks(ItemType.OTHER, expression.substring(next, next + 1));
                     next++;
                     break;
@@ -173,6 +183,9 @@ public class CharProcessor {
         }
         if (c == '"') {
             return CharType.QUOTE;
+        }
+        if (c == '\\') {
+            return CharType.ESCAPE;
         }
         return CharType.OTHER;
     }

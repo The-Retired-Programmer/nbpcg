@@ -448,12 +448,10 @@ public class ${NODEINFO.name}ChildFactory extends BasicChildFactory<${NODEINFO.e
 
     public static class ${child.name}Display {
 
-        private final static Formatter formatter = new Formatter();
-
         public static String getDisplayName(${child.entity} e, String undefined) {
 <#list CHILDNODEINFO.displaynameformat as df >
             if (e != null) {
-                return formatter.format("${df.format}", new String[] {<#list df.display as dp>format${dp.field}(e)<#if dp_has_next>, </#if></#list>});
+                return String.format("${df.format}", new Object[] {<#list df.display as dp>format${dp.field}(e)<#if dp_has_next>, </#if></#list>});
             } else {
                 return undefined;
             }
@@ -464,7 +462,7 @@ public class ${NODEINFO.name}ChildFactory extends BasicChildFactory<${NODEINFO.e
 <#if CHILDNODEINFO.displaytitleformat??>
 <#list CHILDNODEINFO.displaytitleformat as df>
             if (e != null) {
-                return formatter.format("${df.format}", new String[] {<#list df.display as dp>format${dp.field}(e)<#if dp_has_next>, </#if></#list>});
+                return String.format("${df.format}", new Object[] {<#list df.display as dp>format${dp.field}(e)<#if dp_has_next>, </#if></#list>});
             } else {
                 return undefined;
             }
@@ -475,10 +473,10 @@ public class ${NODEINFO.name}ChildFactory extends BasicChildFactory<${NODEINFO.e
         }
 
 public static String getSort(${child.entity} e, String undefined) {
-<#if CHILDNODEINFO.sortformat??>
+<#if CHILDNODEINFO.sortformat?? >
 <#list CHILDNODEINFO.sortformat as df>
             if (e != null) {
-                return formatter.format("${df.format}", new String[] {<#list df.display as dp>format${dp.field}(e<#if dp.length??>, ${dp.length}</#if>)<#if dp_has_next>, </#if></#list>});
+                return String.format("${df.format}", new Object[] {<#list df.display as dp>format${dp.field}(e<#if dp.length??>, ${dp.length}</#if>)<#if dp_has_next>, </#if></#list>});
             } else {
                 return undefined;
             }

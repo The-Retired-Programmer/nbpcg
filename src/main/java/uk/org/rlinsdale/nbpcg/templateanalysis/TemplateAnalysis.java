@@ -102,7 +102,9 @@ public final class TemplateAnalysis {
                         msg.print(" -- " + substitutions + " parameter substitions found");
                         //
                         int commands = 0;
+                        linecount = 0;
                         for (String line : templatelines) {
+                            linecount++;
                             int startpos = 0;
                             while (true) {
                                 int pos = line.indexOf("<#", startpos);
@@ -110,11 +112,14 @@ public final class TemplateAnalysis {
                                     break;
                                 }
                                 int endpos = line.indexOf('>', pos + 2);
-                                if (endpos == -1) {
-                                    throw new Exception("Unmatched command brackets on line " + linecount);
-                                }
-                                String commandtext = line.substring(pos + 2, endpos).trim();
-                                if (!commandtext.startsWith("--")) { // ignore comments
+                                int epos = (endpos == -1) ? line.length(): endpos;
+                                String commandtext = line.substring(pos + 2, epos).trim();
+                                if (commandtext.startsWith("--")) { // comments
+                                    break; // assuming comments are not followed by commands
+                                } else {
+                                    if (endpos == -1) {
+                                        throw new Exception("Unmatched command brackets on line " + linecount);
+                                    }
                                     int sppos = commandtext.indexOf(' ');
                                     if (sppos != -1) {
                                         String command = commandtext.substring(0, sppos);
@@ -139,6 +144,7 @@ public final class TemplateAnalysis {
                                                 commands++;
                                                 break;
                                             case "if":
+                                            case "elseif":
                                                 expressionExtraction(parameterdata, expression);
                                                 break;
                                         }

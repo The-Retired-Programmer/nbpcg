@@ -36,7 +36,6 @@
             icon CDATA #IMPLIED
             label CDATA #IMPLIED
             orderable (yes) #IMPLIED
-            sort (yes) #IMPLIED
             nullallowed (yes) #IMPLIED
             fkey (no) #IMPLIED
             displaynameformat CDATA #IMPLIED
