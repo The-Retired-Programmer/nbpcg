@@ -81,12 +81,12 @@ import uk.org.rlinsdale.lindos.lifecycle.ApplicationProperties;
 <#if hassortchildren>
 import ${nodepackage}.*;
 </#if>
-import uk.org.rlinsdale.nbpcg.datasupportlib.dataaccess.DataAccess${ENTITYINFO.access?upper_case};
-import uk.org.rlinsdale.nbpcg.datasupportlib.dataaccess.${ENTITYINFO.type?lower_case}.*;
-import uk.org.rlinsdale.nbpcg.datasupportlib.dbfields.${ENTITYINFO.withfields?lower_case}.*;
-import uk.org.rlinsdale.nbpcg.datasupportlib.entity.*;
-import uk.org.rlinsdale.nbpcg.datasupportlib.entityreferences.*;
-import uk.org.rlinsdale.nbpcg.supportlib.*;
+import uk.org.rlinsdale.nbpcglibrary.data.dataaccess.DataAccess${ENTITYINFO.access?upper_case};
+import uk.org.rlinsdale.nbpcglibrary.data.dataaccess.${ENTITYINFO.type?lower_case}.*;
+import uk.org.rlinsdale.nbpcglibrary.data.dbfields.${ENTITYINFO.withfields?lower_case}.*;
+import uk.org.rlinsdale.nbpcglibrary.data.entity.*;
+import uk.org.rlinsdale.nbpcglibrary.data.entityreferences.*;
+import uk.org.rlinsdale.nbpcglibrary.common.*;
 
 /**
  * The ${ENTITYINFO.name} Entity (${ENTITYINFO.access}).

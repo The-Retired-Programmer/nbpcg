@@ -67,8 +67,8 @@ import ${datapackage}.${NODEINFO.entity};
 <#if !PARENTNODEINFO.isroot??>
 import ${nodepackage}.${NODEINFO.parentnodeandfactory};
 </#if>
-import uk.org.rlinsdale.nbpcg.annotations.RegisterNodeAction;
-import uk.org.rlinsdale.nbpcg.supportlib.Log;
+import uk.org.rlinsdale.nbpcglibrary.node.RegisterNodeAction;
+import uk.org.rlinsdale.nbpcglibrary.common.Log;
 import org.openide.util.ContextAwareAction;
 import org.openide.util.Lookup;
 

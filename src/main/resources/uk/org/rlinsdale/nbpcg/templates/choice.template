@@ -58,10 +58,10 @@
 package ${package};
 
 import java.util.List;
-import uk.org.rlinsdale.nbpcg.formsupportlib.FormFieldChangeListenerParams;
-import uk.org.rlinsdale.nbpcg.supportlib.IntWithDescription;
-import uk.org.rlinsdale.nbpcg.supportlib.Listener;
-import uk.org.rlinsdale.nbpcg.topcomponentsupportlib.ReferenceChoiceAllField;
+import uk.org.rlinsdale.nbpcglibrary.form.FormFieldChangeListenerParams;
+import uk.org.rlinsdale.nbpcglibrary.common.IntWithDescription;
+import uk.org.rlinsdale.nbpcglibrary.common.Listener;
+import uk.org.rlinsdale.nbpcglibrary.topcomponent.ReferenceChoiceAllField;
 import ${datapackage}.${NODEINFO.entity};
 import ${datapackage}.${NODEINFO.entity}Root;
 import ${nodepackage}.${NODEINFO.parentnode}ChildFactory.${NODEINFO.name}Display;

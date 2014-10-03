@@ -58,7 +58,7 @@
 package ${package};
 
 import ${nodepackage}.*;
-import uk.org.rlinsdale.nbpcg.topcomponentsupportlib.ExplorerTopComponent;
+import uk.org.rlinsdale.nbpcglibrary.topcomponent.ExplorerTopComponent;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 <#if type="Tree">

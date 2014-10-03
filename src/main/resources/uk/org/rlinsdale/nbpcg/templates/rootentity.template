@@ -70,11 +70,11 @@ import java.util.List;
 <#if hassortchildren >
 import ${nodepackage}.*;
 </#if>
-import uk.org.rlinsdale.nbpcg.datasupportlib.entity.*;
-import uk.org.rlinsdale.nbpcg.datasupportlib.entityreferences.*;
-import uk.org.rlinsdale.nbpcg.supportlib.IntWithDescription;
+import uk.org.rlinsdale.nbpcglibrary.data.entity.*;
+import uk.org.rlinsdale.nbpcglibrary.data.entityreferences.*;
+import uk.org.rlinsdale.nbpcglibrary.common.IntWithDescription;
 <#if haschildren >
-import uk.org.rlinsdale.nbpcg.supportlib.Listener;
+import uk.org.rlinsdale.nbpcglibrary.common.Listener;
 </#if>
 import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;

@@ -57,9 +57,9 @@
 <#assign NODEINFO = nodeinfo[usenodeinfo] >
 package ${package};
 
-import uk.org.rlinsdale.nbpcg.nodesupportlib.nodes.NameChangeListenerParams;
-import uk.org.rlinsdale.nbpcg.supportlib.Listener;
-import uk.org.rlinsdale.nbpcg.topcomponentsupportlib.ExplorerTopComponent;
+import uk.org.rlinsdale.nbpcglibrary.node.nodes.NameChangeListenerParams;
+import uk.org.rlinsdale.nbpcglibrary.common.Listener;
+import uk.org.rlinsdale.nbpcglibrary.topcomponent.ExplorerTopComponent;
 import ${nodepackage}.${NODEINFO.parentnodeandfactory};
 import org.openide.explorer.view.IconView;
 import org.openide.nodes.AbstractNode;
