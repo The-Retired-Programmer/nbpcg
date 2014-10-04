@@ -24,7 +24,7 @@ in the Netbeans IDE in order that the script will work.
 The NBPCG script is an XML document.  A template is available - using the New... entry, the template can be selected 
 from the other category with file type NBPCG Definition file
 
-![script template selection](images/newfile.png)
+![script template selection](images/newfile.jpg)
 
 The xml consists of a top level element ( **nbpcg** ).  Details of the xml document is outlined in the following section:
 

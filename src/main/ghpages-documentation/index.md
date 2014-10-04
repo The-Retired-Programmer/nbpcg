@@ -10,10 +10,10 @@ Current release is v${project.version}
                 
 #####Documentation
 
-* [Installation Instructions](installation-documentation.html)
-* [Release Notes](release-documentation.html)
-* [User Documentation](user-documentation.html)
-* [Developer Documentation](developer-documentation.html)
+* [Installation Instructions](installation.html)
+* [Release Notes](release.html)
+* [User Documentation](user.html)
+* [Developer Documentation](developer.html)
 
 #####Support
 
