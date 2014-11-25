@@ -15,12 +15,6 @@
     <name>Netbeans Platform CodeGenerator</name>
     <description>Code Generator for standard Netbeans platform application</description>
     
-    <properties>
-        <release>4</release>
-        <brandingToken>nbpcg</brandingToken>
-        <ghpagesroot>nbpcg</ghpagesroot>
-    </properties>
-    
     <dependencies>
         <dependency>
             <groupId>org.netbeans.api</groupId>
