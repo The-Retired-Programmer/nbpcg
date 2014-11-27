@@ -37,22 +37,36 @@
     
     <xsl:template name="dbinfo">
         <xsl:for-each select="databases/database[not(@usepackage)]" > 
-                <xsl:variable name="database">
-                    <xsl:choose>
-                        <xsl:when test="@dbname">
-                            <xsl:value-of select="@dbname" />
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <xsl:value-of select="@name" />
-                        </xsl:otherwise>
-                    </xsl:choose>
-                </xsl:variable>
-                <dbinfo key="{@name}" name="{$database}" db="{@db}">
-                    <xsl:for-each select="table">
-                        <table name="{@name}" />
-                    </xsl:for-each>
-                </dbinfo>
-            </xsl:for-each>
+            <xsl:variable name="database">
+                <xsl:choose>
+                    <xsl:when test="@dbname">
+                        <xsl:value-of select="@dbname" />
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:value-of select="@name" />
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:variable>
+            <dbinfo key="{@name}" name="{$database}" db="{@db}">
+                <xsl:for-each select="table">
+                    <xsl:variable name="tname">
+                        <xsl:choose>
+                            <xsl:when test="@dbname">
+                                <xsl:value-of select="@dbname" />
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:value-of select="@name" />
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </xsl:variable>
+                    <table name="{$tname}">
+                        <xsl:for-each select="insert">
+                            <insert values="{@values}"/>
+                        </xsl:for-each>
+                    </table>
+                </xsl:for-each>
+            </dbinfo>
+        </xsl:for-each>
     </xsl:template>
     
     <xsl:template name="usepackageentityinfo">
@@ -521,9 +535,9 @@
                 </xsl:attribute>
                 <xsl:copy-of select="@min|@max"/>
                 <xsl:copy-of select="@orderable" />
-                    <xsl:if test="@sortformat">
-                        <xsl:attribute name="sort" />
-                    </xsl:if>
+                <xsl:if test="@sortformat">
+                    <xsl:attribute name="sort" />
+                </xsl:if>
                 <xsl:variable name="childname" select="@name" />
                 <xsl:for-each select="/nbpcg/databases/database/table[@name=$childname]" >
                     <xsl:if test="count(field) = 1 and field[@type='reference']" >

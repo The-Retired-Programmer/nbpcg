@@ -101,14 +101,16 @@ CREATE TABLE ${table.dbtablename}(
 </#list>
 ) ENGINE = INNODB;
 
-<#list table.insert![] as insert>
-INSERT INTO ${table.name} (
+<#list dbtable.insert![] as insert>
+INSERT INTO ${table.dbtablename} (
     createdby
     ,createdon
     ,updatedby
     ,updatedon
 <#list table.field![] as field >
+<#if field.type != "rootref" >
     ,${field.name}
+</#if>
 </#list>
 )
 VALUES (
