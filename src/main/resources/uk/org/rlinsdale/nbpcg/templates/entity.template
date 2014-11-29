@@ -69,9 +69,7 @@ import java.util.ArrayList;
 <#if hassortchildren>
 import java.util.Comparator;
 </#if>
-<#if ENTITYINFO.child??>
 import java.util.List;
-</#if>
 <#if ENTITYINFO.access = "rw" >
 import java.util.Map;
 </#if>
@@ -855,7 +853,6 @@ public class ${ENTITYINFO.name} extends Entity${ENTITYINFO.access?upper_case} {
         }
     }
 </#if>
-<#if ENTITYINFO.parentname??>
 
     /**
      * Get the set of all ${ENTITYINFO.name}s.
@@ -869,5 +866,4 @@ public static List<${ENTITYINFO.name}> getAll${ENTITYINFO.name}s() {
         });
         return list;
     }
-</#if>
 }

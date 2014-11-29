@@ -83,10 +83,42 @@
     </xsl:template>
     
     <xsl:template name="choice">
-        <xsl:for-each select="//node" >
-            <xsl:choose>
+        <xsl:for-each select="databases/database/table" >
+            <xsl:for-each select="field[@type = 'reference']" >
+                <xsl:variable name="ename">
+                    <xsl:value-of select="@references" />
+                </xsl:variable>
+                <xsl:variable name="nkey">
+                    <xsl:for-each select="//node[@name=$ename]" >
+                        <xsl:if test="position() = 1" >
+                            <xsl:choose>
+                                <xsl:when test="local-name(..) = 'node'">
+                                    <xsl:value-of select="concat(../@name, 'NodeChildFactory.',$ename,'Node')" />
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:value-of select="concat($ename, 'RootNodeChildFactory.',$ename,'Node')" />
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </xsl:if>
+                    </xsl:for-each>
+                </xsl:variable>
+                <execute action="nodetemplate" template="choice" folder="nodeeditor" filename="{@references}ChoiceField.java" usenodeinfo="{$nkey}" >
+                        <xsl:attribute name="datapackage">
+                            <xsl:value-of select="/nbpcg/build/project/generate[@type='data']/@package"/>
+                        </xsl:attribute>
+                        <xsl:attribute name="nodepackage">
+                            <xsl:value-of select="/nbpcg/build/project/generate[@type='node']/@package"/>
+                        </xsl:attribute>
+                        <xsl:call-template name="setbuildattributes">
+                            <xsl:with-param name="type">nodeeditor</xsl:with-param>
+                        </xsl:call-template>
+                    </execute>
+            </xsl:for-each>
+        </xsl:for-each>
+    </xsl:template>
+    <!--        <xsl:choose>
                 <xsl:when test="local-name(..) != 'node'" >
-                    <!--    <xsl:variable name="fname" >
+                        <xsl:variable name="fname" >
                                 <xsl:call-template name="firsttouppercase" >
                                     <xsl:with-param name="string" select="@name" />
                                 </xsl:call-template>
@@ -107,7 +139,7 @@
                             </execute>
                         </xsl:when>
                     <xsl:otherwise>
-                    -->
+                    
                     <execute action="nodetemplate" template="choice" folder="nodeeditor" filename="{@name}ChoiceField.java" usenodeinfo="{concat(@name,'RootNodeChildFactory.',@name,'Node')}" >
                         <xsl:attribute name="usenodeinfo" >
                             <xsl:value-of select="concat(@name, 'RootNodeChildFactory.',@name,'Node')" />
@@ -123,12 +155,11 @@
                         </xsl:call-template>
                     </execute>
                 </xsl:when>
-                <!--
                 </xsl:otherwise>
-                -->
             </xsl:choose>
         </xsl:for-each>
     </xsl:template>
+    -->
     
     <xsl:template name="enumchoice">
         <xsl:for-each select="databases/database/table/field[@type='enum']" >

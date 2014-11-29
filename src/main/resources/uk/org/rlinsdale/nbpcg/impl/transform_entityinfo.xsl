@@ -118,18 +118,14 @@
                     <xsl:attribute name="ordercolumn">idx</xsl:attribute>
                 </xsl:if>
                 <xsl:for-each select="/nbpcg/node[@name=$ename]" >
-                    <xsl:if test="count(node)" >
-                        <xsl:attribute name="parentname">
-                            <xsl:value-of select="concat(@name,'Root')"/>
-                        </xsl:attribute>
-                    </xsl:if>
+                    <xsl:attribute name="parentname">
+                        <xsl:value-of select="concat(@name,'Root')"/>
+                    </xsl:attribute>
                 </xsl:for-each>
                 <xsl:for-each select="//node/node[@name=$ename]" >
-                    <xsl:if test="count(node)" >
-                        <xsl:attribute name="parentname">
-                            <xsl:value-of select="../@name"/>
-                        </xsl:attribute>
-                    </xsl:if>
+                    <xsl:attribute name="parentname">
+                        <xsl:value-of select="../@name"/>
+                    </xsl:attribute>
                 </xsl:for-each>
                 <xsl:for-each select="/nbpcg/node[@name=$ename]" >
                     <xsl:variable name="fname">root</xsl:variable>

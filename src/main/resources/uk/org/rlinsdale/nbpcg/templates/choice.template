@@ -63,7 +63,6 @@ import uk.org.rlinsdale.nbpcglibrary.common.IntWithDescription;
 import uk.org.rlinsdale.nbpcglibrary.common.Listener;
 import uk.org.rlinsdale.nbpcglibrary.topcomponent.ReferenceChoiceAllField;
 import ${datapackage}.${NODEINFO.entity};
-import ${datapackage}.${NODEINFO.entity}Root;
 import ${nodepackage}.${NODEINFO.parentnode}ChildFactory.${NODEINFO.name}Display;
 /**
  * The ${NODEINFO.entity} Choice Field
@@ -81,7 +80,7 @@ public final class ${NODEINFO.entity}ChoiceField extends ReferenceChoiceAllField
 
     @Override
     public List<${NODEINFO.entity}> getChoicesEntities() {
-        return ${NODEINFO.entity?cap_first}Root.getRoot().get${NODEINFO.entity?cap_first}s();
+        return ${NODEINFO.entity?cap_first}.getAll${NODEINFO.entity?cap_first}s();
     }
 
     @Override
