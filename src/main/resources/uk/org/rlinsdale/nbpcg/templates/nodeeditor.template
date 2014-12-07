@@ -85,8 +85,8 @@ iconBase = "com/famfamfam/www/silkicons/${NODEINFO.icon}.png",
 persistenceType = TopComponent.PERSISTENCE_NEVER)
 @TopComponent.Registration(mode = "editor", openAtStartup = false)
 @Messages({
-    "CTL_${NODEINFO.name}Editor=${NODEINFO.name} Editor",
-    "HINT_${NODEINFO.name}Editor=This is the ${NODEINFO.name} Editor"
+    "CTL_${NODEINFO.name}Editor=${NODEINFO.entity} Editor",
+    "HINT_${NODEINFO.name}Editor=This is the ${NODEINFO.entity} Editor"
 })
 public final class ${NODEINFO.name}Editor extends NodeEditorTopComponent<${NODEINFO.entity}> {
     
@@ -118,12 +118,12 @@ public final class ${NODEINFO.name}Editor extends NodeEditorTopComponent<${NODEI
         super(node,
                 NbBundle.getMessage(${NODEINFO.name}Editor.class, "CTL_${NODEINFO.name}Editor"),
                 NbBundle.getMessage(${NODEINFO.name}Editor.class, "HINT_${NODEINFO.name}Editor"));
-        form = new Form("${NODEINFO.name}Editor",  new EditorFields());
+        form = new Form("${NODEINFO.entity}Editor",  new EditorFields());
     }
 
     @Override
     protected Form getForm() {
-        setName("${NODEINFO.name}: " + node.getDisplayTitle());
+        setName("${NODEINFO.entity}: " + node.getDisplayTitle());
         node.setSaveHandler(saveHandler);
         form.setAdditionalRules(entity);
         form.set();
@@ -159,7 +159,7 @@ public final class ${NODEINFO.name}Editor extends NodeEditorTopComponent<${NODEI
     private class EditorFields extends FieldsDef {
         
         public EditorFields() {
-            super("${NODEINFO.name}NodeEditorFields");
+            super("${NODEINFO.name}EditorFields");
 <#list NODEINFO.field![] as field>
 <#if field.type!="idx" >
 <#if field.entryfield??>

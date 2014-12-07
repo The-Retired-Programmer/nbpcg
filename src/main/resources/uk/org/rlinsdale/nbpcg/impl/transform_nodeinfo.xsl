@@ -105,11 +105,13 @@
         </nodeinfo>
         <xsl:call-template name="nodeinfo2" >
             <xsl:with-param name="type" select="$type" />
+            <xsl:with-param name="nodeorder" select="1" />
         </xsl:call-template>
     </xsl:template>
         
     <xsl:template name="nodeinfo2">
         <xsl:param name="type"/>
+        <xsl:param name="nodeorder" />
         <xsl:variable name="parentnode">
             <xsl:choose>
                 <xsl:when test="local-name(..) = 'node'" >
@@ -131,7 +133,7 @@
             </xsl:choose>
         </xsl:variable>
         <xsl:variable name="ename" select="@name" />
-        <nodeinfo key="{concat($parentnode, 'ChildFactory.', @name, $type, 'Node')}" name="{@name}{$type}Node" entity="{@name}" parententity="{$parententity}" >
+        <nodeinfo key="{concat($parentnode, 'ChildFactory.', @name, $type, 'Node')}" name="{@name}{$type}Node" entity="{@name}" parententity="{$parententity}" nodeorder="{$nodeorder}" >
             <xsl:attribute name="icon" >
                 <xsl:choose>
                     <xsl:when test="@icon">
@@ -383,17 +385,21 @@
                 <xsl:for-each select="node[@view='icon']" >
                     <xsl:call-template name="nodeinfo2" >
                         <xsl:with-param name="type">Icon</xsl:with-param>
+                        <xsl:with-param name="nodeorder" select="position()" />
                     </xsl:call-template>
                 </xsl:for-each>
                 <xsl:for-each select="node[@view='both']" >
                     <xsl:call-template name="nodeinfo2" >
                         <xsl:with-param name="type">Icon</xsl:with-param>
+                        <xsl:with-param name="nodeorder" select="position()" />
                     </xsl:call-template>
                 </xsl:for-each>
             </xsl:when>
             <xsl:otherwise>
                 <xsl:for-each select="node" >
-                    <xsl:call-template name="nodeinfo2" />
+                    <xsl:call-template name="nodeinfo2" >
+                        <xsl:with-param name="nodeorder" select="position()" />
+                    </xsl:call-template>
                 </xsl:for-each>
             </xsl:otherwise>
         </xsl:choose>

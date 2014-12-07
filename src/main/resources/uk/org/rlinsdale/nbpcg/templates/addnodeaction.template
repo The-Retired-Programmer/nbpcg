@@ -80,7 +80,7 @@ import org.openide.util.Lookup;
  *
  * @author ${templateauthor}
  */
-@RegisterNodeAction(node = "${NODEINFO.parentnode}", position=610)
+@RegisterNodeAction(node = "${NODEINFO.parentnode}", position=61${NODEINFO.nodeorder})
 public final class Add${NODEINFO.name}To${NODEINFO.parentnode}Action extends AbstractAction implements ContextAwareAction {
 
     @Override
@@ -99,12 +99,12 @@ public final class Add${NODEINFO.name}To${NODEINFO.parentnode}Action extends Abs
 
         public ContextAction(Lookup context) {
             parent = context.lookup(${NODEINFO.parentnode}.class);
-            putValue(NAME, "Add ${NODEINFO.name}");
+            putValue(NAME, "Add ${NODEINFO.entity}");
         }
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            Log.get("${log}").log(Level.FINE, "Add${NODEINFO.ename}To${NODEINFO.parentnode}Action: Menu Action");
+            Log.get("${log}").log(Level.FINE, "Add${NODEINFO.name}To${NODEINFO.parentnode}Action: Menu Action");
             Lookup.getDefault().lookup(${NODEINFO.entity}.EM.class).getNew(parent.getEntity());
         }
     }
