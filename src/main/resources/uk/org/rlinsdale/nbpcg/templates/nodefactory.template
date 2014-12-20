@@ -491,7 +491,7 @@ public static String getSort(${child.entity} e, String undefined) {
 
         public static String format${field.name?cap_first}(${child.entity} e) {
 <#if field.type="reference" >
-            return ${field.displaykey}Display.getDisplayName(e.get${field.name?cap_first}(), "");
+            return ${field.displaykey}Display.getDisplayTitle(e.get${field.name?cap_first}(), "");
 <#elseif field.type="ref" >
         return ${field.displaykey}Display.getDisplayName(e.get${field.name?cap_first}(), "");
 <#elseif field.type="int" >
