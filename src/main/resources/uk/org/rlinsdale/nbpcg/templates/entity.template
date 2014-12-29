@@ -95,10 +95,10 @@ import uk.org.rlinsdale.nbpcglibrary.common.*;
  * @author ${templateauthor}
  */
 <#if ENTITYINFO.ordercolumn??>
-public class ${ENTITYINFO.name} extends Entity${ENTITYINFO.access?upper_case}Indexed<${ENTITYINFO.name}> {
+public class ${ENTITYINFO.name} extends Entity${ENTITYINFO.access?upper_case}Indexed<${ENTITYINFO.name},${ENTITYINFO.parentname}> {
 <#else>
 <#if ENTITYINFO.access = "rw" >
-public class ${ENTITYINFO.name} extends Entity${ENTITYINFO.access?upper_case}<${ENTITYINFO.name}> {
+public class ${ENTITYINFO.name} extends Entity${ENTITYINFO.access?upper_case}<${ENTITYINFO.name},${ENTITYINFO.parentname}> {
 <#else>
 public class ${ENTITYINFO.name} extends Entity${ENTITYINFO.access?upper_case} {
 </#if>
@@ -786,8 +786,12 @@ public class ${ENTITYINFO.name} extends Entity${ENTITYINFO.access?upper_case} {
      * The ${ENTITYINFO.name} Entity Manager
      */
     @ServiceProvider(service=${ENTITYINFO.name}.EM.class)
+<#if ENTITYINFO.access = "rw" >
+    public static class EM extends EntityManager${ENTITYINFO.access?upper_case}<${ENTITYINFO.name},${ENTITYINFO.parentname}> {
+<#else>
     public static class EM extends EntityManager${ENTITYINFO.access?upper_case}<${ENTITYINFO.name}> {
-        
+</#if>
+   
         /**
          * Constructor.
          */
@@ -797,16 +801,8 @@ public class ${ENTITYINFO.name} extends Entity${ENTITYINFO.access?upper_case} {
 <#if ENTITYINFO.access = "rw" >
 
         @Override
-        protected final void _link2parent(${ENTITYINFO.name} e, Entity parent) {
-<#list ENTITYINFO.field![] as field>
-<#if field.type="ref" || field.type = "rootref" >
-            if (parent instanceof ${field.references}) {
-                ((${field.references})parent).add${ENTITYINFO.name}(e);
-                return;
-            }
-</#if>
-</#list>
-            throw new LogicException("Unknown parent class for ${ENTITYINFO.name}.Helper.link2parent(..)");
+        protected final void _link2parent(${ENTITYINFO.name} e, ${ENTITYINFO.parentname} parent) {
+                parent.add${ENTITYINFO.name}(e);
         }
 </#if>
         
@@ -859,7 +855,7 @@ public class ${ENTITYINFO.name} extends Entity${ENTITYINFO.access?upper_case} {
      * 
      * @return the set of all ${ENTITYINFO.name}s
      */
-public static List<${ENTITYINFO.name}> getAll${ENTITYINFO.name}s() {
+    public static List<${ENTITYINFO.name}> getAll${ENTITYINFO.name}s() {
         List<${ENTITYINFO.name}> list = new ArrayList<>();
         ${ENTITYINFO.parentname}.getAll${ENTITYINFO.parentname}s().stream().forEach((parent) -> {
             list.addAll(parent.get${ENTITYINFO.name}s());

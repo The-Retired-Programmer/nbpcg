@@ -132,7 +132,7 @@ public final class ${NODEINFO.name}Editor extends NodeEditorTopComponent<${NODEI
 <#list NODEINFO.field![] as field>
 <#if field.type="reference">
         ${field.name}Field.initChoices();
-        ${field.name}Field.set(${field.displaykey}Display.getDisplayName(entity.get${field.name?cap_first}(), ""));
+        ${field.name}Field.set(${field.displaykey}Display.getDisplayTitle(entity.get${field.name?cap_first}(), ""));
 <#elseif field.type="ref">
 <#elseif field.type=="enum">
         ${field.name}Field.initChoices();
@@ -183,7 +183,7 @@ public final class ${NODEINFO.name}Editor extends NodeEditorTopComponent<${NODEI
         public void set() {
 <#list NODEINFO.field![] as field>
 <#if field.type="reference">
-            ${field.name}Field.set(${field.displaykey}Display.getDisplayName(entity.get${field.name?cap_first}(), ""));
+            ${field.name}Field.set(${field.displaykey}Display.getDisplayTitle(entity.get${field.name?cap_first}(), ""));
 <#elseif field.type="ref">
 <#elseif field.type=="int" || field.type=="long" ||field.type=="date" || field.type=="datetime">
             ${field.name}Field.set(entity.get${field.name?cap_first}Text());
@@ -270,7 +270,7 @@ public final class ${NODEINFO.name}Editor extends NodeEditorTopComponent<${NODEI
 <#if field.type!="idx" >
              if (p.equals(${NODEINFO.entity}.${field.name?upper_case}FIELD)){
 <#if field.type="reference" >
-                ${field.name}Field.set(${field.displaykey}Display.getDisplayName(entity.get${field.name?cap_first}(), ""));
+                ${field.name}Field.set(${field.displaykey}Display.getDisplayTitle(entity.get${field.name?cap_first}(), ""));
 <#elseif field.type="ref" >
 <#elseif field.type=="int" || field.type=="long" ||field.type=="date" || field.type=="datetime">
                 ${field.name}Field.set(entity.get${field.name?cap_first}Text());
