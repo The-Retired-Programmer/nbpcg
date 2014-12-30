@@ -411,10 +411,12 @@ public class ${ENTITYINFO.name} extends Entity${ENTITYINFO.access?upper_case} {
      * @param e the ${field.name} entity
      */
     public void set${field.name?cap_first}(${field.references} e) {
-        ensureEditing();
-        if (${field.name}.set(e)) {
-            fireFieldChange(${field.name?upper_case}FIELD);
-        }   
+        if (${field.name}.getId() != e.getId()) {
+            ensureEditing();
+            if (${field.name}.set(e)) {
+                fireFieldChange(${field.name?upper_case}FIELD);
+            }
+        }
     }
 <#elseif field.type = "rootref" >
 
