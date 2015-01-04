@@ -64,6 +64,7 @@ import uk.org.rlinsdale.nbpcglibrary.common.Listener;
 import uk.org.rlinsdale.nbpcglibrary.topcomponent.ReferenceChoiceAllField;
 import ${datapackage}.${NODEINFO.entity};
 import ${nodepackage}.${NODEINFO.parentnode}ChildFactory.${NODEINFO.name}Display;
+import uk.org.rlinsdale.nbpcglibrary.data.entity.SetChangeListenerParams;
 /**
  * The ${NODEINFO.entity} Choice Field
  *
@@ -86,5 +87,15 @@ public final class ${NODEINFO.entity}ChoiceField extends ReferenceChoiceAllField
     @Override
     public String convertEntitytoText(${NODEINFO.entity} e) {
         return ${NODEINFO.name}Display.getDisplayTitle(e, "");
+    }
+
+    @Override
+    protected void addAllCollectionListeners(Listener<SetChangeListenerParams> listener) {
+        ${NODEINFO.entity}.addSetChangeListeners(listener);
+    }
+
+    @Override
+    protected void removeAllCollectionListeners(Listener<SetChangeListenerParams> listener) {
+        ${NODEINFO.entity}.removeSetChangeListeners(listener);
     }
 }

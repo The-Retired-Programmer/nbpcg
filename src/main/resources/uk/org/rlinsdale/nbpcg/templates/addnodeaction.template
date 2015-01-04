@@ -58,19 +58,19 @@
 package ${package};
 
 import java.awt.event.ActionEvent;
-import java.util.logging.Level;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import static javax.swing.Action.NAME;
+import org.openide.util.ContextAwareAction;
+import org.openide.util.Lookup;
 import ${datapackage}.${NODEINFO.entity};
 <#assign PARENTNODEINFO = nodeinfo[NODEINFO.parentnodeandfactory]>
 <#if !PARENTNODEINFO.isroot??>
 import ${nodepackage}.${NODEINFO.parentnodeandfactory};
 </#if>
-import uk.org.rlinsdale.nbpcglibrary.node.RegisterNodeAction;
-import uk.org.rlinsdale.nbpcglibrary.common.Log;
-import org.openide.util.ContextAwareAction;
-import org.openide.util.Lookup;
+import uk.org.rlinsdale.nbpcglibrary.annotations.RegisterNodeAction;
+import uk.org.rlinsdale.nbpcglibrary.common.LogBuilder;
+
 
 /**
  * Add Node Action - add ${NODEINFO.name} to ${NODEINFO.parentnode}.
@@ -104,7 +104,7 @@ public final class Add${NODEINFO.name}To${NODEINFO.parentnode}Action extends Abs
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            Log.get("${log}").log(Level.FINE, "Add${NODEINFO.name}To${NODEINFO.parentnode}Action: Menu Action");
+            LogBuilder.writeEnteringLog("${log}", "Add${NODEINFO.name}To${NODEINFO.parentnode}Action$ContextAction", "actionPerformed",e);
             Lookup.getDefault().lookup(${NODEINFO.entity}.EM.class).getNew(parent.getEntity());
         }
     }

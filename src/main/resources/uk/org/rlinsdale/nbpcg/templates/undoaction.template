@@ -61,12 +61,11 @@ import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import static javax.swing.Action.NAME;
-import java.util.logging.Level;
-import ${nodepackage}.${NODEINFO.key};
-import uk.org.rlinsdale.nbpcglibrary.node.RegisterNodeAction;
-import uk.org.rlinsdale.nbpcglibrary.common.Log;
 import org.openide.util.ContextAwareAction;
 import org.openide.util.Lookup;
+import ${nodepackage}.${NODEINFO.key};
+import uk.org.rlinsdale.nbpcglibrary.annotations.RegisterNodeAction;
+import uk.org.rlinsdale.nbpcglibrary.common.LogBuilder;
 
 /**
  * UndoAction for ${NODEINFO.name}Node.
@@ -100,7 +99,7 @@ public final class Undo${NODEINFO.name}Action extends AbstractAction implements 
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            Log.get("${log}").log(Level.FINE, "${NODEINFO.name}: Menu Action: Undo");
+            LogBuilder.writeEnteringLog("${log}", "Undo${NODEINFO.name}Action$ContextAction", "actionPerformed",e);
             node.getEntity().cancelEdit();
         }
     }
