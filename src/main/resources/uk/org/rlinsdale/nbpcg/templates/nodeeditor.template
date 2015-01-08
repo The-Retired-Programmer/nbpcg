@@ -1,5 +1,5 @@
 <#--
- * Copyright (C) 2014 Richard Linsdale (richard.linsdale at blueyonder.co.uk)
+ * Copyright (C) 2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,7 +16,7 @@
  -->
 <#if license = "gpl30" >
 /*
- * Copyright (C) 2014 Richard Linsdale (richard.linsdale at blueyonder.co.uk)
+ * Copyright (C) 2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,7 +34,7 @@
 </#if>
 <#if license = "lgpl21" >
 /*
- * Copyright (C) 2014 Richard Linsdale (richard.linsdale at blueyonder.co.uk).
+ * Copyright (C) 2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk).
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -64,7 +64,7 @@ import ${nodepackage}.*;
 import uk.org.rlinsdale.nbpcglibrary.data.entity.*;
 import uk.org.rlinsdale.nbpcglibrary.form.*;
 import uk.org.rlinsdale.nbpcglibrary.node.SaveHandler;
-import uk.org.rlinsdale.nbpcglibrary.node.nodes.NameChangeListenerParams;
+import uk.org.rlinsdale.nbpcglibrary.node.nodes.NameChangeEventParams;
 import uk.org.rlinsdale.nbpcglibrary.node.nodes.TreeNodeRW;
 import uk.org.rlinsdale.nbpcglibrary.common.*;
 import uk.org.rlinsdale.nbpcglibrary.topcomponent.*;
@@ -254,7 +254,7 @@ public final class ${NODEINFO.name}Editor extends NodeEditorTopComponent<${NODEI
         }
     }
 
-    private class EntityFieldChangeListener extends Listener<FieldChangeListenerParams> {
+    private class EntityFieldChangeListener extends Listener<FieldChangeEventParams> {
 
         public EntityFieldChangeListener(String name) {
             super(name);
@@ -262,8 +262,8 @@ public final class ${NODEINFO.name}Editor extends NodeEditorTopComponent<${NODEI
 
         @Override
         @SuppressWarnings("IncompatibleEquals")
-        public void action(FieldChangeListenerParams p) {
-            if (p.equals(FieldChangeListenerParams.ALLFIELDS)) {
+        public void action(FieldChangeEventParams p) {
+            if (p.equals(FieldChangeEventParams.ALLFIELDS)) {
                 form.set();
             }
 <#list NODEINFO.field![] as field>
@@ -290,19 +290,19 @@ public final class ${NODEINFO.name}Editor extends NodeEditorTopComponent<${NODEI
         }
     }
 
-    private class TitleChangeListener extends Listener<NameChangeListenerParams> {
+    private class TitleChangeListener extends Listener<NameChangeEventParams> {
 
         public TitleChangeListener(String name) {
             super(name);
         }
 
         @Override
-        public void action(NameChangeListenerParams p) {
+        public void action(NameChangeEventParams p) {
             setName("${NODEINFO.name}: "+p.get());
         }
     }
 
-    private class FormChangeListener extends Listener<FormFieldChangeListenerParams> {
+    private class FormChangeListener extends Listener<FormFieldChangeEventParams> {
 
          public FormChangeListener(String name){
             super(name);
@@ -310,7 +310,7 @@ public final class ${NODEINFO.name}Editor extends NodeEditorTopComponent<${NODEI
 
         @Override
         @SuppressWarnings("IncompatibleEquals")
-        public void action(FormFieldChangeListenerParams p) {
+        public void action(FormFieldChangeEventParams p) {
 <#list NODEINFO.field![] as field>
 <#if field.type!="idx" >
 <#if field.type="reference">

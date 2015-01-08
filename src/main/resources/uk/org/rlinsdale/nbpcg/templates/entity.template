@@ -1,5 +1,5 @@
 <#--
- * Copyright (C) 2014 Richard Linsdale (richard.linsdale at blueyonder.co.uk)
+ * Copyright (C) 2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,7 +16,7 @@
  -->
 <#if license = "gpl30" >
 /*
- * Copyright (C) 2014 Richard Linsdale (richard.linsdale at blueyonder.co.uk)
+ * Copyright (C) 2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,7 +34,7 @@
 </#if>
 <#if license = "lgpl21" >
 /*
- * Copyright (C) 2014 Richard Linsdale (richard.linsdale at blueyonder.co.uk).
+ * Copyright (C) 2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk).
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -55,6 +55,7 @@
 <#-- Freemarker Template for Entity class -->
 <#assign templateauthor = "Richard Linsdale (richard.linsdale at blueyonder.co.uk)" />
 <#assign ENTITYINFO = entityinfo[useentityinfo] >
+<#assign PARENTENTITYINFO = entityinfo[ENTITYINFO.parentname] >
 <#assign hassortchildren = false >
 <#list ENTITYINFO.child![] as child>
 <#assign hassortchildren = hassortchildren | child.sort??>
@@ -102,10 +103,6 @@ public class ${ENTITYINFO.name} extends Entity${ENTITYINFO.access?upper_case}<${
 <#else>
 public class ${ENTITYINFO.name} extends Entity${ENTITYINFO.access?upper_case} {
 </#if>
-</#if>
-
-<#if ENTITYINFO.child??>
-    private final ChildListener childListener;
 </#if>
     public enum ${ENTITYINFO.name}Fields {
 <#list ENTITYINFO.field![] as field>
@@ -192,9 +189,6 @@ public class ${ENTITYINFO.name} extends Entity${ENTITYINFO.access?upper_case} {
     private ${ENTITYINFO.name}(int id, ${ENTITYINFO.name}.EM em, DBFieldsRO${ENTITYINFO.withfields} dbfields) {
         super("${ENTITYINFO.name}", id, em, dbfields);
 </#if>
-<#if ENTITYINFO.child??>
-        childListener = new ChildListener("${ENTITYINFO.name}/childset");
-</#if>
         this.dbfields = dbfields;
 <#list ENTITYINFO.child![] as child>
 <#if child.orderable??>
@@ -204,7 +198,6 @@ public class ${ENTITYINFO.name} extends Entity${ENTITYINFO.access?upper_case} {
 <#else>
         ${child.name}s = new EntityReferenceSet<>("${ENTITYINFO.name}->>${child.name}s", ${child.name?upper_case}SFIELD, "${child.dbname}", getId(), ${child.references}.EM.class);
 </#if>
-        ${child.name}s.addSetListener(childListener);
 <#if child.min??>
         addRule(${child.name}s.getMinRule(${child.min}));
 </#if>
@@ -639,6 +632,30 @@ public class ${ENTITYINFO.name} extends Entity${ENTITYINFO.access?upper_case} {
     }
 
     /**
+     * Add set listener to all ${child.name}s (and parent) collections
+     *
+     * @param listener the set change listener to add
+     */
+    public static void add${child.references}sSetChangeListeners (Listener<SetChangeEventParams> listener) {
+       ${ENTITYINFO.name}.getAll${ENTITYINFO.name}s().stream().forEach((${ENTITYINFO.name?lower_case}) -> {
+            ${ENTITYINFO.name?lower_case}.${child.name}s.addSetListener(listener);
+        });
+        ${ENTITYINFO.parentname}.add${ENTITYINFO.name}sSetChangeListeners(listener);
+    }
+    
+    /**
+     * Remove set listener from all ${child.name}s (and parent) collections
+     *
+     * @param listener the set change listener to remove
+     */
+    public static void remove${child.references}sSetChangeListeners(Listener<SetChangeEventParams> listener) {
+        ${ENTITYINFO.name}.getAll${ENTITYINFO.name}s().stream().forEach((${ENTITYINFO.name?lower_case}) -> {
+            ${ENTITYINFO.name?lower_case}.${child.name}s.removeSetListener(listener);
+        });
+        ${ENTITYINFO.parentname}.remove${ENTITYINFO.name}sSetChangeListeners(listener);
+    }
+
+    /**
      * Get List of ${child.name}s associated with entity.
      *
      * @return list of ${child.name}s
@@ -845,21 +862,6 @@ public class ${ENTITYINFO.name} extends Entity${ENTITYINFO.access?upper_case} {
     }
 </#if>
 </#list>
-<#if ENTITYINFO.child??>
-
-    private class ChildListener extends Listener<SetChangeListenerParams> {
-
-        public ChildListener(String name) {
-            super(name);
-        }
-
-        @Override
-        public void action(SetChangeListenerParams p) {
-            fireSetChange(p);
-        }
-    }
-</#if>
-
     /**
      * Get the set of all ${ENTITYINFO.name}s.
      * 
@@ -867,31 +869,13 @@ public class ${ENTITYINFO.name} extends Entity${ENTITYINFO.access?upper_case} {
      */
     public static List<${ENTITYINFO.name}> getAll${ENTITYINFO.name}s() {
         List<${ENTITYINFO.name}> list = new ArrayList<>();
+<#if PARENTENTITYINFO.parentname?? >
         ${ENTITYINFO.parentname}.getAll${ENTITYINFO.parentname}s().stream().forEach((parent) -> {
             list.addAll(parent.get${ENTITYINFO.name}s());
         });
+<#else>
+        list.addAll(${ENTITYINFO.parentname}.getRoot().get${ENTITYINFO.name}s());
+</#if>
         return list;
-    }
-
-    /**
-     * Add set listener to all parent sets
-     * 
-     * @param listener the set change listener to add
-     */
-    public static void addSetChangeListeners(Listener<SetChangeListenerParams> listener) {
-        ${ENTITYINFO.parentname}.getAll${ENTITYINFO.parentname}s().stream().forEach((parent) -> {
-            parent.addSetChangeListener(listener);
-        });
-    }
-    
-    /**
-     * Remove set listener from all parent sets
-     * 
-     * @param listener the set change listener to remove
-     */
-    public static void removeSetChangeListeners(Listener<SetChangeListenerParams> listener) {
-        ${ENTITYINFO.parentname}.getAll${ENTITYINFO.parentname}s().stream().forEach((parent) -> {
-            parent.removeSetChangeListener(listener);
-        });
     }
 }

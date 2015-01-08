@@ -1,5 +1,5 @@
 <#--
- * Copyright (C) 2014 Richard Linsdale (richard.linsdale at blueyonder.co.uk)
+ * Copyright (C) 2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,7 +16,7 @@
  -->
 <#if license = "gpl30" >
 /*
- * Copyright (C) 2014 Richard Linsdale (richard.linsdale at blueyonder.co.uk)
+ * Copyright (C) 2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,7 +34,7 @@
 </#if>
 <#if license = "lgpl21" >
 /*
- * Copyright (C) 2014 Richard Linsdale (richard.linsdale at blueyonder.co.uk).
+ * Copyright (C) 2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk).
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -62,7 +62,6 @@
 </#list>
 package ${package};
 
-import java.util.Collections;
 <#if hassortchildren >
 import java.util.Comparator;
 </#if>
@@ -99,9 +98,6 @@ public class ${ENTITYINFO.name} extends Entity {
         return Lookup.getDefault().lookup(${ENTITYINFO.name}.class);
     }
 
-<#if haschildren >
-    private final ChildListener childListener;
-</#if>
 <#assign idx = 10 >
 <#list ENTITYINFO.child![] as child>
     /**
@@ -123,9 +119,6 @@ public class ${ENTITYINFO.name} extends Entity {
      */
     public ${ENTITYINFO.name}() {
         super("${ENTITYINFO.name}");
-<#if haschildren >
-        childListener = new ChildListener("${ENTITYINFO.name}/childset");
-</#if>
 <#list ENTITYINFO.child![] as child>
 <#if child.orderable??>
         ${child.name}s = new EntityIndexedReferenceSet<>("${child.name}s", ${child.name?upper_case}SFIELD, ${child.references}.EM.class);
@@ -134,7 +127,6 @@ public class ${ENTITYINFO.name} extends Entity {
 <#else>
         ${child.name}s = new EntityReferenceSet<>("${child.name?cap_first}s", ${child.name?upper_case}SFIELD, ${child.references}.EM.class);
 </#if>
-        ${child.name}s.addSetListener(childListener);
 </#list>
     }
 <#list ENTITYINFO.child![] as child>
@@ -164,6 +156,24 @@ public class ${ENTITYINFO.name} extends Entity {
      */
     protected void removeInternal${child.references}(${child.references} e) {
         ${child.name}s.remove(e);
+    }
+
+    /**
+     * Add set listener to requested collection field (set)
+     *
+     * @param listener the set change listener to be added
+     */
+    public static void add${child.references}sSetChangeListeners(Listener<SetChangeEventParams> listener) {
+        getRoot().${child.name}s.addSetListener(listener);
+    }
+
+    /**
+     * Remove set listener from requested collection field (set)
+     *
+     * @param listener the set change listener to be removed
+     */
+    public static void remove${child.references}sSetChangeListeners(Listener<SetChangeEventParams> listener) {
+        getRoot().${child.name}s.removeSetListener(listener);
     }
 
     /**
@@ -207,27 +217,4 @@ public class ${ENTITYINFO.name} extends Entity {
     }
 </#if>
 </#list>
-<#if haschildren >
-
-    private class ChildListener extends Listener<SetChangeListenerParams> {
-
-        public ChildListener(String name) {
-            super(name);
-        }
-
-        @Override
-        public void action(SetChangeListenerParams p) {
-            fireSetChange(p);
-        }
-    }
-</#if>
-
-    /**
-     * Get the set of all ${ENTITYINFO.name}s.
-     * 
-     * @return the set of all ${ENTITYINFO.name}s
-     */
-    public static List<${ENTITYINFO.name}> getAll${ENTITYINFO.name}s() {
-        return Collections.singletonList(getRoot());
-    }
 }
