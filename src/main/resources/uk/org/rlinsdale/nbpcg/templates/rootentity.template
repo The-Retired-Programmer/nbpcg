@@ -66,17 +66,18 @@ package ${package};
 import java.util.Comparator;
 </#if>
 import java.util.List;
-<#if hassortchildren >
-import ${nodepackage}.*;
-</#if>
-import uk.org.rlinsdale.nbpcglibrary.data.entity.*;
-import uk.org.rlinsdale.nbpcglibrary.data.entityreferences.*;
+import org.openide.util.Lookup;
+import org.openide.util.lookup.ServiceProvider;
 import uk.org.rlinsdale.nbpcglibrary.common.IntWithDescription;
 <#if haschildren >
 import uk.org.rlinsdale.nbpcglibrary.common.Listener;
 </#if>
-import org.openide.util.Lookup;
-import org.openide.util.lookup.ServiceProvider;
+import uk.org.rlinsdale.nbpcglibrary.common.LogBuilder;
+import uk.org.rlinsdale.nbpcglibrary.data.entity.*;
+import uk.org.rlinsdale.nbpcglibrary.data.entityreferences.*;
+<#if hassortchildren >
+import ${nodepackage}.*;
+</#if>
 
 /**
  * The ${ENTITYINFO.name} Object
@@ -89,6 +90,11 @@ import org.openide.util.lookup.ServiceProvider;
 @ServiceProvider(service = ${ENTITYINFO.name}.class)
 public class ${ENTITYINFO.name} extends Entity {
 
+    @Override
+    public String classDescription() {
+        return LogBuilder.classDescription(this);
+    }
+    
     /**
      * Get the ${ENTITYINFO.name} entity.
      * 
