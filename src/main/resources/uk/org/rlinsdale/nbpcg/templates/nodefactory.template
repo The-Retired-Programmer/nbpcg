@@ -75,6 +75,12 @@ import uk.org.rlinsdale.nbpcglibrary.node.properties.*;
 import uk.org.rlinsdale.nbpcglibrary.common.*;
 import org.openide.nodes.Node;
 import org.openide.nodes.PropertySupport;
+<#list NODEINFO.child![] as child >
+import ${datapackage}.${child.entity}.${child.entity}Field;
+</#list>
+import uk.org.rlinsdale.nbpcglibrary.data.entity.FieldChangeEventParams.CommonEntityField;
+import static uk.org.rlinsdale.nbpcglibrary.data.entity.FieldChangeEventParams.CommonEntityField.*;
+
 
 /**
  * ${type}NodeChildFactory from ${NODEINFO.name}.
@@ -197,7 +203,7 @@ public class ${NODEINFO.name}ChildFactory extends BasicChildFactory<${NODEINFO.e
    /**
     * Node for ${child.name}.
     */
-    public class ${child.name} extends ${type2}Node${child.access?upper_case}<${child.entity}> {
+    public class ${child.name} extends ${type2}Node${child.access?upper_case}<${child.entity}, ${child.entity}Field> {
 
         private final ${child.name}ChildFactory cf;
 
@@ -229,7 +235,7 @@ public class ${NODEINFO.name}ChildFactory extends BasicChildFactory<${NODEINFO.e
    /**
     * Node for ${child.name}.
     */
-    public class ${child.name} extends ${type2}Node${child.access?upper_case}<${child.entity}> {
+    public class ${child.name} extends ${type2}Node${child.access?upper_case}<${child.entity}, ${child.entity}Field> {
         /**
          * Constructor
          *
@@ -301,39 +307,51 @@ public class ${NODEINFO.name}ChildFactory extends BasicChildFactory<${NODEINFO.e
 
 <#if child.access = "rw" >
         @Override
-        protected void _processFieldChange(IntWithDescription field) {
+        protected void _processCommonFieldChange(CommonEntityField field) {
             ${child.entity} e =  getEntity();
-            if (field.equals(FieldChangeEventParams.ALLFIELDS)) {
-                if (e != null && idproperty != null) {
-                    idproperty.update(e.getId());
+            switch (field) {
+                case ALL:
+                    if (e != null && idproperty != null) {
+                        idproperty.update(e.getId());
 <#list CHILDNODEINFO.field![] as field>
 <#if field.type != "rootref" >
-                    ${field.name}property.update(${child.name}Display.format${field.name?cap_first}(e));
+                        ${field.name}property.update(${child.name}Display.format${field.name?cap_first}(e));
 </#if>
 </#list>
-                propertyChange();
-                }
-                nameChange();
-                titleChange();
-            } else if (field.equals(FieldChangeEventParams.IDFIELD)) {
-                if (e != null && idproperty != null) {
-                    idproperty.update(e.getId());
-                    propertyChange("Id");
-                }
+                        propertyChange();
+                    }
+                    nameChange();
+                    titleChange();
+                    break;
+                case ID:
+                    if (e != null && idproperty != null) {
+                        idproperty.update(e.getId());
+                        propertyChange("Id");
+                    }
+                    break;
+            }
+        }
+        
+</#if>
+<#if child.access = "rw" >
+        @Override
+        protected void _processFieldChange(${child.entity}Field field) {
+            ${child.entity} e =  getEntity();
+            switch (field) {
 <#list CHILDNODEINFO.field![] as field>
 <#if field.type = "rootref" >
 <#elseif field.type = "idx" >
-            } else if (field.equals(FieldChangeListenerParams.${field.name?upper_case}FIELD)) {
-                if (e != null && ${field.name}property != null) {
-                    ${field.name}property.update(${child.name}Display.format${field.name?cap_first}(e));
-                    propertyChange("${field.label}");
-                }
+                case ${field.name?upper_case}:
+                    if (e != null && ${field.name}property != null) {
+                        ${field.name}property.update(${child.name}Display.format${field.name?cap_first}(e));
+                        propertyChange("${field.label}");
+                    }
 <#else>
-            } else if (field.equals(${child.entity}.${field.name?upper_case}FIELD)) {
-                if (e != null && ${field.name}property != null) {
-                    ${field.name}property.update(${child.name}Display.format${field.name?cap_first}(e));
-                    propertyChange("${field.label}");
-                }
+                case ${field.name?upper_case}:
+                    if (e != null && ${field.name}property != null) {
+                        ${field.name}property.update(${child.name}Display.format${field.name?cap_first}(e));
+                        propertyChange("${field.label}");
+                    }
 <#assign namechange = "no">
 <#list CHILDNODEINFO.displaynameformat as df >
 <#list df.display as dp>
@@ -343,7 +361,7 @@ public class ${NODEINFO.name}ChildFactory extends BasicChildFactory<${NODEINFO.e
 </#list>
 </#list>
 <#if namechange = "yes" >
-                nameChange();
+                    nameChange();
 </#if>
 <#assign titlechange = "no">
 <#if CHILDNODEINFO.displaytitleformat??>
@@ -358,9 +376,10 @@ public class ${NODEINFO.name}ChildFactory extends BasicChildFactory<${NODEINFO.e
 <#assign titlechange = namechange >
 </#if>
 <#if titlechange = "yes" >
-                titleChange();
+                    titleChange();
 </#if>
 </#if>
+                    break;
 </#list>
             }
         }

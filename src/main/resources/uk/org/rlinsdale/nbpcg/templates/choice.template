@@ -61,6 +61,7 @@ import java.util.List;
 import ${nodepackage}.${NODEINFO.parentnode}ChildFactory.${NODEINFO.name}Display;
 import ${datapackage}.${NODEINFO.entity};
 import ${datapackage}.${NODEINFO.parententity};
+import ${datapackage}.${NODEINFO.entity}.${NODEINFO.entity}Field;
 import uk.org.rlinsdale.nbpcglibrary.common.IntWithDescription;
 import uk.org.rlinsdale.nbpcglibrary.common.Listener;
 import uk.org.rlinsdale.nbpcglibrary.data.entity.SetChangeEventParams;
@@ -76,7 +77,7 @@ import uk.org.rlinsdale.nbpcglibrary.topcomponent.ReferenceChoiceCollectionField
  *
  * @author ${templateauthor}
  */
-public final class ${NODEINFO.entity}ChoiceField extends ReferenceChoiceCollectionFields<${NODEINFO.entity}> {
+public final class ${NODEINFO.entity}ChoiceField extends ReferenceChoiceCollectionFields<${NODEINFO.entity}, ${NODEINFO.entity}Field> {
 
     public ${NODEINFO.entity}ChoiceField(IntWithDescription field, String label, Listener<FormFieldChangeEventParams> listener) {
         super(field, label, listener);
