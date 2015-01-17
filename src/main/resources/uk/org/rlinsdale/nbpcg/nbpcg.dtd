@@ -12,6 +12,7 @@
     <!ELEMENT build (project+) >
         <!ATTLIST build
             viewerroles CDATA #REQUIRED
+            copyright CDATA #REQUIRED
             >
         <!ELEMENT project (generatescripts?, generate*) >
             <!ATTLIST project

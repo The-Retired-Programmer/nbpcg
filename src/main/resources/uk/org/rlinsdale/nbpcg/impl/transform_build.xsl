@@ -585,6 +585,9 @@
                             <xsl:otherwise>gpl30</xsl:otherwise>
                         </xsl:choose>
                     </xsl:attribute>
+                    <xsl:attribute name="copyright" >
+                        <xsl:value-of select="../../@copyright" />
+                    </xsl:attribute>
                 </xsl:for-each>
             </xsl:when>
             <xsl:otherwise>
@@ -602,6 +605,9 @@
                             </xsl:when>
                             <xsl:otherwise>gpl30</xsl:otherwise>
                         </xsl:choose>
+                    </xsl:attribute>
+                    <xsl:attribute name="copyright" >
+                        <xsl:value-of select="../../@copyright" />
                     </xsl:attribute>
                 </xsl:for-each>
             </xsl:otherwise>
