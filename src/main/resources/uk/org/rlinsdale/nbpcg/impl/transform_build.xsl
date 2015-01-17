@@ -50,13 +50,13 @@
                 <execute action="message"  message="generating node files" />
                 <xsl:call-template name="rootnode" />
                 <xsl:call-template name="nodefactory" />
-                <xsl:call-template name="undoaction" />
-                <xsl:call-template name="addaction" />
+                <xsl:call-template name="undonode" />
+                <xsl:call-template name="addnode" />
             </xsl:if>
             <xsl:if test="build/project/generate[@type='nodeeditor']" >
                 <execute action="message"  message="generating node editor files" />
                 <xsl:call-template name="nodeeditor" />
-                <xsl:call-template name="nodeeditoraction" />
+                <xsl:call-template name="editnode" />
                 <xsl:call-template name="choice" />
                 <xsl:call-template name="enumchoice" />
             </xsl:if>
@@ -372,11 +372,11 @@
         </xsl:for-each>
     </xsl:template>
     
-    <xsl:template name="undoaction">
+    <xsl:template name="undonode">
         <xsl:for-each select="//node">
             <xsl:choose>
                 <xsl:when test="local-name(..) = 'node'">
-                    <execute action="nodetemplate" template="undoaction" folder="node" filename="Undo{@name}NodeAction.java" usenodeinfo="{../@name}NodeChildFactory.{@name}Node">
+                    <execute action="nodetemplate" template="undonode" folder="node" filename="Undo{@name}Node.java" usenodeinfo="{../@name}NodeChildFactory.{@name}Node">
                         <xsl:attribute name="datapackage">
                             <xsl:value-of select="/nbpcg/build/project/generate[@type='data']/@package"/>
                         </xsl:attribute>
@@ -389,7 +389,7 @@
                     </execute>
                 </xsl:when>
                 <xsl:otherwise>
-                    <execute action="nodetemplate" template="undoaction" folder="node" filename="Undo{@name}NodeAction.java" usenodeinfo="{@name}RootNodeChildFactory.{@name}Node">
+                    <execute action="nodetemplate" template="undonode" folder="node" filename="Undo{@name}Node.java" usenodeinfo="{@name}RootNodeChildFactory.{@name}Node">
                         <xsl:attribute name="datapackage">
                             <xsl:value-of select="/nbpcg/build/project/generate[@type='data']/@package"/>
                         </xsl:attribute>
@@ -405,7 +405,7 @@
         </xsl:for-each>
     </xsl:template>
     
-    <xsl:template name="addaction">
+    <xsl:template name="addnode">
         <xsl:for-each select="//node">
             <xsl:variable name="nname" select="@name" />
             <xsl:variable name="access" >
@@ -421,7 +421,7 @@
             <xsl:if test="$access='rw'" >
                 <xsl:choose>
                     <xsl:when test="local-name(..) = 'node'">
-                        <execute action="nodetemplate" template="addnodeaction" folder="node" filename="Add{@name}NodeTo{../@name}NodeAction.java" usenodeinfo="{../@name}NodeChildFactory.{@name}Node">
+                        <execute action="nodetemplate" template="addnode" folder="node" filename="Add{@name}Node.java" usenodeinfo="{../@name}NodeChildFactory.{@name}Node">
                             <xsl:attribute name="datapackage">
                                 <xsl:value-of select="/nbpcg/build/project/generate[@type='data']/@package"/>
                             </xsl:attribute>
@@ -434,7 +434,7 @@
                         </execute>
                     </xsl:when>
                     <xsl:otherwise>
-                        <execute action="nodetemplate" template="addnodeaction" folder="node" filename="Add{@name}NodeTo{@name}RootNodeAction.java" usenodeinfo="{@name}RootNodeChildFactory.{@name}Node">
+                        <execute action="nodetemplate" template="addnode" folder="node" filename="Add{@name}Node.java" usenodeinfo="{@name}RootNodeChildFactory.{@name}Node">
                             <xsl:attribute name="datapackage">
                                 <xsl:value-of select="/nbpcg/build/project/generate[@type='data']/@package"/>
                             </xsl:attribute>
@@ -489,13 +489,13 @@
         </xsl:for-each>
     </xsl:template>
     
-    <xsl:template name="nodeeditoraction">
+    <xsl:template name="editnode">
         <xsl:for-each select="//node" >
             <xsl:variable name="nname" select="@name" />
             <xsl:if test="/nbpcg/databases/database[not(@usepackage)]/table[@name=$nname]" >
                 <xsl:choose>
                     <xsl:when test="local-name(..) = 'node'" >
-                        <execute action="nodetemplate" template="nodeeditoraction" folder="nodeeditor" filename="{@name}NodeFrom{../@name}NodeEditorAction.java" usenodeinfo="{../@name}NodeChildFactory.{@name}Node">
+                        <execute action="nodetemplate" template="editnode" folder="nodeeditor" filename="Edit{@name}Node.java" usenodeinfo="{../@name}NodeChildFactory.{@name}Node">
                             <xsl:attribute name="datapackage">
                                 <xsl:value-of select="/nbpcg/build/project/generate[@type='data']/@package"/>
                             </xsl:attribute>
@@ -511,7 +511,7 @@
                         </execute>
                     </xsl:when>
                     <xsl:otherwise>
-                        <execute action="nodetemplate" template="nodeeditoraction" folder="nodeeditor" filename="{@name}NodeFrom{@name}RootNodeEditorAction.java" usenodeinfo="{@name}RootNodeChildFactory.{@name}Node">
+                        <execute action="nodetemplate" template="editnode" folder="nodeeditor" filename="Edit{@name}Node.java" usenodeinfo="{@name}RootNodeChildFactory.{@name}Node">
                             <xsl:attribute name="datapackage">
                                 <xsl:value-of select="/nbpcg/build/project/generate[@type='data']/@package"/>
                             </xsl:attribute>

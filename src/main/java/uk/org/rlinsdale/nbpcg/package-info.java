@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014 Richard Linsdale (richard.linsdale at blueyonder.co.uk)
+ * Copyright (C) 2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,10 +29,10 @@
     @TemplateRegistration(folder = "linsdale-nbpcg", displayName = "enumchoice", content = "templates/enumchoice.template", scriptEngine = "freemarker"),
     @TemplateRegistration(folder = "linsdale-nbpcg", displayName = "choice", content = "templates/choice.template", scriptEngine = "freemarker"),
     @TemplateRegistration(folder = "linsdale-nbpcg", displayName = "nodeeditor", content = "templates/nodeeditor.template", scriptEngine = "freemarker"),
-    @TemplateRegistration(folder = "linsdale-nbpcg", displayName = "nodeeditoraction", content = "templates/nodeeditoraction.template", scriptEngine = "freemarker"),
+    @TemplateRegistration(folder = "linsdale-nbpcg", displayName = "editnode", content = "templates/editnode.template", scriptEngine = "freemarker"),
     @TemplateRegistration(folder = "linsdale-nbpcg", displayName = "nodefactory", content = "templates/nodefactory.template", scriptEngine = "freemarker"),
-    @TemplateRegistration(folder = "linsdale-nbpcg", displayName = "undoaction", content = "templates/undoaction.template", scriptEngine = "freemarker"),
-    @TemplateRegistration(folder = "linsdale-nbpcg", displayName = "addnodeaction", content = "templates/addnodeaction.template", scriptEngine = "freemarker"),
+    @TemplateRegistration(folder = "linsdale-nbpcg", displayName = "undonode", content = "templates/undonode.template", scriptEngine = "freemarker"),
+    @TemplateRegistration(folder = "linsdale-nbpcg", displayName = "addnode", content = "templates/addnode.template", scriptEngine = "freemarker"),
     @TemplateRegistration(folder = "linsdale-nbpcg", displayName = "rootentity", content = "templates/rootentity.template", scriptEngine = "freemarker"),
     @TemplateRegistration(folder = "linsdale-nbpcg", displayName = "rootnode", content = "templates/rootnode.template", scriptEngine = "freemarker"),
     @TemplateRegistration(folder = "linsdale-nbpcg", displayName = "rootnodeviewer", content = "templates/rootnodeviewer.template", scriptEngine = "freemarker"),

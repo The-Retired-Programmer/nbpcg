@@ -76,7 +76,7 @@ import uk.org.rlinsdale.nbpcglibrary.common.LogBuilder;
  * @author ${templateauthor}
  */
 @RegisterNodeAction(node = "${NODEINFO.name}", position=510, separator = 600)
-public final class Undo${NODEINFO.name}Action extends AbstractAction implements ContextAwareAction {
+public final class Undo${NODEINFO.name} extends AbstractAction implements ContextAwareAction {
 
     @Override
     public Action createContextAwareInstance(Lookup context) {
