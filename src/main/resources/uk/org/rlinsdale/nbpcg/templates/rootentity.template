@@ -115,7 +115,7 @@ public class ${ENTITYINFO.name} extends Entity {
 </#list>
 
     @Override
-    public String classDescription() {
+    public final String classDescription() {
         return LogBuilder.classDescription(this);
     }
     
@@ -135,11 +135,11 @@ public class ${ENTITYINFO.name} extends Entity {
         super("${ENTITYINFO.name}");
 <#list ENTITYINFO.child![] as child>
 <#if child.orderable??>
-        ${child.name}s = new EntityIndexedReferenceSet<>("${child.name}s", ${child.name?upper_case}S, ${child.references}.EM.class);
+        ${child.name}s = new EntityIndexedReferenceSet<>(classDescription()+">${child.name?cap_first}s", ${child.name?upper_case}S, ${child.references}.EM.class);
 <#elseif child.sort??>
-        ${child.name}s = new EntitySortedReferenceSet<>("${child.name?cap_first}s", ${child.name?upper_case}S, new ${child.references}Comparator(), ${child.references}.EM.class);
+        ${child.name}s = new EntitySortedReferenceSet<>(classDescription()+">${child.name?cap_first}s", ${child.name?upper_case}S, new ${child.references}Comparator(), ${child.references}.EM.class);
 <#else>
-        ${child.name}s = new EntityReferenceSet<>("${child.name?cap_first}s", ${child.name?upper_case}S, ${child.references}.EM.class);
+        ${child.name}s = new EntityReferenceSet<>(classDescription()+">${child.name?cap_first}s", ${child.name?upper_case}S, ${child.references}.EM.class);
 </#if>
 </#list>
     }
@@ -170,6 +170,24 @@ public class ${ENTITYINFO.name} extends Entity {
      */
     protected void removeInternal${child.references}(${child.references} e) {
         ${child.name}s.remove(e);
+    }
+
+    /**
+     * Add set listener to ${child.name}s collections
+     *
+     * @param listener the set change listener to add
+     */
+    public void add${child.references}SetChangeListener(Listener<SetChangeEventParams> listener) {
+        ${child.name}s.addSetListener(listener);
+    }
+    
+    /**
+     * remove set listener to ${child.name}s collections
+     *
+     * @param listener the set change listener to add
+     */
+    public void remove${child.references}SetChangeListener(Listener<SetChangeEventParams> listener) {
+        ${child.name}s.removeSetListener(listener);
     }
 
     /**

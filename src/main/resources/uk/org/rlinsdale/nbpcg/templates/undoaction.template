@@ -99,7 +99,7 @@ public final class Undo${NODEINFO.name}Action extends AbstractAction implements 
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            LogBuilder.writeEnteringLog("${log}", "Undo${NODEINFO.name}Action$ContextAction", "actionPerformed",e);
+            LogBuilder.writeLog("${log}", this, "actionPerformed");
             node.getEntity().cancelEdit();
         }
     }

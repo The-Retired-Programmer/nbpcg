@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--
-    Copyright (C) 2014 Richard Linsdale (richard.linsdale at blueyonder.co.uk)
+    Copyright (C) 2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -450,56 +450,6 @@
                     </xsl:otherwise>
                 </xsl:choose>
             </xsl:attribute>
-            <!-- temporary disable until resolved other problems
-            <xsl:if test="count(field) = 1 and field[@type='reference']" >
-                <xsl:variable name="refers" select="field/@references" />
-                <xsl:attribute name="copymovenode">
-                    <xsl:for-each select="//node[@name=$refers]">
-                        <xsl:choose>
-                            <xsl:when test="local-name(..) = 'node' ">
-                                <xsl:value-of select="concat(@name,'ChildFactory.',$refers,'Node')"/>
-                            </xsl:when>
-                            <xsl:otherwise>
-                                <xsl:value-of select="concat($refers,'RootChildFactory.',$refers,'Node')"/>
-                            </xsl:otherwise>
-                        </xsl:choose>
-                    </xsl:for-each>
-                </xsl:attribute>
-                <xsl:attribute name="copymoveentity">
-                    <xsl:value-of select="$refers" />
-                </xsl:attribute>
-                <xsl:attribute name="copymovefield">
-                    <xsl:value-of select="field/@name" />
-                </xsl:attribute>
-            </xsl:if>
-            <xsl:if test="count(field) = 0 and count(//node[@name=$entityname]) = 2" >
-                <xsl:for-each select="//node[@name=$entityname]" >
-                    <xsl:variable name="parentname" select="../@name" />
-                    <xsl:if test="not ($parentname = $entityname)">
-                        <xsl:attribute name="copymovenode">
-                            <xsl:choose>
-                                <xsl:when test="local-name(../..) = 'node' ">
-                                    <xsl:value-of select="concat(../../@name,'NodeChildFactory.', ../@name ,'Node')"/>
-                                </xsl:when>
-                                <xsl:otherwise>
-                                    <xsl:value-of select="concat(../@name ,'RootNodeChildFactory.',../@name,'Node')"/>
-                                </xsl:otherwise>
-                            </xsl:choose>
-                        </xsl:attribute>
-                        <xsl:attribute name="copymoveentity">
-                            <xsl:value-of select="../@name" />
-                        </xsl:attribute>
-                        <xsl:attribute name="copymovefield">
-                            <xsl:call-template name="firsttolowercase">
-                                <xsl:with-param name="string">
-                                    <xsl:value-of select="../@name"/>
-                                </xsl:with-param>
-                            </xsl:call-template>
-                        </xsl:attribute>
-                    </xsl:if>
-                </xsl:for-each>
-            </xsl:if>
-            -->
         </xsl:for-each>
         <xsl:variable name="parent" select="../@name"/>
         <xsl:choose>

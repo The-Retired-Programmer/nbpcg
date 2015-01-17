@@ -173,40 +173,25 @@ public class ${ENTITYINFO.name} extends Entity${ENTITYINFO.access?upper_case}<${
     }
 
     private ${ENTITYINFO.name}(int id, ${ENTITYINFO.name}.EM em, DBFieldsRWIndexed${ENTITYINFO.withfields}<${ENTITYINFO.name}> dbfields) {
-        super("${ENTITYINFO.name}", id, em, dbfields);
+        super("${ENTITYINFO.name}["+Integer.toString(id)+"]", id, em, dbfields);
 <#else>
         this(id, em, new DBFieldsRW${ENTITYINFO.withfields}<>());
     }
 
     private ${ENTITYINFO.name}(int id, ${ENTITYINFO.name}.EM em, DBFieldsRW${ENTITYINFO.withfields}<${ENTITYINFO.name}> dbfields) {
-        super("${ENTITYINFO.name}", id, em, dbfields);
+        super("${ENTITYINFO.name}["+Integer.toString(id)+"]", id, em, dbfields);
 </#if>
 <#else>
         this(id, em, new DBFieldsRO${ENTITYINFO.withfields}());
     }
 
     private ${ENTITYINFO.name}(int id, ${ENTITYINFO.name}.EM em, DBFieldsRO${ENTITYINFO.withfields} dbfields) {
-        super("${ENTITYINFO.name}", id, em, dbfields);
+        super("${ENTITYINFO.name}["+Integer.toString(id)+"]", id, em, dbfields);
 </#if>
         this.dbfields = dbfields;
-<#list ENTITYINFO.child![] as child>
-<#if child.orderable??>
-        ${child.name}s = new EntityIndexedReferenceSet<>("${ENTITYINFO.name}->>${child.name}s", ${child.name?upper_case}S, "${child.dbname}", getId(), ${child.references}.EM.class);
-<#elseif child.sort??>
-        ${child.name}s = new EntitySortedReferenceSet<>("${ENTITYINFO.name}->>${child.name}s", ${child.name?upper_case}S, new ${child.references}Comparator(), "${child.dbname}", getId(), ${child.references}.EM.class);
-<#else>
-        ${child.name}s = new EntityReferenceSet<>("${ENTITYINFO.name}->>${child.name}s", ${child.name?upper_case}S, "${child.dbname}", getId(), ${child.references}.EM.class);
-</#if>
-<#if child.min??>
-        addRule(${child.name}s.getMinRule(${child.min}));
-</#if>
-<#if child.max??>
-        addRule(${child.name}s.getMaxRule(${child.max}));
-</#if>
-</#list>
 <#list ENTITYINFO.field![] as field>
 <#if field.type == "ref" || field.type == "reference" >
-        ${field.name} = new EntityReference<>("${ENTITYINFO.name}<-${field.name?cap_first}", Lookup.getDefault().lookup(${field.references}.EM.class));
+        ${field.name} = new EntityReference<>("${ENTITYINFO.name}>${field.name?cap_first}", Lookup.getDefault().lookup(${field.references}.EM.class));
 <#if !field.optional??>
         addRule(${field.name}.getDefinedRule());
 </#if>
@@ -239,6 +224,21 @@ public class ${ENTITYINFO.name} extends Entity${ENTITYINFO.access?upper_case}<${
 </#if>
 </#list>
 </#if>
+<#list ENTITYINFO.child![] as child>
+<#if child.orderable??>
+        ${child.name}s = new EntityIndexedReferenceSet<>(classDescription()+">${child.references}s", ${child.name?upper_case}S, "${child.dbname}", getId(), ${child.references}.EM.class);
+<#elseif child.sort??>
+        ${child.name}s = new EntitySortedReferenceSet<>(classDescription()+">${child.references}s", ${child.name?upper_case}S, new ${child.references}Comparator(), "${child.dbname}", getId(), ${child.references}.EM.class);
+<#else>
+        ${child.name}s = new EntityReferenceSet<>(classDescription()+">${child.references}s", ${child.name?upper_case}S, "${child.dbname}", getId(), ${child.references}.EM.class);
+</#if>
+<#if child.min??>
+        addRule(${child.name}s.getMinRule(${child.min}));
+</#if>
+<#if child.max??>
+        addRule(${child.name}s.getMaxRule(${child.max}));
+</#if>
+</#list>
         checkRulesAtLoad();
     }
 <#assign writeDescription = "yes" >
@@ -247,15 +247,17 @@ public class ${ENTITYINFO.name} extends Entity${ENTITYINFO.access?upper_case}<${
 <#if  field.type = "String">
 
     @Override
-    public String classDescription() {
-        return LogBuilder.classDescription(this, Integer.toString(getId())+"-"+${field.name});
+    public final String classDescription() {
+        return "".equals(${field.name}) ?
+                LogBuilder.classDescription(this, Integer.toString(getId())):
+                LogBuilder.classDescription(this, Integer.toString(getId())+"-"+${field.name});
     }
 <#assign writeDescription = "no" >
 </#if>
 <#if field.type = "boolean" || field.type = "int" || field.type = "long" || field.type = "date" || field.type = "datetime" || field.type = "enum" >
     
     @Override
-    public String classDescription() {
+    public final String classDescription() {
         return LogBuilder.classDescription(this, Integer.toString(getId()));
     }
 <#assign writeDescription = "no" >
@@ -263,8 +265,11 @@ public class ${ENTITYINFO.name} extends Entity${ENTITYINFO.access?upper_case}<${
 <#if field.type = "reference">
 
     @Override
-    public String classDescription() {
-        return LogBuilder.classDescription(this, Integer.toString(getId())+"->"+${field.name}.get().classDescription());
+    public final String classDescription() {
+        ${field.references} e = ${field.name}.get();
+        return e != null?
+                LogBuilder.classDescription(this, Integer.toString(getId()) + ":" + e.classDescription()):
+                LogBuilder.classDescription(this, Integer.toString(getId()));
     }
 <#assign writeDescription = "no" >
 </#if>
@@ -657,6 +662,24 @@ public class ${ENTITYINFO.name} extends Entity${ENTITYINFO.access?upper_case}<${
      */
     protected void removeInternal${child.references}(${child.references} e) {
         ${child.name}s.remove(e);
+    }
+
+    /**
+     * Add set listener to ${child.name}s collections
+     *
+     * @param listener the set change listener to add
+     */
+    public void add${child.references}SetChangeListener(Listener<SetChangeEventParams> listener) {
+        ${child.name}s.addSetListener(listener);
+    }
+    
+    /**
+     * remove set listener to ${child.name}s collections
+     *
+     * @param listener the set change listener to add
+     */
+    public void remove${child.references}SetChangeListener(Listener<SetChangeEventParams> listener) {
+        ${child.name}s.removeSetListener(listener);
     }
 
     /**

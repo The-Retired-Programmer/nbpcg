@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--
-    Copyright (C) 2014 Richard Linsdale (richard.linsdale at blueyonder.co.uk)
+    Copyright (C) 2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -116,50 +116,6 @@
             </xsl:for-each>
         </xsl:for-each>
     </xsl:template>
-    <!--        <xsl:choose>
-                <xsl:when test="local-name(..) != 'node'" >
-                        <xsl:variable name="fname" >
-                                <xsl:call-template name="firsttouppercase" >
-                                    <xsl:with-param name="string" select="@name" />
-                                </xsl:call-template>
-                            </xsl:variable>
-                            <xsl:variable name="nkey">
-                                <xsl:value-of select="concat(../@name, 'NodeChildFactory.',@name,'Node')" />
-                            </xsl:variable>
-                            <execute action="nodetemplate" template="referencechoice" folder="nodeeditor" filename="{$fname}ChoiceField.java" usenodeinfo="{$nkey}" >
-                                <xsl:attribute name="datapackage">
-                                    <xsl:value-of select="/nbpcg/build/project/generate[@type='data']/@package"/>
-                                </xsl:attribute>
-                                <xsl:attribute name="nodepackage">
-                                    <xsl:value-of select="/nbpcg/build/project/generate[@type='node']/@package"/>
-                                </xsl:attribute>
-                                <xsl:call-template name="setbuildattributes">
-                                    <xsl:with-param name="type">nodeeditor</xsl:with-param>
-                                </xsl:call-template>
-                            </execute>
-                        </xsl:when>
-                    <xsl:otherwise>
-                    
-                    <execute action="nodetemplate" template="choice" folder="nodeeditor" filename="{@name}ChoiceField.java" usenodeinfo="{concat(@name,'RootNodeChildFactory.',@name,'Node')}" >
-                        <xsl:attribute name="usenodeinfo" >
-                            <xsl:value-of select="concat(@name, 'RootNodeChildFactory.',@name,'Node')" />
-                        </xsl:attribute>
-                        <xsl:attribute name="datapackage">
-                            <xsl:value-of select="/nbpcg/build/project/generate[@type='data']/@package"/>
-                        </xsl:attribute>
-                        <xsl:attribute name="nodepackage">
-                            <xsl:value-of select="/nbpcg/build/project/generate[@type='node']/@package"/>
-                        </xsl:attribute>
-                        <xsl:call-template name="setbuildattributes">
-                            <xsl:with-param name="type">nodeeditor</xsl:with-param>
-                        </xsl:call-template>
-                    </execute>
-                </xsl:when>
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:for-each>
-    </xsl:template>
-    -->
     
     <xsl:template name="enumchoice">
         <xsl:for-each select="databases/database/table/field[@type='enum']" >
@@ -183,7 +139,7 @@
                     </xsl:if>
                 </xsl:for-each>
             </xsl:variable>
-            <execute action="nodetemplate" template="enumchoice" folder="nodeeditor" filename="{$fname}EnumOf{$ename}ChoiceField.java" usenodeinfo="{$nkey}" usefield="{@name}" >
+            <execute action="nodetemplate" template="enumchoice" folder="nodeeditor" filename="{$ename}{$fname}ChoiceField.java" usenodeinfo="{$nkey}" usefield="{@name}" >
                 <xsl:attribute name="datapackage">
                     <xsl:value-of select="/nbpcg/build/project/generate[@type='data']/@package"/>
                 </xsl:attribute>

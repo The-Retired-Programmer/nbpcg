@@ -104,7 +104,7 @@ public final class Add${NODEINFO.name}To${NODEINFO.parentnode}Action extends Abs
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            LogBuilder.writeEnteringLog("${log}", "Add${NODEINFO.name}To${NODEINFO.parentnode}Action$ContextAction", "actionPerformed",e);
+            LogBuilder.writeLog("${log}", this, "actionPerformed");
             Lookup.getDefault().lookup(${NODEINFO.entity}.EM.class).getNew(parent.getEntity());
         }
     }

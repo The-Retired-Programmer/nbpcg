@@ -78,8 +78,8 @@ import org.openide.nodes.PropertySupport;
 <#list NODEINFO.child![] as child >
 import ${datapackage}.${child.entity}.${child.entity}Field;
 </#list>
-import uk.org.rlinsdale.nbpcglibrary.data.entity.FieldChangeEventParams.CommonEntityField;
-import static uk.org.rlinsdale.nbpcglibrary.data.entity.FieldChangeEventParams.CommonEntityField.*;
+import uk.org.rlinsdale.nbpcglibrary.data.entity.EntityFieldChangeEventParams.CommonEntityField;
+import static uk.org.rlinsdale.nbpcglibrary.data.entity.EntityFieldChangeEventParams.CommonEntityField.*;
 
 
 /**
@@ -105,13 +105,19 @@ public class ${NODEINFO.name}ChildFactory extends BasicChildFactory<${NODEINFO.e
 <#if NODEINFO.isroot??>
     public ${NODEINFO.name}ChildFactory(${NODEINFO.entity} parent) {
         super(parent);
-        enableChangeListening("${NODEINFO.name}ChildFactory", parent);
+        Listener<SetChangeEventParams> listener = getSetChangeListener("Node.${NODEINFO.entity}>*");
+<#list NODEINFO.child![] as child >
+        parent.add${child.entity}SetChangeListener(listener);
+</#list>
     }   
 
 <#else>
     public ${NODEINFO.name}ChildFactory(${NODEINFO.entity} parent) {
         super("${NODEINFO.name}", parent, ${NODEINFO.entity}.EM.class);
-        enableChangeListening("${NODEINFO.name}ChildFactory", parent);
+        Listener<SetChangeEventParams> listener = getSetChangeListener("Node.${NODEINFO.entity}>*");
+<#list NODEINFO.child![] as child >
+        parent.add${child.entity}SetChangeListener(listener);
+</#list>
     }  
 
 </#if>
