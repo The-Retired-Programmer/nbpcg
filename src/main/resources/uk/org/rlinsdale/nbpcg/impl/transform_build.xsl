@@ -49,6 +49,7 @@
             <xsl:if test="build/project/generate[@type='node']" >
                 <execute action="message"  message="generating node files" />
                 <xsl:call-template name="rootnode" />
+                <xsl:call-template name="node" />
                 <xsl:call-template name="nodefactory" />
                 <xsl:call-template name="undonode" />
                 <xsl:call-template name="addnode" />
@@ -103,16 +104,16 @@
                     </xsl:for-each>
                 </xsl:variable>
                 <execute action="nodetemplate" template="choice" folder="nodeeditor" filename="{@references}ChoiceField.java" usenodeinfo="{$nkey}" >
-                        <xsl:attribute name="datapackage">
-                            <xsl:value-of select="/nbpcg/build/project/generate[@type='data']/@package"/>
-                        </xsl:attribute>
-                        <xsl:attribute name="nodepackage">
-                            <xsl:value-of select="/nbpcg/build/project/generate[@type='node']/@package"/>
-                        </xsl:attribute>
-                        <xsl:call-template name="setbuildattributes">
-                            <xsl:with-param name="type">nodeeditor</xsl:with-param>
-                        </xsl:call-template>
-                    </execute>
+                    <xsl:attribute name="datapackage">
+                        <xsl:value-of select="/nbpcg/build/project/generate[@type='data']/@package"/>
+                    </xsl:attribute>
+                    <xsl:attribute name="nodepackage">
+                        <xsl:value-of select="/nbpcg/build/project/generate[@type='node']/@package"/>
+                    </xsl:attribute>
+                    <xsl:call-template name="setbuildattributes">
+                        <xsl:with-param name="type">nodeeditor</xsl:with-param>
+                    </xsl:call-template>
+                </execute>
             </xsl:for-each>
         </xsl:for-each>
     </xsl:template>
@@ -168,6 +169,9 @@
                     <xsl:attribute name="datapackage">
                         <xsl:value-of select="/nbpcg/build/project/generate[@type='data']/@package"/>
                     </xsl:attribute>
+                    <xsl:attribute name="nodepackage">
+                        <xsl:value-of select="/nbpcg/build/project/generate[@type='node']/@package"/>
+                    </xsl:attribute>
                     <xsl:call-template name="setbuildattributes">
                         <xsl:with-param name="type">node</xsl:with-param>
                     </xsl:call-template>
@@ -177,6 +181,9 @@
                 <execute action="nodetemplate" template="rootnode" type="Icon" folder="node" filename="{@name}RootIconNode.java" usenodeinfo="{concat(@name,'RootIconNode')}">
                     <xsl:attribute name="datapackage">
                         <xsl:value-of select="/nbpcg/build/project/generate[@type='data']/@package"/>
+                    </xsl:attribute>
+                    <xsl:attribute name="nodepackage">
+                        <xsl:value-of select="/nbpcg/build/project/generate[@type='node']/@package"/>
                     </xsl:attribute>
                     <xsl:call-template name="setbuildattributes">
                         <xsl:with-param name="type">node</xsl:with-param>
@@ -363,6 +370,81 @@
                 <execute action="nodetemplate" template="nodefactory" type="Icon" folder="node" filename="{@name}IconNodeChildFactory.java" usenodeinfo="{../@name}IconNodeChildFactory.{@name}Node">
                     <xsl:attribute name="datapackage">
                         <xsl:value-of select="/nbpcg/build/project/generate[@type='data']/@package"/>
+                    </xsl:attribute>
+                    <xsl:call-template name="setbuildattributes">
+                        <xsl:with-param name="type">node</xsl:with-param>
+                    </xsl:call-template>
+                </execute>
+            </xsl:if>
+        </xsl:for-each>
+    </xsl:template>
+    
+    <xsl:template name="node">
+        <xsl:for-each select="node" >
+            <xsl:variable name="view">
+                <xsl:choose>
+                    <xsl:when test="@view">
+                        <xsl:value-of select="@view" />
+                    </xsl:when>
+                    <xsl:otherwise>tree</xsl:otherwise>
+                </xsl:choose>
+            </xsl:variable>
+            <xsl:if test="($view='both') or ($view = 'tree')" >
+                <execute action="nodetemplate" template="node" type="" folder="node" filename="{@name}Node.java" usenodeinfo="{@name}RootNodeChildFactory.{@name}Node">
+                    <xsl:attribute name="datapackage">
+                        <xsl:value-of select="/nbpcg/build/project/generate[@type='data']/@package"/>
+                    </xsl:attribute>
+                    <xsl:attribute name="nodepackage">
+                        <xsl:value-of select="/nbpcg/build/project/generate[@type='node']/@package"/>
+                    </xsl:attribute>
+                    <xsl:call-template name="setbuildattributes">
+                        <xsl:with-param name="type">node</xsl:with-param>
+                    </xsl:call-template>
+                </execute>
+            </xsl:if>
+            <xsl:if test="($view='both') or ($view = 'icon')" >
+                <execute action="nodetemplate" template="node" type="Icon" folder="node" filename="{@name}IconNode.java" usenodeinfo="{@name}RootIconNodeChildFactory.{@name}Node">
+                    <xsl:attribute name="datapackage">
+                        <xsl:value-of select="/nbpcg/build/project/generate[@type='data']/@package"/>
+                    </xsl:attribute>
+                    <xsl:attribute name="nodepackage">
+                        <xsl:value-of select="/nbpcg/build/project/generate[@type='node']/@package"/>
+                    </xsl:attribute>
+                    <xsl:call-template name="setbuildattributes">
+                        <xsl:with-param name="type">node</xsl:with-param>
+                    </xsl:call-template>
+                </execute>
+            </xsl:if>
+        </xsl:for-each>
+        <xsl:for-each select="//node/node" >
+            <xsl:variable name="view">
+                <xsl:choose>
+                    <xsl:when test="@view">
+                        <xsl:value-of select="@view" />
+                    </xsl:when>
+                    <xsl:otherwise>tree</xsl:otherwise>
+                </xsl:choose>
+            </xsl:variable>
+            <xsl:if test="($view='both') or ($view = 'tree')" >
+                <execute action="nodetemplate" template="node" type="" folder="node" filename="{@name}Node.java" usenodeinfo="{../@name}NodeChildFactory.{@name}Node">
+                    <xsl:attribute name="datapackage">
+                        <xsl:value-of select="/nbpcg/build/project/generate[@type='data']/@package"/>
+                    </xsl:attribute>
+                    <xsl:attribute name="nodepackage">
+                        <xsl:value-of select="/nbpcg/build/project/generate[@type='node']/@package"/>
+                    </xsl:attribute>
+                    <xsl:call-template name="setbuildattributes">
+                        <xsl:with-param name="type">node</xsl:with-param>
+                    </xsl:call-template>
+                </execute>
+            </xsl:if>
+            <xsl:if test="($view='both') or ($view = 'icon')" >
+                <execute action="nodetemplate" template="node" type="Icon" folder="node" filename="{@name}IconNode.java" usenodeinfo="{../@name}IconNodeChildFactory.{@name}Node">
+                    <xsl:attribute name="datapackage">
+                        <xsl:value-of select="/nbpcg/build/project/generate[@type='data']/@package"/>
+                    </xsl:attribute>
+                    <xsl:attribute name="nodepackage">
+                        <xsl:value-of select="/nbpcg/build/project/generate[@type='node']/@package"/>
                     </xsl:attribute>
                     <xsl:call-template name="setbuildattributes">
                         <xsl:with-param name="type">node</xsl:with-param>

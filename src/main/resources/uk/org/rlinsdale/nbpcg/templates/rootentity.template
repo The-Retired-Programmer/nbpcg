@@ -80,6 +80,11 @@ import uk.org.rlinsdale.nbpcglibrary.data.entityreferences.*;
 <#if hassortchildren >
 import ${nodepackage}.*;
 </#if>
+<#list ENTITYINFO.child![] as child>
+<#if child.sort??>
+import ${nodepackage}.${child.references}Node.${child.references}NodeDisplay;
+</#if>
+</#list>
 
 /**
  * The ${ENTITYINFO.name} Object
@@ -244,7 +249,7 @@ public class ${ENTITYINFO.name} extends Entity {
     private class ${child.references}Comparator implements Comparator<${child.references}> {
         @Override
         public int compare(${child.references} o1, ${child.references} o2) {
-            return ${ENTITYINFO.name}NodeChildFactory.${child.references}NodeDisplay.getSort(o1,"undefined").compareTo(${ENTITYINFO.name}NodeChildFactory.${child.references}NodeDisplay.getSort(o2,"undefined"));
+            return ${child.references}NodeDisplay.getSort(o1,"undefined").compareTo(${child.references}NodeDisplay.getSort(o2,"undefined"));
         }
     }
 </#if>

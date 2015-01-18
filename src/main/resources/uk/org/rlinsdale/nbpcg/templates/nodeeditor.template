@@ -74,6 +74,7 @@ import org.openide.util.NbBundle.Messages;
 import org.openide.windows.TopComponent;
 import ${datapackage}.${NODEINFO.entity}.${NODEINFO.entity}Field;
 import static ${datapackage}.${NODEINFO.entity}.${NODEINFO.entity}Field.*;
+import ${nodepackage}.${NODEINFO.name}.${NODEINFO.name}Display;
 import static uk.org.rlinsdale.nbpcglibrary.data.entity.EntityFieldChangeEventParams.CommonEntityField.ALL;
 import uk.org.rlinsdale.nbpcglibrary.data.entity.EntityFieldChangeEventParams.CommonEntityField;
 
@@ -201,7 +202,7 @@ public final class ${NODEINFO.name}Editor extends NodeEditorTopComponent<${NODEI
 
         @Override
         public String get() {
-            return ${NODEINFO.key}Display.getDisplayTitle(entity, "");
+            return ${NODEINFO.name}Display.getDisplayTitle(entity, "");
         }
     }
 <#elseif field.type="ref">

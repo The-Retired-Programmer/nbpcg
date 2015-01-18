@@ -1,0 +1,468 @@
+<#--
+ * Copyright (C) 2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ -->
+<#if license = "gpl30" >
+/*
+ * Copyright (C) ${copyright}
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+</#if>
+<#if license = "lgpl21" >
+/*
+ * Copyright (C) ${copyright}.
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+ * MA 02110-1301  USA
+ */
+</#if>
+<#-- Freemarker Template for ChildFactory class plus an inner classes for Nodes. -->
+<#assign templateauthor = "Richard Linsdale (richard.linsdale at blueyonder.co.uk)" />
+<#assign NODEINFO = nodeinfo[usenodeinfo] >
+<#if type = "Icon" >
+<#assign type2 = "Icon" />
+<#else>
+<#assign type2 = "Tree" />
+</#if>
+package ${package};
+
+import java.awt.datatransfer.DataFlavor;
+import java.text.MessageFormat;
+import java.util.List;
+import javax.swing.Action;
+import ${datapackage}.*;
+import uk.org.rlinsdale.nbpcglibrary.annotations.RegisterNodeSavedAction;
+import uk.org.rlinsdale.nbpcglibrary.annotations.RegisterNodeSavedActions;
+import uk.org.rlinsdale.nbpcglibrary.data.entity.*;
+import uk.org.rlinsdale.nbpcglibrary.node.nodes.*;
+import uk.org.rlinsdale.nbpcglibrary.node.properties.*;
+import uk.org.rlinsdale.nbpcglibrary.common.*;
+import org.openide.nodes.PropertySupport;
+import ${datapackage}.${NODEINFO.entity}.${NODEINFO.entity}Field;
+<#list NODEINFO.field![] as field>
+<#if field.type="reference" || field.type ="ref">
+import ${nodepackage}.${field.references}Node.${field.displaykey}Display;
+</#if>
+</#list>
+<#list NODEINFO.child![] as c>
+import static ${nodepackage}.${c.name}.${c.name?upper_case}_FLAVOR;
+<#if c.copymovenode??>
+<#assign COPYMOVENODEINFO = nodeinfo[c.copymovenode] >
+import static ${nodepackage}.${COPYMOVENODEINFO.name}.${COPYMOVENODEINFO.name?upper_case}_FLAVOR;
+</#if>
+</#list>
+import uk.org.rlinsdale.nbpcglibrary.data.entity.EntityFieldChangeEventParams.CommonEntityField;
+import static uk.org.rlinsdale.nbpcglibrary.data.entity.EntityFieldChangeEventParams.CommonEntityField.*;
+
+/**
+ * Node for ${NODEINFO.name}.
+ */
+public class ${NODEINFO.name} extends ${type2}Node${NODEINFO.access?upper_case}<${NODEINFO.entity}, ${NODEINFO.entity}Field> {
+
+    public static final DataFlavor ${NODEINFO.name?upper_case}_FLAVOR = new DataFlavor(${NODEINFO.name}.class, "${NODEINFO.name}");
+
+<#assign haschildren = false>
+<#assign haseditablechildren = false>
+<#list NODEINFO.child![] as c>
+<#assign haschildren = true >
+<#assign haseditablechildren = haseditablechildren | (c.access = "rw") >
+</#list>
+<#if haschildren >
+
+        private final ${NODEINFO.name}ChildFactory cf;
+
+        /**
+         * Constructor
+         *
+         * @param e the entity associated with this node
+         */
+        public ${NODEINFO.name}(${NODEINFO.entity} e) {
+            this(e, new ${NODEINFO.name}ChildFactory(e));
+        }
+
+        private ${NODEINFO.name}(${NODEINFO.entity} e, ${NODEINFO.name}ChildFactory cf) {
+            super("${NODEINFO.name}", "${NODEINFO.icon}", e, cf, ${NODEINFO.entity}.EM.class,
+                new DataFlavorAndAction[] {
+<#list NODEINFO.child![] as c>
+                    new DataFlavorAndAction(${c.name?upper_case}_FLAVOR, DataFlavorAndAction.COPYCUT<#if c.orderable = "yes">MOVE</#if>),
+<#if c.copymovenode??>
+<#assign COPYMOVENODEINFO = nodeinfo[c.copymovenode] >
+                    new DataFlavorAndAction(${COPYMOVENODEINFO.parententity}ChildFactory.${COPYMOVENODEINFO.name?upper_case}_FLAVOR, DataFlavorAndAction.COPYMOVE),
+</#if>
+</#list>
+                    }
+                    // TODO - decide on state of this cut/destroy flag  - currently it is always true
+                 <#if NODEINFO.access = "rw">, true</#if>);
+            this.cf = cf;
+        }
+<#else>
+   
+        /**
+         * Constructor
+         *
+         * @param e the entity associated with this node
+         */
+        public ${NODEINFO.name}(${NODEINFO.entity} e) {
+            super("${NODEINFO.name}", "${NODEINFO.icon}", e, ${NODEINFO.entity}.EM.class
+                    // TODO - decide on state of this cut/destroy flag  - currently it is always true
+                    <#if NODEINFO.access = "rw">, true</#if>);
+        }
+</#if>
+
+    @RegisterNodeSavedActions({
+<#if NODEINFO.orderable = "yes">
+            @RegisterNodeSavedAction(id = "linsdale.nbpcg.nodesupportlib.actions.NodeReorderAction",
+                    node = "${NODEINFO.name}", position = 810),
+</#if>
+<#if haseditablechildren >
+            @RegisterNodeSavedAction(id = "linsdale.nbpcg.nodesupportlib.actions.NodePasteAction",
+                    node = "${NODEINFO.name}", position = 830),
+</#if>
+<#if NODEINFO.access = "rw" >
+            @RegisterNodeSavedAction(id = "linsdale.nbpcg.nodesupportlib.actions.NodeCutAction",
+                    node = "${NODEINFO.name}",
+                    position = 850, separator = 800),
+            @RegisterNodeSavedAction(id = "linsdale.nbpcg.nodesupportlib.actions.NodeCopyAction",
+                    node = "${NODEINFO.name}", position = 870),
+            @RegisterNodeSavedAction(id = "linsdale.nbpcg.nodesupportlib.actions.NodeDeleteAction",
+                    node = "${NODEINFO.name}", position = 890),
+</#if>
+<#if NODEINFO.orderable = "yes" >
+            @RegisterNodeSavedAction(id = "linsdale.nbpcg.nodesupportlib.actions.NodeMoveUpAction",
+                    node = "${NODEINFO.name}", position = 910),
+            @RegisterNodeSavedAction(id = "linsdale.nbpcg.nodesupportlib.actions.NodeMoveDownAction",
+                    node = "${NODEINFO.name}", position = 930),
+</#if>
+        })
+    private static void register${NODEINFO.name}Annotations() {} // a dummy method
+ 
+        @Override
+        protected DataFlavor _getDataFlavor() {
+           return ${NODEINFO.name?upper_case}_FLAVOR; 
+        }
+
+         /**
+         * Get the node display name
+         *
+         * @return the display name
+         */
+        @Override
+        public String getDisplayName() {
+            return  ${NODEINFO.name}Display.getDisplayName(getEntity(), "#undefined#");
+        }
+
+        /**
+         * Get the node display title
+         *
+         * @return the display title
+         */
+        @Override
+        public String getDisplayTitle() {
+            return  ${NODEINFO.name}Display.getDisplayTitle(getEntity(), "#undefined#");
+        }
+
+<#if NODEINFO.access = "rw" >
+        IntegerReadonlyProperty idproperty;
+<#list NODEINFO.field![] as field>
+<#if field.type != "rootref" >
+        StringReadonlyProperty ${field.name}property;
+</#if>
+</#list>
+
+</#if>
+        @Override
+        protected List<PropertySupport.ReadOnly<?>> createPropertyItems(List<PropertySupport.ReadOnly<?>> props) {
+            ${NODEINFO.entity} e =  getEntity();
+            if (e != null) {
+                props.add(new StringReadonlyProperty("Node Type", "${NODEINFO.name}"));
+<#if NODEINFO.access = "rw" >
+                props.add(idproperty = new IntegerReadonlyProperty("Id",e.getId()));
+<#else>
+                props.add(new IntegerReadonlyProperty("Id",e.getId()));
+</#if>
+<#list NODEINFO.field![] as field>
+<#if field.type != "rootref" >
+<#if NODEINFO.access = "rw" >
+                props.add(${field.name}property = new StringReadonlyProperty("${field.label}", ${NODEINFO.name}Display.format${field.name?cap_first}(e)));
+<#else>
+                props.add(new StringReadonlyProperty("${field.label}", ${NODEINFO.name}Display.format${field.name?cap_first}(e)));
+</#if>
+</#if>
+</#list>
+            }
+            return props;
+        }
+
+<#if NODEINFO.access = "rw" >
+        @Override
+        protected void _processCommonFieldChange(CommonEntityField field) {
+            ${NODEINFO.entity} e =  getEntity();
+            switch (field) {
+                case ALL:
+                    if (e != null && idproperty != null) {
+                        idproperty.update(e.getId());
+<#list NODEINFO.field![] as field>
+<#if field.type != "rootref" >
+                        ${field.name}property.update(${NODEINFO.name}Display.format${field.name?cap_first}(e));
+</#if>
+</#list>
+                        propertyChange();
+                    }
+                    nameChange();
+                    titleChange();
+                    break;
+                case ID:
+                    if (e != null && idproperty != null) {
+                        idproperty.update(e.getId());
+                        propertyChange("Id");
+                    }
+                    break;
+            }
+        }
+        
+</#if>
+<#if NODEINFO.access = "rw" >
+        @Override
+        protected void _processFieldChange(${NODEINFO.entity}Field field) {
+            ${NODEINFO.entity} e =  getEntity();
+            switch (field) {
+<#list NODEINFO.field![] as field>
+<#if field.type = "rootref" >
+<#elseif field.type = "idx" >
+                case ${field.name?upper_case}:
+                    if (e != null && ${field.name}property != null) {
+                        ${field.name}property.update(${NODEINFO.name}Display.format${field.name?cap_first}(e));
+                        propertyChange("${field.label}");
+                    }
+<#else>
+                case ${field.name?upper_case}:
+                    if (e != null && ${field.name}property != null) {
+                        ${field.name}property.update(${NODEINFO.name}Display.format${field.name?cap_first}(e));
+                        propertyChange("${field.label}");
+                    }
+<#assign namechange = "no">
+<#list NODEINFO.displaynameformat as df >
+<#list df.display as dp>
+<#if dp.field = field.label >
+<#assign namechange = "yes" >
+</#if>
+</#list>
+</#list>
+<#if namechange = "yes" >
+                    nameChange();
+</#if>
+<#assign titlechange = "no">
+<#if NODEINFO.displaytitleformat??>
+<#list NODEINFO.displaytitleformat as df >
+<#list df.display as dp>
+<#if dp.field = field.label >
+<#assign titlechange = "yes" >
+</#if>
+</#list>
+</#list>
+<#else>
+<#assign titlechange = namechange >
+</#if>
+<#if titlechange = "yes" >
+                    titleChange();
+</#if>
+</#if>
+                    break;
+</#list>
+            }
+        }
+        
+</#if>
+        @Override
+        protected void _moveAddChild(Entity child) {
+<#list NODEINFO.child![] as c>
+<#if c.copymoveentity??>
+            if (child instanceof ${c.copymoveentity}) {
+                ${c.entity}.EM em = ${c.entity}.getEM();
+                ${c.entity} e = em.getNew(getEntity());
+                e.set${c.copymovefield?cap_first}((${c.copymoveentity}) child);
+                return;
+            }
+</#if>
+</#list>
+            _cutAddChild(child);
+        }
+
+        @Override
+        protected void _cutAddChild(Entity child) {
+<#list NODEINFO.child![] as c>
+            if (child instanceof ${c.entity}) {
+                getEntity().add${c.entity}((${c.entity}) child);
+                return;
+            }
+</#list>
+            throw new LogicException("${NODEINFO.entity} Entity does not have a child of the requested class (" + child.getClass().getSimpleName() + ")");
+        }
+
+        @Override
+        protected void _copyAddChild(Entity child) {
+<#list NODEINFO.child![] as c>
+            if (child instanceof ${c.entity}) {
+                ${c.entity}.getEM().getNew((${c.entity})child ,getEntity());
+                return;
+            }
+<#if c.copymoveentity??>
+            if (child instanceof ${c.copymoveentity}) {
+                ${c.entity}.EM em = ${c.entity}.getEM();
+                ${c.entity} e = em.getNew(getEntity());
+                e.set${c.copymovefield?cap_first}((${c.copymoveentity}) child);
+                return;
+            }
+</#if>
+</#list>
+            throw new LogicException("${NODEINFO.entity} Entity does not have a child of the requested class (" + child.getClass().getSimpleName() + ")");
+        }
+
+<#if NODEINFO.access = "rw" >
+        @Override
+        protected void _cutAndPasteRemove() {
+            getEntity().get${NODEINFO.parentmethod}().remove${NODEINFO.entity}(getEntity());
+        }
+
+        @Override
+        protected void _deleteRemove() {
+            getEntity().remove();
+        }
+
+</#if>
+        @Override
+        protected void _moveReorderChildByFlavor(DataFlavor df, int[] perm) {
+<#list NODEINFO.child![] as c>
+<#if c.orderable = "yes" >
+            if (df == ${c.name?upper_case}_FLAVOR) {
+                getEntity().reorder${c.entity}s(perm, cf.getOffsetMin${c.entity}s(), cf.getOffsetMax${c.entity}s());
+                return;
+            }
+</#if>
+</#list>
+            throw new LogicException("${NODEINFO.entity} Entity does not have a child of the requested DataFlavor that is reorderable");
+        }
+
+        @Override
+        public Action getPreferredAction() {
+            return findDefaultAction("${NODEINFO.name}");
+        }
+
+        @Override
+        public Action[] getActions(boolean context) {
+            return findActions("${NODEINFO.name}");
+        }
+
+    public static class ${NODEINFO.name}Display {
+
+        public static String getDisplayName(${NODEINFO.entity} e, String undefined) {
+<#list NODEINFO.displaynameformat as df >
+            if (e != null) {
+                return MessageFormat.format("${df.format}", new Object[] {<#list df.display as dp>format${dp.field}(e)<#if dp_has_next>, </#if></#list>});
+            } else {
+                return undefined;
+            }
+</#list>
+        }
+
+        public static String getDisplayTitle(${NODEINFO.entity} e, String undefined) {
+<#if NODEINFO.displaytitleformat??>
+<#list NODEINFO.displaytitleformat as df>
+            if (e != null) {
+                return MessageFormat.format("${df.format}", new Object[] {<#list df.display as dp>format${dp.field}(e)<#if dp_has_next>, </#if></#list>});
+            } else {
+                return undefined;
+            }
+</#list>
+<#else>
+            return getDisplayName(e,undefined);
+</#if>
+        }
+
+public static String getSort(${NODEINFO.entity} e, String undefined) {
+<#if NODEINFO.sortformat?? >
+<#list NODEINFO.sortformat as df>
+            if (e != null) {
+                return MessageFormat.format("${df.format}", <#list df.display as dp>format${dp.field}(e<#if dp.length??>, ${dp.length}</#if>)<#if dp_has_next>, </#if></#list>);
+            } else {
+                return undefined;
+            }
+</#list>
+<#else>
+            return getDisplayTitle(e,undefined);
+</#if>
+        }
+
+<#list NODEINFO.field![] as field>
+
+        public static String format${field.name?cap_first}(${NODEINFO.entity} e) {
+<#if field.type="reference" >
+            return ${field.displaykey}Display.getDisplayTitle(e.get${field.name?cap_first}(), "");
+<#elseif field.type="ref" >
+        return ${field.displaykey}Display.getDisplayName(e.get${field.name?cap_first}(), "");
+<#elseif field.type="int" >
+            return Integer.toString(e.get${field.name?cap_first}());
+<#elseif field.type="idx"  >
+            return Integer.toString(e.getIndex());
+<#elseif field.type="long" >
+            return Long.toString(e.get${field.name?cap_first}());
+<#elseif field.type="boolean" >
+            return e.get${field.name?cap_first}()? "Yes": "No";
+<#elseif field.type="date" || field.type="datetime" >
+            return e.get${field.name?cap_first}().toString();
+<#elseif field.type="String" ||  field.type="enum" >
+            return e.get${field.name?cap_first}();
+</#if>
+        }
+</#list>
+<#list NODEINFO.field![] as field>
+<#if field.type="int" >
+
+        public static String format${field.name?cap_first}(${NODEINFO.entity} e, int minDigits) {
+            return StringX.padLeft(format${field.name?cap_first}(e),minDigits,'0');
+        }
+<#elseif field.type="String" >
+
+    public static String format${field.name?cap_first}(${NODEINFO.entity} e, int minDigits) {
+            return StringX.padLeftIfInt(format${field.name?cap_first}(e),minDigits,'0');
+        }
+</#if>
+</#list>
+    }
+}

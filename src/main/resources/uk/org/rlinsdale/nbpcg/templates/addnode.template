@@ -64,10 +64,7 @@ import static javax.swing.Action.NAME;
 import org.openide.util.ContextAwareAction;
 import org.openide.util.Lookup;
 import ${datapackage}.${NODEINFO.entity};
-<#assign PARENTNODEINFO = nodeinfo[NODEINFO.parentnodeandfactory]>
-<#if !PARENTNODEINFO.isroot??>
-import ${nodepackage}.${NODEINFO.parentnodeandfactory};
-</#if>
+import ${nodepackage}.${NODEINFO.parentnode};
 import uk.org.rlinsdale.nbpcglibrary.annotations.RegisterNodeAction;
 import uk.org.rlinsdale.nbpcglibrary.common.LogBuilder;
 

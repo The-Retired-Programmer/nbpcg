@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?><nbpcg-node-info name="Mark Timings">
     <nodeinfo key="DinghyclassRootNode" name="DinghyclassRootNode" entity="DinghyclassRoot" isroot="" label="Dinghyclasss" viewers="Coach" icon="folder_star">
-        <child name="DinghyclassNode" entity="Dinghyclass" nodekey="DinghyclassRootNodeChildFactory.DinghyclassNode" icon="star" orderable="no" sort="yes" access="rw" displaykey="Mark TimingsRootNodeChildFactory.Mark TimingsNode"/>
+        <child name="DinghyclassNode" entity="Dinghyclass" nodekey="DinghyclassRootNodeChildFactory.DinghyclassNode" icon="star" orderable="no" sort="no" access="rw"/>
     </nodeinfo>
-    <nodeinfo key="DinghyclassRootNodeChildFactory.DinghyclassNode" name="DinghyclassNode" entity="Dinghyclass" parententity="DinghyclassRoot" icon="star" parentnode="DinghyclassRootNode" parentnodeandfactory="DinghyclassRootNode" label="Dinghyclass">
+    <nodeinfo key="DinghyclassRootNodeChildFactory.DinghyclassNode" name="DinghyclassNode" entity="Dinghyclass" parententity="DinghyclassRoot" nodeorder="1" icon="star" parentmethod="Root" parentnode="DinghyclassRootNode" parentnodeandfactory="DinghyclassRootNode" label="Dinghyclass" orderable="no" sort="no" access="rw">
         <field name="name" type="String" label="Name" fieldclass="TextField"/>
         <field name="py" type="int" label="Py" fieldclass="TextField"/>
         <sortformat format="{0} {1}">
@@ -14,11 +14,11 @@
         </displaynameformat>
     </nodeinfo>
     <nodeinfo key="DinghyRootNode" name="DinghyRootNode" entity="DinghyRoot" isroot="" label="Dinghys" viewers="Coach" icon="folder">
-        <child name="DinghyNode" entity="Dinghy" nodekey="DinghyRootNodeChildFactory.DinghyNode" icon="tag_green" orderable="no" sort="yes" access="rw" displaykey="Mark TimingsRootNodeChildFactory.Mark TimingsNode"/>
+        <child name="DinghyNode" entity="Dinghy" nodekey="DinghyRootNodeChildFactory.DinghyNode" icon="tag_green" orderable="no" sort="no" access="rw"/>
     </nodeinfo>
-    <nodeinfo key="DinghyRootNodeChildFactory.DinghyNode" name="DinghyNode" entity="Dinghy" parententity="DinghyRoot" icon="tag_green" parentnode="DinghyRootNode" parentnodeandfactory="DinghyRootNode" label="Dinghy">
+    <nodeinfo key="DinghyRootNodeChildFactory.DinghyNode" name="DinghyNode" entity="Dinghy" parententity="DinghyRoot" nodeorder="1" icon="tag_green" parentmethod="Root" parentnode="DinghyRootNode" parentnodeandfactory="DinghyRootNode" label="Dinghy" orderable="no" sort="no" access="rw">
         <field name="sailnumber" type="int" label="Sailnumber" fieldclass="TextField"/>
-        <field name="dinghyclass" type="reference" label="Dinghyclass" references="Dinghyclass" displaykey="DinghyclassRootNodeChildFactory.DinghyclassNode" parentfactory="DinghyclassRoot" fieldclass="ReferenceChoiceField"/>
+        <field name="dinghyclass" type="reference" label="Dinghyclass" references="Dinghyclass" displaykey="DinghyclassNode" parentfactory="DinghyclassRoot" fieldclass="ReferenceChoiceField"/>
         <sortformat format="{0}.{1}">
             <display field="Dinghyclass"/>
             <display field="Sailnumber"/>
@@ -29,9 +29,9 @@
         </displaynameformat>
     </nodeinfo>
     <nodeinfo key="CompetitorRootNode" name="CompetitorRootNode" entity="CompetitorRoot" isroot="" label="Competitors" viewers="Coach" icon="folder">
-        <child name="CompetitorNode" entity="Competitor" nodekey="CompetitorRootNodeChildFactory.CompetitorNode" icon="user" orderable="no" sort="yes" access="rw" displaykey="Mark TimingsRootNodeChildFactory.Mark TimingsNode"/>
+        <child name="CompetitorNode" entity="Competitor" nodekey="CompetitorRootNodeChildFactory.CompetitorNode" icon="user" orderable="no" sort="no" access="rw"/>
     </nodeinfo>
-    <nodeinfo key="CompetitorRootNodeChildFactory.CompetitorNode" name="CompetitorNode" entity="Competitor" parententity="CompetitorRoot" icon="user" parentnode="CompetitorRootNode" parentnodeandfactory="CompetitorRootNode" label="Competitor">
+    <nodeinfo key="CompetitorRootNodeChildFactory.CompetitorNode" name="CompetitorNode" entity="Competitor" parententity="CompetitorRoot" nodeorder="1" icon="user" parentmethod="Root" parentnode="CompetitorRootNode" parentnodeandfactory="CompetitorRootNode" label="Competitor" orderable="no" sort="no" access="rw">
         <field name="firstname" type="String" label="Firstname" fieldclass="TextField"/>
         <field name="familyname" type="String" label="Familyname" fieldclass="TextField"/>
         <sortformat format="{0} {1}">
@@ -44,9 +44,9 @@
         </displaynameformat>
     </nodeinfo>
     <nodeinfo key="MarkRootNode" name="MarkRootNode" entity="MarkRoot" isroot="" label="Marks" viewers="Coach" icon="folder">
-        <child name="MarkNode" entity="Mark" nodekey="MarkRootNodeChildFactory.MarkNode" icon="flag_blue" orderable="no" sort="yes" access="rw" displaykey="Mark TimingsRootNodeChildFactory.Mark TimingsNode"/>
+        <child name="MarkNode" entity="Mark" nodekey="MarkRootNodeChildFactory.MarkNode" icon="flag_blue" orderable="no" sort="no" access="rw"/>
     </nodeinfo>
-    <nodeinfo key="MarkRootNodeChildFactory.MarkNode" name="MarkNode" entity="Mark" parententity="MarkRoot" icon="flag_blue" parentnode="MarkRootNode" parentnodeandfactory="MarkRootNode" label="Mark">
+    <nodeinfo key="MarkRootNodeChildFactory.MarkNode" name="MarkNode" entity="Mark" parententity="MarkRoot" nodeorder="1" icon="flag_blue" parentmethod="Root" parentnode="MarkRootNode" parentnodeandfactory="MarkRootNode" label="Mark" orderable="no" sort="no" access="rw">
         <field name="name" type="String" label="Name" fieldclass="TextField"/>
         <sortformat format="{0}">
             <display field="Name" length="2"/>
@@ -56,12 +56,12 @@
         </displaynameformat>
     </nodeinfo>
     <nodeinfo key="EntryRootNode" name="EntryRootNode" entity="EntryRoot" isroot="" label="Entrys" viewers="Coach" icon="folder">
-        <child name="EntryNode" entity="Entry" nodekey="EntryRootNodeChildFactory.EntryNode" icon="group" orderable="no" sort="yes" access="rw" displaykey="Mark TimingsRootNodeChildFactory.Mark TimingsNode"/>
+        <child name="EntryNode" entity="Entry" nodekey="EntryRootNodeChildFactory.EntryNode" icon="group" orderable="no" sort="no" access="rw"/>
     </nodeinfo>
-    <nodeinfo key="EntryRootNodeChildFactory.EntryNode" name="EntryNode" entity="Entry" parententity="EntryRoot" icon="group" parentnode="EntryRootNode" parentnodeandfactory="EntryRootNode" label="Entry">
-        <field name="helm" type="reference" label="Helm" references="Competitor" displaykey="CompetitorRootNodeChildFactory.CompetitorNode" parentfactory="CompetitorRoot" fieldclass="ReferenceChoiceField"/>
-        <field name="crew" type="reference" label="Crew" references="Competitor" displaykey="CompetitorRootNodeChildFactory.CompetitorNode" parentfactory="CompetitorRoot" fieldclass="ReferenceChoiceField"/>
-        <field name="dinghy" type="reference" label="Dinghy" references="Dinghy" displaykey="DinghyRootNodeChildFactory.DinghyNode" parentfactory="DinghyRoot" fieldclass="ReferenceChoiceField"/>
+    <nodeinfo key="EntryRootNodeChildFactory.EntryNode" name="EntryNode" entity="Entry" parententity="EntryRoot" nodeorder="1" icon="group" parentmethod="Root" parentnode="EntryRootNode" parentnodeandfactory="EntryRootNode" label="Entry" orderable="no" sort="no" access="rw">
+        <field name="helm" type="reference" label="Helm" references="Competitor" displaykey="CompetitorNode" parentfactory="CompetitorRoot" fieldclass="ReferenceChoiceField"/>
+        <field name="crew" type="reference" label="Crew" references="Competitor" displaykey="CompetitorNode" parentfactory="CompetitorRoot" fieldclass="ReferenceChoiceField"/>
+        <field name="dinghy" type="reference" label="Dinghy" references="Dinghy" displaykey="DinghyNode" parentfactory="DinghyRoot" fieldclass="ReferenceChoiceField"/>
         <sortformat format="{0}">
             <display field="Dinghy"/>
         </sortformat>
@@ -73,10 +73,10 @@
         </displaynameformat>
     </nodeinfo>
     <nodeinfo key="RaceseriesRootNode" name="RaceseriesRootNode" entity="RaceseriesRoot" isroot="" label="Raceseriess" viewers="Coach" icon="book_open">
-        <child name="RaceseriesNode" entity="Raceseries" nodekey="RaceseriesRootNodeChildFactory.RaceseriesNode" icon="calendar" orderable="no" sort="yes" access="rw" displaykey="Mark TimingsRootNodeChildFactory.Mark TimingsNode"/>
+        <child name="RaceseriesNode" entity="Raceseries" nodekey="RaceseriesRootNodeChildFactory.RaceseriesNode" icon="calendar" orderable="no" sort="no" access="rw"/>
     </nodeinfo>
-    <nodeinfo key="RaceseriesRootNodeChildFactory.RaceseriesNode" name="RaceseriesNode" entity="Raceseries" parententity="RaceseriesRoot" icon="calendar" parentnode="RaceseriesRootNode" parentnodeandfactory="RaceseriesRootNode" label="Raceseries">
-        <child name="RaceNode" entity="Race" nodekey="RaceseriesNodeChildFactory.RaceNode" icon="rosette" orderable="no" sort="yes" access="rw" displaykey="RaceseriesRootNodeChildFactory.RaceseriesNode"/>
+    <nodeinfo key="RaceseriesRootNodeChildFactory.RaceseriesNode" name="RaceseriesNode" entity="Raceseries" parententity="RaceseriesRoot" nodeorder="1" icon="calendar" parentmethod="Root" parentnode="RaceseriesRootNode" parentnodeandfactory="RaceseriesRootNode" label="Raceseries" orderable="no" sort="no" access="rw">
+        <child name="RaceNode" entity="Race" nodekey="RaceseriesNodeChildFactory.RaceNode" icon="rosette" orderable="no" sort="no" access="rw"/>
         <field name="name" type="String" label="Name" fieldclass="TextField"/>
         <field name="first" type="date" label="First" fieldclass="TextField"/>
         <field name="last" type="date" label="Last" fieldclass="TextField"/>
@@ -88,14 +88,14 @@
             <display field="Name"/>
             <display field="Type"/>)</displaynameformat>
     </nodeinfo>
-    <nodeinfo key="RaceseriesNodeChildFactory.RaceNode" name="RaceNode" entity="Race" parententity="Raceseries" icon="rosette" parentnode="RaceseriesNode" parentnodeandfactory="RaceseriesRootNodeChildFactory.RaceseriesNode" label="Race">
-        <child name="CoursemarkNode" entity="Coursemark" nodekey="RaceNodeChildFactory.CoursemarkNode" icon="flag_blue" orderable="yes" sort="no" access="rw" displaykey="RaceseriesNodeChildFactory.RaceNode"/>
-        <child name="RaceentryNode" entity="Raceentry" nodekey="RaceNodeChildFactory.RaceentryNode" icon="group" orderable="no" sort="yes" access="rw" displaykey="RaceseriesNodeChildFactory.RaceNode"/>
+    <nodeinfo key="RaceseriesNodeChildFactory.RaceNode" name="RaceNode" entity="Race" parententity="Raceseries" nodeorder="1" icon="rosette" parentmethod="Raceseries" parentnode="RaceseriesNode" parentnodeandfactory="RaceseriesRootNodeChildFactory.RaceseriesNode" label="Race" orderable="no" sort="no" access="rw">
+        <child name="CoursemarkNode" entity="Coursemark" nodekey="RaceNodeChildFactory.CoursemarkNode" icon="flag_blue" orderable="yes" sort="no" access="rw"/>
+        <child name="RaceentryNode" entity="Raceentry" nodekey="RaceNodeChildFactory.RaceentryNode" icon="group" orderable="no" sort="no" access="rw"/>
         <field name="dateofrace" type="date" label="Dateofrace" fieldclass="TextField"/>
         <field name="racenumber" type="int" label="Racenumber" fieldclass="TextField"/>
-        <field name="startmark" type="reference" label="Startmark" references="Mark" displaykey="MarkRootNodeChildFactory.MarkNode" parentfactory="MarkRoot" fieldclass="ReferenceChoiceField"/>
-        <field name="finishmark" type="reference" label="Finishmark" references="Mark" displaykey="MarkRootNodeChildFactory.MarkNode" parentfactory="MarkRoot" fieldclass="ReferenceChoiceField"/>
-        <field name="raceseries" type="ref" references="Raceseries" fieldclass="ReferenceChoiceField" parentfactory="Raceseries" label="Raceseries" displaykey="RaceseriesRootNodeChildFactory.RaceseriesNode"/>
+        <field name="startmark" type="reference" label="Startmark" references="Mark" displaykey="MarkNode" parentfactory="MarkRoot" fieldclass="ReferenceChoiceField"/>
+        <field name="finishmark" type="reference" label="Finishmark" references="Mark" displaykey="MarkNode" parentfactory="MarkRoot" fieldclass="ReferenceChoiceField"/>
+        <field name="raceseries" type="ref" references="Raceseries" fieldclass="ReferenceChoiceField" parentfactory="Raceseries" label="Raceseries" displaykey="RaceseriesNode"/>
         <sortformat format="{0}">
             <display field="Racenumber" length="2"/>
         </sortformat>
@@ -108,10 +108,10 @@
             <display field="Racenumber"/>
         </displaynameformat>
     </nodeinfo>
-    <nodeinfo key="RaceNodeChildFactory.CoursemarkNode" name="CoursemarkNode" entity="Coursemark" parententity="Race" icon="flag_blue" parentnode="RaceNode" parentnodeandfactory="RaceseriesNodeChildFactory.RaceNode" label="Coursemark">
-        <child name="TimingNode" entity="Timing" nodekey="CoursemarkNodeChildFactory.TimingNode" icon="time" orderable="no" sort="yes" access="rw" displaykey="RaceNodeChildFactory.CoursemarkNode"/>
-        <field name="mark" type="reference" label="Mark" references="Mark" displaykey="MarkRootNodeChildFactory.MarkNode" parentfactory="MarkRoot" fieldclass="ReferenceChoiceField"/>
-        <field name="race" type="ref" references="Race" fieldclass="ReferenceChoiceField" parentfactory="Race" label="Race" displaykey="RaceseriesNodeChildFactory.RaceNode"/>
+    <nodeinfo key="RaceNodeChildFactory.CoursemarkNode" name="CoursemarkNode" entity="Coursemark" parententity="Race" nodeorder="1" icon="flag_blue" parentmethod="Race" parentnode="RaceNode" parentnodeandfactory="RaceseriesNodeChildFactory.RaceNode" label="Coursemark" orderable="yes" sort="no" access="rw">
+        <child name="TimingNode" entity="Timing" nodekey="CoursemarkNodeChildFactory.TimingNode" icon="time" orderable="no" sort="no" access="rw"/>
+        <field name="mark" type="reference" label="Mark" references="Mark" displaykey="MarkNode" parentfactory="MarkRoot" fieldclass="ReferenceChoiceField"/>
+        <field name="race" type="ref" references="Race" fieldclass="ReferenceChoiceField" parentfactory="Race" label="Race" displaykey="RaceNode"/>
         <field name="idx" type="idx" fieldclass="TextField" label="Idx"/>
         <displaytitleformat format="{0} for {1}">
             <display field="Mark"/>
@@ -121,11 +121,11 @@
             <display field="Mark"/>
         </displaynameformat>
     </nodeinfo>
-    <nodeinfo key="CoursemarkNodeChildFactory.TimingNode" name="TimingNode" entity="Timing" parententity="Coursemark" icon="time" parentnode="CoursemarkNode" parentnodeandfactory="RaceNodeChildFactory.CoursemarkNode" label="Timing">
+    <nodeinfo key="CoursemarkNodeChildFactory.TimingNode" name="TimingNode" entity="Timing" parententity="Coursemark" nodeorder="1" icon="time" parentmethod="Coursemark" parentnode="CoursemarkNode" parentnodeandfactory="RaceNodeChildFactory.CoursemarkNode" label="Timing" orderable="no" sort="no" access="rw">
         <field name="lap" type="int" label="Lap" fieldclass="TextField"/>
         <field name="at" type="datetime" label="At" fieldclass="TextField"/>
         <field name="estimated" type="datetime" label="Estimated" fieldclass="TextField"/>
-        <field name="coursemark" type="ref" references="Coursemark" fieldclass="ReferenceChoiceField" parentfactory="Coursemark" label="Coursemark" displaykey="RaceNodeChildFactory.CoursemarkNode"/>
+        <field name="coursemark" type="ref" references="Coursemark" fieldclass="ReferenceChoiceField" parentfactory="Coursemark" label="Coursemark" displaykey="CoursemarkNode"/>
         <sortformat format="{0}">
             <display field="Lap" length="2"/>
         </sortformat>
@@ -137,9 +137,9 @@
             <display field="Lap"/>
         </displaynameformat>
     </nodeinfo>
-    <nodeinfo key="RaceNodeChildFactory.RaceentryNode" name="RaceentryNode" entity="Raceentry" parententity="Race" icon="group" parentnode="RaceNode" parentnodeandfactory="RaceseriesNodeChildFactory.RaceNode" label="Raceentry">
-        <field name="entry" type="reference" label="Entry" references="Entry" displaykey="EntryRootNodeChildFactory.EntryNode" parentfactory="EntryRoot" fieldclass="ReferenceChoiceField"/>
-        <field name="race" type="ref" references="Race" fieldclass="ReferenceChoiceField" parentfactory="Race" label="Race" displaykey="RaceseriesNodeChildFactory.RaceNode"/>
+    <nodeinfo key="RaceNodeChildFactory.RaceentryNode" name="RaceentryNode" entity="Raceentry" parententity="Race" nodeorder="2" icon="group" parentmethod="Race" parentnode="RaceNode" parentnodeandfactory="RaceseriesNodeChildFactory.RaceNode" label="Raceentry" orderable="no" sort="no" access="rw">
+        <field name="entry" type="reference" label="Entry" references="Entry" displaykey="EntryNode" parentfactory="EntryRoot" fieldclass="ReferenceChoiceField"/>
+        <field name="race" type="ref" references="Race" fieldclass="ReferenceChoiceField" parentfactory="Race" label="Race" displaykey="RaceNode"/>
         <displaytitleformat format="{0} in {1}">
             <display field="Entry"/>
             <display field="Race"/>

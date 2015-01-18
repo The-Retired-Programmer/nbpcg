@@ -63,7 +63,7 @@ import javax.swing.Action;
 import static javax.swing.Action.NAME;
 import org.openide.util.ContextAwareAction;
 import org.openide.util.Lookup;
-import ${nodepackage}.${NODEINFO.key};
+import ${nodepackage}.${NODEINFO.name};
 import uk.org.rlinsdale.nbpcglibrary.annotations.RegisterNodeAction;
 import uk.org.rlinsdale.nbpcglibrary.common.LogBuilder;
 

@@ -122,6 +122,14 @@
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
+        <xsl:variable name="parentmethod" >
+            <xsl:choose>
+                <xsl:when test="local-name(..) = 'node'" >
+                    <xsl:value-of select="../@name" />
+                </xsl:when>
+                <xsl:otherwise>Root</xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
         <xsl:variable name="parententity" >
             <xsl:choose>
                 <xsl:when test="local-name(..) = 'node'" >
@@ -145,16 +153,9 @@
                     <xsl:otherwise>page_red</xsl:otherwise>
                 </xsl:choose>
             </xsl:attribute>
-            <xsl:variable name="parentnode" >
-                <xsl:choose>
-                    <xsl:when test="local-name(..) = 'node'" >
-                        <xsl:value-of select="concat(../@name, $type, 'Node')" />
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:value-of select="concat(@name,'Root',$type,'Node')"/>
-                    </xsl:otherwise>
-                </xsl:choose>
-            </xsl:variable>
+            <xsl:attribute name="parentmethod" >
+                <xsl:value-of select="$parentmethod" />
+            </xsl:attribute>
             <xsl:attribute name="parentnode" >
                 <xsl:value-of select="$parentnode" />
             </xsl:attribute>
@@ -185,6 +186,39 @@
                     </xsl:otherwise>
                 </xsl:choose>
             </xsl:attribute>
+                        <xsl:attribute name="orderable">
+                <xsl:choose>
+                    <xsl:when test="@orderable">
+                        <xsl:value-of select="@orderable"/>
+                    </xsl:when>
+                    <xsl:otherwise>no</xsl:otherwise>
+                </xsl:choose>
+            </xsl:attribute>
+            <xsl:attribute name="sort">
+                <xsl:choose>
+                    <xsl:when test="@sort">
+                        <xsl:value-of select="@sort"/>
+                    </xsl:when>
+                    <xsl:otherwise>no</xsl:otherwise>
+                </xsl:choose>
+            </xsl:attribute>
+            <xsl:for-each select="/nbpcg/databases/database/table[@name = $ename]" >
+                <xsl:attribute name="access" >
+                    <xsl:choose>
+                        <xsl:when test="@access">
+                            <xsl:value-of select="@access" />
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:choose>
+                                <xsl:when test="../@access">
+                                    <xsl:value-of select="../@access" />
+                                </xsl:when>
+                                <xsl:otherwise>rw</xsl:otherwise>
+                            </xsl:choose>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </xsl:attribute>
+            </xsl:for-each>
             <xsl:variable name="nname" select="@name" />
             <xsl:choose>
                 <xsl:when test="$type='Icon'">
@@ -257,14 +291,7 @@
                         <xsl:copy-of select="@references"/>
                         <xsl:for-each select="//node[@name=$refs]">
                             <xsl:attribute name="displaykey" >
-                                <xsl:choose>
-                                    <xsl:when test="local-name(..) = 'node'" >
-                                        <xsl:value-of select="concat(../@name,'NodeChildFactory.',$refs,'Node')" />
-                                    </xsl:when>
-                                    <xsl:otherwise>
-                                        <xsl:value-of select="concat($refs,'RootNodeChildFactory.',$refs,'Node')" />
-                                    </xsl:otherwise>
-                                </xsl:choose>
+                                <xsl:value-of select="concat($refs,'Node')" />
                             </xsl:attribute>
                             <xsl:attribute name="parentfactory">
                                 <xsl:choose>
@@ -315,14 +342,7 @@
                     </xsl:attribute>
                     <xsl:for-each select="//node[@name=$references]">
                         <xsl:attribute name="displaykey" >
-                            <xsl:choose>
-                                <xsl:when test="local-name(..) = 'node'" >
-                                    <xsl:value-of select="concat(../@name,$type,'NodeChildFactory.',$references,$type,'Node')" />
-                                </xsl:when>
-                                <xsl:otherwise>
-                                    <xsl:value-of select="concat($references,'Root',$type,'NodeChildFactory.',$references,$type,'Node')" />
-                                </xsl:otherwise>
-                            </xsl:choose>
+                            <xsl:value-of select="concat($references,$type,'Node')" />
                         </xsl:attribute>
                     </xsl:for-each>
                 </field>
@@ -451,37 +471,6 @@
                 </xsl:choose>
             </xsl:attribute>
         </xsl:for-each>
-        <xsl:variable name="parent" select="../@name"/>
-        <xsl:choose>
-            <xsl:when test="count(//node/node[@name=$entityname]) &gt; 1" >
-                <xsl:for-each select="//node/node[@name=$entityname]" >
-                    <xsl:if test="../@name != $parent" >
-                        <xsl:attribute name="displaykey">
-                            <xsl:choose>
-                                <xsl:when test="local-name(../..) = 'node' ">
-                                    <xsl:value-of select="concat(../../@name,'NodeChildFactory.', ../@name ,'Node')"/>
-                                </xsl:when>
-                                <xsl:otherwise>
-                                    <xsl:value-of select="concat(../@name ,'RootNodeChildFactory.',../@name,'Node')"/>
-                                </xsl:otherwise>
-                            </xsl:choose>
-                        </xsl:attribute>
-                    </xsl:if>
-                </xsl:for-each>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:attribute name="displaykey">
-                    <xsl:choose>
-                        <xsl:when test="local-name(../..) = 'node' ">
-                            <xsl:value-of select="concat(../../@name,'NodeChildFactory.', ../@name ,'Node')"/>
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <xsl:value-of select="concat(../@name ,'RootNodeChildFactory.',../@name,'Node')"/>
-                        </xsl:otherwise>
-                    </xsl:choose>
-                </xsl:attribute>
-            </xsl:otherwise>
-        </xsl:choose>
     </xsl:template>
     
     <!-- the next four templates support the creation of the displaynameformat and display elements in the nodeinfo element -->

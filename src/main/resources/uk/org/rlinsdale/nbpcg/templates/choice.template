@@ -58,7 +58,7 @@
 package ${package};
 
 import java.util.List;
-import ${nodepackage}.${NODEINFO.parentnode}ChildFactory.${NODEINFO.name}Display;
+import ${nodepackage}.${NODEINFO.name}.${NODEINFO.name}Display;
 import ${datapackage}.${NODEINFO.entity};
 import ${datapackage}.${NODEINFO.parententity};
 import ${datapackage}.${NODEINFO.entity}.${NODEINFO.entity}Field;

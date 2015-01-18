@@ -69,6 +69,9 @@ import uk.org.rlinsdale.nbpcglibrary.node.nodes.RootNode;
 import uk.org.rlinsdale.nbpcglibrary.node.properties.StringReadonlyProperty;
 import uk.org.rlinsdale.nbpcglibrary.common.LogicException;
 import org.openide.nodes.*;
+<#list NODEINFO.child![] as child>
+import static ${nodepackage}.${child.name}.${child.name?upper_case}_FLAVOR;
+</#list>
 
 /**
  * ${type}Node for ${NODEINFO.entity}
@@ -94,7 +97,7 @@ public class ${NODEINFO.name} extends RootNode<${NODEINFO.entity}> {
     }
 
     private ${NODEINFO.name}(${NODEINFO.entity} e, ${NODEINFO.name}ChildFactory cf) {
-        super("${NODEINFO.icon}", e, cf, new DataFlavorAndAction[] {<#list NODEINFO.child![] as child>new DataFlavorAndAction(${NODEINFO.name}ChildFactory.${child.name?upper_case}_FLAVOR, DataFlavorAndAction.COPYCUT<#if child.orderable??>MOVE</#if>), </#list>});
+        super("${NODEINFO.icon}", e, cf, new DataFlavorAndAction[] {<#list NODEINFO.child![] as child>new DataFlavorAndAction(${child.name?upper_case}_FLAVOR, DataFlavorAndAction.COPYCUT<#if child.orderable??>MOVE</#if>), </#list>});
         this.cf = cf;
     }
 

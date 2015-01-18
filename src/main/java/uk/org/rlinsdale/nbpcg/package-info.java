@@ -30,6 +30,7 @@
     @TemplateRegistration(folder = "linsdale-nbpcg", displayName = "choice", content = "templates/choice.template", scriptEngine = "freemarker"),
     @TemplateRegistration(folder = "linsdale-nbpcg", displayName = "nodeeditor", content = "templates/nodeeditor.template", scriptEngine = "freemarker"),
     @TemplateRegistration(folder = "linsdale-nbpcg", displayName = "editnode", content = "templates/editnode.template", scriptEngine = "freemarker"),
+    @TemplateRegistration(folder = "linsdale-nbpcg", displayName = "node", content = "templates/node.template", scriptEngine = "freemarker"),
     @TemplateRegistration(folder = "linsdale-nbpcg", displayName = "nodefactory", content = "templates/nodefactory.template", scriptEngine = "freemarker"),
     @TemplateRegistration(folder = "linsdale-nbpcg", displayName = "undonode", content = "templates/undonode.template", scriptEngine = "freemarker"),
     @TemplateRegistration(folder = "linsdale-nbpcg", displayName = "addnode", content = "templates/addnode.template", scriptEngine = "freemarker"),
