@@ -46,6 +46,7 @@ Defines the build information - artifact selection, projects and packages etc.
 | Type | Name |  Value | Required |
 |:-------------------|:--------------|:-------------|:------|
 | Attribute | viewerrole | the viewerroles for this application (comma separated) | yes |
+| Attribute | copyright | the copyright key information year(s) and name / email - this will be added to every licence header placed in a generated file | yes |
 | Child Element | project | | one or more|
 
 
