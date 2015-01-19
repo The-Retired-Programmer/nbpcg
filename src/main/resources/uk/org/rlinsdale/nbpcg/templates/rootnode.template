@@ -62,8 +62,8 @@ import java.util.List;
 import javax.swing.Action;
 import ${datapackage}.*;
 import uk.org.rlinsdale.nbpcglibrary.data.entity.*;
-import uk.org.rlinsdale.nbpcglibrary.annotations.RegisterNodeSavedAction;
-import uk.org.rlinsdale.nbpcglibrary.annotations.RegisterNodeSavedActions;
+import uk.org.rlinsdale.nbpcglibrary.annotations.UseCommonNodeAction;
+import uk.org.rlinsdale.nbpcglibrary.annotations.UseCommonNodeActions;
 import uk.org.rlinsdale.nbpcglibrary.node.nodes.DataFlavorAndAction;
 import uk.org.rlinsdale.nbpcglibrary.node.nodes.RootNode;
 import uk.org.rlinsdale.nbpcglibrary.node.properties.StringReadonlyProperty;
@@ -117,18 +117,18 @@ public class ${NODEINFO.name} extends RootNode<${NODEINFO.entity}> {
         return props;
     }
 
-    @RegisterNodeSavedActions({
+    @UseCommonNodeActions({
 <#list NODEINFO.child![] as child>
 <#if child.access = "rw" > 
-        @RegisterNodeSavedAction(id = "linsdale.nbpcg.nodesupportlib.actions.NodePasteAction",
+        @UseCommonNodeAction(id = "uk.org.rlinsdale.nbpcglibrary.node.actions.NodePasteAction",
                 node = "${NODEINFO.name}", position = 830, separator = 800),
 </#if>
 <#if child.orderable = "yes">
-        @RegisterNodeSavedAction(id = "linsdale.nbpcg.nodesupportlib.actions.NodeReorderAction",
+        @UseCommonNodeAction(id = "uk.org.rlinsdale.nbpcglibrary.node.actions.NodeReorderAction",
                 node = "${NODEINFO.name}", position = 810, separator = 800),
-        @RegisterNodeSavedAction(id = "linsdale.nbpcg.nodesupportlib.actions.NodeMoveUpAction",
+        @UseCommonNodeAction(id = "uk.org.rlinsdale.nbpcglibrary.node.actions.NodeMoveUpAction",
                 node = "${NODEINFO.name}", position = 910),
-        @RegisterNodeSavedAction(id = "linsdale.nbpcg.nodesupportlib.actions.NodeMoveDownAction",
+        @UseCommonNodeAction(id = "uk.org.rlinsdale.nbpcglibrary.node.actions.NodeMoveDownAction",
                 node = "${NODEINFO.name}", position = 930),
 </#if>
 </#list>

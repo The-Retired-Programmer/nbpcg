@@ -67,8 +67,8 @@ import java.text.MessageFormat;
 import java.util.List;
 import javax.swing.Action;
 import ${datapackage}.*;
-import uk.org.rlinsdale.nbpcglibrary.annotations.RegisterNodeSavedAction;
-import uk.org.rlinsdale.nbpcglibrary.annotations.RegisterNodeSavedActions;
+import uk.org.rlinsdale.nbpcglibrary.annotations.UseCommonNodeAction;
+import uk.org.rlinsdale.nbpcglibrary.annotations.UseCommonNodeActions;
 import uk.org.rlinsdale.nbpcglibrary.data.entity.*;
 import uk.org.rlinsdale.nbpcglibrary.node.nodes.*;
 import uk.org.rlinsdale.nbpcglibrary.node.properties.*;
@@ -145,32 +145,32 @@ public class ${NODEINFO.name} extends ${type2}Node${NODEINFO.access?upper_case}<
         }
 </#if>
 
-    @RegisterNodeSavedActions({
+    @UseCommonNodeActions({
 <#if NODEINFO.orderable = "yes">
-            @RegisterNodeSavedAction(id = "linsdale.nbpcg.nodesupportlib.actions.NodeReorderAction",
+            @UseCommonNodeAction(id = "uk.org.rlinsdale.nbpcglibrary.node.actions.NodeReorderAction",
                     node = "${NODEINFO.name}", position = 810),
 </#if>
 <#if haseditablechildren >
-            @RegisterNodeSavedAction(id = "linsdale.nbpcg.nodesupportlib.actions.NodePasteAction",
+            @UseCommonNodeAction(id = "uk.org.rlinsdale.nbpcglibrary.node.actions.NodePasteAction",
                     node = "${NODEINFO.name}", position = 830),
 </#if>
 <#if NODEINFO.access = "rw" >
-            @RegisterNodeSavedAction(id = "linsdale.nbpcg.nodesupportlib.actions.NodeCutAction",
+            @UseCommonNodeAction(id = "uk.org.rlinsdale.nbpcglibrary.node.actions.NodeCutAction",
                     node = "${NODEINFO.name}",
                     position = 850, separator = 800),
-            @RegisterNodeSavedAction(id = "linsdale.nbpcg.nodesupportlib.actions.NodeCopyAction",
+            @UseCommonNodeAction(id = "uk.org.rlinsdale.nbpcglibrary.node.actions.NodeCopyAction",
                     node = "${NODEINFO.name}", position = 870),
-            @RegisterNodeSavedAction(id = "linsdale.nbpcg.nodesupportlib.actions.NodeDeleteAction",
+            @UseCommonNodeAction(id = "uk.org.rlinsdale.nbpcglibrary.node.actions.NodeDeleteAction",
                     node = "${NODEINFO.name}", position = 890),
 </#if>
 <#if NODEINFO.orderable = "yes" >
-            @RegisterNodeSavedAction(id = "linsdale.nbpcg.nodesupportlib.actions.NodeMoveUpAction",
+            @UseCommonNodeAction(id = "uk.org.rlinsdale.nbpcglibrary.node.actions.NodeMoveUpAction",
                     node = "${NODEINFO.name}", position = 910),
-            @RegisterNodeSavedAction(id = "linsdale.nbpcg.nodesupportlib.actions.NodeMoveDownAction",
+            @UseCommonNodeAction(id = "uk.org.rlinsdale.nbpcglibrary.node.actions.NodeMoveDownAction",
                     node = "${NODEINFO.name}", position = 930),
 </#if>
         })
-    private static void register${NODEINFO.name}Annotations() {} // a dummy method
+    private static void useCommonNodeActions() {} // a dummy method
  
         @Override
         protected DataFlavor _getDataFlavor() {
