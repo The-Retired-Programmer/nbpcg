@@ -22,7 +22,7 @@
         </folder>
     </folder>
     <folder name="Templates">
-        <folder name="linsdale-nbpcg">
+        <folder name="uk-org-rlinsdale-nbpcg">
             <attr name="simple" boolvalue="false"/> 
         </folder>
     </folder>

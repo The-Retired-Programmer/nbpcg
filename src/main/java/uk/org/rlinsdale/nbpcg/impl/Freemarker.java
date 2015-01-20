@@ -44,7 +44,7 @@ public class Freemarker {
      */
     public void setTemplate(String templatename) throws Exception {
         this.nameext = templatename;
-        FileObject foTemplate = getConfigFile("/Templates/linsdale-nbpcg/" + templatename);
+        FileObject foTemplate = getConfigFile("/Templates/uk-org-rlinsdale-nbpcg/" + templatename);
         if (foTemplate == null) {
             throw new Exception("Template not found (" + templatename + ")");
         }

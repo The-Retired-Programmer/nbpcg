@@ -21,24 +21,24 @@
  */
 @TemplateRegistrations({
     @TemplateRegistration(folder = "Other", displayName = "NBPCG Definition File", content = "NBPCG.xml"),
-    @TemplateRegistration(folder = "linsdale-nbpcg", displayName = "backupscript", content = "templates/backupscript.template", scriptEngine = "freemarker"),
-    @TemplateRegistration(folder = "linsdale-nbpcg", displayName = "create", content = "templates/create.template", scriptEngine = "freemarker"),
-    @TemplateRegistration(folder = "linsdale-nbpcg", displayName = "createtables", content = "templates/createtables.template", scriptEngine = "freemarker"),
-    @TemplateRegistration(folder = "linsdale-nbpcg", displayName = "entity", content = "templates/entity.template", scriptEngine = "freemarker"),
-    @TemplateRegistration(folder = "linsdale-nbpcg", displayName = "referencechoice", content = "templates/referencechoice.template", scriptEngine = "freemarker"),
-    @TemplateRegistration(folder = "linsdale-nbpcg", displayName = "enumchoice", content = "templates/enumchoice.template", scriptEngine = "freemarker"),
-    @TemplateRegistration(folder = "linsdale-nbpcg", displayName = "choice", content = "templates/choice.template", scriptEngine = "freemarker"),
-    @TemplateRegistration(folder = "linsdale-nbpcg", displayName = "nodeeditor", content = "templates/nodeeditor.template", scriptEngine = "freemarker"),
-    @TemplateRegistration(folder = "linsdale-nbpcg", displayName = "editnode", content = "templates/editnode.template", scriptEngine = "freemarker"),
-    @TemplateRegistration(folder = "linsdale-nbpcg", displayName = "node", content = "templates/node.template", scriptEngine = "freemarker"),
-    @TemplateRegistration(folder = "linsdale-nbpcg", displayName = "nodefactory", content = "templates/nodefactory.template", scriptEngine = "freemarker"),
-    @TemplateRegistration(folder = "linsdale-nbpcg", displayName = "undonode", content = "templates/undonode.template", scriptEngine = "freemarker"),
-    @TemplateRegistration(folder = "linsdale-nbpcg", displayName = "addnode", content = "templates/addnode.template", scriptEngine = "freemarker"),
-    @TemplateRegistration(folder = "linsdale-nbpcg", displayName = "rootentity", content = "templates/rootentity.template", scriptEngine = "freemarker"),
-    @TemplateRegistration(folder = "linsdale-nbpcg", displayName = "rootnode", content = "templates/rootnode.template", scriptEngine = "freemarker"),
-    @TemplateRegistration(folder = "linsdale-nbpcg", displayName = "rootnodeviewer", content = "templates/rootnodeviewer.template", scriptEngine = "freemarker"),
-    @TemplateRegistration(folder = "linsdale-nbpcg", displayName = "iconnodeviewer", content = "templates/iconnodeviewer.template", scriptEngine = "freemarker"),
-    @TemplateRegistration(folder = "linsdale-nbpcg", displayName = "iconnodevieweraction", content = "templates/iconnodevieweraction.template", scriptEngine = "freemarker")
+    @TemplateRegistration(folder = "uk-org-rlinsdale-nbpcg", displayName = "backupscript", content = "templates/backupscript.template", scriptEngine = "freemarker"),
+    @TemplateRegistration(folder = "uk-org-rlinsdale-nbpcg", displayName = "create", content = "templates/create.template", scriptEngine = "freemarker"),
+    @TemplateRegistration(folder = "uk-org-rlinsdale-nbpcg", displayName = "createtables", content = "templates/createtables.template", scriptEngine = "freemarker"),
+    @TemplateRegistration(folder = "uk-org-rlinsdale-nbpcg", displayName = "entity", content = "templates/entity.template", scriptEngine = "freemarker"),
+    @TemplateRegistration(folder = "uk-org-rlinsdale-nbpcg", displayName = "referencechoice", content = "templates/referencechoice.template", scriptEngine = "freemarker"),
+    @TemplateRegistration(folder = "uk-org-rlinsdale-nbpcg", displayName = "enumchoice", content = "templates/enumchoice.template", scriptEngine = "freemarker"),
+    @TemplateRegistration(folder = "uk-org-rlinsdale-nbpcg", displayName = "choice", content = "templates/choice.template", scriptEngine = "freemarker"),
+    @TemplateRegistration(folder = "uk-org-rlinsdale-nbpcg", displayName = "nodeeditor", content = "templates/nodeeditor.template", scriptEngine = "freemarker"),
+    @TemplateRegistration(folder = "uk-org-rlinsdale-nbpcg", displayName = "editnode", content = "templates/editnode.template", scriptEngine = "freemarker"),
+    @TemplateRegistration(folder = "uk-org-rlinsdale-nbpcg", displayName = "node", content = "templates/node.template", scriptEngine = "freemarker"),
+    @TemplateRegistration(folder = "uk-org-rlinsdale-nbpcg", displayName = "nodefactory", content = "templates/nodefactory.template", scriptEngine = "freemarker"),
+    @TemplateRegistration(folder = "uk-org-rlinsdale-nbpcg", displayName = "undonode", content = "templates/undonode.template", scriptEngine = "freemarker"),
+    @TemplateRegistration(folder = "uk-org-rlinsdale-nbpcg", displayName = "addnode", content = "templates/addnode.template", scriptEngine = "freemarker"),
+    @TemplateRegistration(folder = "uk-org-rlinsdale-nbpcg", displayName = "rootentity", content = "templates/rootentity.template", scriptEngine = "freemarker"),
+    @TemplateRegistration(folder = "uk-org-rlinsdale-nbpcg", displayName = "rootnode", content = "templates/rootnode.template", scriptEngine = "freemarker"),
+    @TemplateRegistration(folder = "uk-org-rlinsdale-nbpcg", displayName = "rootnodeviewer", content = "templates/rootnodeviewer.template", scriptEngine = "freemarker"),
+    @TemplateRegistration(folder = "uk-org-rlinsdale-nbpcg", displayName = "iconnodeviewer", content = "templates/iconnodeviewer.template", scriptEngine = "freemarker"),
+    @TemplateRegistration(folder = "uk-org-rlinsdale-nbpcg", displayName = "iconnodevieweraction", content = "templates/iconnodevieweraction.template", scriptEngine = "freemarker")
 })
 @TemplateRegistration(folder = "Other", displayName = "NBPCG Template File", content = "TemplateTemplate.template")
 package uk.org.rlinsdale.nbpcg;
