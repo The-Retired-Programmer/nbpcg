@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    SYSTEM ID  : nbres:/uk/org/rlinsdale/nbpcg/nbpcgentityinfo.dtd
+
+    Author     : Richard Linsdale (richard.linsdale at blueyonder.co.uk)
+-->
+
+<!ELEMENT nbpcg-entity-info (entityinfo+, dbinfo) >
+    <!ATTLIST nbpcg-entity-info
+        name CDATA #REQUIRED
+        >
+    <!ELEMENT entityinfo (field*, child*)  >
+        <!ATTLIST entityinfo
+            key CDATA #REQUIRED
+            name CDATA #REQUIRED
+            dbkey CDATA #IMPLIED
+            access (rw|ro) #IMPLIED
+            dbtablename CDATA #IMPLIED 
+            withfields (Idandstamp) #IMPLIED 
+            type (Idkeyauto) #IMPLIED
+            parentname CDATA #IMPLIED
+            ordercolumn CDATA #IMPLIED 
+            >
+        <!ELEMENT field EMPTY  >
+            <!ATTLIST field
+                name CDATA #REQUIRED
+                type (rootref|ref|String|int|reference|date|enum|idx|datetime|boolean|long) #REQUIRED
+                references CDATA #IMPLIED
+                referencestable CDATA #IMPLIED
+                parentfactory CDATA #IMPLIED
+                label CDATA #REQUIRED
+                rvid CDATA #REQUIRED
+                pcvu CDATA #IMPLIED
+                pprvu CDATA #IMPLIED
+                values CDATA #IMPLIED
+                javatype (int|String|DateOnly|Timestamp|boolean|long) #REQUIRED
+                initialisation CDATA #REQUIRED
+                javarsget (getInt|getString|getLong|getBoolean) #REQUIRED
+                nullsql CDATA #IMPLIED
+                uniquesql CDATA #IMPLIED
+                unique (yes) #IMPLIED
+                optional (yes) #IMPLIED
+                sort CDATA #IMPLIED
+                index (yes) #IMPLIED
+                min CDATA #IMPLIED
+                max CDATA #IMPLIED
+                fieldclass (TextField|ReferenceChoiceField|EnumChoiceField|PasswordField|CheckboxField) #IMPLIED
+                sqltype CDATA #IMPLIED
+                dbcolumnname CDATA #IMPLIED
+                entryfield CDATA #IMPLIED
+                encodemethod CDATA #IMPLIED
+                >
+        <!ELEMENT child EMPTY  >
+            <!ATTLIST child
+                name CDATA #REQUIRED
+                dbname CDATA #IMPLIED 
+                nodekey CDATA #IMPLIED 
+                references CDATA #REQUIRED
+                sort CDATA #IMPLIED
+                orderable (yes) #IMPLIED 
+                copymovenode CDATA #IMPLIED 
+                copymoveentity CDATA #IMPLIED 
+                copymovefield CDATA #IMPLIED
+                >
+    <!ELEMENT dbinfo (table+) >
+        <!ATTLIST dbinfo
+            key CDATA #REQUIRED
+            name CDATA #REQUIRED
+            db CDATA #REQUIRED
+            >
+        <!ELEMENT table (insert*) >
+            <!ATTLIST table
+                name CDATA #REQUIRED
+                >
+        <!ELEMENT insert EMPTY >
+            <!ATTLIST insert
+                values CDATA #REQUIRED
+                >

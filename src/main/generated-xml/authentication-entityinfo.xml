@@ -1,4 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?><nbpcg-entity-info name="Authentication">
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE nbpcg-entity-info PUBLIC "-//uk/org/rlinsdale/nbpcgentityinfo/DTD NBPCGENTITYINFO SCHEMA 1.0//EN" "nbres:/uk/org/rlinsdale/nbpcg/nbpcgentityinfo.dtd">
+<nbpcg-entity-info name="Authentication">
     <entityinfo key="User" name="User" dbkey="authentication2" access="rw" dbtablename="User" withfields="Idandstamp" type="Idkeyauto" parentname="UserRoot">
         <field name="root" references="UserRoot" type="rootref" label="Root" rvid="root" javatype="int" initialisation="" javarsget="getInt"/>
         <field name="username" nullsql="NOT NULL" uniquesql="UNIQUE" unique="yes" min="1" max="100" fieldclass="TextField" sqltype="VARCHAR(100)" type="String" dbcolumnname="username" label="Username" rvid="username" javatype="String" initialisation=" = &quot;&quot;" javarsget="getString"/>

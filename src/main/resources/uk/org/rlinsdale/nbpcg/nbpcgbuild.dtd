@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    SYSTEM ID  : nbres:/uk/org/rlinsdale/nbpcg/nbpcgbuild.dtd
+
+    Author     : Richard Linsdale (richard.linsdale at blueyonder.co.uk)
+-->
+
+<!ELEMENT nbpcg-build (folder+, scriptfolder, execute+) >
+    <!ATTLIST nbpcg-build
+        name CDATA #REQUIRED
+        >
+    <!ELEMENT folder EMPTY >
+        <!ATTLIST folder
+            name CDATA #REQUIRED
+            project CDATA #REQUIRED
+            package CDATA #REQUIRED
+            >
+    <!ELEMENT scriptfolder EMPTY >
+        <!ATTLIST scriptfolder
+            project CDATA #REQUIRED
+            >
+    <!ELEMENT execute EMPTY >
+        <!ATTLIST execute
+            action (message|entitytemplate|nodetemplate) #REQUIRED
+            message CDATA #IMPLIED
+            template CDATA #IMPLIED
+            type CDATA #IMPLIED
+            folder CDATA #IMPLIED
+            filename CDATA #IMPLIED
+            usedbinfo CDATA #IMPLIED
+            useentityinfo CDATA #IMPLIED
+            usenodeinfo CDATA #IMPLIED
+            usefield CDATA #IMPLIED
+            log CDATA #IMPLIED
+            package CDATA #IMPLIED
+            datapackage CDATA #IMPLIED
+            nodepackage CDATA #IMPLIED
+            nodeeditorpackage CDATA #IMPLIED
+            license CDATA #IMPLIED
+            copyright CDATA #IMPLIED
+            >

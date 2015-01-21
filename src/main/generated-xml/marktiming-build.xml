@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE nbpcg-build PUBLIC "-//uk/org/rlinsdale/nbpcgbuild/DTD NBPCGBUILD SCHEMA 1.0//EN" "nbres:/uk/org/rlinsdale/nbpcg/nbpcgbuild.dtd">
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE nbpcg-build PUBLIC "-//uk/org/rlinsdale/nbpcgbuild/DTD NBPCGBUILD SCHEMA 1.0//EN" "nbres:/uk/org/rlinsdale/nbpcg/nbpcgbuild.dtd">
 <nbpcg-build name="Mark Timings">
     <folder name="data" project="Mark Timings Recorder - generated code" package="uk.org.rlinsdale.marktimingsrecorder.dataobjects"/>
     <folder name="node" project="Mark Timings Recorder - generated code" package="uk.org.rlinsdale.marktimingsrecorder.nodes"/>

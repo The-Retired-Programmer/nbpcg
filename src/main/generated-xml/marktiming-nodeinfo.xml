@@ -1,4 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?><nbpcg-node-info name="Mark Timings">
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE nbpcg-node-info PUBLIC "-//uk/org/rlinsdale/nbpcgnodeinfo/DTD NBPCGNODEINFO SCHEMA 1.0//EN" "nbres:/uk/org/rlinsdale/nbpcg/nbpcgnodeinfo.dtd">
+<nbpcg-node-info name="Mark Timings">
     <nodeinfo key="DinghyclassRootNode" name="DinghyclassRootNode" entity="DinghyclassRoot" isroot="" label="Dinghyclasss" viewers="Coach" icon="folder_star">
         <child name="DinghyclassNode" entity="Dinghyclass" nodekey="DinghyclassRootNodeChildFactory.DinghyclassNode" icon="star" orderable="no" sort="no" access="rw"/>
     </nodeinfo>
@@ -67,7 +69,8 @@
         </sortformat>
         <displaytitleformat format="{0}({1})">
             <display field="Dinghy"/>
-            <display field="Helm"/>)</displaytitleformat>
+            <display field="Helm"/>
+        </displaytitleformat>
         <displaynameformat format="{0}">
             <display field="Dinghy"/>
         </displaynameformat>
@@ -86,7 +89,8 @@
         </sortformat>
         <displaynameformat format="{0}({1})">
             <display field="Name"/>
-            <display field="Type"/>)</displaynameformat>
+            <display field="Type"/>
+        </displaynameformat>
     </nodeinfo>
     <nodeinfo key="RaceseriesNodeChildFactory.RaceNode" name="RaceNode" entity="Race" parententity="Raceseries" nodeorder="1" icon="rosette" parentmethod="Raceseries" parentnode="RaceseriesNode" parentnodeandfactory="RaceseriesRootNodeChildFactory.RaceseriesNode" label="Race" orderable="no" sort="no" access="rw">
         <child name="CoursemarkNode" entity="Coursemark" nodekey="RaceNodeChildFactory.CoursemarkNode" icon="flag_blue" orderable="yes" sort="no" access="rw"/>

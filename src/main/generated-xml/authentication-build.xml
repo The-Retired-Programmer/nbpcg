@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE nbpcg-build PUBLIC "-//uk/org/rlinsdale/nbpcgbuild/DTD NBPCGBUILD SCHEMA 1.0//EN" "nbres:/uk/org/rlinsdale/nbpcg/nbpcgbuild.dtd">
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE nbpcg-build PUBLIC "-//uk/org/rlinsdale/nbpcgbuild/DTD NBPCGBUILD SCHEMA 1.0//EN" "nbres:/uk/org/rlinsdale/nbpcg/nbpcgbuild.dtd">
 <nbpcg-build name="Authentication">
     <folder name="data" project="Lindos LifeCycle" package="uk.org.rlinsdale.lindos.authentication.dataobjects"/>
     <folder name="node" project="Access Control Manager - generated" package="uk.org.rlinsdale.accesscontrolmanager.nodes"/>

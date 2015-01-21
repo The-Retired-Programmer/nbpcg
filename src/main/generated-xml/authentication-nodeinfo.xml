@@ -1,10 +1,11 @@
-<?xml version="1.0" encoding="UTF-8"?><nbpcg-node-info name="Authentication">
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE nbpcg-node-info PUBLIC "-//uk/org/rlinsdale/nbpcgnodeinfo/DTD NBPCGNODEINFO SCHEMA 1.0//EN" "nbres:/uk/org/rlinsdale/nbpcg/nbpcgnodeinfo.dtd">
+<nbpcg-node-info name="Authentication">
     <nodeinfo key="UserRootNode" name="UserRootNode" entity="UserRoot" isroot="" label="Users" viewers="Manager" icon="folder_user">
-        <child name="UserNode" entity="User" nodekey="UserRootNodeChildFactory.UserNode" icon="user" orderable="no" sort="no" access="rw" displaykey="AuthenticationRootNodeChildFactory.AuthenticationNode"/>
+        <child name="UserNode" entity="User" nodekey="UserRootNodeChildFactory.UserNode" icon="user" orderable="no" sort="no" access="rw"/>
     </nodeinfo>
-    <nodeinfo key="UserRootNodeChildFactory.UserNode" name="UserNode" entity="User" parententity="UserRoot" nodeorder="1" icon="user" parentnode="UserRootNode" parentnodeandfactory="UserRootNode" label="User">
-        <child name="UserpermissionNode" entity="Userpermission" nodekey="UserNodeChildFactory.UserpermissionNode" icon="thumb_up" orderable="no" sort="no" access="rw" displaykey="UserRootNodeChildFactory.UserNode"/>
-        <child name="UserroleNode" entity="Userrole" nodekey="UserNodeChildFactory.UserroleNode" icon="key" orderable="no" sort="no" access="rw" displaykey="UserRootNodeChildFactory.UserNode"/>
+    <nodeinfo key="UserRootNodeChildFactory.UserNode" name="UserNode" entity="User" parententity="UserRoot" nodeorder="1" icon="user" parentmethod="Root" parentnode="UserRootNode" parentnodeandfactory="UserRootNode" label="User" orderable="no" sort="no" access="rw">
+        <child name="UserpermissionNode" entity="Userpermission" nodekey="UserNodeChildFactory.UserpermissionNode" icon="thumb_up" orderable="no" sort="no" access="rw"/>
+        <child name="UserroleNode" entity="Userrole" nodekey="UserNodeChildFactory.UserroleNode" icon="key" orderable="no" sort="no" access="rw"/>
         <field name="username" type="String" label="Username" fieldclass="TextField"/>
         <field name="encodedpassword" type="String" label="Password" fieldclass="TextField" encodemethod="uk.org.rlinsdale.lindos.authentication.Authentication.encode"/>
         <field name="usercode" type="String" label="Usercode" fieldclass="TextField"/>
@@ -13,34 +14,34 @@
             <display field="Username"/>
         </displaynameformat>
     </nodeinfo>
-    <nodeinfo key="UserNodeChildFactory.UserpermissionNode" name="UserpermissionNode" entity="Userpermission" parententity="User" nodeorder="1" icon="thumb_up" parentnode="UserNode" parentnodeandfactory="UserRootNodeChildFactory.UserNode" label="Userpermission">
-        <field name="permission" type="reference" label="Permission" references="Permission" displaykey="ApplicationNodeChildFactory.PermissionNode" parentfactory="Application" fieldclass="ReferenceChoiceField"/>
-        <field name="user" type="ref" references="User" fieldclass="ReferenceChoiceField" parentfactory="User" label="User" displaykey="UserRootNodeChildFactory.UserNode"/>
+    <nodeinfo key="UserNodeChildFactory.UserpermissionNode" name="UserpermissionNode" entity="Userpermission" parententity="User" nodeorder="1" icon="thumb_up" parentmethod="User" parentnode="UserNode" parentnodeandfactory="UserRootNodeChildFactory.UserNode" label="Userpermission" orderable="no" sort="no" access="rw">
+        <field name="permission" type="reference" label="Permission" references="Permission" displaykey="PermissionNode" parentfactory="Application" fieldclass="ReferenceChoiceField"/>
+        <field name="user" type="ref" references="User" fieldclass="ReferenceChoiceField" parentfactory="User" label="User" displaykey="UserNode"/>
         <displaynameformat format="{0}">
             <display field="Permission"/>
         </displaynameformat>
     </nodeinfo>
-    <nodeinfo key="UserNodeChildFactory.UserroleNode" name="UserroleNode" entity="Userrole" parententity="User" nodeorder="2" icon="key" parentnode="UserNode" parentnodeandfactory="UserRootNodeChildFactory.UserNode" label="Userrole">
-        <field name="role" type="reference" label="Role" references="Role" displaykey="ApplicationNodeChildFactory.RoleNode" parentfactory="Application" fieldclass="ReferenceChoiceField"/>
-        <field name="user" type="ref" references="User" fieldclass="ReferenceChoiceField" parentfactory="User" label="User" displaykey="UserRootNodeChildFactory.UserNode"/>
+    <nodeinfo key="UserNodeChildFactory.UserroleNode" name="UserroleNode" entity="Userrole" parententity="User" nodeorder="2" icon="key" parentmethod="User" parentnode="UserNode" parentnodeandfactory="UserRootNodeChildFactory.UserNode" label="Userrole" orderable="no" sort="no" access="rw">
+        <field name="role" type="reference" label="Role" references="Role" displaykey="RoleNode" parentfactory="Application" fieldclass="ReferenceChoiceField"/>
+        <field name="user" type="ref" references="User" fieldclass="ReferenceChoiceField" parentfactory="User" label="User" displaykey="UserNode"/>
         <displaynameformat format="{0}">
             <display field="Role"/>
         </displaynameformat>
     </nodeinfo>
     <nodeinfo key="ApplicationRootNode" name="ApplicationRootNode" entity="ApplicationRoot" isroot="" label="Applications" viewers="Manager" icon="folder_table">
-        <child name="ApplicationNode" entity="Application" nodekey="ApplicationRootNodeChildFactory.ApplicationNode" icon="application" orderable="no" sort="no" access="rw" displaykey="AuthenticationRootNodeChildFactory.AuthenticationNode"/>
+        <child name="ApplicationNode" entity="Application" nodekey="ApplicationRootNodeChildFactory.ApplicationNode" icon="application" orderable="no" sort="no" access="rw"/>
     </nodeinfo>
-    <nodeinfo key="ApplicationRootNodeChildFactory.ApplicationNode" name="ApplicationNode" entity="Application" parententity="ApplicationRoot" nodeorder="1" icon="application" parentnode="ApplicationRootNode" parentnodeandfactory="ApplicationRootNode" label="Application">
-        <child name="RoleNode" entity="Role" nodekey="ApplicationNodeChildFactory.RoleNode" icon="key" orderable="no" sort="no" access="rw" displaykey="ApplicationRootNodeChildFactory.ApplicationNode"/>
-        <child name="PermissionNode" entity="Permission" nodekey="ApplicationNodeChildFactory.PermissionNode" icon="thumb_up" orderable="no" sort="no" access="rw" displaykey="ApplicationRootNodeChildFactory.ApplicationNode"/>
+    <nodeinfo key="ApplicationRootNodeChildFactory.ApplicationNode" name="ApplicationNode" entity="Application" parententity="ApplicationRoot" nodeorder="1" icon="application" parentmethod="Root" parentnode="ApplicationRootNode" parentnodeandfactory="ApplicationRootNode" label="Application" orderable="no" sort="no" access="rw">
+        <child name="RoleNode" entity="Role" nodekey="ApplicationNodeChildFactory.RoleNode" icon="key" orderable="no" sort="no" access="rw"/>
+        <child name="PermissionNode" entity="Permission" nodekey="ApplicationNodeChildFactory.PermissionNode" icon="thumb_up" orderable="no" sort="no" access="rw"/>
         <field name="application" type="String" label="Application" fieldclass="TextField"/>
         <displaynameformat format="{0}">
             <display field="Application"/>
         </displaynameformat>
     </nodeinfo>
-    <nodeinfo key="ApplicationNodeChildFactory.RoleNode" name="RoleNode" entity="Role" parententity="Application" nodeorder="1" icon="key" parentnode="ApplicationNode" parentnodeandfactory="ApplicationRootNodeChildFactory.ApplicationNode" label="Role">
+    <nodeinfo key="ApplicationNodeChildFactory.RoleNode" name="RoleNode" entity="Role" parententity="Application" nodeorder="1" icon="key" parentmethod="Application" parentnode="ApplicationNode" parentnodeandfactory="ApplicationRootNodeChildFactory.ApplicationNode" label="Role" orderable="no" sort="no" access="rw">
         <field name="role" type="String" label="Role" fieldclass="TextField"/>
-        <field name="application" type="ref" references="Application" fieldclass="ReferenceChoiceField" parentfactory="Application" label="Application" displaykey="ApplicationRootNodeChildFactory.ApplicationNode"/>
+        <field name="application" type="ref" references="Application" fieldclass="ReferenceChoiceField" parentfactory="Application" label="Application" displaykey="ApplicationNode"/>
         <displaytitleformat format="{0} for {1}">
             <display field="Role"/>
             <display field="Application"/>
@@ -49,9 +50,9 @@
             <display field="Role"/>
         </displaynameformat>
     </nodeinfo>
-    <nodeinfo key="ApplicationNodeChildFactory.PermissionNode" name="PermissionNode" entity="Permission" parententity="Application" nodeorder="2" icon="thumb_up" parentnode="ApplicationNode" parentnodeandfactory="ApplicationRootNodeChildFactory.ApplicationNode" label="Permission">
+    <nodeinfo key="ApplicationNodeChildFactory.PermissionNode" name="PermissionNode" entity="Permission" parententity="Application" nodeorder="2" icon="thumb_up" parentmethod="Application" parentnode="ApplicationNode" parentnodeandfactory="ApplicationRootNodeChildFactory.ApplicationNode" label="Permission" orderable="no" sort="no" access="rw">
         <field name="permission" type="String" label="Permission" fieldclass="TextField"/>
-        <field name="application" type="ref" references="Application" fieldclass="ReferenceChoiceField" parentfactory="Application" label="Application" displaykey="ApplicationRootNodeChildFactory.ApplicationNode"/>
+        <field name="application" type="ref" references="Application" fieldclass="ReferenceChoiceField" parentfactory="Application" label="Application" displaykey="ApplicationNode"/>
         <displaytitleformat format="{0} for {1}">
             <display field="Permission"/>
             <display field="Application"/>
