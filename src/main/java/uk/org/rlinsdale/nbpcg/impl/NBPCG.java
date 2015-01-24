@@ -96,7 +96,6 @@ public final class NBPCG {
                     //
                     msg.println("Creating information definitions");
                     FreemarkerHashMap entitymap = factory.createFreemarkerHashMapByTransformation(root, NBPCG.class.getResourceAsStream("transform_entityinfo.xsl"));
-                    FreemarkerHashMap nodemap = factory.createFreemarkerHashMapByTransformation(root, NBPCG.class.getResourceAsStream("transform_nodeinfo.xsl"));
                     //
                     msg.println("Creating build definitions");
                     FreemarkerHashMap buildmap = factory.createFreemarkerListMapByTransformation(root, NBPCG.class.getResourceAsStream("transform_build.xsl"));
@@ -134,9 +133,6 @@ public final class NBPCG {
                                 break;
                             case "entitytemplate":
                                 processTemplate(command, entitymap, templates, folders, counter);
-                                break;
-                            case "nodetemplate":
-                                processTemplate(command, nodemap, templates, folders, counter);
                                 break;
                             default:
                                 throw new Exception("Illegal execute action parameter (" + command.getString("action") + ")");
