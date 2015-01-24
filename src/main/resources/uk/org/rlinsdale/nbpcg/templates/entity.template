@@ -58,7 +58,7 @@
 <#assign PARENTENTITYINFO = entityinfo[ENTITYINFO.parentname] >
 <#assign hassortchildren = false >
 <#list ENTITYINFO.child![] as child>
-<#assign hassortchildren = hassortchildren | child.sort??>
+<#assign hassortchildren = hassortchildren | child.sort = "yes" >
 </#list>
 package ${package};
 
@@ -88,7 +88,7 @@ import uk.org.rlinsdale.lindos.lifecycle.ApplicationProperties;
 import ${nodepackage}.*;
 </#if>
 <#list ENTITYINFO.child![] as child>
-<#if child.sort??>
+<#if child.sort = "yes" >
 import ${nodepackage}.${child.references}Node.${child.references}NodeDisplay;
 </#if>
 </#list>
@@ -147,9 +147,9 @@ public class ${ENTITYINFO.name} extends Entity${ENTITYINFO.access?upper_case}<${
 </#if>
 </#list>
 <#list ENTITYINFO.child![] as child>
-<#if child.orderable??>
+<#if child.orderable = "yes">
     private final EntityIndexedReferenceSet<${child.references},${ENTITYINFO.name}Field> ${child.name}s;
-<#elseif child.sort??>
+<#elseif child.sort = "yes" >
     private final EntitySortedReferenceSet<${child.references},${ENTITYINFO.name}Field> ${child.name}s;
 <#else>
     private final EntityReferenceSet<${child.references},${ENTITYINFO.name}Field> ${child.name}s;
@@ -230,9 +230,9 @@ public class ${ENTITYINFO.name} extends Entity${ENTITYINFO.access?upper_case}<${
 </#list>
 </#if>
 <#list ENTITYINFO.child![] as child>
-<#if child.orderable??>
+<#if child.orderable = "yes" >
         ${child.name}s = new EntityIndexedReferenceSet<>(classDescription()+">${child.references}s", ${child.name?upper_case}S, "${child.dbname}", getId(), ${child.references}.EM.class);
-<#elseif child.sort??>
+<#elseif child.sort = "yes" >
         ${child.name}s = new EntitySortedReferenceSet<>(classDescription()+">${child.references}s", ${child.name?upper_case}S, new ${child.references}Comparator(), "${child.dbname}", getId(), ${child.references}.EM.class);
 <#else>
         ${child.name}s = new EntityReferenceSet<>(classDescription()+">${child.references}s", ${child.name?upper_case}S, "${child.dbname}", getId(), ${child.references}.EM.class);
@@ -319,7 +319,7 @@ public class ${ENTITYINFO.name} extends Entity${ENTITYINFO.access?upper_case}<${
         protected boolean ruleCheck() {
 <#list ENTITYINFO.field![] as pref>
 <#if pref.type="ref" || pref.type="rootref" >
-            return get${pref.name?cap_first}().get${ENTITYINFO.name}s().stream().noneMatch((e) -> (e != ${ENTITYINFO.name}.this && e.get${field.name?cap_first}().equals(${field.name})));
+            return getParent().get${ENTITYINFO.name}s().stream().noneMatch((e) -> (e != ${ENTITYINFO.name}.this && e.get${field.name?cap_first}().equals(${field.name})));
 
 </#if>
 </#list>
@@ -392,11 +392,11 @@ public class ${ENTITYINFO.name} extends Entity${ENTITYINFO.access?upper_case}<${
 <#if field.type = "ref" >
 
     /**
-     * Get the ${field.name?cap_first} Entity associated with this entity.
+     * Get the parent Entity associated with this entity.
      *
      * @return the ${field.name?cap_first} entity
      */
-    public ${field.references} get${field.name?cap_first}() {
+    public ${field.references} getParent() {
         return ${field.name}.get();
     }
 
@@ -414,11 +414,11 @@ public class ${ENTITYINFO.name} extends Entity${ENTITYINFO.access?upper_case}<${
     }
 
     /**
-     * Set the ${field.name?cap_first} Entity associated with this entity.
+     * Set the Parent Entity associated with this entity.
      *
      * @param e the ${field.name} entity
      */
-    public void set${field.name?cap_first}(${field.references} e) {
+    public void setParent(${field.references} e) {
         if (${field.name}.getId() != e.getId()) {
             ensureEditing();
             if (${field.name}.isValidEntity()) {
@@ -460,11 +460,11 @@ public class ${ENTITYINFO.name} extends Entity${ENTITYINFO.access?upper_case}<${
 <#elseif field.type = "rootref" >
 
     /**
-     * Get the ${field.name?cap_first} Entity associated with this entity.
+     * Get the parent Entity associated with this entity.
      *
      * @return the ${field.name?cap_first} entity
      */
-    public ${field.references} get${field.name?cap_first}() {
+    public ${field.references} getParent() {
         return root;
     }
 <#elseif field.type == "idx" >
@@ -719,7 +719,7 @@ public class ${ENTITYINFO.name} extends Entity${ENTITYINFO.access?upper_case}<${
     public List<${child.references}> get${child.references}s() { 
         return ${child.name}s.get();
     }
-<#if child.orderable??>
+<#if child.orderable = "yes">
 
     /**
      * Reorder the list of ${child.name}s associated with entity.
@@ -767,7 +767,7 @@ public class ${ENTITYINFO.name} extends Entity${ENTITYINFO.access?upper_case}<${
     protected final void _remove() {
 <#list ENTITYINFO.field as field>
 <#if field.type = "ref"  || field.type = "rootref" >
-        get${field.name?cap_first}().removeInternal${ENTITYINFO.name}(this);
+        getParent().removeInternal${ENTITYINFO.name}(this);
 </#if>
 </#list>
     }
@@ -908,7 +908,7 @@ public class ${ENTITYINFO.name} extends Entity${ENTITYINFO.access?upper_case}<${
         }
     }
 <#list ENTITYINFO.child![] as child>
-<#if child.sort??>
+<#if child.sort = "yes" >
 
     private class ${child.references}Comparator implements Comparator<${child.references}> {
         @Override
@@ -930,7 +930,7 @@ public class ${ENTITYINFO.name} extends Entity${ENTITYINFO.access?upper_case}<${
             list.addAll(parent.get${ENTITYINFO.name}s());
         });
 <#else>
-        list.addAll(${ENTITYINFO.parentname}.getRoot().get${ENTITYINFO.name}s());
+        list.addAll(${ENTITYINFO.parentname}.get().get${ENTITYINFO.name}s());
 </#if>
         return list;
     }

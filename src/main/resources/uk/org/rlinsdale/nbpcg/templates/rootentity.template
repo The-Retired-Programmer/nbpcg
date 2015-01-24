@@ -57,7 +57,7 @@
 <#assign ENTITYINFO = entityinfo[useentityinfo] >
 <#assign hassortchildren = false>
 <#list ENTITYINFO.child as child>
-<#assign hassortchildren = hassortchildren | child.sort?? >
+<#assign hassortchildren = hassortchildren | child.sort = "yes" >
 <#assign haschildren = true >
 </#list>
 package ${package};
@@ -81,7 +81,7 @@ import uk.org.rlinsdale.nbpcglibrary.data.entityreferences.*;
 import ${nodepackage}.*;
 </#if>
 <#list ENTITYINFO.child![] as child>
-<#if child.sort??>
+<#if child.sort = "yes" >
 import ${nodepackage}.${child.references}Node.${child.references}NodeDisplay;
 </#if>
 </#list>
@@ -110,9 +110,9 @@ public class ${ENTITYINFO.name} extends Entity {
     }
 
 <#list ENTITYINFO.child![] as child>
-<#if child.orderable??>
+<#if child.orderable = "yes" >
     private final EntityIndexedReferenceSet<${child.references}, ${ENTITYINFO.name}Field> ${child.name}s;
-<#elseif child.sort??>
+<#elseif child.sort = "yes" >
     private final EntitySortedReferenceSet<${child.references}, ${ENTITYINFO.name}Field> ${child.name}s;
 <#else>
     private final EntityReferenceSet<${child.references}, ${ENTITYINFO.name}Field> ${child.name}s;
@@ -129,7 +129,7 @@ public class ${ENTITYINFO.name} extends Entity {
      * 
      * @return the ${ENTITYINFO.name} entity
      */
-    public static ${ENTITYINFO.name} getRoot() {
+    public static ${ENTITYINFO.name} get() {
         return Lookup.getDefault().lookup(${ENTITYINFO.name}.class);
     }
     
@@ -139,9 +139,9 @@ public class ${ENTITYINFO.name} extends Entity {
     public ${ENTITYINFO.name}() {
         super("${ENTITYINFO.name}");
 <#list ENTITYINFO.child![] as child>
-<#if child.orderable??>
+<#if child.orderable = "yes" >
         ${child.name}s = new EntityIndexedReferenceSet<>(classDescription()+">${child.name?cap_first}s", ${child.name?upper_case}S, ${child.references}.EM.class);
-<#elseif child.sort??>
+<#elseif child.sort = "yes" >
         ${child.name}s = new EntitySortedReferenceSet<>(classDescription()+">${child.name?cap_first}s", ${child.name?upper_case}S, new ${child.references}Comparator(), ${child.references}.EM.class);
 <#else>
         ${child.name}s = new EntityReferenceSet<>(classDescription()+">${child.name?cap_first}s", ${child.name?upper_case}S, ${child.references}.EM.class);
@@ -201,7 +201,7 @@ public class ${ENTITYINFO.name} extends Entity {
      * @param listener the set change listener to be added
      */
     public static void add${child.references}sSetChangeListeners(Listener<SetChangeEventParams> listener) {
-        getRoot().${child.name}s.addSetListener(listener);
+        get().${child.name}s.addSetListener(listener);
     }
 
     /**
@@ -210,7 +210,7 @@ public class ${ENTITYINFO.name} extends Entity {
      * @param listener the set change listener to be removed
      */
     public static void remove${child.references}sSetChangeListeners(Listener<SetChangeEventParams> listener) {
-        getRoot().${child.name}s.removeSetListener(listener);
+        get().${child.name}s.removeSetListener(listener);
     }
 
     /**
@@ -221,7 +221,7 @@ public class ${ENTITYINFO.name} extends Entity {
     public List<${child.references}> get${child.references}s() { 
         return ${child.name}s.get();
     }
-<#if child.orderable??>
+<#if child.orderable = "yes" >
 
    /**
      * Reorder the list of ${child.references}s
@@ -244,7 +244,7 @@ public class ${ENTITYINFO.name} extends Entity {
 </#list>
         }
 <#list ENTITYINFO.child![] as child>
-<#if child.sort??>
+<#if child.sort = "yes" >
 
     private class ${child.references}Comparator implements Comparator<${child.references}> {
         @Override

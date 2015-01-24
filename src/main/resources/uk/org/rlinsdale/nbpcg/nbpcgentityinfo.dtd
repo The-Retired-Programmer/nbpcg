@@ -9,17 +9,24 @@
     <!ATTLIST nbpcg-entity-info
         name CDATA #REQUIRED
         >
-    <!ELEMENT entityinfo (field*, child*)  >
+    <!ELEMENT entityinfo (field*, child*, sortformat*, displaytitleformat*, displaynameformat*)  >
         <!ATTLIST entityinfo
             key CDATA #REQUIRED
             name CDATA #REQUIRED
+            isroot CDATA #IMPLIED
+            nodeorder CDATA #IMPLIED
             dbkey CDATA #IMPLIED
             access (rw|ro) #IMPLIED
             dbtablename CDATA #IMPLIED 
             withfields (Idandstamp) #IMPLIED 
             type (Idkeyauto) #IMPLIED
             parentname CDATA #IMPLIED
-            ordercolumn CDATA #IMPLIED 
+            ordercolumn CDATA #IMPLIED
+            orderable (yes|no) #IMPLIED
+            sort (yes|no) #IMPLIED
+            label CDATA #IMPLIED
+            viewers CDATA #IMPLIED
+            icon CDATA #REQUIRED 
             >
         <!ELEMENT field EMPTY  >
             <!ATTLIST field
@@ -56,12 +63,29 @@
                 dbname CDATA #IMPLIED 
                 nodekey CDATA #IMPLIED 
                 references CDATA #REQUIRED
-                sort CDATA #IMPLIED
-                orderable (yes) #IMPLIED 
-                copymovenode CDATA #IMPLIED 
+                sort (yes|no) #REQUIRED
+                orderable (yes|no) #REQUIRED
+                access (rw|ro) #REQUIRED
                 copymoveentity CDATA #IMPLIED 
                 copymovefield CDATA #IMPLIED
                 >
+        <!ELEMENT sortformat (display*)  >
+            <!ATTLIST sortformat
+                format CDATA #REQUIRED
+                >
+        <!ELEMENT displaynameformat  (display*)  >
+            <!ATTLIST displaynameformat
+                format CDATA #REQUIRED
+                >
+        <!ELEMENT displaytitleformat  (display*)  >
+            <!ATTLIST displaytitleformat
+                format CDATA #REQUIRED
+                >
+            <!ELEMENT display EMPTY >
+                <!ATTLIST display 
+                    field CDATA #REQUIRED
+                    length CDATA #IMPLIED
+                    >
     <!ELEMENT dbinfo (table+) >
         <!ATTLIST dbinfo
             key CDATA #REQUIRED

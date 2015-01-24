@@ -54,7 +54,7 @@
 </#if>
 <#-- Freemarker Template for ChildFactory class plus an inner classes for Nodes. -->
 <#assign templateauthor = "Richard Linsdale (richard.linsdale at blueyonder.co.uk)" />
-<#assign NODEINFO = nodeinfo[usenodeinfo] >
+<#assign ENTITYINFO = entityinfo[useentityinfo] >
 <#if type = "Icon" >
 <#assign type2 = "Icon" />
 <#else>
@@ -74,61 +74,61 @@ import uk.org.rlinsdale.nbpcglibrary.node.nodes.*;
 import uk.org.rlinsdale.nbpcglibrary.node.properties.*;
 import uk.org.rlinsdale.nbpcglibrary.common.*;
 import org.openide.nodes.PropertySupport;
-import ${datapackage}.${NODEINFO.entity}.${NODEINFO.entity}Field;
-<#list NODEINFO.field![] as field>
+import ${datapackage}.${ENTITYINFO.name}.${ENTITYINFO.name}Field;
+<#list ENTITYINFO.field![] as field>
 <#if field.type="reference" || field.type ="ref">
-import ${nodepackage}.${field.references}Node.${field.displaykey}Display;
+import ${nodepackage}.${field.references}Node.${field.references}NodeDisplay;
 </#if>
 </#list>
-<#list NODEINFO.child![] as c>
-import static ${nodepackage}.${c.name}.${c.name?upper_case}_FLAVOR;
+<#list ENTITYINFO.child![] as c>
+import static ${nodepackage}.${c.name?cap_first}Node.${c.name?upper_case}NODE_FLAVOR;
 <#if c.copymovenode??>
-<#assign COPYMOVENODEINFO = nodeinfo[c.copymovenode] >
-import static ${nodepackage}.${COPYMOVENODEINFO.name}.${COPYMOVENODEINFO.name?upper_case}_FLAVOR;
+<#assign COPYMOVEENTITYINFO = entityinfo[c.copymoveentity] >
+import static ${nodepackage}.${COPYMOVEENTITYINFO.name}Node.${COPYMOVEENTITYINFO.name?upper_case}NODE_FLAVOR;
 </#if>
 </#list>
 import uk.org.rlinsdale.nbpcglibrary.data.entity.EntityFieldChangeEventParams.CommonEntityField;
 import static uk.org.rlinsdale.nbpcglibrary.data.entity.EntityFieldChangeEventParams.CommonEntityField.*;
 
 /**
- * Node for ${NODEINFO.name}.
+ * Node for ${ENTITYINFO.name}Node.
  */
-public class ${NODEINFO.name} extends ${type2}Node${NODEINFO.access?upper_case}<${NODEINFO.entity}, ${NODEINFO.entity}Field> {
+public class ${ENTITYINFO.name}Node extends ${type2}Node${ENTITYINFO.access?upper_case}<${ENTITYINFO.name}, ${ENTITYINFO.name}Field> {
 
-    public static final DataFlavor ${NODEINFO.name?upper_case}_FLAVOR = new DataFlavor(${NODEINFO.name}.class, "${NODEINFO.name}");
+    public static final DataFlavor ${ENTITYINFO.name?upper_case}NODE_FLAVOR = new DataFlavor(${ENTITYINFO.name}Node.class, "${ENTITYINFO.name}Node");
 
 <#assign haschildren = false>
 <#assign haseditablechildren = false>
-<#list NODEINFO.child![] as c>
+<#list ENTITYINFO.child![] as c>
 <#assign haschildren = true >
 <#assign haseditablechildren = haseditablechildren | (c.access = "rw") >
 </#list>
 <#if haschildren >
 
-        private final ${NODEINFO.name}ChildFactory cf;
+        private final ${ENTITYINFO.name}NodeChildFactory cf;
 
         /**
          * Constructor
          *
          * @param e the entity associated with this node
          */
-        public ${NODEINFO.name}(${NODEINFO.entity} e) {
-            this(e, new ${NODEINFO.name}ChildFactory(e));
+        public ${ENTITYINFO.name}Node(${ENTITYINFO.name} e) {
+            this(e, new ${ENTITYINFO.name}NodeChildFactory(e));
         }
 
-        private ${NODEINFO.name}(${NODEINFO.entity} e, ${NODEINFO.name}ChildFactory cf) {
-            super("${NODEINFO.name}", "${NODEINFO.icon}", e, cf, ${NODEINFO.entity}.EM.class,
+        private ${ENTITYINFO.name}Node(${ENTITYINFO.name} e, ${ENTITYINFO.name}NodeChildFactory cf) {
+            super("${ENTITYINFO.name}Node", "${ENTITYINFO.icon}", e, cf, ${ENTITYINFO.name}.EM.class,
                 new DataFlavorAndAction[] {
-<#list NODEINFO.child![] as c>
-                    new DataFlavorAndAction(${c.name?upper_case}_FLAVOR, DataFlavorAndAction.COPYCUT<#if c.orderable = "yes">MOVE</#if>),
+<#list ENTITYINFO.child![] as c>
+                    new DataFlavorAndAction(${c.name?upper_case}NODE_FLAVOR, DataFlavorAndAction.COPYCUT<#if c.orderable = "yes">MOVE</#if>),
 <#if c.copymovenode??>
-<#assign COPYMOVENODEINFO = nodeinfo[c.copymovenode] >
-                    new DataFlavorAndAction(${COPYMOVENODEINFO.parententity}ChildFactory.${COPYMOVENODEINFO.name?upper_case}_FLAVOR, DataFlavorAndAction.COPYMOVE),
+<#assign COPYMOVEENTITYINFO = entityinfo[c.copymoveentity] >
+                    new DataFlavorAndAction(${COPYMOVEENTITYINFO.name?upper_case}NODE_FLAVOR, DataFlavorAndAction.COPYMOVE),
 </#if>
 </#list>
                     }
                     // TODO - decide on state of this cut/destroy flag  - currently it is always true
-                 <#if NODEINFO.access = "rw">, true</#if>);
+                 <#if ENTITYINFO.access = "rw">, true</#if>);
             this.cf = cf;
         }
 <#else>
@@ -138,43 +138,43 @@ public class ${NODEINFO.name} extends ${type2}Node${NODEINFO.access?upper_case}<
          *
          * @param e the entity associated with this node
          */
-        public ${NODEINFO.name}(${NODEINFO.entity} e) {
-            super("${NODEINFO.name}", "${NODEINFO.icon}", e, ${NODEINFO.entity}.EM.class
+        public ${ENTITYINFO.name}Node(${ENTITYINFO.name} e) {
+            super("${ENTITYINFO.name}Node", "${ENTITYINFO.icon}", e, ${ENTITYINFO.name}.EM.class
                     // TODO - decide on state of this cut/destroy flag  - currently it is always true
-                    <#if NODEINFO.access = "rw">, true</#if>);
+                    <#if ENTITYINFO.access = "rw">, true</#if>);
         }
 </#if>
 
     @UseCommonNodeActions({
-<#if NODEINFO.orderable = "yes">
+<#if ENTITYINFO.orderable = "yes">
             @UseCommonNodeAction(id = "uk.org.rlinsdale.nbpcglibrary.node.actions.NodeReorderAction",
-                    node = "${NODEINFO.name}", position = 810),
+                    node = "${ENTITYINFO.name}Node", position = 810),
 </#if>
 <#if haseditablechildren >
             @UseCommonNodeAction(id = "uk.org.rlinsdale.nbpcglibrary.node.actions.NodePasteAction",
-                    node = "${NODEINFO.name}", position = 830),
+                    node = "${ENTITYINFO.name}Node", position = 830),
 </#if>
-<#if NODEINFO.access = "rw" >
+<#if ENTITYINFO.access = "rw" >
             @UseCommonNodeAction(id = "uk.org.rlinsdale.nbpcglibrary.node.actions.NodeCutAction",
-                    node = "${NODEINFO.name}",
+                    node = "${ENTITYINFO.name}Node",
                     position = 850, separator = 800),
             @UseCommonNodeAction(id = "uk.org.rlinsdale.nbpcglibrary.node.actions.NodeCopyAction",
-                    node = "${NODEINFO.name}", position = 870),
+                    node = "${ENTITYINFO.name}Node", position = 870),
             @UseCommonNodeAction(id = "uk.org.rlinsdale.nbpcglibrary.node.actions.NodeDeleteAction",
-                    node = "${NODEINFO.name}", position = 890),
+                    node = "${ENTITYINFO.name}Node", position = 890),
 </#if>
-<#if NODEINFO.orderable = "yes" >
+<#if ENTITYINFO.orderable = "yes" >
             @UseCommonNodeAction(id = "uk.org.rlinsdale.nbpcglibrary.node.actions.NodeMoveUpAction",
-                    node = "${NODEINFO.name}", position = 910),
+                    node = "${ENTITYINFO.name}Node", position = 910),
             @UseCommonNodeAction(id = "uk.org.rlinsdale.nbpcglibrary.node.actions.NodeMoveDownAction",
-                    node = "${NODEINFO.name}", position = 930),
+                    node = "${ENTITYINFO.name}Node", position = 930),
 </#if>
         })
     private static void useCommonNodeActions() {} // a dummy method
  
         @Override
         protected DataFlavor _getDataFlavor() {
-           return ${NODEINFO.name?upper_case}_FLAVOR; 
+           return ${ENTITYINFO.name?upper_case}NODE_FLAVOR; 
         }
 
          /**
@@ -184,7 +184,7 @@ public class ${NODEINFO.name} extends ${type2}Node${NODEINFO.access?upper_case}<
          */
         @Override
         public String getDisplayName() {
-            return  ${NODEINFO.name}Display.getDisplayName(getEntity(), "#undefined#");
+            return  ${ENTITYINFO.name}NodeDisplay.getDisplayName(getEntity(), "#undefined#");
         }
 
         /**
@@ -194,12 +194,12 @@ public class ${NODEINFO.name} extends ${type2}Node${NODEINFO.access?upper_case}<
          */
         @Override
         public String getDisplayTitle() {
-            return  ${NODEINFO.name}Display.getDisplayTitle(getEntity(), "#undefined#");
+            return  ${ENTITYINFO.name}NodeDisplay.getDisplayTitle(getEntity(), "#undefined#");
         }
 
-<#if NODEINFO.access = "rw" >
+<#if ENTITYINFO.access = "rw" >
         IntegerReadonlyProperty idproperty;
-<#list NODEINFO.field![] as field>
+<#list ENTITYINFO.field![] as field>
 <#if field.type != "rootref" >
         StringReadonlyProperty ${field.name}property;
 </#if>
@@ -208,20 +208,20 @@ public class ${NODEINFO.name} extends ${type2}Node${NODEINFO.access?upper_case}<
 </#if>
         @Override
         protected List<PropertySupport.ReadOnly<?>> createPropertyItems(List<PropertySupport.ReadOnly<?>> props) {
-            ${NODEINFO.entity} e =  getEntity();
+            ${ENTITYINFO.name} e =  getEntity();
             if (e != null) {
-                props.add(new StringReadonlyProperty("Node Type", "${NODEINFO.name}"));
-<#if NODEINFO.access = "rw" >
+                props.add(new StringReadonlyProperty("Node Type", "${ENTITYINFO.name}Node"));
+<#if ENTITYINFO.access = "rw" >
                 props.add(idproperty = new IntegerReadonlyProperty("Id",e.getId()));
 <#else>
                 props.add(new IntegerReadonlyProperty("Id",e.getId()));
 </#if>
-<#list NODEINFO.field![] as field>
+<#list ENTITYINFO.field![] as field>
 <#if field.type != "rootref" >
-<#if NODEINFO.access = "rw" >
-                props.add(${field.name}property = new StringReadonlyProperty("${field.label}", ${NODEINFO.name}Display.format${field.name?cap_first}(e)));
+<#if ENTITYINFO.access = "rw" >
+                props.add(${field.name}property = new StringReadonlyProperty("${field.label}", ${ENTITYINFO.name}NodeDisplay.format${field.name?cap_first}(e)));
 <#else>
-                props.add(new StringReadonlyProperty("${field.label}", ${NODEINFO.name}Display.format${field.name?cap_first}(e)));
+                props.add(new StringReadonlyProperty("${field.label}", ${ENTITYINFO.name}NodeDisplay.format${field.name?cap_first}(e)));
 </#if>
 </#if>
 </#list>
@@ -229,17 +229,17 @@ public class ${NODEINFO.name} extends ${type2}Node${NODEINFO.access?upper_case}<
             return props;
         }
 
-<#if NODEINFO.access = "rw" >
+<#if ENTITYINFO.access = "rw" >
         @Override
         protected void _processCommonFieldChange(CommonEntityField field) {
-            ${NODEINFO.entity} e =  getEntity();
+            ${ENTITYINFO.name} e =  getEntity();
             switch (field) {
                 case ALL:
                     if (e != null && idproperty != null) {
                         idproperty.update(e.getId());
-<#list NODEINFO.field![] as field>
+<#list ENTITYINFO.field![] as field>
 <#if field.type != "rootref" >
-                        ${field.name}property.update(${NODEINFO.name}Display.format${field.name?cap_first}(e));
+                        ${field.name}property.update(${ENTITYINFO.name}NodeDisplay.format${field.name?cap_first}(e));
 </#if>
 </#list>
                         propertyChange();
@@ -257,27 +257,28 @@ public class ${NODEINFO.name} extends ${type2}Node${NODEINFO.access?upper_case}<
         }
         
 </#if>
-<#if NODEINFO.access = "rw" >
+<#if ENTITYINFO.access = "rw" >
         @Override
-        protected void _processFieldChange(${NODEINFO.entity}Field field) {
-            ${NODEINFO.entity} e =  getEntity();
+        protected void _processFieldChange(${ENTITYINFO.name}Field field) {
+            ${ENTITYINFO.name} e =  getEntity();
             switch (field) {
-<#list NODEINFO.field![] as field>
+<#list ENTITYINFO.field![] as field>
 <#if field.type = "rootref" >
 <#elseif field.type = "idx" >
                 case ${field.name?upper_case}:
                     if (e != null && ${field.name}property != null) {
-                        ${field.name}property.update(${NODEINFO.name}Display.format${field.name?cap_first}(e));
+                        ${field.name}property.update(${ENTITYINFO.name}NodeDisplay.format${field.name?cap_first}(e));
                         propertyChange("${field.label}");
                     }
+                    break;
 <#else>
                 case ${field.name?upper_case}:
                     if (e != null && ${field.name}property != null) {
-                        ${field.name}property.update(${NODEINFO.name}Display.format${field.name?cap_first}(e));
+                        ${field.name}property.update(${ENTITYINFO.name}NodeDisplay.format${field.name?cap_first}(e));
                         propertyChange("${field.label}");
                     }
 <#assign namechange = "no">
-<#list NODEINFO.displaynameformat as df >
+<#list ENTITYINFO.displaynameformat as df >
 <#list df.display as dp>
 <#if dp.field = field.label >
 <#assign namechange = "yes" >
@@ -288,8 +289,8 @@ public class ${NODEINFO.name} extends ${type2}Node${NODEINFO.access?upper_case}<
                     nameChange();
 </#if>
 <#assign titlechange = "no">
-<#if NODEINFO.displaytitleformat??>
-<#list NODEINFO.displaytitleformat as df >
+<#if ENTITYINFO.displaytitleformat??>
+<#list ENTITYINFO.displaytitleformat as df >
 <#list df.display as dp>
 <#if dp.field = field.label >
 <#assign titlechange = "yes" >
@@ -302,8 +303,8 @@ public class ${NODEINFO.name} extends ${type2}Node${NODEINFO.access?upper_case}<
 <#if titlechange = "yes" >
                     titleChange();
 </#if>
-</#if>
                     break;
+</#if>
 </#list>
             }
         }
@@ -311,11 +312,11 @@ public class ${NODEINFO.name} extends ${type2}Node${NODEINFO.access?upper_case}<
 </#if>
         @Override
         protected void _moveAddChild(Entity child) {
-<#list NODEINFO.child![] as c>
+<#list ENTITYINFO.child![] as c>
 <#if c.copymoveentity??>
             if (child instanceof ${c.copymoveentity}) {
-                ${c.entity}.EM em = ${c.entity}.getEM();
-                ${c.entity} e = em.getNew(getEntity());
+                ${c.name?cap_first}.EM em = ${c.name?cap_first}.getEM();
+                ${c.name?cap_first} e = em.getNew(getEntity());
                 e.set${c.copymovefield?cap_first}((${c.copymoveentity}) child);
                 return;
             }
@@ -326,38 +327,38 @@ public class ${NODEINFO.name} extends ${type2}Node${NODEINFO.access?upper_case}<
 
         @Override
         protected void _cutAddChild(Entity child) {
-<#list NODEINFO.child![] as c>
-            if (child instanceof ${c.entity}) {
-                getEntity().add${c.entity}((${c.entity}) child);
+<#list ENTITYINFO.child![] as c>
+            if (child instanceof ${c.name?cap_first}) {
+                getEntity().add${c.name?cap_first}((${c.name?cap_first}) child);
                 return;
             }
 </#list>
-            throw new LogicException("${NODEINFO.entity} Entity does not have a child of the requested class (" + child.getClass().getSimpleName() + ")");
+            throw new LogicException("${ENTITYINFO.name} Entity does not have a child of the requested class (" + child.getClass().getSimpleName() + ")");
         }
 
         @Override
         protected void _copyAddChild(Entity child) {
-<#list NODEINFO.child![] as c>
-            if (child instanceof ${c.entity}) {
-                ${c.entity}.getEM().getNew((${c.entity})child ,getEntity());
+<#list ENTITYINFO.child![] as c>
+            if (child instanceof ${c.name?cap_first}) {
+                ${c.name?cap_first}.getEM().getNew((${c.name?cap_first})child ,getEntity());
                 return;
             }
 <#if c.copymoveentity??>
             if (child instanceof ${c.copymoveentity}) {
-                ${c.entity}.EM em = ${c.entity}.getEM();
-                ${c.entity} e = em.getNew(getEntity());
+                ${c.name?cap_first}.EM em = ${c.name?cap_first}.getEM();
+                ${c.name?cap_first} e = em.getNew(getEntity());
                 e.set${c.copymovefield?cap_first}((${c.copymoveentity}) child);
                 return;
             }
 </#if>
 </#list>
-            throw new LogicException("${NODEINFO.entity} Entity does not have a child of the requested class (" + child.getClass().getSimpleName() + ")");
+            throw new LogicException("${ENTITYINFO.name} Entity does not have a child of the requested class (" + child.getClass().getSimpleName() + ")");
         }
 
-<#if NODEINFO.access = "rw" >
+<#if ENTITYINFO.access = "rw" >
         @Override
         protected void _cutAndPasteRemove() {
-            getEntity().get${NODEINFO.parentmethod}().remove${NODEINFO.entity}(getEntity());
+            getEntity().getParent().remove${ENTITYINFO.name}(getEntity());
         }
 
         @Override
@@ -368,31 +369,31 @@ public class ${NODEINFO.name} extends ${type2}Node${NODEINFO.access?upper_case}<
 </#if>
         @Override
         protected void _moveReorderChildByFlavor(DataFlavor df, int[] perm) {
-<#list NODEINFO.child![] as c>
+<#list ENTITYINFO.child![] as c>
 <#if c.orderable = "yes" >
-            if (df == ${c.name?upper_case}_FLAVOR) {
-                getEntity().reorder${c.entity}s(perm, cf.getOffsetMin${c.entity}s(), cf.getOffsetMax${c.entity}s());
+            if (df == ${c.name?upper_case}NODE_FLAVOR) {
+                getEntity().reorder${c.name?cap_first}s(perm, cf.getOffsetMin${c.name?cap_first}s(), cf.getOffsetMax${c.name?cap_first}s());
                 return;
             }
 </#if>
 </#list>
-            throw new LogicException("${NODEINFO.entity} Entity does not have a child of the requested DataFlavor that is reorderable");
+            throw new LogicException("${ENTITYINFO.name} Entity does not have a child of the requested DataFlavor that is reorderable");
         }
 
         @Override
         public Action getPreferredAction() {
-            return findDefaultAction("${NODEINFO.name}");
+            return findDefaultAction("${ENTITYINFO.name}Node");
         }
 
         @Override
         public Action[] getActions(boolean context) {
-            return findActions("${NODEINFO.name}");
+            return findActions("${ENTITYINFO.name}Node");
         }
 
-    public static class ${NODEINFO.name}Display {
+    public static class ${ENTITYINFO.name}NodeDisplay {
 
-        public static String getDisplayName(${NODEINFO.entity} e, String undefined) {
-<#list NODEINFO.displaynameformat as df >
+        public static String getDisplayName(${ENTITYINFO.name} e, String undefined) {
+<#list ENTITYINFO.displaynameformat as df >
             if (e != null) {
                 return MessageFormat.format("${df.format}", new Object[] {<#list df.display as dp>format${dp.field}(e)<#if dp_has_next>, </#if></#list>});
             } else {
@@ -401,9 +402,9 @@ public class ${NODEINFO.name} extends ${type2}Node${NODEINFO.access?upper_case}<
 </#list>
         }
 
-        public static String getDisplayTitle(${NODEINFO.entity} e, String undefined) {
-<#if NODEINFO.displaytitleformat??>
-<#list NODEINFO.displaytitleformat as df>
+        public static String getDisplayTitle(${ENTITYINFO.name} e, String undefined) {
+<#if ENTITYINFO.displaytitleformat??>
+<#list ENTITYINFO.displaytitleformat as df>
             if (e != null) {
                 return MessageFormat.format("${df.format}", new Object[] {<#list df.display as dp>format${dp.field}(e)<#if dp_has_next>, </#if></#list>});
             } else {
@@ -415,9 +416,9 @@ public class ${NODEINFO.name} extends ${type2}Node${NODEINFO.access?upper_case}<
 </#if>
         }
 
-public static String getSort(${NODEINFO.entity} e, String undefined) {
-<#if NODEINFO.sortformat?? >
-<#list NODEINFO.sortformat as df>
+public static String getSort(${ENTITYINFO.name} e, String undefined) {
+<#if ENTITYINFO.sortformat?? >
+<#list ENTITYINFO.sortformat as df>
             if (e != null) {
                 return MessageFormat.format("${df.format}", <#list df.display as dp>format${dp.field}(e<#if dp.length??>, ${dp.length}</#if>)<#if dp_has_next>, </#if></#list>);
             } else {
@@ -429,13 +430,13 @@ public static String getSort(${NODEINFO.entity} e, String undefined) {
 </#if>
         }
 
-<#list NODEINFO.field![] as field>
-
-        public static String format${field.name?cap_first}(${NODEINFO.entity} e) {
+<#list ENTITYINFO.field![] as field>
+<#if field.type != "rootref" >
+        public static String format${field.name?cap_first}(${ENTITYINFO.name} e) {
 <#if field.type="reference" >
-            return ${field.displaykey}Display.getDisplayTitle(e.get${field.name?cap_first}(), "");
+            return ${field.references}NodeDisplay.getDisplayTitle(e.get${field.name?cap_first}(), "");
 <#elseif field.type="ref" >
-        return ${field.displaykey}Display.getDisplayName(e.get${field.name?cap_first}(), "");
+        return ${field.references}NodeDisplay.getDisplayName(e.getParent(), "");
 <#elseif field.type="int" >
             return Integer.toString(e.get${field.name?cap_first}());
 <#elseif field.type="idx"  >
@@ -450,16 +451,18 @@ public static String getSort(${NODEINFO.entity} e, String undefined) {
             return e.get${field.name?cap_first}();
 </#if>
         }
+
+</#if>
 </#list>
-<#list NODEINFO.field![] as field>
+<#list ENTITYINFO.field![] as field>
 <#if field.type="int" >
 
-        public static String format${field.name?cap_first}(${NODEINFO.entity} e, int minDigits) {
+        public static String format${field.name?cap_first}(${ENTITYINFO.name} e, int minDigits) {
             return StringX.padLeft(format${field.name?cap_first}(e),minDigits,'0');
         }
 <#elseif field.type="String" >
 
-    public static String format${field.name?cap_first}(${NODEINFO.entity} e, int minDigits) {
+    public static String format${field.name?cap_first}(${ENTITYINFO.name} e, int minDigits) {
             return StringX.padLeftIfInt(format${field.name?cap_first}(e),minDigits,'0');
         }
 </#if>

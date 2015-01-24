@@ -69,10 +69,10 @@
             </xsl:if>
         </nbpcg-build>
     </xsl:template>
-    
+   
     <xsl:template name="rootentity">
         <xsl:for-each select="node" >
-            <execute action="entitytemplate" template="rootentity" folder="data" filename="{@name}Root.java" useentityinfo="{concat(@name,'Root')}" >
+            <execute action="entitytemplate" template="rootentity" folder="data" filename="{@name}Root.java" useentityinfo="{@name}Root" >
                 <xsl:attribute name="nodepackage">
                     <xsl:value-of select="/nbpcg/build/project/generate[@type='node']/@package"/>
                 </xsl:attribute>
@@ -89,21 +89,7 @@
                 <xsl:variable name="ename">
                     <xsl:value-of select="@references" />
                 </xsl:variable>
-                <xsl:variable name="nkey">
-                    <xsl:for-each select="//node[@name=$ename]" >
-                        <xsl:if test="position() = 1" >
-                            <xsl:choose>
-                                <xsl:when test="local-name(..) = 'node'">
-                                    <xsl:value-of select="concat(../@name, 'NodeChildFactory.',$ename,'Node')" />
-                                </xsl:when>
-                                <xsl:otherwise>
-                                    <xsl:value-of select="concat($ename, 'RootNodeChildFactory.',$ename,'Node')" />
-                                </xsl:otherwise>
-                            </xsl:choose>
-                        </xsl:if>
-                    </xsl:for-each>
-                </xsl:variable>
-                <execute action="nodetemplate" template="choice" folder="nodeeditor" filename="{@references}ChoiceField.java" usenodeinfo="{$nkey}" >
+                <execute action="entitytemplate" template="choice" folder="nodeeditor" filename="{@references}ChoiceField.java" useentityinfo="{$ename}" >
                     <xsl:attribute name="datapackage">
                         <xsl:value-of select="/nbpcg/build/project/generate[@type='data']/@package"/>
                     </xsl:attribute>
@@ -126,21 +112,7 @@
                     <xsl:with-param name="string" select="@name" />
                 </xsl:call-template>
             </xsl:variable>
-            <xsl:variable name="nkey">
-                <xsl:for-each select="//node[@name=$ename]" >
-                    <xsl:if test="position() = 1" >
-                        <xsl:choose>
-                            <xsl:when test="local-name(..) = 'node'">
-                                <xsl:value-of select="concat(../@name, 'NodeChildFactory.',$ename,'Node')" />
-                            </xsl:when>
-                            <xsl:otherwise>
-                                <xsl:value-of select="concat($ename, 'RootNodeChildFactory.',$ename,'Node')" />
-                            </xsl:otherwise>
-                        </xsl:choose>
-                    </xsl:if>
-                </xsl:for-each>
-            </xsl:variable>
-            <execute action="nodetemplate" template="enumchoice" folder="nodeeditor" filename="{$ename}{$fname}ChoiceField.java" usenodeinfo="{$nkey}" usefield="{@name}" >
+            <execute action="entitytemplate" template="enumchoice" folder="nodeeditor" filename="{$ename}{$fname}ChoiceField.java" useentityinfo="{$ename}" usefield="{@name}" >
                 <xsl:attribute name="datapackage">
                     <xsl:value-of select="/nbpcg/build/project/generate[@type='data']/@package"/>
                 </xsl:attribute>
@@ -165,7 +137,7 @@
                 </xsl:choose>
             </xsl:variable>
             <xsl:if test="($view='both') or ($view = 'tree')" >
-                <execute action="nodetemplate" template="rootnode" type="" folder="node" filename="{@name}RootNode.java" usenodeinfo="{concat(@name,'RootNode')}">
+                <execute action="entitytemplate" template="rootnode" type="" folder="node" filename="{@name}RootNode.java" useentityinfo="{@name}Root">
                     <xsl:attribute name="datapackage">
                         <xsl:value-of select="/nbpcg/build/project/generate[@type='data']/@package"/>
                     </xsl:attribute>
@@ -178,7 +150,7 @@
                 </execute>
             </xsl:if>
             <xsl:if test="($view='both') or ($view = 'icon')" >
-                <execute action="nodetemplate" template="rootnode" type="Icon" folder="node" filename="{@name}RootIconNode.java" usenodeinfo="{concat(@name,'RootIconNode')}">
+                <execute action="entitytemplate" template="rootnode" type="Icon" folder="node" filename="{@name}RootIconNode.java" useentityinfo="{@name}Root">
                     <xsl:attribute name="datapackage">
                         <xsl:value-of select="/nbpcg/build/project/generate[@type='data']/@package"/>
                     </xsl:attribute>
@@ -204,7 +176,7 @@
                 </xsl:choose>
             </xsl:variable>
             <xsl:if test="($view='both') or ($view = 'tree')" >
-                <execute action="nodetemplate" template="rootnodeviewer" type="Tree" folder="nodeviewer" filename="{@name}RootNodeViewer.java" usenodeinfo="{concat(@name,'RootNode')}">
+                <execute action="entitytemplate" template="rootnodeviewer" type="Tree" folder="nodeviewer" filename="{@name}RootNodeViewer.java" useentityinfo="{@name}Root">
                     <xsl:attribute name="datapackage">
                         <xsl:value-of select="/nbpcg/build/project/generate[@type='data']/@package"/>
                     </xsl:attribute>
@@ -217,7 +189,7 @@
                 </execute>
             </xsl:if>
             <xsl:if test="($view='both') or ($view = 'icon')" >
-                <execute action="nodetemplate" template="rootnodeviewer" type="Icon" folder="nodeviewer" filename="{@name}RootIconNodeViewer.java" usenodeinfo="{concat(@name,'RootIconNode')}">
+                <execute action="entitytemplate" template="rootnodeviewer" type="Icon" folder="nodeviewer" filename="{@name}RootIconNodeViewer.java" useentityinfo="{@name}Root">
                     <xsl:attribute name="datapackage">
                         <xsl:value-of select="/nbpcg/build/project/generate[@type='data']/@package"/>
                     </xsl:attribute>
@@ -234,7 +206,7 @@
     
     <xsl:template name="iconviewer">
         <xsl:for-each select="node/node[@view='icon' or @view='both']" >
-            <execute action="nodetemplate" template="iconnodeviewer" folder="nodeviewer" filename="{@name}IconNodeViewer.java" usenodeinfo="{../@name}IconNodeChildFactory.{@name}IconNode" >
+            <execute action="entitytemplate" template="iconnodeviewer" folder="nodeviewer" filename="{@name}IconNodeViewer.java" useentityinfo="{@name}" >
                 <xsl:attribute name="datapackage">
                     <xsl:value-of select="/nbpcg/build/project/generate[@type='data']/@package"/>
                 </xsl:attribute>
@@ -250,7 +222,7 @@
     
     <xsl:template name="iconvieweraction">
         <xsl:for-each select="node/node[@view='icon' or @view='both']" >
-            <execute action="nodetemplate" template="iconnodevieweraction" folder="nodeviewer" filename="{@name}IconNodeViewerAction.java" usenodeinfo="{../@name}IconNodeChildFactory.{@name}IconNode" >
+            <execute action="entitytemplate" template="iconnodevieweraction" folder="nodeviewer" filename="{@name}IconNodeViewerAction.java" useentityinfo="{@name}" >
                 <xsl:attribute name="datapackage">
                     <xsl:value-of select="/nbpcg/build/project/generate[@type='data']/@package"/>
                 </xsl:attribute>
@@ -307,7 +279,7 @@
                 </xsl:choose>
             </xsl:variable>
             <xsl:if test="($view='both') or ($view = 'tree')" >
-                <execute action="nodetemplate" template="nodefactory" type="" folder="node" filename="{@name}RootNodeChildFactory.java" usenodeinfo="{@name}RootNode">
+                <execute action="entitytemplate" template="nodefactory" type="" folder="node" filename="{@name}RootNodeChildFactory.java" useentityinfo="{@name}Root">
                     <xsl:attribute name="datapackage">
                         <xsl:value-of select="/nbpcg/build/project/generate[@type='data']/@package"/>
                     </xsl:attribute>
@@ -316,7 +288,7 @@
                     </xsl:call-template>
                 </execute>
                 <xsl:if test="count(node) &gt; 0">
-                    <execute action="nodetemplate" template="nodefactory" type="" folder="node" filename="{@name}NodeChildFactory.java" usenodeinfo="{@name}RootNodeChildFactory.{@name}Node">
+                    <execute action="entitytemplate" template="nodefactory" type="" folder="node" filename="{@name}NodeChildFactory.java" useentityinfo="{@name}">
                         <xsl:attribute name="datapackage">
                             <xsl:value-of select="/nbpcg/build/project/generate[@type='data']/@package"/>
                         </xsl:attribute>
@@ -327,7 +299,7 @@
                 </xsl:if>
             </xsl:if>
             <xsl:if test="($view='both') or ($view = 'icon')" >
-                <execute action="nodetemplate" template="nodefactory" type="Icon" folder="node" filename="{@name}RootIconNodeChildFactory.java" usenodeinfo="{@name}RootIconNode">
+                <execute action="entitytemplate" template="nodefactory" type="Icon" folder="node" filename="{@name}RootIconNodeChildFactory.java" useentityinfo="{@name}Root">
                     <xsl:attribute name="datapackage">
                         <xsl:value-of select="/nbpcg/build/project/generate[@type='data']/@package"/>
                     </xsl:attribute>
@@ -336,7 +308,7 @@
                     </xsl:call-template>
                 </execute>
                 <xsl:if test="count(node) &gt; 0">
-                    <execute action="nodetemplate" template="nodefactory" type="Icon" folder="node" filename="{@name}IconNodeChildFactory.java" usenodeinfo="{@name}RootIconNodeChildFactory.{@name}IconNode">
+                    <execute action="entitytemplate" template="nodefactory" type="Icon" folder="node" filename="{@name}IconNodeChildFactory.java" useentityinfo="{@name}">
                         <xsl:attribute name="datapackage">
                             <xsl:value-of select="/nbpcg/build/project/generate[@type='data']/@package"/>
                         </xsl:attribute>
@@ -357,7 +329,7 @@
                 </xsl:choose>
             </xsl:variable>
             <xsl:if test="($view='both') or ($view = 'tree')" >
-                <execute action="nodetemplate" template="nodefactory" type="" folder="node" filename="{@name}NodeChildFactory.java" usenodeinfo="{../@name}NodeChildFactory.{@name}Node">
+                <execute action="entitytemplate" template="nodefactory" type="" folder="node" filename="{@name}NodeChildFactory.java" useentityinfo="{@name}">
                     <xsl:attribute name="datapackage">
                         <xsl:value-of select="/nbpcg/build/project/generate[@type='data']/@package"/>
                     </xsl:attribute>
@@ -367,7 +339,7 @@
                 </execute>
             </xsl:if>
             <xsl:if test="($view='both') or ($view = 'icon')" >
-                <execute action="nodetemplate" template="nodefactory" type="Icon" folder="node" filename="{@name}IconNodeChildFactory.java" usenodeinfo="{../@name}IconNodeChildFactory.{@name}Node">
+                <execute action="entitytemplate" template="nodefactory" type="Icon" folder="node" filename="{@name}IconNodeChildFactory.java" useentityinfo="{@name}">
                     <xsl:attribute name="datapackage">
                         <xsl:value-of select="/nbpcg/build/project/generate[@type='data']/@package"/>
                     </xsl:attribute>
@@ -378,7 +350,7 @@
             </xsl:if>
         </xsl:for-each>
     </xsl:template>
-    
+  
     <xsl:template name="node">
         <xsl:for-each select="node" >
             <xsl:variable name="view">
@@ -390,7 +362,7 @@
                 </xsl:choose>
             </xsl:variable>
             <xsl:if test="($view='both') or ($view = 'tree')" >
-                <execute action="nodetemplate" template="node" type="" folder="node" filename="{@name}Node.java" usenodeinfo="{@name}RootNodeChildFactory.{@name}Node">
+                <execute action="entitytemplate" template="node" type="" folder="node" filename="{@name}Node.java" useentityinfo="{@name}">
                     <xsl:attribute name="datapackage">
                         <xsl:value-of select="/nbpcg/build/project/generate[@type='data']/@package"/>
                     </xsl:attribute>
@@ -403,7 +375,7 @@
                 </execute>
             </xsl:if>
             <xsl:if test="($view='both') or ($view = 'icon')" >
-                <execute action="nodetemplate" template="node" type="Icon" folder="node" filename="{@name}IconNode.java" usenodeinfo="{@name}RootIconNodeChildFactory.{@name}Node">
+                <execute action="entitytemplate" template="node" type="Icon" folder="node" filename="{@name}IconNode.java" useentityinfo="{@name}">
                     <xsl:attribute name="datapackage">
                         <xsl:value-of select="/nbpcg/build/project/generate[@type='data']/@package"/>
                     </xsl:attribute>
@@ -426,7 +398,7 @@
                 </xsl:choose>
             </xsl:variable>
             <xsl:if test="($view='both') or ($view = 'tree')" >
-                <execute action="nodetemplate" template="node" type="" folder="node" filename="{@name}Node.java" usenodeinfo="{../@name}NodeChildFactory.{@name}Node">
+                <execute action="entitytemplate" template="node" type="" folder="node" filename="{@name}Node.java" useentityinfo="{@name}">
                     <xsl:attribute name="datapackage">
                         <xsl:value-of select="/nbpcg/build/project/generate[@type='data']/@package"/>
                     </xsl:attribute>
@@ -439,7 +411,7 @@
                 </execute>
             </xsl:if>
             <xsl:if test="($view='both') or ($view = 'icon')" >
-                <execute action="nodetemplate" template="node" type="Icon" folder="node" filename="{@name}IconNode.java" usenodeinfo="{../@name}IconNodeChildFactory.{@name}Node">
+                <execute action="entitytemplate" template="node" type="Icon" folder="node" filename="{@name}IconNode.java" useentityinfo="{@name}">
                     <xsl:attribute name="datapackage">
                         <xsl:value-of select="/nbpcg/build/project/generate[@type='data']/@package"/>
                     </xsl:attribute>
@@ -458,7 +430,7 @@
         <xsl:for-each select="//node">
             <xsl:choose>
                 <xsl:when test="local-name(..) = 'node'">
-                    <execute action="nodetemplate" template="undonode" folder="node" filename="Undo{@name}Node.java" usenodeinfo="{../@name}NodeChildFactory.{@name}Node">
+                    <execute action="entitytemplate" template="undonode" folder="node" filename="Undo{@name}Node.java" useentityinfo="{@name}">
                         <xsl:attribute name="datapackage">
                             <xsl:value-of select="/nbpcg/build/project/generate[@type='data']/@package"/>
                         </xsl:attribute>
@@ -471,7 +443,7 @@
                     </execute>
                 </xsl:when>
                 <xsl:otherwise>
-                    <execute action="nodetemplate" template="undonode" folder="node" filename="Undo{@name}Node.java" usenodeinfo="{@name}RootNodeChildFactory.{@name}Node">
+                    <execute action="entitytemplate" template="undonode" folder="node" filename="Undo{@name}Node.java" useentityinfo="{@name}">
                         <xsl:attribute name="datapackage">
                             <xsl:value-of select="/nbpcg/build/project/generate[@type='data']/@package"/>
                         </xsl:attribute>
@@ -503,7 +475,7 @@
             <xsl:if test="$access='rw'" >
                 <xsl:choose>
                     <xsl:when test="local-name(..) = 'node'">
-                        <execute action="nodetemplate" template="addnode" folder="node" filename="Add{@name}Node.java" usenodeinfo="{../@name}NodeChildFactory.{@name}Node">
+                        <execute action="entitytemplate" template="addnode" folder="node" filename="Add{@name}Node.java" useentityinfo="{@name}">
                             <xsl:attribute name="datapackage">
                                 <xsl:value-of select="/nbpcg/build/project/generate[@type='data']/@package"/>
                             </xsl:attribute>
@@ -516,7 +488,7 @@
                         </execute>
                     </xsl:when>
                     <xsl:otherwise>
-                        <execute action="nodetemplate" template="addnode" folder="node" filename="Add{@name}Node.java" usenodeinfo="{@name}RootNodeChildFactory.{@name}Node">
+                        <execute action="entitytemplate" template="addnode" folder="node" filename="Add{@name}Node.java" useentityinfo="{@name}">
                             <xsl:attribute name="datapackage">
                                 <xsl:value-of select="/nbpcg/build/project/generate[@type='data']/@package"/>
                             </xsl:attribute>
@@ -538,7 +510,7 @@
             <xsl:variable name="ename" select="@name" />
             <xsl:choose>
                 <xsl:when test="/nbpcg/node[@name=$ename]" >
-                    <execute action="nodetemplate" template="nodeeditor" folder="nodeeditor" filename="{@name}NodeEditor.java" usenodeinfo="{@name}RootNodeChildFactory.{@name}Node">
+                    <execute action="entitytemplate" template="nodeeditor" folder="nodeeditor" filename="{@name}NodeEditor.java" useentityinfo="{@name}">
                         <xsl:attribute name="datapackage">
                             <xsl:value-of select="/nbpcg/build/project/generate[@type='data']/@package"/>
                         </xsl:attribute>
@@ -553,7 +525,7 @@
                 <xsl:otherwise>
                     <xsl:for-each select="//node[@name=$ename and local-name(..) = 'node'][position() = 1]" >
                         <xsl:if test="position() = 1" >
-                            <execute action="nodetemplate" template="nodeeditor" folder="nodeeditor" filename="{@name}NodeEditor.java" usenodeinfo="{../@name}NodeChildFactory.{@name}Node">
+                            <execute action="entitytemplate" template="nodeeditor" folder="nodeeditor" filename="{@name}NodeEditor.java" useentityinfo="{@name}">
                                 <xsl:attribute name="datapackage">
                                     <xsl:value-of select="/nbpcg/build/project/generate[@type='data']/@package"/>
                                 </xsl:attribute>
@@ -577,7 +549,7 @@
             <xsl:if test="/nbpcg/databases/database[not(@usepackage)]/table[@name=$nname]" >
                 <xsl:choose>
                     <xsl:when test="local-name(..) = 'node'" >
-                        <execute action="nodetemplate" template="editnode" folder="nodeeditor" filename="Edit{@name}Node.java" usenodeinfo="{../@name}NodeChildFactory.{@name}Node">
+                        <execute action="entitytemplate" template="editnode" folder="nodeeditor" filename="Edit{@name}Node.java" useentityinfo="{@name}">
                             <xsl:attribute name="datapackage">
                                 <xsl:value-of select="/nbpcg/build/project/generate[@type='data']/@package"/>
                             </xsl:attribute>
@@ -593,7 +565,7 @@
                         </execute>
                     </xsl:when>
                     <xsl:otherwise>
-                        <execute action="nodetemplate" template="editnode" folder="nodeeditor" filename="Edit{@name}Node.java" usenodeinfo="{@name}RootNodeChildFactory.{@name}Node">
+                        <execute action="entitytemplate" template="editnode" folder="nodeeditor" filename="Edit{@name}Node.java" useentityinfo="{@name}">
                             <xsl:attribute name="datapackage">
                                 <xsl:value-of select="/nbpcg/build/project/generate[@type='data']/@package"/>
                             </xsl:attribute>
@@ -647,6 +619,7 @@
             </execute>
         </xsl:for-each>
     </xsl:template> 
+
     
     <!-- set of useful utility templates -->
     

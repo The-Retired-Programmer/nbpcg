@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--
-    Copyright (C) 2014 Richard Linsdale (richard.linsdale at blueyonder.co.uk)
+    Copyright (C) 2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -117,9 +117,30 @@
                 <xsl:if test="//node[@name=$ename and @orderable='yes']">
                     <xsl:attribute name="ordercolumn">idx</xsl:attribute>
                 </xsl:if>
-                <xsl:for-each select="/nbpcg/node[@name=$ename]" >
-                    <xsl:attribute name="parentname">
-                        <xsl:value-of select="concat(@name,'Root')"/>
+                <xsl:for-each select="//node[@name=$ename]" >
+                    <xsl:attribute name="icon" >
+                        <xsl:choose>
+                            <xsl:when test="@icon">
+                                <xsl:value-of select="@icon" />
+                            </xsl:when>
+                            <xsl:otherwise>page_red</xsl:otherwise>
+                        </xsl:choose>
+                    </xsl:attribute>
+                    <xsl:attribute name="orderable">
+                        <xsl:choose>
+                            <xsl:when test="@orderable">
+                                <xsl:value-of select="@orderable"/>
+                            </xsl:when>
+                            <xsl:otherwise>no</xsl:otherwise>
+                        </xsl:choose>
+                    </xsl:attribute>
+                    <xsl:attribute name="sort">
+                        <xsl:choose>
+                            <xsl:when test="@sort">
+                                <xsl:value-of select="@sort"/>
+                            </xsl:when>
+                            <xsl:otherwise>no</xsl:otherwise>
+                        </xsl:choose>
                     </xsl:attribute>
                 </xsl:for-each>
                 <xsl:for-each select="//node/node[@name=$ename]" >
@@ -127,7 +148,20 @@
                         <xsl:value-of select="../@name"/>
                     </xsl:attribute>
                 </xsl:for-each>
+                <xsl:for-each select="//node[node/@name = $ename]" >
+                    <xsl:for-each select="node">
+                        <xsl:if test="@name=$ename">
+                            <xsl:attribute name="nodeorder">
+                                <xsl:value-of select="position()"/>
+                            </xsl:attribute>
+                        </xsl:if>
+                    </xsl:for-each>
+                </xsl:for-each>
                 <xsl:for-each select="/nbpcg/node[@name=$ename]" >
+                    <xsl:attribute name="nodeorder">1</xsl:attribute>
+                    <xsl:attribute name="parentname">
+                        <xsl:value-of select="concat(@name,'Root')"/>
+                    </xsl:attribute>
                     <xsl:variable name="fname">root</xsl:variable>
                     <field name="{$fname}" references="{concat(@name,'Root')}" >
                         <xsl:call-template name="commonfieldattributes" >
@@ -246,6 +280,14 @@
                                 </xsl:otherwise>
                             </xsl:choose>
                         </xsl:if>
+                        <xsl:attribute name="fieldclass">
+                        <xsl:choose>
+                            <xsl:when test="$type='boolean'">CheckboxField</xsl:when>
+                            <xsl:when test="($type='long') or ($type='int') or ($type='date') or ($type='datetime') or ($type='String')">TextField</xsl:when>
+                            <xsl:when test="($type='reference') or ($type='ref') or ($type='rootref')">ReferenceChoiceField</xsl:when>
+                            <xsl:when test="$type='enum'">EnumChoiceField</xsl:when>
+                        </xsl:choose>
+                    </xsl:attribute>
                         <xsl:copy-of select="@encodemethod|@entryfield" />
                         <xsl:call-template name="commonfieldattributes" >
                             <xsl:with-param name="type" select="$type" />
@@ -324,10 +366,99 @@
                 <xsl:call-template name="children" >
                     <xsl:with-param name="entityname" select="$ename"/>
                 </xsl:call-template>
+                <xsl:for-each select="//node[@name=$ename]" >
+                    <xsl:variable name="parententity" >
+                        <xsl:choose>
+                            <xsl:when test="local-name(..) = 'node'" >
+                                <xsl:value-of select="../@name" />
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:value-of select="concat(@name,'Root')"/>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </xsl:variable>
+                    <xsl:if test="@sortformat" >
+                        <xsl:if test="not (@sortformat = '')">
+                            <sortformat>
+                                <xsl:call-template name="display">
+                                    <xsl:with-param name="displayformat" select="@sortformat" />
+                                </xsl:call-template>
+                            </sortformat>
+                        </xsl:if> 
+                    </xsl:if>
+                    <xsl:if test="@displaytitleformat" >
+                        <displaytitleformat>
+                            <xsl:call-template name="display">
+                                <xsl:with-param name="displayformat" select="@displaytitleformat" />
+                            </xsl:call-template>
+                        </displaytitleformat> 
+                    </xsl:if>
+                    <xsl:choose>
+                        <xsl:when test="@displaynameformat">
+                            <displaynameformat>
+                                <xsl:call-template name="display">
+                                    <xsl:with-param name="displayformat" select="@displaynameformat" />
+                                </xsl:call-template>
+                            </displaynameformat>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:for-each select="/nbpcg/databases/database/table[@name=$ename]">
+                                <xsl:choose>
+                                    <xsl:when test="count(field)" >
+                                        <displaynameformat>
+                                            <xsl:attribute name="format">{0}</xsl:attribute>
+                                            <display>
+                                                <xsl:attribute name="field" >
+                                                    <xsl:call-template name="firsttouppercase">
+                                                        <xsl:with-param name="string" select="field[position() = 1]/@name" />
+                                                    </xsl:call-template>
+                                                </xsl:attribute>
+                                            </display>
+                                        </displaynameformat>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:call-template name="selectdisplayfieldfromnodestructure" >
+                                            <xsl:with-param name="ename" select="$ename" />
+                                            <xsl:with-param name="parent" select="$parententity" />
+                                        </xsl:call-template>
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </xsl:for-each>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </xsl:for-each >
             </entityinfo>
         </xsl:for-each>
         <xsl:for-each select="node">
-            <entityinfo key="{@name}Root" name="{concat(@name,'Root')}" >
+            <entityinfo key="{@name}Root" name="{concat(@name,'Root')}" isroot="" >
+                <xsl:attribute name="label" >
+                    <xsl:choose>
+                        <xsl:when test="@rootlabel" >
+                            <xsl:value-of select="@rootlabel"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:value-of select="concat(@name,'s')" />
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </xsl:attribute>
+                <xsl:attribute name="viewers">
+                    <xsl:choose>
+                        <xsl:when test="@viewers">
+                            <xsl:value-of select="@viewers" />
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:value-of select="/nbpcg/build/@viewerroles"/>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </xsl:attribute>
+                <xsl:attribute name="icon" >
+                    <xsl:choose>
+                        <xsl:when test="@rooticon" >
+                            <xsl:value-of select="@rooticon"/>
+                        </xsl:when>
+                        <xsl:otherwise>folder</xsl:otherwise>
+                    </xsl:choose>
+                </xsl:attribute>
                 <xsl:variable name="name">
                     <xsl:call-template name="firsttolowercase">
                         <xsl:with-param name="string" select="@name" />
@@ -338,10 +469,37 @@
                     <xsl:if test="(@view='both') or (@view='icon')" >
                         <xsl:attribute name="isiconchild" />
                     </xsl:if>
-                    <xsl:copy-of select="@orderable" />
-                    <xsl:if test="@sortformat">
-                        <xsl:attribute name="sort" />
-                    </xsl:if>
+                    <xsl:attribute name="orderable">
+                        <xsl:choose>
+                            <xsl:when test="@orderable">
+                                <xsl:value-of select="@orderable"/>
+                            </xsl:when>
+                            <xsl:otherwise>no</xsl:otherwise>
+                        </xsl:choose>
+                    </xsl:attribute>
+                    <xsl:attribute name="sort">
+                        <xsl:choose>
+                            <xsl:when test="@sortformat">yes</xsl:when>
+                            <xsl:otherwise>no</xsl:otherwise>
+                        </xsl:choose>
+                    </xsl:attribute>
+                    <xsl:for-each select="/nbpcg/databases/database/table[@name = $tname]" >
+                        <xsl:attribute name="access" >
+                            <xsl:choose>
+                                <xsl:when test="@access">
+                                    <xsl:value-of select="@access" />
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:choose>
+                                        <xsl:when test="../@access">
+                                            <xsl:value-of select="../@access" />
+                                        </xsl:when>
+                                        <xsl:otherwise>rw</xsl:otherwise>
+                                    </xsl:choose>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </xsl:attribute>
+                    </xsl:for-each>
                 </child>
             </entityinfo>
         </xsl:for-each>
@@ -530,26 +688,41 @@
                     <xsl:value-of select="@name"/>
                 </xsl:attribute>
                 <xsl:copy-of select="@min|@max"/>
-                <xsl:copy-of select="@orderable" />
-                <xsl:if test="@sortformat">
-                    <xsl:attribute name="sort" />
-                </xsl:if>
+                <xsl:attribute name="orderable">
+                    <xsl:choose>
+                        <xsl:when test="@orderable">
+                            <xsl:value-of select="@orderable"/>
+                        </xsl:when>
+                        <xsl:otherwise>no</xsl:otherwise>
+                    </xsl:choose>
+                </xsl:attribute>
+                <xsl:attribute name="sort">
+                    <xsl:choose>
+                        <xsl:when test="@sortformat">yes</xsl:when>
+                        <xsl:otherwise>no</xsl:otherwise>
+                    </xsl:choose>
+                </xsl:attribute>
+                <xsl:for-each select="/nbpcg/databases/database/table[@name = $entityname]" >
+                    <xsl:attribute name="access" >
+                        <xsl:choose>
+                            <xsl:when test="@access">
+                                <xsl:value-of select="@access" />
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:choose>
+                                    <xsl:when test="../@access">
+                                        <xsl:value-of select="../@access" />
+                                    </xsl:when>
+                                    <xsl:otherwise>rw</xsl:otherwise>
+                                </xsl:choose>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </xsl:attribute>
+                </xsl:for-each>
                 <xsl:variable name="childname" select="@name" />
                 <xsl:for-each select="/nbpcg/databases/database/table[@name=$childname]" >
                     <xsl:if test="count(field) = 1 and field[@type='reference']" >
                         <xsl:variable name="refers" select="field/@references" />
-                        <xsl:attribute name="copymovenode">
-                            <xsl:for-each select="//node[@name=$refers]">
-                                <xsl:choose>
-                                    <xsl:when test="local-name(..) = 'node' ">
-                                        <xsl:value-of select="concat(@name,'ChildFactory.',$refers,'Node')"/>
-                                    </xsl:when>
-                                    <xsl:otherwise>
-                                        <xsl:value-of select="concat($refers,'RootChildFactory.',$refers,'Node')"/>
-                                    </xsl:otherwise>
-                                </xsl:choose>
-                            </xsl:for-each>
-                        </xsl:attribute>
                         <xsl:attribute name="copymoveentity">
                             <xsl:value-of select="$refers" />
                         </xsl:attribute>
@@ -561,16 +734,6 @@
                         <xsl:for-each select="//node[@name=$childname]" >
                             <xsl:variable name="parentname" select="../@name" />
                             <xsl:if test="not ($parentname = $entityname)">
-                                <xsl:attribute name="copymovenode">
-                                    <xsl:choose>
-                                        <xsl:when test="local-name(../..) = 'node' ">
-                                            <xsl:value-of select="concat(../../@name,'ChildFactory.', ../@name ,'Node')"/>
-                                        </xsl:when>
-                                        <xsl:otherwise>
-                                            <xsl:value-of select="concat(../@name ,'RootChildFactory.',../@name,'Node')"/>
-                                        </xsl:otherwise>
-                                    </xsl:choose>
-                                </xsl:attribute>
                                 <xsl:attribute name="copymoveentity">
                                     <xsl:value-of select="../@name" />
                                 </xsl:attribute>
@@ -588,6 +751,103 @@
             </child>
         </xsl:for-each>
     </xsl:template>
+    
+    <!-- the next four templates support the creation of the displaynameformat and display elements in the nodeinfo element -->
+    
+    <xsl:template name="selectdisplayfieldfromnodestructure" >
+        <xsl:param name="ename" />
+        <xsl:param name="parent" />
+        <xsl:for-each select="//node[@name=$ename]">
+            <xsl:variable name="pnode">
+                <xsl:choose>
+                    <xsl:when test="local-name(..) = 'node'" >
+                        <xsl:value-of select="../@name" />
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:value-of select="concat(@name,'Root')" />
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:variable>
+            <xsl:if test="$parent != $pnode" >
+                <xsl:variable name="rvu">
+                    <xsl:choose>
+                        <xsl:when test="local-name(..) = 'node'">
+                            <xsl:value-of select="../@name" />
+                        </xsl:when>
+                        <xsl:otherwise>Root</xsl:otherwise>
+                    </xsl:choose>
+                </xsl:variable>
+                <displaynameformat>
+                    <xsl:attribute name="format">{0}</xsl:attribute>
+                    <display field="{$rvu}" />
+                </displaynameformat>
+            </xsl:if> 
+        </xsl:for-each>
+    </xsl:template>
+    
+    <xsl:template name="display" >
+        <xsl:param name="displayformat" />
+        <xsl:attribute name="format">
+            <xsl:call-template name="format">
+                <xsl:with-param name="fstring" select="$displayformat" />
+            </xsl:call-template>
+        </xsl:attribute>
+        <xsl:call-template name="parameters" >
+            <xsl:with-param name="fstring" select="$displayformat" /> 
+        </xsl:call-template>
+    </xsl:template>
+    
+    <xsl:template name="format" >
+        <xsl:param name="fstring"/>
+        <xsl:param name="counter" select="'0'" />
+        <xsl:choose>
+            <xsl:when test="contains($fstring,'{')" >
+                <xsl:variable name="rest" >
+                    <xsl:call-template name="format">
+                        <xsl:with-param name="fstring" select="substring-after($fstring,'}')" />
+                        <xsl:with-param name="counter" select="$counter + 1 " />
+                    </xsl:call-template>
+                </xsl:variable>
+                <xsl:value-of select="concat(substring-before($fstring,'{'),'{',$counter,'}',$rest)" />
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="$fstring" />
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:template>
+    
+    <xsl:template name="parameters" >
+        <xsl:param name="fstring"/>
+        <xsl:choose>
+            <xsl:when test="contains($fstring,'{')" >
+                <xsl:variable name="pp" select="substring-before(substring-after($fstring,'{'),'}')"/>
+                <xsl:choose>
+                    <xsl:when test="contains($pp,':')">
+                        <xsl:variable name="ppp" select="substring-before($pp,':')" />
+                        <xsl:variable name="c" select="substring-after($pp,':')" />
+                        <xsl:variable name="p">
+                            <xsl:call-template name="firsttouppercase">
+                                <xsl:with-param name="string" select="$ppp" />
+                            </xsl:call-template>
+                        </xsl:variable>
+                        <display field="{$p}" length="{$c}"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:variable name="p">
+                            <xsl:call-template name="firsttouppercase">
+                                <xsl:with-param name="string" select="$pp" />
+                            </xsl:call-template>
+                        </xsl:variable>
+                        <display field="{$p}" />
+                    </xsl:otherwise>
+                </xsl:choose>
+                <xsl:call-template name="parameters" >
+                    <xsl:with-param name="fstring" select="substring-after($fstring,'}')" />
+                </xsl:call-template>
+            </xsl:when>
+        </xsl:choose>
+    </xsl:template>
+    
     
     <!-- set of useful utility templates -->
     

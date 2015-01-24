@@ -21,7 +21,7 @@
             >
     <!ELEMENT execute EMPTY >
         <!ATTLIST execute
-            action (message|entitytemplate|nodetemplate) #REQUIRED
+            action (message|entitytemplate) #REQUIRED
             message CDATA #IMPLIED
             template CDATA #IMPLIED
             type CDATA #IMPLIED
@@ -29,7 +29,6 @@
             filename CDATA #IMPLIED
             usedbinfo CDATA #IMPLIED
             useentityinfo CDATA #IMPLIED
-            usenodeinfo CDATA #IMPLIED
             usefield CDATA #IMPLIED
             log CDATA #IMPLIED
             package CDATA #IMPLIED

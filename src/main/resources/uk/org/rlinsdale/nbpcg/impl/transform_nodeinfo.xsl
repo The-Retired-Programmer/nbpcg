@@ -186,7 +186,7 @@
                     </xsl:otherwise>
                 </xsl:choose>
             </xsl:attribute>
-                        <xsl:attribute name="orderable">
+            <xsl:attribute name="orderable">
                 <xsl:choose>
                     <xsl:when test="@orderable">
                         <xsl:value-of select="@orderable"/>
@@ -260,7 +260,7 @@
                     </xsl:for-each>
                 </xsl:otherwise>
             </xsl:choose>
-            <!-- add the FIELD Elements here ______________________________________________________________________________________________ -->
+            <!-- add the FIELD Elements here  -->
             <xsl:for-each select="/nbpcg/databases/database/table[@name=$nname]/field" >
                 <field name="{@name}" >
                     <xsl:variable name="type">
