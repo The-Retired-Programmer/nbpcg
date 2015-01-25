@@ -64,6 +64,7 @@ package ${package};
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.MessageFormat;
 <#if ENTITYINFO.parentname??>
 import java.util.ArrayList;
 </#if>
@@ -78,26 +79,49 @@ import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
 import static ${package}.${ENTITYINFO.name}.${ENTITYINFO.name}Field;
 <#list ENTITYINFO.field![] as field>
+<#if field.type != "rootref" >
+<#if field.type != "idx" >
 import static ${package}.${ENTITYINFO.name}.${ENTITYINFO.name}Field.${field.name?upper_case};
+</#if>
+</#if>
 </#list>
 <#list ENTITYINFO.child![] as child>
 import static ${package}.${ENTITYINFO.name}.${ENTITYINFO.name}Field.${child.name?upper_case}S;
 </#list>
 import uk.org.rlinsdale.lindos.lifecycle.ApplicationProperties;
-<#if hassortchildren>
-import ${nodepackage}.*;
-</#if>
-<#list ENTITYINFO.child![] as child>
-<#if child.sort = "yes" >
-import ${nodepackage}.${child.references}Node.${child.references}NodeDisplay;
-</#if>
-</#list>
+import uk.org.rlinsdale.nbpcglibrary.common.*;
 import uk.org.rlinsdale.nbpcglibrary.data.dataaccess.DataAccess${ENTITYINFO.access?upper_case};
 import uk.org.rlinsdale.nbpcglibrary.data.dataaccess.${ENTITYINFO.type?lower_case}.*;
 import uk.org.rlinsdale.nbpcglibrary.data.dbfields.${ENTITYINFO.withfields?lower_case}.*;
 import uk.org.rlinsdale.nbpcglibrary.data.entity.*;
-import uk.org.rlinsdale.nbpcglibrary.data.entityreferences.*;
-import uk.org.rlinsdale.nbpcglibrary.common.*;
+<#assign er_written = "n" >
+<#list ENTITYINFO.field![] as field >
+<#if (field.type = "reference" || field.type = "ref") && er_written = "n" >
+import uk.org.rlinsdale.nbpcglibrary.data.entityreferences.EntityReference;
+<#assign er_written = "y" >
+</#if>
+</#list>
+<#assign ers_written = "n" >
+<#assign erss_written = "n" >
+<#assign ersi_written = "n" >
+<#list ENTITYINFO.child![] as child >
+<#if child.orderable = "yes">
+<#if ersi_written = "n" >
+import uk.org.rlinsdale.nbpcglibrary.data.entityreferences.EntityIndexedReferenceSet;
+<#assign ersi_written = "y" >
+</#if>
+<#elseif child.sort = "yes" >
+<#if erss_written = "n" >
+import uk.org.rlinsdale.nbpcglibrary.data.entityreferences.EntitySortedReferenceSet;
+<#assign erss_written = "y" >
+</#if>
+<#else>
+<#if ers_written = "n" >
+import uk.org.rlinsdale.nbpcglibrary.data.entityreferences.EntityReferenceSet;
+<#assign ers_written = "y" >
+</#if>
+</#if>
+</#list>
 
 /**
  * The ${ENTITYINFO.name} Entity (${ENTITYINFO.access}).
@@ -122,10 +146,12 @@ public class ${ENTITYINFO.name} extends Entity${ENTITYINFO.access?upper_case}<${
      */
     public enum ${ENTITYINFO.name}Field {
 <#list ENTITYINFO.field![] as field >
+<#if field.type != "rootref" >
         /**
          * the ${field.name} field
          */
         ${field.name?upper_case},
+</#if>
 </#list>
 <#list ENTITYINFO.child![] as child>
         /**
@@ -913,7 +939,7 @@ public class ${ENTITYINFO.name} extends Entity${ENTITYINFO.access?upper_case}<${
     private class ${child.references}Comparator implements Comparator<${child.references}> {
         @Override
         public int compare(${child.references} o1, ${child.references} o2) {
-            return ${child.references}NodeDisplay.getSort(o1,"undefined").compareTo(${child.references}NodeDisplay.getSort(o2,"undefined"));
+            return o1.getSort().compareTo(o2.getSort());
         }
     }
 </#if>
@@ -934,4 +960,67 @@ public class ${ENTITYINFO.name} extends Entity${ENTITYINFO.access?upper_case}<${
 </#if>
         return list;
     }
+
+    public String getDisplayName() {
+<#list ENTITYINFO.displaynameformat as df >
+        return MessageFormat.format("${df.format}", <#list df.display as dp>format${dp.field}()<#if dp_has_next>, </#if></#list>);
+</#list>
+        }
+
+    public String getDisplayTitle() {
+<#if ENTITYINFO.displaytitleformat??>
+<#list ENTITYINFO.displaytitleformat as df>
+        return MessageFormat.format("${df.format}", <#list df.display as dp>format${dp.field}()<#if dp_has_next>, </#if></#list>);
+</#list>
+<#else>
+        return getDisplayName();
+</#if>
+    }
+
+    public String getSort() {
+<#if ENTITYINFO.sortformat?? >
+<#list ENTITYINFO.sortformat as df>
+        return MessageFormat.format("${df.format}", <#list df.display as dp>format${dp.field}(<#if dp.length??>${dp.length}</#if>)<#if dp_has_next>, </#if></#list>);
+</#list>
+<#else>
+        return getDisplayTitle();
+</#if>
+    }
+
+<#list ENTITYINFO.field![] as field>
+<#if field.type != "rootref" >
+    public String format${field.name?cap_first}() {
+<#if field.type="reference" >
+        return get${field.name?cap_first}()!=null ? get${field.name?cap_first}().getDisplayTitle(): "undefined";
+<#elseif field.type="ref" >
+        return getParent()!=null ? getParent().getDisplayName(): "undefined" ;
+<#elseif field.type="int" >
+        return Integer.toString(get${field.name?cap_first}());
+<#elseif field.type="idx"  >
+        return Integer.toString(getIndex());
+<#elseif field.type="long" >
+        return Long.toString(e.get${field.name?cap_first}());
+<#elseif field.type="boolean" >
+        return get${field.name?cap_first}()? "Yes": "No";
+<#elseif field.type="date" || field.type="datetime" >
+        return get${field.name?cap_first}().toString();
+<#elseif field.type="String" ||  field.type="enum" >
+        return get${field.name?cap_first}();
+</#if>
+    }
+</#if>
+</#list>
+<#list ENTITYINFO.field![] as field>
+<#if field.type="int" >
+
+    public String format${field.name?cap_first}(int minDigits) {
+        return StringX.padLeft(format${field.name?cap_first}(),minDigits,'0');
+    }
+<#elseif field.type="String" >
+
+    public String format${field.name?cap_first}(int minChars) {
+        return StringX.padLeftIfInt(format${field.name?cap_first}(),minChars,'0');
+    }
+</#if>
+</#list>
 }

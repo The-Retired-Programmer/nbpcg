@@ -61,12 +61,11 @@ package ${package};
 import java.io.IOException;
 import java.util.List;
 import ${datapackage}.*;
-import ${nodepackage}.*;
+import ${nodepackage}.${ENTITYINFO.name}Node;
 import uk.org.rlinsdale.nbpcglibrary.data.entity.*;
 import uk.org.rlinsdale.nbpcglibrary.form.*;
 import uk.org.rlinsdale.nbpcglibrary.node.SaveHandler;
 import uk.org.rlinsdale.nbpcglibrary.node.nodes.NameChangeEventParams;
-import uk.org.rlinsdale.nbpcglibrary.node.nodes.TreeNodeRW;
 import uk.org.rlinsdale.nbpcglibrary.common.*;
 import uk.org.rlinsdale.nbpcglibrary.topcomponent.*;
 import org.openide.util.NbBundle;
@@ -74,11 +73,6 @@ import org.openide.util.NbBundle.Messages;
 import org.openide.windows.TopComponent;
 import ${datapackage}.${ENTITYINFO.name}.${ENTITYINFO.name}Field;
 import static ${datapackage}.${ENTITYINFO.name}.${ENTITYINFO.name}Field.*;
-<#list ENTITYINFO.field![] as field>
-<#if field.type="reference">
-import ${nodepackage}.${field.references}Node.${field.references}NodeDisplay;
-</#if>
-</#list>
 import static uk.org.rlinsdale.nbpcglibrary.data.entity.EntityFieldChangeEventParams.CommonEntityField.ALL;
 import uk.org.rlinsdale.nbpcglibrary.data.entity.EntityFieldChangeEventParams.CommonEntityField;
 
@@ -123,7 +117,7 @@ public final class ${ENTITYINFO.name}NodeEditor extends NodeEditorTopComponent<$
 </#if>
 </#list>
   
-    public ${ENTITYINFO.name}NodeEditor(TreeNodeRW<${ENTITYINFO.name}, ${ENTITYINFO.name}Field> node) {
+    public ${ENTITYINFO.name}NodeEditor(${ENTITYINFO.name}Node node) {
         super(node,
                 NbBundle.getMessage(${ENTITYINFO.name}NodeEditor.class, "CTL_${ENTITYINFO.name}NodeEditor"),
                 NbBundle.getMessage(${ENTITYINFO.name}NodeEditor.class, "HINT_${ENTITYINFO.name}NodeEditor"));
@@ -206,7 +200,7 @@ public final class ${ENTITYINFO.name}NodeEditor extends NodeEditorTopComponent<$
 
         @Override
         public String get() {
-            return ${field.references}NodeDisplay.getDisplayTitle(entity.get${field.name?cap_first}(), "");
+            return entity.get${field.name?cap_first}().getDisplayTitle();
         }
     }
 <#elseif field.type="ref"  >
@@ -344,10 +338,11 @@ public final class ${ENTITYINFO.name}NodeEditor extends NodeEditorTopComponent<$
                 switch (f) {
 <#list ENTITYINFO.field![] as field>
 <#if field.type!="idx" >
+<#if field.type!="rootref" >
                     case ${field.name?upper_case}:
 <#if field.type="reference"  >
                         ${field.name}Field.updateFieldFromBackingObject();
-<#elseif field.type="ref" || field.type = "rootref" >
+<#elseif field.type="ref" >
 <#elseif field.type=="int" || field.type=="long" ||field.type=="date" || field.type=="datetime">
                         ${field.name}Field.updateFieldFromBackingObject();
                         ${field.name}BadFormat=!p.isFormatOK();
@@ -355,6 +350,7 @@ public final class ${ENTITYINFO.name}NodeEditor extends NodeEditorTopComponent<$
                         ${field.name}Field.updateFieldFromBackingObject();
 </#if>
                         break;
+</#if>
 </#if>
 </#list>
                 }

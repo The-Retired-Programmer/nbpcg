@@ -63,7 +63,6 @@
 package ${package};
 
 import java.awt.datatransfer.DataFlavor;
-import java.text.MessageFormat;
 import java.util.List;
 import javax.swing.Action;
 import ${datapackage}.*;
@@ -75,11 +74,6 @@ import uk.org.rlinsdale.nbpcglibrary.node.properties.*;
 import uk.org.rlinsdale.nbpcglibrary.common.*;
 import org.openide.nodes.PropertySupport;
 import ${datapackage}.${ENTITYINFO.name}.${ENTITYINFO.name}Field;
-<#list ENTITYINFO.field![] as field>
-<#if field.type="reference" || field.type ="ref">
-import ${nodepackage}.${field.references}Node.${field.references}NodeDisplay;
-</#if>
-</#list>
 <#list ENTITYINFO.child![] as c>
 import static ${nodepackage}.${c.name?cap_first}Node.${c.name?upper_case}NODE_FLAVOR;
 <#if c.copymovenode??>
@@ -184,7 +178,7 @@ public class ${ENTITYINFO.name}Node extends ${type2}Node${ENTITYINFO.access?uppe
          */
         @Override
         public String getDisplayName() {
-            return  ${ENTITYINFO.name}NodeDisplay.getDisplayName(getEntity(), "#undefined#");
+            return getEntity() != null? getEntity().getDisplayName(): "#undefined#";
         }
 
         /**
@@ -194,7 +188,7 @@ public class ${ENTITYINFO.name}Node extends ${type2}Node${ENTITYINFO.access?uppe
          */
         @Override
         public String getDisplayTitle() {
-            return  ${ENTITYINFO.name}NodeDisplay.getDisplayTitle(getEntity(), "#undefined#");
+            return getEntity() != null? getEntity().getDisplayTitle(): "#undefined#";
         }
 
 <#if ENTITYINFO.access = "rw" >
@@ -219,9 +213,9 @@ public class ${ENTITYINFO.name}Node extends ${type2}Node${ENTITYINFO.access?uppe
 <#list ENTITYINFO.field![] as field>
 <#if field.type != "rootref" >
 <#if ENTITYINFO.access = "rw" >
-                props.add(${field.name}property = new StringReadonlyProperty("${field.label}", ${ENTITYINFO.name}NodeDisplay.format${field.name?cap_first}(e)));
+                props.add(${field.name}property = new StringReadonlyProperty("${field.label}", e.format${field.name?cap_first}()));
 <#else>
-                props.add(new StringReadonlyProperty("${field.label}", ${ENTITYINFO.name}NodeDisplay.format${field.name?cap_first}(e)));
+                props.add(new StringReadonlyProperty("${field.label}", e.format${field.name?cap_first}()));
 </#if>
 </#if>
 </#list>
@@ -239,7 +233,7 @@ public class ${ENTITYINFO.name}Node extends ${type2}Node${ENTITYINFO.access?uppe
                         idproperty.update(e.getId());
 <#list ENTITYINFO.field![] as field>
 <#if field.type != "rootref" >
-                        ${field.name}property.update(${ENTITYINFO.name}NodeDisplay.format${field.name?cap_first}(e));
+                        ${field.name}property.update(e.format${field.name?cap_first}());
 </#if>
 </#list>
                         propertyChange();
@@ -267,14 +261,14 @@ public class ${ENTITYINFO.name}Node extends ${type2}Node${ENTITYINFO.access?uppe
 <#elseif field.type = "idx" >
                 case ${field.name?upper_case}:
                     if (e != null && ${field.name}property != null) {
-                        ${field.name}property.update(${ENTITYINFO.name}NodeDisplay.format${field.name?cap_first}(e));
+                        ${field.name}property.update(e.format${field.name?cap_first}());
                         propertyChange("${field.label}");
                     }
                     break;
 <#else>
                 case ${field.name?upper_case}:
                     if (e != null && ${field.name}property != null) {
-                        ${field.name}property.update(${ENTITYINFO.name}NodeDisplay.format${field.name?cap_first}(e));
+                        ${field.name}property.update(e.format${field.name?cap_first}());
                         propertyChange("${field.label}");
                     }
 <#assign namechange = "no">
@@ -389,83 +383,4 @@ public class ${ENTITYINFO.name}Node extends ${type2}Node${ENTITYINFO.access?uppe
         public Action[] getActions(boolean context) {
             return findActions("${ENTITYINFO.name}Node");
         }
-
-    public static class ${ENTITYINFO.name}NodeDisplay {
-
-        public static String getDisplayName(${ENTITYINFO.name} e, String undefined) {
-<#list ENTITYINFO.displaynameformat as df >
-            if (e != null) {
-                return MessageFormat.format("${df.format}", new Object[] {<#list df.display as dp>format${dp.field}(e)<#if dp_has_next>, </#if></#list>});
-            } else {
-                return undefined;
-            }
-</#list>
-        }
-
-        public static String getDisplayTitle(${ENTITYINFO.name} e, String undefined) {
-<#if ENTITYINFO.displaytitleformat??>
-<#list ENTITYINFO.displaytitleformat as df>
-            if (e != null) {
-                return MessageFormat.format("${df.format}", new Object[] {<#list df.display as dp>format${dp.field}(e)<#if dp_has_next>, </#if></#list>});
-            } else {
-                return undefined;
-            }
-</#list>
-<#else>
-            return getDisplayName(e,undefined);
-</#if>
-        }
-
-public static String getSort(${ENTITYINFO.name} e, String undefined) {
-<#if ENTITYINFO.sortformat?? >
-<#list ENTITYINFO.sortformat as df>
-            if (e != null) {
-                return MessageFormat.format("${df.format}", <#list df.display as dp>format${dp.field}(e<#if dp.length??>, ${dp.length}</#if>)<#if dp_has_next>, </#if></#list>);
-            } else {
-                return undefined;
-            }
-</#list>
-<#else>
-            return getDisplayTitle(e,undefined);
-</#if>
-        }
-
-<#list ENTITYINFO.field![] as field>
-<#if field.type != "rootref" >
-        public static String format${field.name?cap_first}(${ENTITYINFO.name} e) {
-<#if field.type="reference" >
-            return ${field.references}NodeDisplay.getDisplayTitle(e.get${field.name?cap_first}(), "");
-<#elseif field.type="ref" >
-        return ${field.references}NodeDisplay.getDisplayName(e.getParent(), "");
-<#elseif field.type="int" >
-            return Integer.toString(e.get${field.name?cap_first}());
-<#elseif field.type="idx"  >
-            return Integer.toString(e.getIndex());
-<#elseif field.type="long" >
-            return Long.toString(e.get${field.name?cap_first}());
-<#elseif field.type="boolean" >
-            return e.get${field.name?cap_first}()? "Yes": "No";
-<#elseif field.type="date" || field.type="datetime" >
-            return e.get${field.name?cap_first}().toString();
-<#elseif field.type="String" ||  field.type="enum" >
-            return e.get${field.name?cap_first}();
-</#if>
-        }
-
-</#if>
-</#list>
-<#list ENTITYINFO.field![] as field>
-<#if field.type="int" >
-
-        public static String format${field.name?cap_first}(${ENTITYINFO.name} e, int minDigits) {
-            return StringX.padLeft(format${field.name?cap_first}(e),minDigits,'0');
-        }
-<#elseif field.type="String" >
-
-    public static String format${field.name?cap_first}(${ENTITYINFO.name} e, int minDigits) {
-            return StringX.padLeftIfInt(format${field.name?cap_first}(e),minDigits,'0');
-        }
-</#if>
-</#list>
-    }
 }

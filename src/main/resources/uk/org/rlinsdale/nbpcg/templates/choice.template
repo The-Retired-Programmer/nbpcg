@@ -58,7 +58,6 @@
 package ${package};
 
 import java.util.List;
-import ${nodepackage}.${ENTITYINFO.name}Node.${ENTITYINFO.name}NodeDisplay;
 import ${datapackage}.${ENTITYINFO.name};
 import ${datapackage}.${ENTITYINFO.parentname};
 import ${datapackage}.${ENTITYINFO.name}.${ENTITYINFO.name}Field;
@@ -89,7 +88,7 @@ public final class ${ENTITYINFO.name}ChoiceField extends ReferenceChoiceCollecti
 
     @Override
     public String convertEntitytoText(${ENTITYINFO.name} e) {
-        return ${ENTITYINFO.name}NodeDisplay.getDisplayTitle(e, "");
+        return e.getDisplayTitle();
     }
 
     @Override
