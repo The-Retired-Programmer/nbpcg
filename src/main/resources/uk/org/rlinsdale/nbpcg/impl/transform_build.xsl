@@ -85,11 +85,14 @@
     
     <xsl:template name="choice">
         <xsl:for-each select="databases/database/table" >
-            <xsl:for-each select="field[@type = 'reference']" >
-                <xsl:variable name="ename">
-                    <xsl:value-of select="@references" />
-                </xsl:variable>
-                <execute action="entitytemplate" template="choice" folder="nodeeditor" filename="{@references}ChoiceField.java" useentityinfo="{$ename}" >
+            <xsl:variable name="ename">
+                <xsl:value-of select="@name" />
+            </xsl:variable>
+            <xsl:variable name="references" >
+                <xsl:value-of select="count(/nbpcg/databases/database/table/field[@type = 'reference'][@references = $ename])" />
+            </xsl:variable>
+            <xsl:if test="$references > 0" >
+                <execute action="entitytemplate" template="choice" folder="nodeeditor" filename="{$ename}ChoiceField.java" useentityinfo="{$ename}" >
                     <xsl:attribute name="datapackage">
                         <xsl:value-of select="/nbpcg/build/project/generate[@type='data']/@package"/>
                     </xsl:attribute>
@@ -100,7 +103,7 @@
                         <xsl:with-param name="type">nodeeditor</xsl:with-param>
                     </xsl:call-template>
                 </execute>
-            </xsl:for-each>
+            </xsl:if>
         </xsl:for-each>
     </xsl:template>
     
