@@ -122,7 +122,15 @@ import uk.org.rlinsdale.nbpcglibrary.data.entityreferences.EntityReferenceSet;
 </#if>
 </#if>
 </#list>
-
+<#assign none_written = "n" >
+<#list ENTITYINFO.field![] as field >
+<#if field.type="reference" >
+<#if none_written = "n" >
+import static uk.org.rlinsdale.nbpcglibrary.data.entityreferences.EntityReference.NONE;
+<#assign none_written = "y" >
+</#if>
+</#if>
+</#list>
 /**
  * The ${ENTITYINFO.name} Entity (${ENTITYINFO.access}).
  *
@@ -476,12 +484,22 @@ public class ${ENTITYINFO.name} extends Entity${ENTITYINFO.access?upper_case}<${
      * @param e the ${field.name} entity
      */
     public void set${field.name?cap_first}(${field.references} e) {
-        if (${field.name}.getId() != e.getId()) {
-            ensureEditing();
-            if (${field.name}.set(e)) {
-                fireFieldChange(${field.name?upper_case});
+        if (e == null) {
+            if (${field.name}.getId() != NONE) {
+                ensureEditing();
+                if (${field.name}.set()) {
+                    fireFieldChange(${field.name?upper_case});
+                }
+            }
+        } else {
+            if (${field.name}.getId() != e.getId()) {
+                ensureEditing();
+                if (${field.name}.set(e)) {
+                    fireFieldChange(${field.name?upper_case});
+                }
             }
         }
+
     }
 <#elseif field.type = "rootref" >
 
