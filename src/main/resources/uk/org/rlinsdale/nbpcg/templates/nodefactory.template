@@ -87,22 +87,23 @@ public class ${ENTITYINFO.name}NodeChildFactory extends BasicChildFactory<${ENTI
     private int offsetMin${child.name?cap_first}s;
     private int offsetMax${child.name?cap_first}s;
 </#list>
+    private final Listener<SetChangeEventParams> setListener;
 
 <#if ENTITYINFO.isroot??>
     public   ${ENTITYINFO.name}NodeChildFactory(${ENTITYINFO.name} parent) {
         super(parent);
-        Listener<SetChangeEventParams> listener = getSetChangeListener("Node.${ENTITYINFO.name}>*");
+        setListener = getSetChangeListener("Node.${ENTITYINFO.name}>*");
 <#list ENTITYINFO.child![] as child >
-        parent.add${child.name?cap_first}SetChangeListener(listener);
+        parent.add${child.name?cap_first}SetChangeListener(setListener);
 </#list>
     }   
 
 <#else>
     public   ${ENTITYINFO.name}NodeChildFactory(  ${ENTITYINFO.name} parent) {
         super("  ${ENTITYINFO.name}Node", parent, ${ENTITYINFO.name}.EM.class);
-        Listener<SetChangeEventParams> listener = getSetChangeListener("Node.${ENTITYINFO.name}>*");
+        setListener = getSetChangeListener("Node.${ENTITYINFO.name}>*");
 <#list ENTITYINFO.child![] as child >
-        parent.add${child.name?cap_first}SetChangeListener(listener);
+        parent.add${child.name?cap_first}SetChangeListener(setListener);
 </#list>
     }  
 
