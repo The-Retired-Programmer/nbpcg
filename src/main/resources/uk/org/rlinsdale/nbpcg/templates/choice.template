@@ -77,8 +77,8 @@ import uk.org.rlinsdale.nbpcglibrary.topcomponent.ReferenceChoiceCollectionField
  */
 public final class ${ENTITYINFO.name}ChoiceField extends ReferenceChoiceCollectionFields<${ENTITYINFO.name}, ${ENTITYINFO.name}Field> {
 
-    public ${ENTITYINFO.name}ChoiceField(ChoiceFieldBackingObject backingObject, String label) {
-        super(backingObject, label);
+    public ${ENTITYINFO.name}ChoiceField(ChoiceFieldBackingObject backingObject, String label, boolean nullSelectionAllowed) {
+        super(backingObject, label, nullSelectionAllowed);
     }
 
     @Override

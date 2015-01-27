@@ -160,7 +160,11 @@ public final class ${ENTITYINFO.name}NodeEditor extends NodeEditorTopComponent<$
 <#if field.entryfield??>
             add(${field.entryfield}Field = new PasswordField(new ${field.name?cap_first}FieldBackingObject(), "${field.label}"));
 <#elseif field.type=="reference" >
-            add(${field.name}Field = new ${field.references}ChoiceField(new ${field.name?cap_first}FieldBackingObject(), "${field.label}"));
+<#if field.optional??>
+            add(${field.name}Field = new ${field.references}ChoiceField(new ${field.name?cap_first}FieldBackingObject(), "${field.label}", true));
+<#else>
+            add(${field.name}Field = new ${field.references}ChoiceField(new ${field.name?cap_first}FieldBackingObject(), "${field.label}", false));
+</#if>
 <#elseif field.type=="ref" || field.type = "rootref" >
 <#elseif field.type == "enum" >
             add(${field.name}Field = new ${ENTITYINFO.name}${field.name?cap_first}ChoiceField(new ${field.name?cap_first}FieldBackingObject(), "${field.label}"));
