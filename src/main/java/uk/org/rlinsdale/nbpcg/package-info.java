@@ -25,7 +25,6 @@
     @TemplateRegistration(folder = "uk-org-rlinsdale-nbpcg", displayName = "create", content = "templates/create.template", scriptEngine = "freemarker"),
     @TemplateRegistration(folder = "uk-org-rlinsdale-nbpcg", displayName = "createtables", content = "templates/createtables.template", scriptEngine = "freemarker"),
     @TemplateRegistration(folder = "uk-org-rlinsdale-nbpcg", displayName = "entity", content = "templates/entity.template", scriptEngine = "freemarker"),
-    @TemplateRegistration(folder = "uk-org-rlinsdale-nbpcg", displayName = "referencechoice", content = "templates/referencechoice.template", scriptEngine = "freemarker"),
     @TemplateRegistration(folder = "uk-org-rlinsdale-nbpcg", displayName = "enumchoice", content = "templates/enumchoice.template", scriptEngine = "freemarker"),
     @TemplateRegistration(folder = "uk-org-rlinsdale-nbpcg", displayName = "choice", content = "templates/choice.template", scriptEngine = "freemarker"),
     @TemplateRegistration(folder = "uk-org-rlinsdale-nbpcg", displayName = "nodeeditor", content = "templates/nodeeditor.template", scriptEngine = "freemarker"),
