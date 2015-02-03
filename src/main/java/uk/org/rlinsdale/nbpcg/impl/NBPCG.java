@@ -182,7 +182,9 @@ public final class NBPCG {
             }
             // and empty folder of all contents prior to rebuilding code
             for (FileObject fd : pfo.getChildren()) {
-                fd.delete();
+                if (fd.isData() ){
+                    fd.delete(); // only delete data not other packages - fixes #21
+                }
             }
             return pfo;
         }
@@ -196,7 +198,9 @@ public final class NBPCG {
             pfo = childfolder(pfo, folder);
             // and empty folder of all contents prior to rebuilding code
             for (FileObject fd : pfo.getChildren()) {
-                fd.delete();
+                if (fd.isData() ){
+                    fd.delete(); // only delete data not other packages - fixes #21
+                }
             }
             return pfo;
         }
