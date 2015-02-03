@@ -238,8 +238,6 @@ public class ${ENTITYINFO.name}Node extends ${type2}Node${ENTITYINFO.access?uppe
 </#list>
                         propertyChange();
                     }
-                    nameChange();
-                    titleChange();
                     break;
                 case ID:
                     if (e != null && idproperty != null) {
@@ -271,32 +269,6 @@ public class ${ENTITYINFO.name}Node extends ${type2}Node${ENTITYINFO.access?uppe
                         ${field.name}property.update(e.format${field.name?cap_first}());
                         propertyChange("${field.label}");
                     }
-<#assign namechange = "no">
-<#list ENTITYINFO.displaynameformat as df >
-<#list df.display as dp>
-<#if dp.field = field.label >
-<#assign namechange = "yes" >
-</#if>
-</#list>
-</#list>
-<#if namechange = "yes" >
-                    nameChange();
-</#if>
-<#assign titlechange = "no">
-<#if ENTITYINFO.displaytitleformat??>
-<#list ENTITYINFO.displaytitleformat as df >
-<#list df.display as dp>
-<#if dp.field = field.label >
-<#assign titlechange = "yes" >
-</#if>
-</#list>
-</#list>
-<#else>
-<#assign titlechange = namechange >
-</#if>
-<#if titlechange = "yes" >
-                    titleChange();
-</#if>
                     break;
 </#if>
 </#list>

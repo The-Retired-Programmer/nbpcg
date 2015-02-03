@@ -92,7 +92,7 @@ public class ${ENTITYINFO.name}NodeChildFactory extends BasicChildFactory<${ENTI
 <#if ENTITYINFO.isroot??>
     public   ${ENTITYINFO.name}NodeChildFactory(${ENTITYINFO.name} parent) {
         super(parent);
-        setListener = getSetChangeListener("Node.${ENTITYINFO.name}>*");
+        setListener = getSetChangeListener("${ENTITYINFO.name}>*");
 <#list ENTITYINFO.child![] as child >
         parent.add${child.name?cap_first}SetChangeListener(setListener);
 </#list>
@@ -101,7 +101,7 @@ public class ${ENTITYINFO.name}NodeChildFactory extends BasicChildFactory<${ENTI
 <#else>
     public   ${ENTITYINFO.name}NodeChildFactory(  ${ENTITYINFO.name} parent) {
         super("  ${ENTITYINFO.name}Node", parent, ${ENTITYINFO.name}.EM.class);
-        setListener = getSetChangeListener("Node.${ENTITYINFO.name}>*");
+        setListener = getSetChangeListener("${ENTITYINFO.name}>*");
 <#list ENTITYINFO.child![] as child >
         parent.add${child.name?cap_first}SetChangeListener(setListener);
 </#list>

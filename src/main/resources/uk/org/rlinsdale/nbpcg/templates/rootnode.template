@@ -108,7 +108,7 @@ public class ${ENTITYINFO.name}Node extends RootNode<${ENTITYINFO.name}> {
      */
     @Override
     public String getDisplayName() {
-            return "${ENTITYINFO.label}";
+        return ${ENTITYINFO.name}.get().getDisplayName();
     }
 
     @Override

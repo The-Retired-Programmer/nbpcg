@@ -65,7 +65,6 @@ import ${nodepackage}.${ENTITYINFO.name}Node;
 import uk.org.rlinsdale.nbpcglibrary.data.entity.*;
 import uk.org.rlinsdale.nbpcglibrary.form.*;
 import uk.org.rlinsdale.nbpcglibrary.node.SaveHandler;
-import uk.org.rlinsdale.nbpcglibrary.node.nodes.NameChangeEventParams;
 import uk.org.rlinsdale.nbpcglibrary.common.*;
 import uk.org.rlinsdale.nbpcglibrary.topcomponent.*;
 import org.openide.util.NbBundle;
@@ -133,7 +132,7 @@ public final class ${ENTITYINFO.name}NodeEditor extends NodeEditorTopComponent<$
         form = new Form("${ENTITYINFO.name}Editor",  new EditorFields());
         form.setAdditionalRules(entity);
         form.set();
-        node.addTitleListener(titlechangelistener);
+        entity.addTitleListener(titlechangelistener);
         entity.addFieldListener(entityfieldchangelistener);
         return form;                 
     }
@@ -146,7 +145,7 @@ public final class ${ENTITYINFO.name}NodeEditor extends NodeEditorTopComponent<$
 </#if>
 </#list>
         form.save();
-        node.removeTitleListener(titlechangelistener);
+        entity.removeTitleListener(titlechangelistener);
         node.setSaveHandler(null);
         entity.removeFieldListener(entityfieldchangelistener);
         return form;
@@ -364,15 +363,15 @@ public final class ${ENTITYINFO.name}NodeEditor extends NodeEditorTopComponent<$
         }
     }
 
-    private class TitleChangeListener extends Listener<NameChangeEventParams> {
+    private class TitleChangeListener extends Listener<SimpleEventParams> {
 
         public TitleChangeListener(String name) {
             super(name);
         }
 
         @Override
-        public void action(NameChangeEventParams p) {
-            setName("${ENTITYINFO.name}Node: "+p.get());
+        public void action(SimpleEventParams p) {
+            setName("${ENTITYINFO.name}: " + node.getDisplayTitle());
         }
     }
 }

@@ -161,15 +161,6 @@ public class ${ENTITYINFO.name} extends Entity {
     }
 
     /**
-     * Remove a ${child.references} from the root's list
-     *
-     * @param e the ${child.references}
-     */
-    protected void removeInternal${child.references}(${child.references} e) {
-        ${child.name}s.remove(e);
-    }
-
-    /**
      * Add set listener to ${child.name}s collections
      *
      * @param listener the set change listener to add
@@ -241,9 +232,14 @@ public class ${ENTITYINFO.name} extends Entity {
     private class ${child.references}Comparator implements Comparator<${child.references}> {
         @Override
         public int compare(${child.references} o1, ${child.references} o2) {
-            return o1.getSort().compareTo(o2.getSort());
+            return o1.getSortKey().compareTo(o2.getSortKey());
         }
     }
 </#if>
 </#list>
+
+    @Override
+    public String getDisplayName() {
+        return "${ENTITYINFO.label}";
+    }
 }

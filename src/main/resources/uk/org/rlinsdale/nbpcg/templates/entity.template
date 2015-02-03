@@ -230,7 +230,29 @@ public class ${ENTITYINFO.name} extends Entity${ENTITYINFO.access?upper_case}<${
         this.dbfields = dbfields;
 <#list ENTITYINFO.field![] as field>
 <#if field.type == "ref" || field.type == "reference" >
-        ${field.name} = new EntityReference<>("${ENTITYINFO.name}>${field.name?cap_first}", Lookup.getDefault().lookup(${field.references}.EM.class));
+        
+<#assign needreflistener = "no">
+<#list ENTITYINFO.displaynameformat as df >
+<#list df.display as dp>
+<#if dp.field = field.label >
+<#assign needreflistener  = "yes" >
+</#if>
+</#list>
+</#list>
+<#if ENTITYINFO.displaytitleformat??>
+<#list ENTITYINFO.displaytitleformat as df >
+<#list df.display as dp>
+<#if dp.field = field.label >
+<#assign needreflistener = "yes" >
+</#if>
+</#list>
+</#list>
+</#if>
+<#if needreflistener = "yes" >
+        ${field.name} = new EntityReference<>("${ENTITYINFO.name}>${field.name?cap_first}", ${field.references}.EM.class, new ReferencedEntityTitleChangeListener("${ENTITYINFO.name}>${field.name?cap_first}"));
+<#else>
+        ${field.name} = new EntityReference<>("${ENTITYINFO.name}>${field.name?cap_first}", ${field.references}.EM.class);
+</#if>
 <#if !field.optional??>
         addRule(${field.name}.getDefinedRule());
 </#if>
@@ -305,7 +327,7 @@ public class ${ENTITYINFO.name} extends Entity${ENTITYINFO.access?upper_case}<${
 
     @Override
     public final String classDescription() {
-        ${field.references} e = ${field.name}.get();
+        ${field.references} e = ${field.name}.getNoLoad();
         return e != null?
                 LogBuilder.classDescription(this, Integer.toString(getId()) + ":" + e.classDescription()):
                 LogBuilder.classDescription(this, Integer.toString(getId()));
@@ -435,37 +457,29 @@ public class ${ENTITYINFO.name} extends Entity${ENTITYINFO.access?upper_case}<${
     }
 
     /**
-     * Set the ${field.name?cap_first} Entity associated with this entity.
-     * called from the parent entity as part of the add / remove roles methods
+     * Set the parent (${field.name?cap_first}) Entity associated with this entity.
+     * Called from the parent entity as part of the add${ENTITYINFO.name} method
      *
-     * @param e the ${field.name} entity
+     * @param e the parent ${field.name} entity
      */
-    protected void setInternal${field.name?cap_first}(${field.references} e) {
+    protected void linkToParent(${field.references} e) {
         ensureEditing();
         if (${field.name}.set(e) ) {
             fireFieldChange(${field.name?upper_case});
+            fireNameAndOrTitleChangeOn${field.name?cap_first}();
         }
     }
 
     /**
-     * Set the Parent Entity associated with this entity.
-     *
-     * @param e the ${field.name} entity
+     * Clear the parent (${field.name?cap_first}) Entity associated with this entity.
+     * Called from the parent entity as part of the remove${ENTITYINFO.name} method
      */
-    public void setParent(${field.references} e) {
-        if (${field.name}.getId() != e.getId()) {
-            ensureEditing();
-            if (${field.name}.isValidEntity()) {
-                ${field.name}.get().removeInternal${ENTITYINFO.name}(this);
-            }
-            boolean updated = ${field.name}.set(e);
-            if (${field.name}.isValidEntity()) {
-                ${field.name}.get().addInternal${ENTITYINFO.name}(this);
-            }
-            if (updated) {
-                fireFieldChange(${field.name?upper_case});
-            }
-        }   
+    protected void unlinkFromParent() {
+        ensureEditing();
+        if (${field.name}.set() ) {
+            fireFieldChange(${field.name?upper_case});
+            fireNameAndOrTitleChangeOn${field.name?cap_first}();
+        }
     }
 <#elseif field.type = "reference" >
 
@@ -489,6 +503,7 @@ public class ${ENTITYINFO.name} extends Entity${ENTITYINFO.access?upper_case}<${
                 ensureEditing();
                 if (${field.name}.set()) {
                     fireFieldChange(${field.name?upper_case});
+                    fireNameAndOrTitleChangeOn${field.name?cap_first}();
                 }
             }
         } else {
@@ -496,6 +511,7 @@ public class ${ENTITYINFO.name} extends Entity${ENTITYINFO.access?upper_case}<${
                 ensureEditing();
                 if (${field.name}.set(e)) {
                     fireFieldChange(${field.name?upper_case});
+                    fireNameAndOrTitleChangeOn${field.name?cap_first}();
                 }
             }
         }
@@ -577,6 +593,7 @@ public class ${ENTITYINFO.name} extends Entity${ENTITYINFO.access?upper_case}<${
             ensureEditing();
             this.${field.rvid} = encoded;
             fireFieldChange(${field.name?upper_case});
+            fireNameAndOrTitleChangeOn${field.name?cap_first}();
         }
     }
 <#else>
@@ -597,6 +614,7 @@ public class ${ENTITYINFO.name} extends Entity${ENTITYINFO.access?upper_case}<${
             ensureEditing();
             this.${field.rvid} = ${field.rvid};
             fireFieldChange(${field.name?upper_case});
+            fireNameAndOrTitleChangeOn${field.name?cap_first}();
         }
     }
 </#if>
@@ -613,9 +631,12 @@ public class ${ENTITYINFO.name} extends Entity${ENTITYINFO.access?upper_case}<${
             new${field.rvid}=Integer.parseInt(${field.rvid}Text);
         } catch (NumberFormatException ex) {
             fireFieldChange(${field.name?upper_case}, false);
+            fireNameAndOrTitleChangeOn${field.name?cap_first}();
             return;
         } 
         set${field.name?cap_first}(new${field.rvid});
+        fireFieldChange(${field.name?upper_case});
+        fireNameAndOrTitleChangeOn${field.name?cap_first}();
     }
 <#elseif field.type == "long" >
 
@@ -630,9 +651,12 @@ public class ${ENTITYINFO.name} extends Entity${ENTITYINFO.access?upper_case}<${
             new${field.rvid}=Long.parseLong(${field.rvid}Text);
         } catch (NumberFormatException ex) {
             fireFieldChange(${field.name?upper_case}, false);
+            fireNameAndOrTitleChangeOn${field.name?cap_first}();
             return;
         } 
         set${field.name?cap_first}(new${field.rvid});
+        fireFieldChange(${field.name?upper_case});
+        fireNameAndOrTitleChangeOn${field.name?cap_first}();
     }
 <#elseif field.type == "date" >
 
@@ -647,9 +671,12 @@ public class ${ENTITYINFO.name} extends Entity${ENTITYINFO.access?upper_case}<${
             new${field.rvid}=new DateOnly(${field.rvid}Text);
         } catch (BadFormatException ex) {
             fireFieldChange(${field.name?upper_case}, false);
+            fireNameAndOrTitleChangeOn${field.name?cap_first}();
             return;
         } 
         set${field.name?cap_first}(new${field.rvid});
+        fireFieldChange(${field.name?upper_case});
+        fireNameAndOrTitleChangeOn${field.name?cap_first}();
     }
 <#elseif field.type == "datetime" >
 
@@ -664,13 +691,44 @@ public class ${ENTITYINFO.name} extends Entity${ENTITYINFO.access?upper_case}<${
             new${field.rvid}=new Timestamp(${field.rvid}Text);
         } catch (BadFormatException ex) {
             fireFieldChange(${field.name?upper_case}, false);
+            fireNameAndOrTitleChangeOn${field.name?cap_first}();
             return;
         } 
         set${field.name?cap_first}(new${field.rvid});
+        fireFieldChange(${field.name?upper_case});
+        fireNameAndOrTitleChangeOn${field.name?cap_first}();
     }
 </#if>
 </#if>
 </#if>
+    private void fireNameAndOrTitleChangeOn${field.name?cap_first}() {
+<#assign namechange = "no">
+<#list ENTITYINFO.displaynameformat as df >
+<#list df.display as dp>
+<#if dp.field = field.label >
+<#assign namechange = "yes" >
+</#if>
+</#list>
+</#list>
+<#if namechange = "yes" >
+        nameListenerFire();
+</#if>
+<#assign titlechange = "no">
+<#if ENTITYINFO.displaytitleformat??>
+<#list ENTITYINFO.displaytitleformat as df >
+<#list df.display as dp>
+<#if dp.field = field.label >
+<#assign titlechange = "yes" >
+</#if>
+</#list>
+</#list>
+<#else>
+<#assign titlechange = namechange >
+</#if>
+<#if titlechange = "yes" >
+        titleListenerFire();
+</#if>
+    }
 </#list>
 <#list ENTITYINFO.child![] as child>
     /**
@@ -679,17 +737,7 @@ public class ${ENTITYINFO.name} extends Entity${ENTITYINFO.access?upper_case}<${
      * @param e the ${child.name}
      */
     public void add${child.references}(${child.references} e) {
-        e.setInternal${ENTITYINFO.name}(this);
-        ${child.name}s.add(e);
-    }
-
-    /**
-     * Add a ${child.references} to this entity.
-     * internal use only - called from ${child.references?cap_first}
-     *
-     * @param e the ${child.name}
-     */
-    protected void addInternal${child.references}(${child.references} e) {
+        e.linkToParent(this);
         ${child.name}s.add(e);
     }
 
@@ -699,17 +747,7 @@ public class ${ENTITYINFO.name} extends Entity${ENTITYINFO.access?upper_case}<${
      * @param e the ${child.name}
      */
     public void remove${child.references}(${child.references} e) {
-        e.setInternal${ENTITYINFO.name}((${ENTITYINFO.name}) null);
-        ${child.name}s.remove(e);
-    }
-
-    /**
-     * Remove a ${child.references} from this entity.
-     * internal use only - called from ${child.references?cap_first}
-     *
-     * @param e the ${child.name}
-     */
-    protected void removeInternal${child.references}(${child.references} e) {
+        e.unlinkFromParent();
         ${child.name}s.remove(e);
     }
 
@@ -811,7 +849,7 @@ public class ${ENTITYINFO.name} extends Entity${ENTITYINFO.access?upper_case}<${
     protected final void _remove() {
 <#list ENTITYINFO.field as field>
 <#if field.type = "ref"  || field.type = "rootref" >
-        getParent().removeInternal${ENTITYINFO.name}(this);
+        getParent().remove${ENTITYINFO.name}(this);
 </#if>
 </#list>
     }
@@ -957,7 +995,7 @@ public class ${ENTITYINFO.name} extends Entity${ENTITYINFO.access?upper_case}<${
     private class ${child.references}Comparator implements Comparator<${child.references}> {
         @Override
         public int compare(${child.references} o1, ${child.references} o2) {
-            return o1.getSort().compareTo(o2.getSort());
+            return o1.getSortKey().compareTo(o2.getSortKey());
         }
     }
 </#if>
@@ -979,12 +1017,14 @@ public class ${ENTITYINFO.name} extends Entity${ENTITYINFO.access?upper_case}<${
         return list;
     }
 
+    @Override
     public String getDisplayName() {
 <#list ENTITYINFO.displaynameformat as df >
         return MessageFormat.format("${df.format}", <#list df.display as dp>format${dp.field}()<#if dp_has_next>, </#if></#list>);
 </#list>
         }
 
+    @Override
     public String getDisplayTitle() {
 <#if ENTITYINFO.displaytitleformat??>
 <#list ENTITYINFO.displaytitleformat as df>
@@ -995,7 +1035,8 @@ public class ${ENTITYINFO.name} extends Entity${ENTITYINFO.access?upper_case}<${
 </#if>
     }
 
-    public String getSort() {
+    @Override
+    public String getSortKey() {
 <#if ENTITYINFO.sortformat?? >
 <#list ENTITYINFO.sortformat as df>
         return MessageFormat.format("${df.format}", <#list df.display as dp>format${dp.field}(<#if dp.length??>${dp.length}</#if>)<#if dp_has_next>, </#if></#list>);
@@ -1041,4 +1082,47 @@ public class ${ENTITYINFO.name} extends Entity${ENTITYINFO.access?upper_case}<${
     }
 </#if>
 </#list>
+<#assign fireName = "no">
+<#assign fireTitle = "no">
+<#list ENTITYINFO.field![] as field>
+<#if field.type == "ref" || field.type == "reference" >
+<#list ENTITYINFO.displaynameformat as df >
+<#list df.display as dp>
+<#if dp.field = field.label >
+<#assign fireName  = "yes" >
+</#if>
+</#list>
+</#list>
+<#if ENTITYINFO.displaytitleformat??>
+<#list ENTITYINFO.displaytitleformat as df >
+<#list df.display as dp>
+<#if dp.field = field.label >
+<#assign fireTitle = "yes" >
+</#if>
+</#list>
+</#list>
+<#else>
+<#assign fireTitle = fireName >
+</#if>
+</#if>
+</#list>
+<#if fireName = "yes" || fireTitle = "yes" >
+
+    private class ReferencedEntityTitleChangeListener extends Listener<SimpleEventParams> {
+
+        public  ReferencedEntityTitleChangeListener(String name) {
+            super(name);
+        }
+
+        @Override
+        public void action(SimpleEventParams p) {
+<#if fireName = "yes" >
+            nameListenerFire();
+</#if>
+<#if fireTitle = "yes" >
+            titleListenerFire();
+</#if>
+        }
+    }
+</#if>
 }
