@@ -287,11 +287,11 @@ public class ${ENTITYINFO.name} extends Entity${ENTITYINFO.access?upper_case}<${
 </#if>
 <#list ENTITYINFO.child![] as child>
 <#if child.orderable = "yes" >
-        ${child.name}s = new EntityIndexedReferenceSet<>(classDescription()+">${child.references}s", ${child.name?upper_case}S, "${child.dbname}", getId(), ${child.references}.EM.class);
+        ${child.name}s = new EntityIndexedReferenceSet<>(instanceDescription()+">${child.references}s", ${child.name?upper_case}S, "${child.dbname}", getId(), ${child.references}.EM.class);
 <#elseif child.sort = "yes" >
-        ${child.name}s = new EntitySortedReferenceSet<>(classDescription()+">${child.references}s", ${child.name?upper_case}S, new ${child.references}Comparator(), "${child.dbname}", getId(), ${child.references}.EM.class);
+        ${child.name}s = new EntitySortedReferenceSet<>(instanceDescription()+">${child.references}s", ${child.name?upper_case}S, new ${child.references}Comparator(), "${child.dbname}", getId(), ${child.references}.EM.class);
 <#else>
-        ${child.name}s = new EntityReferenceSet<>(classDescription()+">${child.references}s", ${child.name?upper_case}S, "${child.dbname}", getId(), ${child.references}.EM.class);
+        ${child.name}s = new EntityReferenceSet<>(instanceDescription()+">${child.references}s", ${child.name?upper_case}S, "${child.dbname}", getId(), ${child.references}.EM.class);
 </#if>
 <#if child.min??>
         addRule(${child.name}s.getMinRule(${child.min}));
@@ -308,29 +308,29 @@ public class ${ENTITYINFO.name} extends Entity${ENTITYINFO.access?upper_case}<${
 <#if  field.type = "String">
 
     @Override
-    public final String classDescription() {
+    public final String instanceDescription() {
         return "".equals(${field.name}) ?
-                LogBuilder.classDescription(this, Integer.toString(getId())):
-                LogBuilder.classDescription(this, Integer.toString(getId())+"-"+${field.name});
+                LogBuilder.instanceDescription(this, Integer.toString(getId())):
+                LogBuilder.instanceDescription(this, Integer.toString(getId())+"-"+${field.name});
     }
 <#assign writeDescription = "no" >
 </#if>
 <#if field.type = "boolean" || field.type = "int" || field.type = "long" || field.type = "date" || field.type = "datetime" || field.type = "enum" >
     
     @Override
-    public final String classDescription() {
-        return LogBuilder.classDescription(this, Integer.toString(getId()));
+    public final String instanceDescription() {
+        return LogBuilder.instanceDescription(this, Integer.toString(getId()));
     }
 <#assign writeDescription = "no" >
 </#if>
 <#if field.type = "reference">
 
     @Override
-    public final String classDescription() {
+    public final String instanceDescription() {
         ${field.references} e = ${field.name}.getNoLoad();
         return e != null?
-                LogBuilder.classDescription(this, Integer.toString(getId()) + ":" + e.classDescription()):
-                LogBuilder.classDescription(this, Integer.toString(getId()));
+                LogBuilder.instanceDescription(this, Integer.toString(getId()) + ":" + e.instanceDescription()):
+                LogBuilder.instanceDescription(this, Integer.toString(getId()));
     }
 <#assign writeDescription = "no" >
 </#if>

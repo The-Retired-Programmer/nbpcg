@@ -121,8 +121,8 @@ public final class ${ENTITYINFO.name}NodeEditor extends NodeEditorTopComponent<$
                 NbBundle.getMessage(${ENTITYINFO.name}NodeEditor.class, "CTL_${ENTITYINFO.name}NodeEditor"),
                 NbBundle.getMessage(${ENTITYINFO.name}NodeEditor.class, "HINT_${ENTITYINFO.name}NodeEditor"));
         ${ENTITYINFO.name} e = node.getEntity();
-        entityfieldchangelistener = new EntityFieldChangeListener("Editor:"+e.classDescription());
-        titlechangelistener = new TitleChangeListener("Editor:"+e.classDescription());
+        entityfieldchangelistener = new EntityFieldChangeListener("Editor:"+e.instanceDescription());
+        titlechangelistener = new TitleChangeListener("Editor:"+e.instanceDescription());
     }
 
     @Override

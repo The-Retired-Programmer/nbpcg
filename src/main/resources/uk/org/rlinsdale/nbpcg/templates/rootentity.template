@@ -112,8 +112,8 @@ public class ${ENTITYINFO.name} extends Entity {
 </#list>
 
     @Override
-    public final String classDescription() {
-        return LogBuilder.classDescription(this);
+    public final String instanceDescription() {
+        return LogBuilder.instanceDescription(this);
     }
     
     /**
@@ -132,11 +132,11 @@ public class ${ENTITYINFO.name} extends Entity {
         super("${ENTITYINFO.name}");
 <#list ENTITYINFO.child![] as child>
 <#if child.orderable = "yes" >
-        ${child.name}s = new EntityIndexedReferenceSet<>(classDescription()+">${child.name?cap_first}s", ${child.name?upper_case}S, ${child.references}.EM.class);
+        ${child.name}s = new EntityIndexedReferenceSet<>(instanceDescription()+">${child.name?cap_first}s", ${child.name?upper_case}S, ${child.references}.EM.class);
 <#elseif child.sort = "yes" >
-        ${child.name}s = new EntitySortedReferenceSet<>(classDescription()+">${child.name?cap_first}s", ${child.name?upper_case}S, new ${child.references}Comparator(), ${child.references}.EM.class);
+        ${child.name}s = new EntitySortedReferenceSet<>(instanceDescription()+">${child.name?cap_first}s", ${child.name?upper_case}S, new ${child.references}Comparator(), ${child.references}.EM.class);
 <#else>
-        ${child.name}s = new EntityReferenceSet<>(classDescription()+">${child.name?cap_first}s", ${child.name?upper_case}S, ${child.references}.EM.class);
+        ${child.name}s = new EntityReferenceSet<>(instanceDescription()+">${child.name?cap_first}s", ${child.name?upper_case}S, ${child.references}.EM.class);
 </#if>
 </#list>
     }

@@ -72,6 +72,7 @@ import org.openide.nodes.AbstractNode;
 import org.openide.util.NbBundle;
 import org.openide.util.NbBundle.Messages;
 import org.openide.windows.TopComponent;
+import uk.org.rlinsdale.nbpcglibrary.common.LogBuilder;
 
 /**
  * Viewer for ${ENTITYINFO.name} (type=${type})
@@ -103,5 +104,10 @@ public final class ${ENTITYINFO.name}NodeViewer extends ExplorerTopComponent {
     @Override
     public AbstractNode getRootContextNode() {
         return new ${ENTITYINFO.name}Node();
+    }
+ 
+    @Override
+    public String instanceDescription() {
+        return LogBuilder.instanceDescription(this);
     }
 }
