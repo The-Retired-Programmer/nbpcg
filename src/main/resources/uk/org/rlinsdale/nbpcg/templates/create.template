@@ -66,5 +66,5 @@
 -- @package generated-scripts
 -- @author ${templateauthor}
 --
-CREATE DATABASE ${DBINFO.name};
+CREATE DATABASE ${DBINFO.name} CHARACTER SET utf8 COLLATE utf8_bin;
 GRANT DELETE,INSERT,SELECT,UPDATE ON ${DBINFO.name}.* TO 'nbplatform'@'localhost';

@@ -66,7 +66,7 @@
 -- @author ${templateauthor}
 --
 DROP DATABASE IF EXISTS ${DBINFO.name};
-CREATE DATABASE ${DBINFO.name};
+CREATE DATABASE ${DBINFO.name} CHARACTER SET utf8 COLLATE utf8_bin;
 USE ${DBINFO.name};
 --
 <#list DBINFO.table![] as dbtable >
