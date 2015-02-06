@@ -58,8 +58,16 @@
 <#assign ENTITYINFO = entityinfo[useentityinfo] >
 package ${package};
 
+<#assign needListImport = "no" >
+<#list ENTITYINFO.field![] as field>
+<#if field.type="reference" || field.type="reference" >
+<#assign needListImport = "yes" >
+</#if>
+</#list>
 import java.io.IOException;
+<#if needListImport = "yes">
 import java.util.List;
+</#if>
 import ${datapackage}.*;
 import ${nodepackage}.${ENTITYINFO.name}Node;
 import uk.org.rlinsdale.nbpcglibrary.data.entity.*;
@@ -131,7 +139,7 @@ public final class ${ENTITYINFO.name}NodeEditor extends NodeEditorTopComponent<$
         node.setSaveHandler(saveHandler);
         form = new Form("${ENTITYINFO.name}Editor",  new EditorFields());
         form.setAdditionalRules(entity);
-        form.set();
+        form.updateAllFieldsFromBackingObject();
         entity.addTitleListener(titlechangelistener);
         entity.addFieldListener(entityfieldchangelistener);
         return form;                 
@@ -180,10 +188,6 @@ public final class ${ENTITYINFO.name}NodeEditor extends NodeEditorTopComponent<$
         @Override
         public boolean save() {
             return entity.save();
-        }
-
-        @Override
-        public void cancel() {
         }
     }
 <#list ENTITYINFO.field![] as field>
@@ -332,7 +336,7 @@ public final class ${ENTITYINFO.name}NodeEditor extends NodeEditorTopComponent<$
             if (c!= null ) {
                 switch(c) {
                     case ALL:
-                        form.set();
+                        form.updateAllFieldsFromBackingObject();
                         break;
                 }
             }
