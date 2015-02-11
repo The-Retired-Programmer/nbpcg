@@ -180,6 +180,9 @@ public class ${ENTITYINFO.name} extends Entity${ENTITYINFO.access?upper_case}<${
     private final Rules ${field.rvid}Rules = new Rules();
     private ${field.javatype} ${field.rvid}${field.initialisation};
     private ${field.javatype} ${field.rvid}Original;
+<#if field.type=="int" || field.type=="long" || field.type == "date" || field.type == "datetime" >
+    private boolean ${field.name}BadFormat=false;
+</#if>
 </#if>
 </#list>
 <#list ENTITYINFO.child![] as child>
@@ -277,6 +280,7 @@ public class ${ENTITYINFO.name} extends Entity${ENTITYINFO.access?upper_case}<${
 <#if field.max??>
         addRule(${field.rvid}Rules, new ${field.name?cap_first}MaxRule());
 </#if>
+        addRule(${field.rvid}Rules, new ${field.name?cap_first}BadFormatRule());
 <#elseif field.type = "date" || field.type = "datetime" >
 <#if field.future??>
         addRule(${field.rvid}Rules, new ${field.name?cap_first}FutureRule()); 
@@ -284,6 +288,7 @@ public class ${ENTITYINFO.name} extends Entity${ENTITYINFO.access?upper_case}<${
 <#if field.past??>
         addRule(${field.rvid}Rules, new ${field.name?cap_first}PastRule());
 </#if>
+        addRule(${field.rvid}Rules, new ${field.name?cap_first}BadFormatRule());
 </#if>
 </#list>
 </#if>
@@ -628,8 +633,31 @@ public class ${ENTITYINFO.name} extends Entity${ENTITYINFO.access?upper_case}<${
 </#if>
             ensureEditing();
             this.${field.rvid} = ${field.rvid};
+<#if field.type=="int" || field.type=="long" || field.type == "date" || field.type == "datetime" >
+            ${field.rvid}BadFormat = false;
+</#if>
             fireFieldChange(${field.name?upper_case});
             fireNameAndOrTitleChangeOn${field.name?cap_first}();
+        }
+    }
+</#if>
+<#if field.type=="int" || field.type=="long" || field.type == "date" || field.type == "datetime" >
+    
+    private class ${field.rvid?cap_first}BadFormatRule extends Rule {
+        
+        public ${field.rvid?cap_first}BadFormatRule() {
+<#if field.type = "int" || field.type=="long" >
+            super("${field.rvid?cap_first} is not in Number format");
+<#elseif field.type == "date" >
+            super("${field.rvid?cap_first} is not in Date format");
+<#else>
+            super("${field.rvid?cap_first} is not in Date Time format");
+</#if>
+        }
+        
+        @Override
+        public boolean ruleCheck() {
+            return !${field.rvid}BadFormat;
         }
     }
 </#if>
@@ -645,11 +673,12 @@ public class ${ENTITYINFO.name} extends Entity${ENTITYINFO.access?upper_case}<${
         try {
             new${field.rvid}=Integer.parseInt(${field.rvid}Text);
         } catch (NumberFormatException ex) {
+            ${field.rvid}BadFormat = true;
             fireFieldChange(${field.name?upper_case}, false);
-            fireNameAndOrTitleChangeOn${field.name?cap_first}();
             return;
         } 
         set${field.name?cap_first}(new${field.rvid});
+        ${field.rvid}BadFormat = false;
         fireFieldChange(${field.name?upper_case});
         fireNameAndOrTitleChangeOn${field.name?cap_first}();
     }
@@ -665,11 +694,12 @@ public class ${ENTITYINFO.name} extends Entity${ENTITYINFO.access?upper_case}<${
         try {
             new${field.rvid}=Long.parseLong(${field.rvid}Text);
         } catch (NumberFormatException ex) {
+            ${field.rvid}BadFormat = true;
             fireFieldChange(${field.name?upper_case}, false);
-            fireNameAndOrTitleChangeOn${field.name?cap_first}();
             return;
         } 
         set${field.name?cap_first}(new${field.rvid});
+        ${field.rvid}BadFormat = false;
         fireFieldChange(${field.name?upper_case});
         fireNameAndOrTitleChangeOn${field.name?cap_first}();
     }
@@ -685,11 +715,12 @@ public class ${ENTITYINFO.name} extends Entity${ENTITYINFO.access?upper_case}<${
         try {
             new${field.rvid}=new DateOnly(${field.rvid}Text);
         } catch (BadFormatException ex) {
+            ${field.rvid}BadFormat = true;
             fireFieldChange(${field.name?upper_case}, false);
-            fireNameAndOrTitleChangeOn${field.name?cap_first}();
             return;
         } 
         set${field.name?cap_first}(new${field.rvid});
+        ${field.rvid}BadFormat = false;
         fireFieldChange(${field.name?upper_case});
         fireNameAndOrTitleChangeOn${field.name?cap_first}();
     }
@@ -705,11 +736,12 @@ public class ${ENTITYINFO.name} extends Entity${ENTITYINFO.access?upper_case}<${
         try {
             new${field.rvid}=new Timestamp(${field.rvid}Text);
         } catch (BadFormatException ex) {
+            ${field.rvid}BadFormat = true;
             fireFieldChange(${field.name?upper_case}, false);
-            fireNameAndOrTitleChangeOn${field.name?cap_first}();
             return;
         } 
         set${field.name?cap_first}(new${field.rvid});
+        ${field.rvid}BadFormat = false;
         fireFieldChange(${field.name?upper_case});
         fireNameAndOrTitleChangeOn${field.name?cap_first}();
     }
@@ -851,7 +883,10 @@ public class ${ENTITYINFO.name} extends Entity${ENTITYINFO.access?upper_case}<${
         ${field.name}.restoreState();
 <#elseif field.type == "idx"  || field.type == "rootref" >
 <#else>
-        ${field.name} = ${field.name}Original;
+         ${field.name} = ${field.name}Original;
+<#if field.type=="int" || field.type=="long" || field.type == "date" || field.type == "datetime" >
+        ${field.name}BadFormat=false;
+</#if>      
 </#if>
 </#list>
 <#list ENTITYINFO.child![] as child>
