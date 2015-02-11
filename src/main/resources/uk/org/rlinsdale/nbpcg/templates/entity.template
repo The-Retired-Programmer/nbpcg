@@ -169,6 +169,7 @@ public class ${ENTITYINFO.name} extends Entity${ENTITYINFO.access?upper_case}<${
 </#list>
     }
 
+    private final Rules entityRules = new Rules();
 <#list ENTITYINFO.field![] as field>
 <#if field.type == "ref" || field.type == "reference">
     private final EntityReference<${field.references}> ${field.name};
@@ -176,6 +177,7 @@ public class ${ENTITYINFO.name} extends Entity${ENTITYINFO.access?upper_case}<${
     private final ${field.references} ${field.name};
 <#elseif field.type == "idx">
 <#else>
+    private final Rules ${field.rvid}Rules = new Rules();
     private ${field.javatype} ${field.rvid}${field.initialisation};
     private ${field.javatype} ${field.rvid}Original;
 </#if>
@@ -263,24 +265,24 @@ public class ${ENTITYINFO.name} extends Entity${ENTITYINFO.access?upper_case}<${
 <#if ENTITYINFO.access = "rw" >
 <#list ENTITYINFO.field![] as field>
 <#if field.type = "String" >
-        addRule(new ${field.name?cap_first}MinRule());
-        addRule(new ${field.name?cap_first}MaxRule());
+        addRule(${field.rvid}Rules, new ${field.name?cap_first}MinRule());
+        addRule(${field.rvid}Rules, new ${field.name?cap_first}MaxRule());
 <#if field.unique??>
-        addRule(new ${field.name?cap_first}UniqueRule());
+        addRule(${field.rvid}Rules, new ${field.name?cap_first}UniqueRule());
 </#if>
 <#elseif field.type = "int" || field.type = "long">
 <#if field.min??>
-        addRule(new ${field.name?cap_first}MinRule());
+        addRule(${field.rvid}Rules, new ${field.name?cap_first}MinRule());
 </#if>
 <#if field.max??>
-        addRule(new ${field.name?cap_first}MaxRule());
+        addRule(${field.rvid}Rules, new ${field.name?cap_first}MaxRule());
 </#if>
 <#elseif field.type = "date" || field.type = "datetime" >
 <#if field.future??>
-        addRule(new ${field.name?cap_first}FutureRule()); 
+        addRule(${field.rvid}Rules, new ${field.name?cap_first}FutureRule()); 
 </#if>
 <#if field.past??>
-        addRule(new ${field.name?cap_first}PastRule());
+        addRule(${field.rvid}Rules, new ${field.name?cap_first}PastRule());
 </#if>
 </#if>
 </#list>
@@ -301,6 +303,10 @@ public class ${ENTITYINFO.name} extends Entity${ENTITYINFO.access?upper_case}<${
 </#if>
 </#list>
         checkRulesAtLoad();
+    }
+
+    public final Rules getEntityRules() {
+        return entityRules;
     }
 <#assign writeDescription = "yes" >
 <#list ENTITYINFO.field![] as field>
@@ -529,6 +535,15 @@ public class ${ENTITYINFO.name} extends Entity${ENTITYINFO.access?upper_case}<${
     }
 <#elseif field.type == "idx" >
 <#else>
+
+    /**
+     * Get the username field rules.
+     *
+     * @return the username
+     */
+    public Rules get${field.rvid?cap_first}Rules() {
+        return ${field.rvid}Rules;
+    }
 
     /**
      * Get the ${field.rvid}.

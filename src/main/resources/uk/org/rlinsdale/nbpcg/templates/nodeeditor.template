@@ -138,8 +138,6 @@ public final class ${ENTITYINFO.name}NodeEditor extends NodeEditorTopComponent<$
         setName("${ENTITYINFO.name}: " + node.getDisplayTitle());
         node.setSaveHandler(saveHandler);
         form = new Form("${ENTITYINFO.name}Editor",  new EditorFields());
-        form.setAdditionalRules(entity);
-        form.updateAllFieldsFromBackingObject();
         entity.addTitleListener(titlechangelistener);
         entity.addFieldListener(entityfieldchangelistener);
         return form;                 
@@ -162,6 +160,7 @@ public final class ${ENTITYINFO.name}NodeEditor extends NodeEditorTopComponent<$
     private class EditorFields extends FieldsDef {
         
         public EditorFields() {
+            super(new EditorFieldsBackingObject());
 <#list ENTITYINFO.field![] as field>
 <#if field.type!="idx" >
 <#if field.entryfield??>
@@ -190,10 +189,24 @@ public final class ${ENTITYINFO.name}NodeEditor extends NodeEditorTopComponent<$
             return entity.save();
         }
     }
+
+    private class EditorFieldsBackingObject implements FieldsDefBackingObject {
+
+        @Override
+        public boolean checkRules() {
+            return entity.getEntityRules().checkRules();
+        }
+
+        @Override
+        public String getErrorMessages() {
+            return entity.getEntityRules().getErrorMessages();
+        }
+    }
+
 <#list ENTITYINFO.field![] as field>
 <#if field.type="reference">
 
-    private class ${field.name?cap_first}FieldBackingObject implements ChoiceFieldBackingObject {
+    private class ${field.name?cap_first}FieldBackingObject extends ChoiceFieldBackingObject {
     
         @Override
         public List<String> getChoices() {
@@ -213,7 +226,7 @@ public final class ${ENTITYINFO.name}NodeEditor extends NodeEditorTopComponent<$
 <#elseif field.type="ref"  >
 <#elseif field.type="enum" >
 
-    private class ${field.name?cap_first}FieldBackingObject implements ChoiceFieldBackingObject {
+    private class ${field.name?cap_first}FieldBackingObject extends ChoiceFieldBackingObject {
     
         @Override
         public List<String> getChoices() {
@@ -244,13 +257,23 @@ public final class ${ENTITYINFO.name}NodeEditor extends NodeEditorTopComponent<$
         public Boolean get() {
             return entity.get${field.name?cap_first}();
         }
+
+        @Override
+        public boolean checkRules() {
+            return true;
+        }
+
+        @Override
+        public String getErrorMessages() {
+            return "";
+        }
     }
 <#else>
 <#if field.entryfield??>
 
-    private class ${field.name?cap_first}FieldBackingObject implements EditableFieldBackingObject<String> {
+    private class ${field.name?cap_first}FieldBackingObject implements FieldBackingObject<String> {
     
-    @Override
+        @Override
         public void set(String value) {
             if (!"".equals(val)) {
                 entity.set${field.entryfield?cap_first}(value);
@@ -261,11 +284,21 @@ public final class ${ENTITYINFO.name}NodeEditor extends NodeEditorTopComponent<$
         public String get() {
             return "";
         }
+
+        @Override
+        public boolean checkRules() {
+            return entity.get${field.name?cap_first}Rules().checkRules();
+        }
+
+        @Override
+        public String getErrorMessages() {
+            return entity.get${field.name?cap_first}Rules().getErrorMessages();
+        }
     }
 <#else>
 <#if field.type=="int" || field.type=="long" || field.type == "date" || field.type == "datetime" >
 
-    private class ${field.name?cap_first}FieldBackingObject implements EditableFieldBackingObject<String> {
+    private class ${field.name?cap_first}FieldBackingObject implements FieldBackingObject<String> {
     
     @Override
         public void set(String value) {
@@ -276,10 +309,20 @@ public final class ${ENTITYINFO.name}NodeEditor extends NodeEditorTopComponent<$
         public String get() {
             return entity.get${field.name?cap_first}Text();
         }
+
+        @Override
+        public boolean checkRules() {
+            return entity.get${field.name?cap_first}Rules().checkRules();
+        }
+
+        @Override
+        public String getErrorMessages() {
+            return entity.get${field.name?cap_first}Rules().getErrorMessages();
+        }
     }
 <#else>
 
-    private class ${field.name?cap_first}FieldBackingObject implements EditableFieldBackingObject<String> {
+    private class ${field.name?cap_first}FieldBackingObject implements FieldBackingObject<String> {
     
     @Override
         public void set(String value) {
@@ -289,6 +332,16 @@ public final class ${ENTITYINFO.name}NodeEditor extends NodeEditorTopComponent<$
         @Override
         public String get() {
             return entity.get${field.name?cap_first}();
+        }
+
+        @Override
+        public boolean checkRules() {
+            return entity.get${field.name?cap_first}Rules().checkRules();
+        }
+
+        @Override
+        public String getErrorMessages() {
+            return entity.get${field.name?cap_first}Rules().getErrorMessages();
         }
     }
 </#if>
@@ -362,8 +415,6 @@ public final class ${ENTITYINFO.name}NodeEditor extends NodeEditorTopComponent<$
 </#list>
                 }
             }
-            form.checkRules();
-            form.writeAllFailureMessages();
         }
     }
 
