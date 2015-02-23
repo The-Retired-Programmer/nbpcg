@@ -948,6 +948,7 @@ public class ${ENTITYINFO.name} extends Entity${ENTITYINFO.access?upper_case}<${
 
     @Override
     protected final void _diffs(Map<String, Object> map) {
+        int id;
 <#list ENTITYINFO.field![] as field>
 <#if field.javatype == "String">
         if (!${field.rvid}.equals(${field.rvid}Original)) {
@@ -956,9 +957,22 @@ public class ${ENTITYINFO.name} extends Entity${ENTITYINFO.access?upper_case}<${
 <#elseif field.type == "ref" || field.type == "reference" >
         if (${field.name}.isDirty()) {
 <#if field.optional??>
-            map.put("${field.name}", ${field.name}.getId() == 0 ? null: ${field.name}.getId());
+            id = ${field.name}.getId();
+            if (id < 0 ) {
+                ${field.name}.get().save();
+                map.put("${field.name}", ${field.name}.get().getId());
+            } elseif (id == 0) {
+                map.put("${field.name}", null);
+            } else {
+                map.put("${field.name}", id);
+            }
 <#else>
-            map.put("${field.name}", ${field.name}.getId());
+            id = ${field.name}.getId();
+            if (id < 0 ) {
+                ${field.name}.get().save();
+                id = ${field.name}.get().getId();
+            }
+            map.put("${field.name}", id);
 </#if>
         }
 <#elseif field.type == "rootref">
@@ -973,12 +987,26 @@ public class ${ENTITYINFO.name} extends Entity${ENTITYINFO.access?upper_case}<${
 
     @Override
     protected final void _values(Map<String, Object> map) {
+        int id;
 <#list ENTITYINFO.field![] as field>
 <#if field.type == "ref" || field.type == "reference" >
 <#if field.optional??>
-        map.put("${field.name}", ${field.name}.getId() == 0 ? null: ${field.name}.getId());
+        id = ${field.name}.getId();
+        if (id < 0 ) {
+            ${field.name}.get().save();
+            map.put("${field.name}", ${field.name}.get().getId());
+        } elseif (id == 0) {
+            map.put("${field.name}", null);
+        } else {
+            map.put("${field.name}", id);
+        }
 <#else>
-        map.put("${field.name}", ${field.name}.getId());
+        id = ${field.name}.getId();
+        if (id < 0 ) {
+            ${field.name}.get().save();
+            id = ${field.name}.get().getId();
+        }
+        map.put("${field.name}", id);
 </#if>
 <#elseif field.type == "rootref">
 <#elseif field.type == "idx" >
