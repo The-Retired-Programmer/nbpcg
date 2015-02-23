@@ -961,7 +961,7 @@ public class ${ENTITYINFO.name} extends Entity${ENTITYINFO.access?upper_case}<${
             if (id < 0 ) {
                 ${field.name}.get().save();
                 map.put("${field.name}", ${field.name}.get().getId());
-            } elseif (id == 0) {
+            } else if (id == 0) {
                 map.put("${field.name}", null);
             } else {
                 map.put("${field.name}", id);
@@ -995,7 +995,7 @@ public class ${ENTITYINFO.name} extends Entity${ENTITYINFO.access?upper_case}<${
         if (id < 0 ) {
             ${field.name}.get().save();
             map.put("${field.name}", ${field.name}.get().getId());
-        } elseif (id == 0) {
+        } else if (id == 0) {
             map.put("${field.name}", null);
         } else {
             map.put("${field.name}", id);

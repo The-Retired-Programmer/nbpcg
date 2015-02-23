@@ -82,6 +82,7 @@ import ${datapackage}.${ENTITYINFO.name}.${ENTITYINFO.name}Field;
 import static ${datapackage}.${ENTITYINFO.name}.${ENTITYINFO.name}Field.*;
 import static uk.org.rlinsdale.nbpcglibrary.data.entity.EntityFieldChangeEventParams.CommonEntityField.ALL;
 import uk.org.rlinsdale.nbpcglibrary.data.entity.EntityFieldChangeEventParams.CommonEntityField;
+import static uk.org.rlinsdale.nbpcglibrary.form.Form.FormSaveResult.SAVESUCCESS;
 
 /**
  * NodeEditor for ${ENTITYINFO.name}Node.
@@ -147,13 +148,17 @@ public final class ${ENTITYINFO.name}NodeEditor extends NodeEditorTopComponent<$
         ${field.name}Field.closeChoices();
 </#if>
 </#list>
-        form.save();
         entity.removeTitleListener(titlechangelistener);
         node.setSaveHandler(null);
         entity.removeFieldListener(entityfieldchangelistener);
         return form;
     }
 
+    @Override
+    protected boolean canCloseForm() {
+         return form.save() == SAVESUCCESS;
+    }
+    
     private class EditorFields extends FieldsDef {
         
         public EditorFields() {
