@@ -64,15 +64,20 @@ package ${package};
 <#assign needListImport = "yes" >
 </#if>
 </#list>
+import java.awt.Component;
+import java.awt.Graphics;
+import static java.beans.BeanInfo.ICON_COLOR_16x16;
 import java.io.IOException;
 <#if needListImport = "yes">
 import java.util.List;
 </#if>
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import org.netbeans.spi.actions.AbstractSavable;
 import ${datapackage}.*;
 import ${nodepackage}.${ENTITYINFO.name}Node;
 import uk.org.rlinsdale.nbpcglibrary.data.entity.*;
 import uk.org.rlinsdale.nbpcglibrary.form.*;
-import uk.org.rlinsdale.nbpcglibrary.node.SaveHandler;
 import uk.org.rlinsdale.nbpcglibrary.common.*;
 import uk.org.rlinsdale.nbpcglibrary.topcomponent.*;
 import org.openide.util.NbBundle;
@@ -102,9 +107,9 @@ persistenceType = TopComponent.PERSISTENCE_NEVER)
 })
 public final class ${ENTITYINFO.name}NodeEditor extends NodeEditorTopComponent<${ENTITYINFO.name}, ${ENTITYINFO.name}Field> {
     
-    private final SaveHandler saveHandler = new FormSaveHandler();
     private final EntityFieldChangeListener entityfieldchangelistener;
     private final TitleChangeListener titlechangelistener;
+    private final EntityStateChangeListener entitystatechangelistener;
     //
     private Form form;
 <#list ENTITYINFO.field![] as field>
@@ -127,17 +132,19 @@ public final class ${ENTITYINFO.name}NodeEditor extends NodeEditorTopComponent<$
                 NbBundle.getMessage(${ENTITYINFO.name}NodeEditor.class, "CTL_${ENTITYINFO.name}NodeEditor"),
                 NbBundle.getMessage(${ENTITYINFO.name}NodeEditor.class, "HINT_${ENTITYINFO.name}NodeEditor"));
         ${ENTITYINFO.name} e = node.getEntity();
-        entityfieldchangelistener = new EntityFieldChangeListener("Editor:"+e.instanceDescription());
-        titlechangelistener = new TitleChangeListener("Editor:"+e.instanceDescription());
+        String desc = "Editor:" + e.instanceDescription();
+        entityfieldchangelistener = new EntityFieldChangeListener(desc);
+        titlechangelistener = new TitleChangeListener(desc);
+        entitystatechangelistener = new EntityStateChangeListener(desc);
     }
 
     @Override
     protected Form getForm() {
         setName("${ENTITYINFO.name}: " + node.getDisplayTitle());
-        node.setSaveHandler(saveHandler);
         form = new Form("${ENTITYINFO.name}Editor",  new EditorFields());
         entity.addTitleListener(titlechangelistener);
         entity.addFieldListener(entityfieldchangelistener);
+        entity.addStateListener(entitystatechangelistener);
         return form;                 
     }
 
@@ -149,8 +156,8 @@ public final class ${ENTITYINFO.name}NodeEditor extends NodeEditorTopComponent<$
 </#if>
 </#list>
         entity.removeTitleListener(titlechangelistener);
-        node.setSaveHandler(null);
         entity.removeFieldListener(entityfieldchangelistener);
+        entity.removeStateListener(entitystatechangelistener);
         return form;
     }
 
@@ -347,13 +354,98 @@ public final class ${ENTITYINFO.name}NodeEditor extends NodeEditorTopComponent<$
 </#if>
 </#if>
 </#list>
-    private class FormSaveHandler implements SaveHandler {
+    private class TCSavable extends AbstractSavable implements Icon, HasInstanceDescription {
+
+        private Icon nodeicon;
+
+        public TCSavable() {
+            register();
+        }
 
         @Override
-        public void handleSave() throws IOException {
-            form.save();
+        public String instanceDescription() {
+            return LogBuilder.instanceDescription(this, "${ENTITYINFO.name}Editor");
+        }
+
+        @Override
+        protected void handleSave() throws IOException {
+            LogBuilder.writeLog("nbpcglibrary.node", this, "handleSave");
+            if (form.save() == SAVESUCCESS) {
+                editor().content.remove(this);
+                unregister();
+            }
+        }
+
+        @Override
+        protected String findDisplayName() {
+            return entity.getDisplayTitle();
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (obj instanceof TCSavable) {
+                return editor() == ((TCSavable) obj).editor();
+            }
+            return false;
+        }
+
+        @Override
+        public int hashCode() {
+            return editor().hashCode();
+        }
+        
+        ${ENTITYINFO.name}NodeEditor editor() {
+            return ${ENTITYINFO.name}NodeEditor.this;
+        }
+
+        @Override
+        public void paintIcon(Component c, Graphics g, int x, int y) {
+            if (nodeicon == null) {
+                nodeicon = new ImageIcon(node.getIcon(ICON_COLOR_16x16));
+            }
+            nodeicon.paintIcon(c, g, x, y);
+        }
+
+        @Override
+        public int getIconWidth() {
+            if (nodeicon == null) {
+                nodeicon = new ImageIcon(node.getIcon(ICON_COLOR_16x16));
+            }
+            return nodeicon.getIconWidth();
+        }
+
+        @Override
+        public int getIconHeight() {
+            if (nodeicon == null) {
+                nodeicon = new ImageIcon(node.getIcon(ICON_COLOR_16x16));
+            }
+            return nodeicon.getIconHeight();
         }
     }
+
+    private class EntityStateChangeListener extends Listener<EntityStateChangeEventParams> {
+
+        public EntityStateChangeListener(String name) {
+            super(name);
+        }
+
+        @Override
+        public void action(EntityStateChangeEventParams p) {
+            switch (p.getTransition()) {
+                case EDIT:
+                    if (getLookup().lookup(TCSavable.class) == null) {
+                        content.add(new TCSavable());
+                    }
+                    break;
+                case SAVE:
+                    break;
+                case REMOVE:
+                    break;
+                case RESET:
+            }
+        }
+    }
+    
 
     private class EntityFieldChangeListener extends Listener<EntityFieldChangeEventParams<${ENTITYINFO.name}Field>> {
 
