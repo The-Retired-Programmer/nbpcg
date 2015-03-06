@@ -65,6 +65,7 @@ package ${package};
 </#if>
 </#list>
 import java.awt.Component;
+import java.awt.EventQueue;
 import java.awt.Graphics;
 import static java.beans.BeanInfo.ICON_COLOR_16x16;
 import java.io.IOException;
@@ -85,6 +86,7 @@ import org.openide.util.NbBundle.Messages;
 import org.openide.windows.TopComponent;
 import ${datapackage}.${ENTITYINFO.name}.${ENTITYINFO.name}Field;
 import static ${datapackage}.${ENTITYINFO.name}.${ENTITYINFO.name}Field.*;
+import uk.org.rlinsdale.nbpcglibrary.data.LibraryOnStop;
 import static uk.org.rlinsdale.nbpcglibrary.data.entity.EntityFieldChangeEventParams.CommonEntityField.ALL;
 import uk.org.rlinsdale.nbpcglibrary.data.entity.EntityFieldChangeEventParams.CommonEntityField;
 import static uk.org.rlinsdale.nbpcglibrary.form.Form.FormSaveResult.SAVESUCCESS;
@@ -372,7 +374,19 @@ public final class ${ENTITYINFO.name}NodeEditor extends NodeEditorTopComponent<$
             LogBuilder.writeLog("nbpcglibrary.node", this, "handleSave");
             if (form.save() == SAVESUCCESS) {
                 editor().content.remove(this);
-                unregister();
+            } else {
+                EventQueue.invokeLater(new ReRegister());
+                LibraryOnStop.incRegisterOutstanding();
+            }
+        }
+
+
+        private class ReRegister implements Runnable {
+            
+            @Override
+            public void run() {
+                TCSavable.this.register();
+                LibraryOnStop.decRegisterOutstanding();
             }
         }
 
