@@ -97,7 +97,7 @@ public class ${ENTITYINFO.name}Node extends RootNode<${ENTITYINFO.name}> {
     }
 
     private ${ENTITYINFO.name}Node(${ENTITYINFO.name} e, ${ENTITYINFO.name}NodeChildFactory cf) {
-        super("${ENTITYINFO.icon}", e, cf, new DataFlavorAndAction[] {<#list ENTITYINFO.child![] as child>new DataFlavorAndAction(${child.name?upper_case}NODE_FLAVOR, DataFlavorAndAction.COPYCUT<#if child.orderable??>MOVE</#if>), </#list>});
+        super(e, cf, new DataFlavorAndAction[] {<#list ENTITYINFO.child![] as child>new DataFlavorAndAction(${child.name?upper_case}NODE_FLAVOR, DataFlavorAndAction.COPYCUT<#if child.orderable??>MOVE</#if>), </#list>});
         this.cf = cf;
     }
 

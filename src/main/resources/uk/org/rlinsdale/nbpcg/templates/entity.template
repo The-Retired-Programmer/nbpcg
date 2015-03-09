@@ -217,20 +217,20 @@ public class ${ENTITYINFO.name} extends Entity${ENTITYINFO.access?upper_case}<${
     }
 
     private ${ENTITYINFO.name}(int id, ${ENTITYINFO.name}.EM em, DBFieldsRWIndexed${ENTITYINFO.withfields}<${ENTITYINFO.name}> dbfields) {
-        super("${ENTITYINFO.name}["+Integer.toString(id)+"]", id, em, dbfields);
+        super("${ENTITYINFO.name}["+Integer.toString(id)+"]", "${ENTITYINFO.icon}", id, em, dbfields);
 <#else>
         this(id, em, new DBFieldsRW${ENTITYINFO.withfields}<>());
     }
 
     private ${ENTITYINFO.name}(int id, ${ENTITYINFO.name}.EM em, DBFieldsRW${ENTITYINFO.withfields}<${ENTITYINFO.name}> dbfields) {
-        super("${ENTITYINFO.name}["+Integer.toString(id)+"]", id, em, dbfields);
+        super("${ENTITYINFO.name}["+Integer.toString(id)+"]", "${ENTITYINFO.icon}", id, em, dbfields);
 </#if>
 <#else>
         this(id, em, new DBFieldsRO${ENTITYINFO.withfields}());
     }
 
     private ${ENTITYINFO.name}(int id, ${ENTITYINFO.name}.EM em, DBFieldsRO${ENTITYINFO.withfields} dbfields) {
-        super("${ENTITYINFO.name}["+Integer.toString(id)+"]", id, em, dbfields);
+        super("${ENTITYINFO.name}["+Integer.toString(id)+"]", "${ENTITYINFO.icon}", id, em, dbfields);
 </#if>
         this.dbfields = dbfields;
 <#list ENTITYINFO.field![] as field>
@@ -338,6 +338,9 @@ public class ${ENTITYINFO.name} extends Entity${ENTITYINFO.access?upper_case}<${
 
     @Override
     public final String instanceDescription() {
+        if (${field.name} == null) {
+            return LogBuilder.instanceDescription(this, Integer.toString(getId()));
+        }
         ${field.references} e = ${field.name}.getNoLoad();
         return e != null?
                 LogBuilder.instanceDescription(this, Integer.toString(getId()) + ":" + e.instanceDescription()):

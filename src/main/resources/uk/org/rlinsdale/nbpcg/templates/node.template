@@ -116,7 +116,7 @@ public class ${ENTITYINFO.name}Node extends ${type2}Node${ENTITYINFO.access?uppe
         }
 
         private ${ENTITYINFO.name}Node(${ENTITYINFO.name} e, ${ENTITYINFO.name}NodeChildFactory cf) {
-            super("${ENTITYINFO.name}Node", "${ENTITYINFO.icon}", e, cf, ${ENTITYINFO.name}.EM.class,
+            super("${ENTITYINFO.name}Node", e, cf, ${ENTITYINFO.name}.EM.class,
                 new DataFlavorAndAction[] {
 <#list ENTITYINFO.child![] as c>
                     new DataFlavorAndAction(${c.name?upper_case}NODE_FLAVOR, DataFlavorAndAction.COPYCUT<#if c.orderable = "yes">MOVE</#if>),
@@ -138,7 +138,7 @@ public class ${ENTITYINFO.name}Node extends ${type2}Node${ENTITYINFO.access?uppe
          * @param e the entity associated with this node
          */
         public ${ENTITYINFO.name}Node(${ENTITYINFO.name} e) {
-            super("${ENTITYINFO.name}Node", "${ENTITYINFO.icon}", e, ${ENTITYINFO.name}.EM.class
+            super("${ENTITYINFO.name}Node", e, ${ENTITYINFO.name}.EM.class
                     // TODO - decide on state of this cut/destroy flag  - currently it is always true
                     <#if ENTITYINFO.access = "rw">, true</#if>);
         }
