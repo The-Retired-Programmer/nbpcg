@@ -9,7 +9,7 @@
     <!ATTLIST nbpcg-entity-info
         name CDATA #REQUIRED
         >
-    <!ELEMENT entityinfo (field*, child*, sortformat*, displaytitleformat*, displaynameformat*)  >
+    <!ELEMENT entityinfo (field*, child*, referenced*, sortformat*, displaytitleformat*, displaynameformat*)  >
         <!ATTLIST entityinfo
             key CDATA #REQUIRED
             name CDATA #REQUIRED
@@ -68,6 +68,11 @@
                 access (rw|ro) #REQUIRED
                 copymoveentity CDATA #IMPLIED 
                 copymovefield CDATA #IMPLIED
+                >
+        <!ELEMENT referenced EMPTY  >
+            <!ATTLIST referenced
+                name CDATA #REQUIRED
+                field CDATA #REQUIRED
                 >
         <!ELEMENT sortformat (display*)  >
             <!ATTLIST sortformat

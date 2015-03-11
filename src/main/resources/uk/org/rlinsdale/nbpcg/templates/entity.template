@@ -900,6 +900,19 @@ public class ${ENTITYINFO.name} extends Entity${ENTITYINFO.access?upper_case}<${
 
     @Override
     protected final void _remove() {
+<#list ENTITYINFO.referenced![] as referenced>
+        ${referenced.name}.EM em = ${referenced.name}.getEM();
+        DataAccessRW da = em._createDataAccess();
+        da.find("${referenced.dbfield}", getId()).stream().forEach((id) -> {
+<#if referenced.optional??>
+            ${referenced.name} ${referenced.name?lower_case} = em.get(id);
+            ${referenced.name?lower_case}.set${referenced.field?cap_first}(null);
+            ${referenced.name?lower_case}.save();
+<#else>
+            em.get(id).remove();
+</#if>
+        });
+</#list>
 <#list ENTITYINFO.child![] as child>
         get${child.references}s().stream().forEach((${child.name}) -> {
             ${child.name}.remove();

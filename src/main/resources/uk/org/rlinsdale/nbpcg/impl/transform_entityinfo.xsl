@@ -366,6 +366,24 @@
                 <xsl:call-template name="children" >
                     <xsl:with-param name="entityname" select="$ename"/>
                 </xsl:call-template>
+                <!-- and now add any referenced elements -->
+                <xsl:for-each select="/nbpcg/databases/database[not(@usepackage)]/table/field[@type='reference' and  @references=$ename ]" >
+                    <xsl:variable name="dbfield" >
+                        <xsl:choose>
+                            <xsl:when test="@dbname">
+                                <xsl:value-of select="@dbname"/>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:value-of select="@name"/>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </xsl:variable>
+                    <referenced name="{../@name}" field="{@name}" dbfield="{$dbfield}">
+                        <xsl:if test="@nullallowed = 'yes'">
+                            <xsl:attribute name="optional">yes</xsl:attribute>
+                        </xsl:if>
+                    </referenced>
+                </xsl:for-each>
                 <xsl:for-each select="//node[@name=$ename]" >
                     <xsl:variable name="parententity" >
                         <xsl:choose>
