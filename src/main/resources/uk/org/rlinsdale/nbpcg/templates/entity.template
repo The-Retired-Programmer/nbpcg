@@ -77,6 +77,11 @@ import java.util.Map;
 </#if>
 import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
+<#list ENTITYINFO.field![] as field>
+<#if field.type = "password" >
+import static ${field.passwordsupport}.*;
+</#if>
+</#list>
 import static ${package}.${ENTITYINFO.name}.${ENTITYINFO.name}Field;
 <#list ENTITYINFO.field![] as field>
 <#if field.type != "rootref" >
@@ -180,7 +185,9 @@ public class ${ENTITYINFO.name} extends Entity${ENTITYINFO.access?upper_case}<${
     private final Rules ${field.rvid}Rules = new Rules();
     private ${field.javatype} ${field.rvid}${field.initialisation};
     private ${field.javatype} ${field.rvid}Original;
-<#if field.type=="int" || field.type=="long" || field.type == "date" || field.type == "datetime" >
+<#if field.type == "password" >
+    private final PasswordRule passwordrule;
+<#elseif field.type=="int" || field.type=="long" || field.type == "date" || field.type == "datetime" >
     private boolean ${field.name}BadFormat=false;
 </#if>
 </#if>
@@ -235,7 +242,6 @@ public class ${ENTITYINFO.name} extends Entity${ENTITYINFO.access?upper_case}<${
         this.dbfields = dbfields;
 <#list ENTITYINFO.field![] as field>
 <#if field.type == "ref" || field.type == "reference" >
-        
 <#assign needreflistener = "no">
 <#list ENTITYINFO.displaynameformat as df >
 <#list df.display as dp>
@@ -262,7 +268,7 @@ public class ${ENTITYINFO.name} extends Entity${ENTITYINFO.access?upper_case}<${
         addRule(${field.name}.getDefinedRule());
 </#if>
 <#elseif field.type == "rootref">
-        root = Lookup.getDefault().lookup(${field.references}.class);
+        root = ${field.references}.get();
 </#if>
 </#list>
 <#if ENTITYINFO.access = "rw" >
@@ -289,6 +295,8 @@ public class ${ENTITYINFO.name} extends Entity${ENTITYINFO.access?upper_case}<${
         addRule(${field.rvid}Rules, new ${field.name?cap_first}PastRule());
 </#if>
         addRule(${field.rvid}Rules, new ${field.name?cap_first}BadFormatRule());
+<#elseif field.type = "password" >
+        addRule(${field.rvid}Rules, passwordrule = new PasswordRule());
 </#if>
 </#list>
 </#if>
@@ -316,7 +324,7 @@ public class ${ENTITYINFO.name} extends Entity${ENTITYINFO.access?upper_case}<${
 <#assign writeDescription = "yes" >
 <#list ENTITYINFO.field![] as field>
 <#if writeDescription = "yes">
-<#if  field.type = "String">
+<#if  field.type = "String" || field.type = "enum" || field.type = "password">
 
     @Override
     public final String instanceDescription() {
@@ -326,7 +334,7 @@ public class ${ENTITYINFO.name} extends Entity${ENTITYINFO.access?upper_case}<${
     }
 <#assign writeDescription = "no" >
 </#if>
-<#if field.type = "boolean" || field.type = "int" || field.type = "long" || field.type = "date" || field.type = "datetime" || field.type = "enum" >
+<#if field.type = "boolean" || field.type = "int" || field.type = "long" || field.type = "date" || field.type = "datetime"  >
     
     @Override
     public final String instanceDescription() {
@@ -390,7 +398,6 @@ public class ${ENTITYINFO.name} extends Entity${ENTITYINFO.access?upper_case}<${
 <#list ENTITYINFO.field![] as pref>
 <#if pref.type="ref" || pref.type="rootref" >
             return getParent().get${ENTITYINFO.name}s().stream().noneMatch((e) -> (e != ${ENTITYINFO.name}.this && e.get${field.name?cap_first}().equals(${field.name})));
-
 </#if>
 </#list>
         }
@@ -455,6 +462,29 @@ public class ${ENTITYINFO.name} extends Entity${ENTITYINFO.access?upper_case}<${
     }
 
 </#if>
+<#elseif field.type = "password" >
+    private class PasswordRule extends Rule {
+
+        private boolean wasPasswordValid = false;
+
+        public PasswordRule() {
+            super("password is not valid");
+        }
+
+        @Override
+        public boolean ruleCheck() {
+            return wasPasswordValid;
+        }
+
+        public boolean checkPassword(PasswordStrength strength, String password) {
+            return wasPasswordValid = passwordCheck(strength, password);
+        }
+
+        public void encodedPasswordLoaded() {
+            wasPasswordValid = true;
+        }
+    }
+
 </#if>
 </#list>
 </#if>
@@ -603,7 +633,7 @@ public class ${ENTITYINFO.name} extends Entity${ENTITYINFO.access?upper_case}<${
     }
 </#if>
 <#if ENTITYINFO.access = "rw" >
-<#if field.entryfield??>
+<#if field.type = "password" >
 
     /**
      * Define the ${field.name?cap_first}.
@@ -611,12 +641,14 @@ public class ${ENTITYINFO.name} extends Entity${ENTITYINFO.access?upper_case}<${
      * @param ${field.entryfield} the ${field.entryfield}
      */
     public void set${field.entryfield?cap_first}(String ${field.entryfield}) {
-        String encoded = ${field.encodemethod}(${field.entryfield});
-        if (!this.${field.rvid}.equals(encoded)) {
-            ensureEditing();
-            this.${field.rvid} = encoded;
-            fireFieldChange(${field.name?upper_case});
-            fireNameAndOrTitleChangeOn${field.name?cap_first}();
+        if (passwordrule.checkPassword(PasswordStrength.${field.passwordstrength?upper_case}, password)) {
+            String encoded = encode(${field.entryfield});
+            if (!this.${field.rvid}.equals(encoded)) {
+                ensureEditing();
+                this.${field.rvid} = encoded;
+                fireFieldChange(${field.name?upper_case});
+                fireNameAndOrTitleChangeOn${field.name?cap_first}();
+            }
         }
     }
 <#else>
@@ -937,6 +969,9 @@ public class ${ENTITYINFO.name} extends Entity${ENTITYINFO.access?upper_case}<${
         ${field.name}.set(rs.getInt("${field.name}"));
 <#elseif field.type == "rootref">
 <#elseif field.type == "idx" >
+<#elseif field.type == "password" >
+        ${field.rvid} = rs.${field.javarsget}("${field.name}");
+        passwordrule.encodedPasswordLoaded();
 <#else>
         ${field.rvid} = rs.${field.javarsget}("${field.name}");
 </#if>
@@ -971,7 +1006,7 @@ public class ${ENTITYINFO.name} extends Entity${ENTITYINFO.access?upper_case}<${
     protected final void _diffs(Map<String, Object> map) {
         int id;
 <#list ENTITYINFO.field![] as field>
-<#if field.javatype == "String">
+<#if field.javatype == "String" >
         if (!${field.rvid}.equals(${field.rvid}Original)) {
             map.put("${field.name}", ${field.rvid});
         }
@@ -1162,7 +1197,7 @@ public class ${ENTITYINFO.name} extends Entity${ENTITYINFO.access?upper_case}<${
         return get${field.name?cap_first}()? "Yes": "No";
 <#elseif field.type="date" || field.type="datetime" >
         return get${field.name?cap_first}().toString();
-<#elseif field.type="String" ||  field.type="enum" >
+<#elseif field.type="String" ||  field.type="enum" || field.type="password" >
         return get${field.name?cap_first}();
 </#if>
     }

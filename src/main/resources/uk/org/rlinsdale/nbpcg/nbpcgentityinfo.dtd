@@ -31,7 +31,7 @@
         <!ELEMENT field EMPTY  >
             <!ATTLIST field
                 name CDATA #REQUIRED
-                type (rootref|ref|String|int|reference|date|enum|idx|datetime|boolean|long) #REQUIRED
+                type (rootref|ref|String|int|reference|date|enum|idx|datetime|boolean|long|password) #REQUIRED
                 references CDATA #IMPLIED
                 referencestable CDATA #IMPLIED
                 parentfactory CDATA #IMPLIED
@@ -55,7 +55,8 @@
                 sqltype CDATA #IMPLIED
                 dbcolumnname CDATA #IMPLIED
                 entryfield CDATA #IMPLIED
-                encodemethod CDATA #IMPLIED
+                passwordsupport CDATA #IMPLIED
+                passwordstrength (none|weak|strong|verystrong) #IMPLIED
                 >
         <!ELEMENT child EMPTY  >
             <!ATTLIST child
@@ -73,6 +74,7 @@
             <!ATTLIST referenced
                 name CDATA #REQUIRED
                 field CDATA #REQUIRED
+                dbfield CDATA #REQUIRED
                 >
         <!ELEMENT sortformat (display*)  >
             <!ATTLIST sortformat

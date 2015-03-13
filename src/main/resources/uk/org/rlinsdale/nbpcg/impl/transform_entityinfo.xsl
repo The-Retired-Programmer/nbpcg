@@ -210,6 +210,17 @@
                                     </xsl:choose>
                                 </xsl:attribute>
                             </xsl:when>
+                            <xsl:when test="$type='password'" >
+                                <xsl:copy-of select="@passwordsupport|@entryfield" />
+                                <xsl:attribute name="passwordstrength">
+                                    <xsl:choose>
+                                        <xsl:when test="@passwordstrength">
+                                            <xsl:value-of select="@passwordstrength" />
+                                        </xsl:when>
+                                        <xsl:otherwise>none</xsl:otherwise>
+                                    </xsl:choose>
+                                </xsl:attribute>
+                            </xsl:when>
                             <xsl:otherwise>
                                 <xsl:copy-of select="@min|@max|@future|@past|@values" />
                             </xsl:otherwise>
@@ -221,6 +232,7 @@
                                 <xsl:when test="($type='long') or ($type='int') or ($type='date') or ($type='datetime') or ($type='String')">TextField</xsl:when>
                                 <xsl:when test="($type='reference') or ($type='ref') or ($type='rootref')">ReferenceChoiceField</xsl:when>
                                 <xsl:when test="$type='enum'">EnumChoiceField</xsl:when>
+                                <xsl:when test="$type='password'">PasswordField</xsl:when>
                             </xsl:choose>
                         </xsl:attribute>
                         <xsl:attribute name="sqltype">
@@ -230,6 +242,14 @@
                                 <xsl:when test="$type='int'">MEDIUMINT</xsl:when>
                                 <xsl:when test="$type='date'">VARCHAR(8)</xsl:when>
                                 <xsl:when test="$type='datetime'">VARCHAR(14)</xsl:when>
+                                <xsl:when test="$type='password'">
+                                    <xsl:choose>
+                                        <xsl:when test="@max">
+                                            <xsl:value-of select="concat('VARCHAR(',@max,')')" />
+                                        </xsl:when>
+                                        <xsl:otherwise>VARCHAR(40)</xsl:otherwise>
+                                    </xsl:choose>
+                                </xsl:when>
                                 <xsl:when test="$type='String'">
                                     <xsl:choose>
                                         <xsl:when test="@max">
@@ -281,14 +301,14 @@
                             </xsl:choose>
                         </xsl:if>
                         <xsl:attribute name="fieldclass">
-                        <xsl:choose>
-                            <xsl:when test="$type='boolean'">CheckboxField</xsl:when>
-                            <xsl:when test="($type='long') or ($type='int') or ($type='date') or ($type='datetime') or ($type='String')">TextField</xsl:when>
-                            <xsl:when test="($type='reference') or ($type='ref') or ($type='rootref')">ReferenceChoiceField</xsl:when>
-                            <xsl:when test="$type='enum'">EnumChoiceField</xsl:when>
-                        </xsl:choose>
-                    </xsl:attribute>
-                        <xsl:copy-of select="@encodemethod|@entryfield" />
+                            <xsl:choose>
+                                <xsl:when test="$type='boolean'">CheckboxField</xsl:when>
+                                <xsl:when test="($type='long') or ($type='int') or ($type='date') or ($type='datetime') or ($type='String')">TextField</xsl:when>
+                                <xsl:when test="($type='reference') or ($type='ref') or ($type='rootref')">ReferenceChoiceField</xsl:when>
+                                <xsl:when test="$type='enum'">EnumChoiceField</xsl:when>
+                                <xsl:when test="$type='password'">PasswordField</xsl:when>
+                            </xsl:choose>
+                        </xsl:attribute>
                         <xsl:call-template name="commonfieldattributes" >
                             <xsl:with-param name="type" select="$type" />
                         </xsl:call-template>
@@ -651,7 +671,7 @@
                 <xsl:when test="($type='int') or ($type='reference') or ($type='ref') or ($type='rootref')">int</xsl:when>
                 <xsl:when test="$type='date' ">DateOnly</xsl:when>
                 <xsl:when test="$type='datetime' ">Timestamp</xsl:when>
-                <xsl:when test="($type='enum') or ($type='String') ">String</xsl:when>
+                <xsl:when test="($type='enum') or ($type='String')  or ($type='password') ">String</xsl:when>
             </xsl:choose>
         </xsl:attribute>
         <xsl:attribute name="initialisation">
@@ -661,7 +681,7 @@
                 <xsl:when test="$type='date' "> = new DateOnly()</xsl:when>
                 <xsl:when test="$type='datetime' "> = new Timestamp()</xsl:when>
                 <xsl:when test="($type='reference') or ($type='ref') or ($type='rootref') "/>
-                <xsl:when test="($type='enum') or ($type='String') "> = ""</xsl:when>
+                <xsl:when test="($type='enum') or ($type='String') or ($type='password') "> = ""</xsl:when>
             </xsl:choose>
         </xsl:attribute>
         <xsl:attribute name="javarsget">
@@ -669,7 +689,7 @@
                 <xsl:when test="$type='boolean'">getBoolean</xsl:when>
                 <xsl:when test="$type='long' ">getLong</xsl:when>
                 <xsl:when test="($type='int') or ($type='reference') or ($type='ref') or ($type='rootref') ">getInt</xsl:when>
-                <xsl:when test="($type='date') or ($type='datetime') or ($type='enum') or ($type='String') ">getString</xsl:when>
+                <xsl:when test="($type='date') or ($type='datetime') or ($type='enum') or ($type='String') or ($type='password') ">getString</xsl:when>
             </xsl:choose>
         </xsl:attribute>
         <xsl:if test="@nullallowed = 'yes'">

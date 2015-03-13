@@ -64,7 +64,6 @@ import static javax.swing.Action.NAME;
 import org.openide.util.ContextAwareAction;
 import org.openide.util.Lookup;
 import ${datapackage}.${ENTITYINFO.name};
-import ${nodepackage}.${ENTITYINFO.parentname}Node;
 import uk.org.rlinsdale.nbpcglibrary.annotations.RegisterNodeAction;
 import uk.org.rlinsdale.nbpcglibrary.common.LogBuilder;
 
@@ -102,7 +101,7 @@ public final class Add${ENTITYINFO.name}Node extends AbstractAction implements C
         @Override
         public void actionPerformed(ActionEvent e) {
             LogBuilder.writeLog("${log}", this, "actionPerformed");
-            Lookup.getDefault().lookup(${ENTITYINFO.name}.EM.class).getNew(parent.getEntity());
+            ${ENTITYINFO.name}.getEM().getNew(parent.getEntity());
         }
     }
 }

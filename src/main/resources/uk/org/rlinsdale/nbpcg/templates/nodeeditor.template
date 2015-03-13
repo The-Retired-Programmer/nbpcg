@@ -263,16 +263,13 @@ public final class ${ENTITYINFO.name}NodeEditor extends NodeEditorTopComponent<$
             return "";
         }
     }
-<#else>
-<#if field.entryfield??>
+<#elseif field.type = "password" >
 
     private class ${field.name?cap_first}FieldBackingObject implements FieldBackingObject<String> {
     
         @Override
         public void set(String value) {
-            if (!"".equals(val)) {
                 entity.set${field.entryfield?cap_first}(value);
-            }
         }
 
         @Override
@@ -290,8 +287,7 @@ public final class ${ENTITYINFO.name}NodeEditor extends NodeEditorTopComponent<$
             return entity.get${field.name?cap_first}Rules().getErrorMessages();
         }
     }
-<#else>
-<#if field.type=="int" || field.type=="long" || field.type == "date" || field.type == "datetime" >
+<#elseif field.type=="int" || field.type=="long" || field.type == "date" || field.type == "datetime" >
 
     private class ${field.name?cap_first}FieldBackingObject implements FieldBackingObject<String> {
     
@@ -340,8 +336,6 @@ public final class ${ENTITYINFO.name}NodeEditor extends NodeEditorTopComponent<$
         }
     }
 </#if>
-</#if>
-</#if>
 </#list>
 
     private class EntityFieldChangeListener extends Listener<EntityFieldChangeEventParams<${ENTITYINFO.name}Field>> {
@@ -367,7 +361,9 @@ public final class ${ENTITYINFO.name}NodeEditor extends NodeEditorTopComponent<$
 <#if field.type!="idx" >
 <#if field.type!="rootref" >
                     case ${field.name?upper_case}:
-<#if field.type="reference"  >
+<#if field.type="password" >
+                        ${field.entryfield}Field.updateFieldFromBackingObject();
+<#elseif field.type="reference"  >
                         ${field.name}Field.updateFieldFromBackingObject();
 <#elseif field.type="ref" >
 <#elseif field.type=="int" || field.type=="long" ||field.type=="date" || field.type=="datetime">

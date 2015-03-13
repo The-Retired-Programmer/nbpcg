@@ -69,7 +69,7 @@
                         dbname  CDATA #IMPLIED
                         index (unique|yes) #IMPLIED
                         unique (yes) #IMPLIED
-                        type (boolean|long|int|date|datetime|enum|reference) #IMPLIED
+                        type (boolean|long|int|date|datetime|enum|reference|password) #IMPLIED
                         nullallowed (yes) #IMPLIED
                         label CDATA #IMPLIED
                         references CDATA #IMPLIED
@@ -79,8 +79,9 @@
                         max CDATA #IMPLIED
                         future (yes) #IMPLIED
                         past (yes) #IMPLIED
-                        encodemethod CDATA #IMPLIED
+                        passwordsupport CDATA #IMPLIED
                         entryfield CDATA #IMPLIED
+                        passwordstrength (weak|strong|verystrong) #IMPLIED
                         >
                 <!ELEMENT insert EMPTY>
                     <!ATTLIST insert values CDATA #REQUIRED>
