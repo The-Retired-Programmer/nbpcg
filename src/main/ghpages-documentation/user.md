@@ -150,7 +150,7 @@ Definition of a database table field (column) object.
 | Attribute | dbname | teh table column name - defaults to attribute name | optional |
 | Attribute | index | define the indexing for this field - one of unique or yes - default is no | optional |
 | Attribute | unique | define the uniqueness of this field - one of yes - default is no | optional |
-| Attribute | type | data type of the field one of boolean, long, int, date, datetime, enum or reference - default is string | optional |
+| Attribute | type | data type of the field one of boolean, long, int, date, datetime, enum, password or reference - default is string | optional |
 | Attribute | nullallowed | are null values allowed? - one of yes - default is no | optional |
 | Attribute | label |  | optional |
 | Attribute | references |  | optional |
@@ -160,9 +160,9 @@ Definition of a database table field (column) object.
 | Attribute | max | max length of string entered, max value of number entered | optional |
 | Attribute | future | set to yes if date or datetime entered must be in future | optional |
 | Attribute | past | set to yes if date or datetime entered must be in past | optional |
-| Attribute | encodemethod |  | optional |
-| Attribute | entryfield |  | optional |
-
+| Attribute | passwordsupport | package name containing the helper methods for encoding and password testing | optional |
+| Attribute | entryfield | the field name used for a password entry | optional |
+| Attribute | passwordstrength | the require password strength - one of weak, strong, verystrong - default is none | optional |
 
 **The insert element**
 
