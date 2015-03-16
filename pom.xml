@@ -4,12 +4,12 @@
     <parent>
         <groupId>uk.org.rlinsdale.poms</groupId>
         <artifactId>nb-plugin-module</artifactId>
-        <version>1.0.0</version>
+        <version>1.0.2</version>
     </parent>
     
     <groupId>uk.org.rlinsdale</groupId>
     <artifactId>nbpcg</artifactId>
-    <version>4.0.12</version>
+    <version>4.0.13</version>
     <packaging>nbm</packaging>
     
     <name>Netbeans Platform CodeGenerator</name>
