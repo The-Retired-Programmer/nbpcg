@@ -62,6 +62,7 @@
 </#if>
 package ${package};
 
+import java.io.IOException;
 import java.util.List;
 import  ${datapackage}.*;
 import uk.org.rlinsdale.nbpcglibrary.data.entity.*;
@@ -118,15 +119,19 @@ public class ${ENTITYINFO.name}NodeChildFactory extends BasicChildFactory<${ENTI
     protected boolean createKeys(List<Entity> list) {
 <#assign previous = "" >
 <#list ENTITYINFO.child![] as child>
+        try {
 <#if previous = "" >
-        offsetMin${child.name?cap_first}s = 0; 
+            offsetMin${child.name?cap_first}s = 0; 
 <#else>
-        offsetMin${child.name?cap_first}s = ${previous} + 1;
+            offsetMin${child.name?cap_first}s = ${previous} + 1;
 </#if>
-        List<${child.references}> ${child.name}s = getParentEntity().get${child.name?cap_first}s();
-        list.addAll(${child.name}s);
-        offsetMax${child.name?cap_first}s = offsetMin${child.name?cap_first}s + ${child.name}s.size() -1;
+            offsetMax${child.name?cap_first}s = offsetMin${child.name?cap_first}s;
+            List<${child.references}> ${child.name}s = getParentEntity().get${child.name?cap_first}s();
+            list.addAll(${child.name}s);
+            offsetMax${child.name?cap_first}s = offsetMin${child.name?cap_first}s + ${child.name}s.size() -1;
 <#assign previous = "offsetMax${child.name?cap_first}s" >
+        } catch (IOException ex) {
+        }
 </#list>
         return true;
     }

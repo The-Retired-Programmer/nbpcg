@@ -62,6 +62,7 @@
 </#list>
 package ${package};
 
+import java.io.IOException;
 <#if hassortchildren >
 import java.util.Comparator;
 </#if>
@@ -127,8 +128,9 @@ public class ${ENTITYINFO.name} extends Entity {
     
     /**
      * Constructor.
+     * @throws IOException if problem with obtaining/parsing data
      */
-    public ${ENTITYINFO.name}() {
+    public ${ENTITYINFO.name}() throws IOException {
         super("${ENTITYINFO.name}", "${ENTITYINFO.icon}");
 <#list ENTITYINFO.child![] as child>
 <#if child.orderable = "yes" >
@@ -146,8 +148,9 @@ public class ${ENTITYINFO.name} extends Entity {
      * Add a ${child.references} to the root's list
      *
      * @param e the ${child.name}
+     * @throws IOException if problem with adding data
      */
-    public void add${child.references}(${child.references} e) {
+    public void add${child.references}(${child.references} e) throws IOException {
         ${child.name}s.add(e);
     }
 
@@ -200,8 +203,9 @@ public class ${ENTITYINFO.name} extends Entity {
      * Get the list of ${child.references}s
      *
      * @return the list of ${child.references}s
+     * @throws IOException if problem with obtaining/parsing data
      */
-    public List<${child.references}> get${child.references}s() { 
+    public List<${child.references}> get${child.references}s() throws IOException { 
         return ${child.name}s.get();
     }
 <#if child.orderable = "yes" >
@@ -221,7 +225,7 @@ public class ${ENTITYINFO.name} extends Entity {
 </#list>
 
         @Override
-        protected final void _restoreState() {
+        protected final void _restoreState() throws IOException {
 <#list ENTITYINFO.child![] as child>
             ${child.name}s.restoreState();
 </#list>

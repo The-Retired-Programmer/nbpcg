@@ -73,10 +73,10 @@ USE ${DBINFO.name};
 <#assign table = entityinfo[dbtable.name] >
 CREATE TABLE ${table.dbtablename}(
     id MEDIUMINT UNSIGNED AUTO_INCREMENT PRIMARY KEY
-    ,createdby VARCHAR(4) NOT NULL
-    ,createdon VARCHAR(14) NOT NULL
-    ,updatedby VARCHAR(4) NOT NULL
-    ,updatedon VARCHAR(14) NOT NULL
+    ,createdby CHAR(4) NOT NULL
+    ,createdon CHAR(14) NOT NULL
+    ,updatedby CHAR(4) NOT NULL
+    ,updatedon CHAR(14) NOT NULL
 <#list table.field![] as field >
 <#if field.type != "rootref" >
     ,${field.dbcolumnname} ${field.sqltype} ${field.uniquesql} ${field.nullsql}

@@ -63,6 +63,7 @@
 package ${package};
 
 import java.awt.datatransfer.DataFlavor;
+import java.io.IOException;
 import java.util.List;
 import javax.swing.Action;
 import ${datapackage}.*;
@@ -282,7 +283,7 @@ public class ${ENTITYINFO.name}Node extends ${type2}Node${ENTITYINFO.access?uppe
         
 </#if>
         @Override
-        protected void _moveAddChild(Entity child) {
+        protected void _moveAddChild(Entity child) throws IOException {
 <#list ENTITYINFO.child![] as c>
 <#if c.copymoveentity??>
             if (child instanceof ${c.copymoveentity}) {
@@ -297,7 +298,7 @@ public class ${ENTITYINFO.name}Node extends ${type2}Node${ENTITYINFO.access?uppe
         }
 
         @Override
-        protected void _cutAddChild(Entity child) {
+        protected void _cutAddChild(Entity child) throws IOException {
 <#list ENTITYINFO.child![] as c>
             if (child instanceof ${c.name?cap_first}) {
                 getEntity().add${c.name?cap_first}((${c.name?cap_first}) child);
@@ -308,7 +309,7 @@ public class ${ENTITYINFO.name}Node extends ${type2}Node${ENTITYINFO.access?uppe
         }
 
         @Override
-        protected void _copyAddChild(Entity child) {
+        protected void _copyAddChild(Entity child) throws IOException {
 <#list ENTITYINFO.child![] as c>
             if (child instanceof ${c.name?cap_first}) {
                 ${c.name?cap_first}.getEM().getNew((${c.name?cap_first})child ,getEntity());
@@ -328,12 +329,12 @@ public class ${ENTITYINFO.name}Node extends ${type2}Node${ENTITYINFO.access?uppe
 
 <#if ENTITYINFO.access = "rw" >
         @Override
-        protected void _cutAndPasteRemove() {
+        protected void _cutAndPasteRemove()  throws IOException {
             getEntity().getParent().remove${ENTITYINFO.name}(getEntity());
         }
 
         @Override
-        protected void _deleteRemove() {
+        protected void _deleteRemove() throws IOException {
             getEntity().remove();
         }
 

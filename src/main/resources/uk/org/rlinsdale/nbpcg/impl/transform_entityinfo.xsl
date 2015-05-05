@@ -59,7 +59,27 @@
                             </xsl:otherwise>
                         </xsl:choose>
                     </xsl:variable>
-                    <table name="{$tname}">
+                    <xsl:variable name="ttype">
+                        <xsl:choose>
+                            <xsl:when test="@type">
+                                <xsl:value-of select="@type" />
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:value-of select="../@type" />
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </xsl:variable>
+                    <xsl:variable name="twithfields">
+                        <xsl:choose>
+                            <xsl:when test="@withfields">
+                                <xsl:value-of select="@withfields" />
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:value-of select="../@withfields" />
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </xsl:variable>
+                    <table name="{$tname}" type="{$ttype}" withfields="{$twithfields}">
                         <xsl:for-each select="insert">
                             <insert values="{@values}"/>
                         </xsl:for-each>
@@ -220,6 +240,22 @@
                                         <xsl:otherwise>none</xsl:otherwise>
                                     </xsl:choose>
                                 </xsl:attribute>
+                                <xsl:attribute name="max">
+                                    <xsl:choose>
+                                        <xsl:when test="@max">
+                                            <xsl:value-of select="@max" />
+                                        </xsl:when>
+                                        <xsl:otherwise>40</xsl:otherwise>
+                                    </xsl:choose>
+                                </xsl:attribute>
+                                <xsl:attribute name="min">
+                                    <xsl:choose>
+                                        <xsl:when test="@max">
+                                            <xsl:value-of select="@max" />
+                                        </xsl:when>
+                                        <xsl:otherwise>40</xsl:otherwise>
+                                    </xsl:choose>
+                                </xsl:attribute>
                             </xsl:when>
                             <xsl:otherwise>
                                 <xsl:copy-of select="@min|@max|@future|@past|@values" />
@@ -240,23 +276,40 @@
                                 <xsl:when test="$type='boolean'">BOOLEAN</xsl:when>
                                 <xsl:when test="$type='long'">BIGINT</xsl:when>
                                 <xsl:when test="$type='int'">MEDIUMINT</xsl:when>
-                                <xsl:when test="$type='date'">VARCHAR(8)</xsl:when>
-                                <xsl:when test="$type='datetime'">VARCHAR(14)</xsl:when>
+                                <xsl:when test="$type='date'">CHAR(8)</xsl:when>
+                                <xsl:when test="$type='datetime'">CHAR(14)</xsl:when>
                                 <xsl:when test="$type='password'">
                                     <xsl:choose>
                                         <xsl:when test="@max">
-                                            <xsl:value-of select="concat('VARCHAR(',@max,')')" />
+                                            <xsl:value-of select="concat('CHAR(',@max,')')" />
                                         </xsl:when>
-                                        <xsl:otherwise>VARCHAR(40)</xsl:otherwise>
+                                        <xsl:otherwise>CHAR(40)</xsl:otherwise>
                                     </xsl:choose>
                                 </xsl:when>
                                 <xsl:when test="$type='String'">
-                                    <xsl:choose>
-                                        <xsl:when test="@max">
-                                            <xsl:value-of select="concat('VARCHAR(',@max,')')" />
-                                        </xsl:when>
-                                        <xsl:otherwise>VARCHAR(50)</xsl:otherwise>
-                                    </xsl:choose>
+                                    <xsl:variable name="max">
+                                        <xsl:choose>
+                                            <xsl:when test="@max">
+                                                <xsl:value-of select="@max"/>
+                                            </xsl:when>
+                                            <xsl:otherwise>50</xsl:otherwise>
+                                        </xsl:choose>
+                                    </xsl:variable>
+                                    <xsl:variable name="min">
+                                        <xsl:choose>
+                                            <xsl:when test="@min">
+                                                <xsl:value-of select="@min"/>
+                                            </xsl:when>
+                                            <xsl:otherwise>1</xsl:otherwise>
+                                        </xsl:choose>
+                                    </xsl:variable>
+                                    <xsl:variable name="sqltype">
+                                        <xsl:choose>
+                                            <xsl:when test="$min = $max">CHAR</xsl:when>
+                                            <xsl:otherwise>VARCHAR</xsl:otherwise>
+                                        </xsl:choose>
+                                    </xsl:variable>
+                                    <xsl:value-of select="concat($sqltype,'(',$max,')')" />
                                 </xsl:when>
                                 <xsl:when test="($type='reference') or ($type='ref') or ($type='rootref')">MEDIUMINT UNSIGNED</xsl:when>
                                 <xsl:when test="$type='enum'">
@@ -669,6 +722,16 @@
                 <xsl:when test="$type='boolean'">boolean</xsl:when>
                 <xsl:when test="$type='long' ">long</xsl:when>
                 <xsl:when test="($type='int') or ($type='reference') or ($type='ref') or ($type='rootref')">int</xsl:when>
+                <xsl:when test="$type='date' ">DateOnly</xsl:when>
+                <xsl:when test="$type='datetime' ">Timestamp</xsl:when>
+                <xsl:when test="($type='enum') or ($type='String')  or ($type='password') ">String</xsl:when>
+            </xsl:choose>
+        </xsl:attribute>
+        <xsl:attribute name="jsontype">
+            <xsl:choose>
+                <xsl:when test="$type='boolean'">Boolean</xsl:when>
+                <xsl:when test="$type='long' ">Long</xsl:when>
+                <xsl:when test="($type='int') or ($type='reference') or ($type='ref') or ($type='rootref')">Integer</xsl:when>
                 <xsl:when test="$type='date' ">DateOnly</xsl:when>
                 <xsl:when test="$type='datetime' ">Timestamp</xsl:when>
                 <xsl:when test="($type='enum') or ($type='String')  or ($type='password') ">String</xsl:when>

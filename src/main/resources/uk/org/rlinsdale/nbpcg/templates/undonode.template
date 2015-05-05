@@ -58,12 +58,13 @@
 package ${package};
 
 import java.awt.event.ActionEvent;
+import java.io.IOException;
+import java.util.logging.Level;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import static javax.swing.Action.NAME;
 import org.openide.util.ContextAwareAction;
 import org.openide.util.Lookup;
-import ${nodepackage}.${ENTITYINFO.name}Node;
 import uk.org.rlinsdale.nbpcglibrary.annotations.RegisterNodeAction;
 import uk.org.rlinsdale.nbpcglibrary.common.LogBuilder;
 
@@ -100,7 +101,12 @@ public final class Undo${ENTITYINFO.name}Node extends AbstractAction implements 
         @Override
         public void actionPerformed(ActionEvent e) {
             LogBuilder.writeLog("${log}", this, "actionPerformed");
-            node.getEntity().cancelEdit();
+            try {
+                node.getEntity().cancelEdit();
+            } catch (IOException ex) {
+                LogBuilder.create("${log}", Level.SEVERE).addMethodName(this, "actionPerformed")
+                            .addExceptionMessage(ex).write();
+            }
         }
     }
 }

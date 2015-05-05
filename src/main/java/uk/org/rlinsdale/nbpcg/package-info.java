@@ -37,7 +37,10 @@
     @TemplateRegistration(folder = "uk-org-rlinsdale-nbpcg", displayName = "rootnode", content = "templates/rootnode.template", scriptEngine = "freemarker"),
     @TemplateRegistration(folder = "uk-org-rlinsdale-nbpcg", displayName = "rootnodeviewer", content = "templates/rootnodeviewer.template", scriptEngine = "freemarker"),
     @TemplateRegistration(folder = "uk-org-rlinsdale-nbpcg", displayName = "iconnodeviewer", content = "templates/iconnodeviewer.template", scriptEngine = "freemarker"),
-    @TemplateRegistration(folder = "uk-org-rlinsdale-nbpcg", displayName = "iconnodevieweraction", content = "templates/iconnodevieweraction.template", scriptEngine = "freemarker")
+    @TemplateRegistration(folder = "uk-org-rlinsdale-nbpcg", displayName = "iconnodevieweraction", content = "templates/iconnodevieweraction.template", scriptEngine = "freemarker"),
+    @TemplateRegistration(folder = "uk-org-rlinsdale-nbpcg", displayName = "remoteservlet", content = "templates/remoteservlet.template", scriptEngine = "freemarker"),
+    @TemplateRegistration(folder = "uk-org-rlinsdale-nbpcg", displayName = "remotecommandprocessor", content = "templates/remotecommandprocessor.template", scriptEngine = "freemarker"),
+    @TemplateRegistration(folder = "uk-org-rlinsdale-nbpcg", displayName = "remoteentity", content = "templates/remoteentity.template", scriptEngine = "freemarker")
 })
 @TemplateRegistration(folder = "Other", displayName = "NBPCG Template File", content = "TemplateTemplate.template")
 package uk.org.rlinsdale.nbpcg;

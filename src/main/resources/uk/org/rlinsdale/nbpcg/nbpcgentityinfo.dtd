@@ -41,6 +41,7 @@
                 pprvu CDATA #IMPLIED
                 values CDATA #IMPLIED
                 javatype (int|String|DateOnly|Timestamp|boolean|long) #REQUIRED
+                jsontype (Integer|String|DateOnly|Timestamp|Boolean|Long) #REQUIRED
                 initialisation CDATA #REQUIRED
                 javarsget (getInt|getString|getLong|getBoolean) #REQUIRED
                 nullsql CDATA #IMPLIED
@@ -102,6 +103,8 @@
         <!ELEMENT table (insert*) >
             <!ATTLIST table
                 name CDATA #REQUIRED
+                type CDATA #REQUIRED
+                withfields CDATA #REQUIRED
                 >
         <!ELEMENT insert EMPTY >
             <!ATTLIST insert

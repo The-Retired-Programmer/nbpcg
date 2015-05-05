@@ -58,6 +58,7 @@
 package ${package};
 
 import java.awt.datatransfer.DataFlavor;
+import java.io.IOException;
 import java.util.List;
 import javax.swing.Action;
 import ${datapackage}.*;
@@ -146,12 +147,12 @@ public class ${ENTITYINFO.name}Node extends RootNode<${ENTITYINFO.name}> {
     }
 
     @Override
-    protected void _moveAddChild(Entity child) {
+    protected void _moveAddChild(Entity child) throws IOException {
         _cutAddChild(child);
     }
 
     @Override
-    protected void _cutAddChild(Entity child) {
+    protected void _cutAddChild(Entity child) throws IOException {
 <#list ENTITYINFO.child![] as child>
 <#if child.access = "rw" >
         if (child instanceof ${child.name?cap_first}) {
@@ -164,7 +165,7 @@ public class ${ENTITYINFO.name}Node extends RootNode<${ENTITYINFO.name}> {
     }
 
     @Override
-    protected void _copyAddChild(Entity child) {
+    protected void _copyAddChild(Entity child) throws IOException {
 <#list ENTITYINFO.child![] as child>
 <#if child.access = "rw" >
         if (child instanceof ${child.name?cap_first}) {

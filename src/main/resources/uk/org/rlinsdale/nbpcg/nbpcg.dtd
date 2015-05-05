@@ -23,7 +23,7 @@
             <!ELEMENT generatescripts EMPTY>
             <!ELEMENT generate EMPTY>
                 <!ATTLIST generate
-                    type (data|node|nodeviewer|nodeeditor) #REQUIRED
+                    type (data|node|nodeviewer|nodeeditor|remotedb) #REQUIRED
                     package CDATA #REQUIRED
                     >
     <!ELEMENT node (node*)>
@@ -50,7 +50,7 @@
             <!ATTLIST database
                 name CDATA #REQUIRED
                 dbname CDATA #IMPLIED
-                db (MySQL) #IMPLIED
+                db (MySQL|Remote-MySQL) #IMPLIED
                 access (rw|ro) #IMPLIED
                 type (idkeyauto) #IMPLIED
                 withfields (idandstamp) #IMPLIED

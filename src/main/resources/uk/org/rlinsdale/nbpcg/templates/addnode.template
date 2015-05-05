@@ -58,6 +58,8 @@
 package ${package};
 
 import java.awt.event.ActionEvent;
+import java.io.IOException;
+import java.util.logging.Level;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import static javax.swing.Action.NAME;
@@ -101,7 +103,12 @@ public final class Add${ENTITYINFO.name}Node extends AbstractAction implements C
         @Override
         public void actionPerformed(ActionEvent e) {
             LogBuilder.writeLog("${log}", this, "actionPerformed");
-            ${ENTITYINFO.name}.getEM().getNew(parent.getEntity());
+            try {
+                ${ENTITYINFO.name}.getEM().getNew(parent.getEntity());
+            } catch (IOException ex) {
+                LogBuilder.create("${log}", Level.SEVERE).addMethodName(this, "actionPerformed")
+                            .addExceptionMessage(ex).write();
+            }
         }
     }
 }

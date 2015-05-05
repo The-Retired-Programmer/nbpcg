@@ -58,6 +58,7 @@
 <#assign ENTITYINFO = entityinfo[useentityinfo] >
 package ${package};
 
+import java.io.IOException;
 <#assign needListImport = "no" >
 <#list ENTITYINFO.field![] as field>
 <#if field.type="reference" || field.type="reference" || field.type="enum" >
@@ -67,6 +68,7 @@ package ${package};
 <#if needListImport = "yes">
 import java.util.List;
 </#if>
+import java.util.logging.Level;
 import ${datapackage}.*;
 import ${nodepackage}.${ENTITYINFO.name}Node;
 import uk.org.rlinsdale.nbpcglibrary.data.entity.*;
@@ -210,12 +212,23 @@ public final class ${ENTITYINFO.name}NodeEditor extends NodeEditorTopComponent<$
 
         @Override
         public void set(String value) {
-           entity.set${field.name?cap_first}(${field.name}Field.convertTexttoEntity(value));
+            try {
+                entity.set${field.name?cap_first}(${field.name}Field.convertTexttoEntity(value));
+            } catch (IOException ex) {
+                LogBuilder.create("accesscontrolmanager", Level.SEVERE).addMethodName(this, "set")
+                            .addExceptionMessage(ex).write();
+            }
         }
 
         @Override
         public String get() {
-            return entity.get${field.name?cap_first}() != null ? entity.get${field.name?cap_first}().getDisplayTitle() : "";
+            try {
+                return entity.get${field.name?cap_first}() != null ? entity.get${field.name?cap_first}().getDisplayTitle() : "";
+            } catch (IOException ex) {
+                 LogBuilder.create("${log}", Level.SEVERE).addMethodName(this, "get")
+                            .addExceptionMessage(ex).write();
+                 return "";
+            }
         }
     }
 <#elseif field.type="ref"  >
@@ -235,7 +248,13 @@ public final class ${ENTITYINFO.name}NodeEditor extends NodeEditorTopComponent<$
 
         @Override
         public String get() {
-            return entity.get${field.name?cap_first}();
+            try {
+                return entity.get${field.name?cap_first}();
+            } catch (IOException ex) {
+                 LogBuilder.create("${log}", Level.SEVERE).addMethodName(this, "get")
+                            .addExceptionMessage(ex).write();
+                 return "";
+            }
         }
     }
 <#elseif field.type == "rootref" || field.type="idx" >

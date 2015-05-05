@@ -67,6 +67,12 @@
                 <xsl:call-template name="iconviewer" />
                 <xsl:call-template name="iconvieweraction" />
             </xsl:if>
+            <xsl:if test="build/project/generate[@type='remotedb']" >
+                <execute action="message"  message="generating remote files" />
+                <xsl:call-template name="remoteentity" />
+                <xsl:call-template name="remotecp" />
+                <xsl:call-template name="remoteservlet" />
+            </xsl:if>
         </nbpcg-build>
     </xsl:template>
    
@@ -585,6 +591,41 @@
                     </xsl:otherwise>
                 </xsl:choose>
             </xsl:if>
+        </xsl:for-each>
+    </xsl:template>
+    
+    <xsl:template name="remoteentity">
+        <xsl:for-each select="databases/database[not(@usepackage)][@db = 'Remote-MySQL']/table" >
+            <execute action="entitytemplate" template="remoteentity" folder="remotedb" filename="{@name}.java" useentityinfo="{@name}">
+                <xsl:call-template name="setbuildattributes">
+                    <xsl:with-param name="type">remotedb</xsl:with-param>
+                </xsl:call-template>
+            </execute>
+        </xsl:for-each>
+    </xsl:template>
+    
+    <xsl:template name="remotecp">
+        <xsl:for-each select="databases/database[not(@usepackage)][@db = 'Remote-MySQL']/table" >
+            <execute action="entitytemplate" template="remotecommandprocessor" folder="remotedb" filename="{@name}CommandProcessor.java" useentityinfo="{@name}">
+                <xsl:call-template name="setbuildattributes">
+                    <xsl:with-param name="type">remotedb</xsl:with-param>
+                </xsl:call-template>
+            </execute>
+        </xsl:for-each>
+    </xsl:template>
+    
+    <xsl:template name="remoteservlet">
+        <xsl:for-each select="databases/database[not(@usepackage)][@db = 'Remote-MySQL']" >
+            <xsl:variable name="nameuc">
+                <xsl:call-template name="firsttouppercase">
+                    <xsl:with-param name="string" select="@name" />
+                </xsl:call-template>
+            </xsl:variable>
+            <execute action="entitytemplate" template="remoteservlet" folder="remotedb" filename="{$nameuc}Servlet.java" usedbinfo="{@name}">
+                <xsl:call-template name="setbuildattributes">
+                    <xsl:with-param name="type">remotedb</xsl:with-param>
+                </xsl:call-template>
+            </execute>
         </xsl:for-each>
     </xsl:template>
     
