@@ -81,7 +81,7 @@ import org.openide.nodes.Node;
 <#if ENTITYINFO.isroot??>
 public class ${ENTITYINFO.name}NodeChildFactory extends RootChildFactory<${ENTITYINFO.name}> {
 <#else>
-public class ${ENTITYINFO.name}NodeChildFactory extends BasicChildFactory<${ENTITYINFO.name}> {
+public class ${ENTITYINFO.name}NodeChildFactory extends BasicChildFactory<${ENTITYINFO.name}, ${ENTITYINFO.parentname}> {
 </#if>
 
 <#list ENTITYINFO.child![] as child>
@@ -116,7 +116,7 @@ public class ${ENTITYINFO.name}NodeChildFactory extends BasicChildFactory<${ENTI
      * @return true
      */
     @Override
-    protected boolean createKeys(List<Entity> list) {
+    protected boolean createKeys(List<CoreEntity> list) {
 <#assign previous = "" >
 <#list ENTITYINFO.child![] as child>
         try {
@@ -143,7 +143,7 @@ public class ${ENTITYINFO.name}NodeChildFactory extends BasicChildFactory<${ENTI
      * @return the Child Node
      */
     @Override
-    protected Node createNodeForKey(Entity e) {
+    protected Node createNodeForKey(CoreEntity e) {
 <#list ENTITYINFO.child![] as child>
         if (e instanceof ${child.references}) {
             return new ${child.name?cap_first}Node((${child.references}) e);

@@ -93,7 +93,7 @@ import static uk.org.rlinsdale.nbpcglibrary.data.entity.EntityFieldChangeEventPa
  *
  * @author ${templateauthor}
  */
-public class ${ENTITYINFO.name}Node extends ${type2}Node${ENTITYINFO.access?upper_case}<${ENTITYINFO.name}, ${ENTITYINFO.name}Field> {
+public class ${ENTITYINFO.name}Node extends ${type2}Node<${ENTITYINFO.name}, ${ENTITYINFO.parentname},${ENTITYINFO.name}Field> {
 
     public static final DataFlavor ${ENTITYINFO.name?upper_case}NODE_FLAVOR = new DataFlavor(${ENTITYINFO.name}Node.class, "${ENTITYINFO.name}Node");
 
@@ -283,7 +283,7 @@ public class ${ENTITYINFO.name}Node extends ${type2}Node${ENTITYINFO.access?uppe
         
 </#if>
         @Override
-        protected void _moveAddChild(Entity child) throws IOException {
+        protected void _moveAddChild(CoreEntity child) throws IOException {
 <#list ENTITYINFO.child![] as c>
 <#if c.copymoveentity??>
             if (child instanceof ${c.copymoveentity}) {
@@ -298,7 +298,7 @@ public class ${ENTITYINFO.name}Node extends ${type2}Node${ENTITYINFO.access?uppe
         }
 
         @Override
-        protected void _cutAddChild(Entity child) throws IOException {
+        protected void _cutAddChild(CoreEntity child) throws IOException {
 <#list ENTITYINFO.child![] as c>
             if (child instanceof ${c.name?cap_first}) {
                 getEntity().add${c.name?cap_first}((${c.name?cap_first}) child);
@@ -309,7 +309,7 @@ public class ${ENTITYINFO.name}Node extends ${type2}Node${ENTITYINFO.access?uppe
         }
 
         @Override
-        protected void _copyAddChild(Entity child) throws IOException {
+        protected void _copyAddChild(CoreEntity child) throws IOException {
 <#list ENTITYINFO.child![] as c>
             if (child instanceof ${c.name?cap_first}) {
                 ${c.name?cap_first}.getEM().getNew((${c.name?cap_first})child ,getEntity());

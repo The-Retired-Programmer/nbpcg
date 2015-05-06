@@ -88,7 +88,7 @@ import uk.org.rlinsdale.nbpcglibrary.data.entityreferences.*;
  * @author ${templateauthor}
  */
 @ServiceProvider(service = ${ENTITYINFO.name}.class)
-public class ${ENTITYINFO.name} extends Entity {
+public class ${ENTITYINFO.name} extends CoreEntity {
 
     /**
      * the ${ENTITYINFO.name} field identifiers
@@ -104,11 +104,11 @@ public class ${ENTITYINFO.name} extends Entity {
 
 <#list ENTITYINFO.child![] as child>
 <#if child.orderable = "yes" >
-    private final EntityIndexedReferenceSet<${child.references}, ${ENTITYINFO.name}Field> ${child.name}s;
+    private final EntityIndexedReferenceSet<${child.references}, ${ENTITYINFO.name}, ${ENTITYINFO.name}Field> ${child.name}s;
 <#elseif child.sort = "yes" >
-    private final EntitySortedReferenceSet<${child.references}, ${ENTITYINFO.name}Field> ${child.name}s;
+    private final EntitySortedReferenceSet<${child.references}, ${ENTITYINFO.name}, ${ENTITYINFO.name}Field> ${child.name}s;
 <#else>
-    private final EntityReferenceSet<${child.references}, ${ENTITYINFO.name}Field> ${child.name}s;
+    private final EntityReferenceSet<${child.references}, ${ENTITYINFO.name}, ${ENTITYINFO.name}Field> ${child.name}s;
 </#if>
 </#list>
 

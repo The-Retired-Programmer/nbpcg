@@ -100,7 +100,7 @@ persistenceType = TopComponent.PERSISTENCE_NEVER)
     "CTL_${ENTITYINFO.name}NodeEditor=${ENTITYINFO.name} Editor",
     "HINT_${ENTITYINFO.name}NodeEditor=This is the ${ENTITYINFO.name} Editor"
 })
-public final class ${ENTITYINFO.name}NodeEditor extends NodeEditorTopComponent<${ENTITYINFO.name}, ${ENTITYINFO.name}Field> {
+public final class ${ENTITYINFO.name}NodeEditor extends NodeEditorTopComponent<${ENTITYINFO.name}, ${ENTITYINFO.parentname}, ${ENTITYINFO.name}Field> {
     
     private final EntityFieldChangeListener entityfieldchangelistener;
     private final TitleChangeListener titlechangelistener;
