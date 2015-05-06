@@ -51,7 +51,6 @@
                 name CDATA #REQUIRED
                 dbname CDATA #IMPLIED
                 db (MySQL|Remote-MySQL) #IMPLIED
-                access (rw|ro) #IMPLIED
                 type (idkeyauto) #IMPLIED
                 withfields (idandstamp) #IMPLIED
                 usepackage CDATA #IMPLIED
@@ -60,7 +59,6 @@
                 <!ATTLIST table
                     name CDATA #REQUIRED
                     dbname CDATA #IMPLIED
-                    access (rw|ro) #IMPLIED
                     type (idkeyauto) #IMPLIED
                     withfields (idandstamp) #IMPLIED>
                 <!ELEMENT field EMPTY>

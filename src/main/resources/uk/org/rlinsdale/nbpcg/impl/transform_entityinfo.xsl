@@ -574,23 +574,6 @@
                             <xsl:otherwise>no</xsl:otherwise>
                         </xsl:choose>
                     </xsl:attribute>
-                    <xsl:for-each select="/nbpcg/databases/database/table[@name = $tname]" >
-                        <xsl:attribute name="access" >
-                            <xsl:choose>
-                                <xsl:when test="@access">
-                                    <xsl:value-of select="@access" />
-                                </xsl:when>
-                                <xsl:otherwise>
-                                    <xsl:choose>
-                                        <xsl:when test="../@access">
-                                            <xsl:value-of select="../@access" />
-                                        </xsl:when>
-                                        <xsl:otherwise>rw</xsl:otherwise>
-                                    </xsl:choose>
-                                </xsl:otherwise>
-                            </xsl:choose>
-                        </xsl:attribute>
-                    </xsl:for-each>
                 </child>
             </entityinfo>
         </xsl:for-each>
@@ -612,21 +595,6 @@
                 <xsl:value-of select="../@usepackage" />
             </xsl:attribute>
         </xsl:if>
-        <xsl:attribute name="access" >
-            <xsl:choose>
-                <xsl:when test="@access">
-                    <xsl:value-of select="@access" />
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:choose>
-                        <xsl:when test="../@access">
-                            <xsl:value-of select="../@access" />
-                        </xsl:when>
-                        <xsl:otherwise>rw</xsl:otherwise>
-                    </xsl:choose>
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:attribute>
         <xsl:attribute name="dbtablename" >
             <xsl:choose>
                 <xsl:when test="@dbname">
@@ -803,23 +771,6 @@
                         <xsl:otherwise>no</xsl:otherwise>
                     </xsl:choose>
                 </xsl:attribute>
-                <xsl:for-each select="/nbpcg/databases/database/table[@name = $entityname]" >
-                    <xsl:attribute name="access" >
-                        <xsl:choose>
-                            <xsl:when test="@access">
-                                <xsl:value-of select="@access" />
-                            </xsl:when>
-                            <xsl:otherwise>
-                                <xsl:choose>
-                                    <xsl:when test="../@access">
-                                        <xsl:value-of select="../@access" />
-                                    </xsl:when>
-                                    <xsl:otherwise>rw</xsl:otherwise>
-                                </xsl:choose>
-                            </xsl:otherwise>
-                        </xsl:choose>
-                    </xsl:attribute>
-                </xsl:for-each>
                 <xsl:variable name="childname" select="@name" />
                 <xsl:for-each select="/nbpcg/databases/database/table[@name=$childname]" >
                     <xsl:if test="count(field) = 1 and field[@type='reference']" >

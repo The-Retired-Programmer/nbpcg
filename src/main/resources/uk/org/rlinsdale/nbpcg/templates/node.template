@@ -98,10 +98,8 @@ public class ${ENTITYINFO.name}Node extends ${type2}Node<${ENTITYINFO.name}, ${E
     public static final DataFlavor ${ENTITYINFO.name?upper_case}NODE_FLAVOR = new DataFlavor(${ENTITYINFO.name}Node.class, "${ENTITYINFO.name}Node");
 
 <#assign haschildren = false>
-<#assign haseditablechildren = false>
 <#list ENTITYINFO.child![] as c>
 <#assign haschildren = true >
-<#assign haseditablechildren = haseditablechildren | (c.access = "rw") >
 </#list>
 <#if haschildren >
 
@@ -128,7 +126,7 @@ public class ${ENTITYINFO.name}Node extends ${type2}Node<${ENTITYINFO.name}, ${E
 </#list>
                     }
                     // TODO - decide on state of this cut/destroy flag  - currently it is always true
-                 <#if ENTITYINFO.access = "rw">, true</#if>);
+                 , true);
             this.cf = cf;
         }
 <#else>
@@ -141,7 +139,7 @@ public class ${ENTITYINFO.name}Node extends ${type2}Node<${ENTITYINFO.name}, ${E
         public ${ENTITYINFO.name}Node(${ENTITYINFO.name} e) {
             super("${ENTITYINFO.name}Node", e, ${ENTITYINFO.name}.EM.class
                     // TODO - decide on state of this cut/destroy flag  - currently it is always true
-                    <#if ENTITYINFO.access = "rw">, true</#if>);
+                    , true);
         }
 </#if>
 
@@ -150,11 +148,10 @@ public class ${ENTITYINFO.name}Node extends ${type2}Node<${ENTITYINFO.name}, ${E
             @UseCommonNodeAction(id = "uk.org.rlinsdale.nbpcglibrary.node.actions.NodeReorderAction",
                     node = "${ENTITYINFO.name}Node", position = 810),
 </#if>
-<#if haseditablechildren >
+<#if haschildren >
             @UseCommonNodeAction(id = "uk.org.rlinsdale.nbpcglibrary.node.actions.NodePasteAction",
                     node = "${ENTITYINFO.name}Node", position = 830),
 </#if>
-<#if ENTITYINFO.access = "rw" >
             @UseCommonNodeAction(id = "uk.org.rlinsdale.nbpcglibrary.node.actions.NodeCutAction",
                     node = "${ENTITYINFO.name}Node",
                     position = 850, separator = 800),
@@ -162,7 +159,6 @@ public class ${ENTITYINFO.name}Node extends ${type2}Node<${ENTITYINFO.name}, ${E
                     node = "${ENTITYINFO.name}Node", position = 870),
             @UseCommonNodeAction(id = "uk.org.rlinsdale.nbpcglibrary.node.actions.NodeDeleteAction",
                     node = "${ENTITYINFO.name}Node", position = 890),
-</#if>
 <#if ENTITYINFO.orderable = "yes" >
             @UseCommonNodeAction(id = "uk.org.rlinsdale.nbpcglibrary.node.actions.NodeMoveUpAction",
                     node = "${ENTITYINFO.name}Node", position = 910),
@@ -197,7 +193,6 @@ public class ${ENTITYINFO.name}Node extends ${type2}Node<${ENTITYINFO.name}, ${E
             return getEntity() != null? getEntity().getDisplayTitle(): "#undefined#";
         }
 
-<#if ENTITYINFO.access = "rw" >
         IntegerReadonlyProperty idproperty;
 <#list ENTITYINFO.field![] as field>
 <#if field.type != "rootref" >
@@ -205,31 +200,21 @@ public class ${ENTITYINFO.name}Node extends ${type2}Node<${ENTITYINFO.name}, ${E
 </#if>
 </#list>
 
-</#if>
         @Override
         protected List<PropertySupport.ReadOnly<?>> createPropertyItems(List<PropertySupport.ReadOnly<?>> props) {
             ${ENTITYINFO.name} e =  getEntity();
             if (e != null) {
                 props.add(new StringReadonlyProperty("Node Type", "${ENTITYINFO.name}Node"));
-<#if ENTITYINFO.access = "rw" >
                 props.add(idproperty = new IntegerReadonlyProperty("Id",e.getId()));
-<#else>
-                props.add(new IntegerReadonlyProperty("Id",e.getId()));
-</#if>
 <#list ENTITYINFO.field![] as field>
 <#if field.type != "rootref" >
-<#if ENTITYINFO.access = "rw" >
                 props.add(${field.name}property = new StringReadonlyProperty("${field.label}", e.format${field.name?cap_first}()));
-<#else>
-                props.add(new StringReadonlyProperty("${field.label}", e.format${field.name?cap_first}()));
-</#if>
 </#if>
 </#list>
             }
             return props;
         }
 
-<#if ENTITYINFO.access = "rw" >
         @Override
         protected void _processCommonFieldChange(CommonEntityField field) {
             ${ENTITYINFO.name} e =  getEntity();
@@ -254,8 +239,6 @@ public class ${ENTITYINFO.name}Node extends ${type2}Node<${ENTITYINFO.name}, ${E
             }
         }
         
-</#if>
-<#if ENTITYINFO.access = "rw" >
         @Override
         protected void _processFieldChange(${ENTITYINFO.name}Field field) {
             ${ENTITYINFO.name} e =  getEntity();
@@ -281,7 +264,6 @@ public class ${ENTITYINFO.name}Node extends ${type2}Node<${ENTITYINFO.name}, ${E
             }
         }
         
-</#if>
         @Override
         protected void _moveAddChild(CoreEntity child) throws IOException {
 <#list ENTITYINFO.child![] as c>
@@ -327,7 +309,6 @@ public class ${ENTITYINFO.name}Node extends ${type2}Node<${ENTITYINFO.name}, ${E
             throw new LogicException("${ENTITYINFO.name} Entity does not have a child of the requested class (" + child.getClass().getSimpleName() + ")");
         }
 
-<#if ENTITYINFO.access = "rw" >
         @Override
         protected void _cutAndPasteRemove()  throws IOException {
             getEntity().getParent().remove${ENTITYINFO.name}(getEntity());
@@ -338,7 +319,6 @@ public class ${ENTITYINFO.name}Node extends ${type2}Node<${ENTITYINFO.name}, ${E
             getEntity().remove();
         }
 
-</#if>
         @Override
         protected void _moveReorderChildByFlavor(DataFlavor df, int[] perm) {
 <#list ENTITYINFO.child![] as c>

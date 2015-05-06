@@ -16,7 +16,6 @@
             isroot CDATA #IMPLIED
             nodeorder CDATA #IMPLIED
             dbkey CDATA #IMPLIED
-            access (rw|ro) #IMPLIED
             dbtablename CDATA #IMPLIED 
             withfields (Idandstamp) #IMPLIED 
             type (Idkeyauto) #IMPLIED
@@ -67,7 +66,6 @@
                 references CDATA #REQUIRED
                 sort (yes|no) #REQUIRED
                 orderable (yes|no) #REQUIRED
-                access (rw|ro) #REQUIRED
                 copymoveentity CDATA #IMPLIED 
                 copymovefield CDATA #IMPLIED
                 >

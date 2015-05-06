@@ -120,10 +120,8 @@ public class ${ENTITYINFO.name}Node extends RootNode<${ENTITYINFO.name}> {
 
     @UseCommonNodeActions({
 <#list ENTITYINFO.child![] as child>
-<#if child.access = "rw" > 
         @UseCommonNodeAction(id = "uk.org.rlinsdale.nbpcglibrary.node.actions.NodePasteAction",
                 node = "${ENTITYINFO.name}Node", position = 830, separator = 800),
-</#if>
 <#if child.orderable = "yes">
         @UseCommonNodeAction(id = "uk.org.rlinsdale.nbpcglibrary.node.actions.NodeReorderAction",
                 node = "${ENTITYINFO.name}Node", position = 810, separator = 800),
@@ -154,12 +152,10 @@ public class ${ENTITYINFO.name}Node extends RootNode<${ENTITYINFO.name}> {
     @Override
     protected void _cutAddChild(CoreEntity child) throws IOException {
 <#list ENTITYINFO.child![] as child>
-<#if child.access = "rw" >
         if (child instanceof ${child.name?cap_first}) {
             getEntity().add${child.name?cap_first}((${child.name?cap_first}) child);
             return;
         }
-</#if>
 </#list>
         throw new LogicException("${ENTITYINFO.name} Entity does not have a child of the requested class (" + child.getClass().getSimpleName() + ")");
     }
@@ -167,12 +163,10 @@ public class ${ENTITYINFO.name}Node extends RootNode<${ENTITYINFO.name}> {
     @Override
     protected void _copyAddChild(CoreEntity child) throws IOException {
 <#list ENTITYINFO.child![] as child>
-<#if child.access = "rw" >
         if (child instanceof ${child.name?cap_first}) {
             ${child.name?cap_first}.getEM().getNew((${child.name?cap_first})child ,getEntity());
             return;
         }
-</#if>
 </#list>
         throw new LogicException("${ENTITYINFO.name} Entity does not have a child of the requested class (" + child.getClass().getSimpleName() + ")");
     }

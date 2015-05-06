@@ -19,7 +19,7 @@
 
     Author     : Richard Linsdale (richard.linsdale at blueyonder.co.uk)
     Description:
-        Transform the user definition (nbpcg) into a set of elements
+        Transform the user definition (nbpcg) into a set of command elements
         designed to allow freemarker processing to build the required files.
 -->
 
@@ -471,46 +471,34 @@
     <xsl:template name="addnode">
         <xsl:for-each select="//node">
             <xsl:variable name="nname" select="@name" />
-            <xsl:variable name="access" >
-                <xsl:for-each select="/nbpcg/databases/database/table[@name=$nname]" >
-                    <xsl:choose>
-                        <xsl:when test="../@access" >
-                            <xsl:value-of select="../@access" />
-                        </xsl:when>
-                        <xsl:otherwise>rw</xsl:otherwise>
-                    </xsl:choose>
-                </xsl:for-each>
-            </xsl:variable>
-            <xsl:if test="$access='rw'" >
-                <xsl:choose>
-                    <xsl:when test="local-name(..) = 'node'">
-                        <execute action="entitytemplate" template="addnode" folder="node" filename="Add{@name}Node.java" useentityinfo="{@name}">
-                            <xsl:attribute name="datapackage">
-                                <xsl:value-of select="/nbpcg/build/project/generate[@type='data']/@package"/>
-                            </xsl:attribute>
-                            <xsl:attribute name="nodepackage">
-                                <xsl:value-of select="/nbpcg/build/project/generate[@type='node']/@package"/>
-                            </xsl:attribute>
-                            <xsl:call-template name="setbuildattributes">
-                                <xsl:with-param name="type">node</xsl:with-param>
-                            </xsl:call-template>
-                        </execute>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <execute action="entitytemplate" template="addnode" folder="node" filename="Add{@name}Node.java" useentityinfo="{@name}">
-                            <xsl:attribute name="datapackage">
-                                <xsl:value-of select="/nbpcg/build/project/generate[@type='data']/@package"/>
-                            </xsl:attribute>
-                            <xsl:attribute name="nodepackage">
-                                <xsl:value-of select="/nbpcg/build/project/generate[@type='node']/@package"/>
-                            </xsl:attribute>
-                            <xsl:call-template name="setbuildattributes">
-                                <xsl:with-param name="type">node</xsl:with-param>
-                            </xsl:call-template>
-                        </execute>
-                    </xsl:otherwise>
-                </xsl:choose>
-            </xsl:if>
+            <xsl:choose>
+                <xsl:when test="local-name(..) = 'node'">
+                    <execute action="entitytemplate" template="addnode" folder="node" filename="Add{@name}Node.java" useentityinfo="{@name}">
+                        <xsl:attribute name="datapackage">
+                            <xsl:value-of select="/nbpcg/build/project/generate[@type='data']/@package"/>
+                        </xsl:attribute>
+                        <xsl:attribute name="nodepackage">
+                            <xsl:value-of select="/nbpcg/build/project/generate[@type='node']/@package"/>
+                        </xsl:attribute>
+                        <xsl:call-template name="setbuildattributes">
+                            <xsl:with-param name="type">node</xsl:with-param>
+                        </xsl:call-template>
+                    </execute>
+                </xsl:when>
+                <xsl:otherwise>
+                    <execute action="entitytemplate" template="addnode" folder="node" filename="Add{@name}Node.java" useentityinfo="{@name}">
+                        <xsl:attribute name="datapackage">
+                            <xsl:value-of select="/nbpcg/build/project/generate[@type='data']/@package"/>
+                        </xsl:attribute>
+                        <xsl:attribute name="nodepackage">
+                            <xsl:value-of select="/nbpcg/build/project/generate[@type='node']/@package"/>
+                        </xsl:attribute>
+                        <xsl:call-template name="setbuildattributes">
+                            <xsl:with-param name="type">node</xsl:with-param>
+                        </xsl:call-template>
+                    </execute>
+                </xsl:otherwise>
+            </xsl:choose>
         </xsl:for-each>
     </xsl:template>
     
