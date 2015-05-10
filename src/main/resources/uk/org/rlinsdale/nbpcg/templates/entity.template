@@ -92,8 +92,8 @@ import static ${package}.${ENTITYINFO.name}.${ENTITYINFO.name}Field.${field.name
 <#list ENTITYINFO.child![] as child>
 import static ${package}.${ENTITYINFO.name}.${ENTITYINFO.name}Field.${child.name?upper_case}S;
 </#list>
-import uk.org.rlinsdale.nbpcglibrary.api.EntityPersistenceManager;
-import uk.org.rlinsdale.nbpcglibrary.api.EntityPersistenceManagerManager;
+import uk.org.rlinsdale.nbpcglibrary.api.EntityPersistenceProvider;
+import uk.org.rlinsdale.nbpcglibrary.api.EntityPersistenceProviderManager;
 import uk.org.rlinsdale.nbpcglibrary.common.*;
 import uk.org.rlinsdale.nbpcglibrary.data.dbfields.${ENTITYINFO.withfields?lower_case}.*;
 import uk.org.rlinsdale.nbpcglibrary.data.entity.*;
@@ -898,7 +898,7 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.name},${ENTITYINFO.p
 </#list>
 
     @Override
-    protected final void _saveState() {
+    protected final void entitySaveState() {
 <#list ENTITYINFO.field![] as field>
 <#if field.type == "ref" || field.type == "reference" >
             ${field.name}.saveState();
@@ -910,7 +910,7 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.name},${ENTITYINFO.p
         }
 
     @Override
-    protected final void _restoreState() throws IOException {
+    protected final void entityRestoreState() throws IOException {
 <#list ENTITYINFO.field![] as field>
 <#if field.type == "ref" || field.type == "reference">
         ${field.name}.restoreState();
@@ -928,11 +928,11 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.name},${ENTITYINFO.p
     }
 
     @Override
-    protected final void _remove() throws IOException {
+    protected final void entityRemove() throws IOException {
 <#list ENTITYINFO.referenced![] as referenced>
         ${referenced.name}.EM em = ${referenced.name}.getEM();
-        EntityPersistenceManager da = em.getEntityPersistenceManager();
-        for (JsonValue id : da.find("${referenced.dbfield}", JsonUtil.createJsonValue(getId()))) {
+        EntityPersistenceProvider epp = em.getEntityPersistenceProvider();
+        for (JsonValue id : epp.find("${referenced.dbfield}", JsonUtil.createJsonValue(getId()))) {
 <#if referenced.optional??>
             ${referenced.name} ${referenced.name?lower_case} = em.get(JsonUtil.getIntegerValue(id));
             ${referenced.name?lower_case}.set${referenced.field?cap_first}(null);
@@ -955,7 +955,7 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.name},${ENTITYINFO.p
     }
 
     @Override
-    protected final void _load(JsonObject data) throws IOException {
+    protected final void entityLoad(JsonObject data) throws IOException {
 <#list ENTITYINFO.field![] as field>
 <#if field.javatype == "DateOnly">
         ${field.rvid}.setDateUsingSQLString(data.getString("${field.name}"));
@@ -977,7 +977,7 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.name},${ENTITYINFO.p
     }
 
     @Override
-    protected final void _copy(${ENTITYINFO.name} from) {
+    protected final void entityCopy(${ENTITYINFO.name} from) {
 <#list ENTITYINFO.field![] as field>
 <#if field.javatype == "DateOnly">
         try {
@@ -1000,7 +1000,7 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.name},${ENTITYINFO.p
     }
 
     @Override
-    protected final void _diffs(JsonObjectBuilder job) throws IOException {
+    protected final void entityDiffs(JsonObjectBuilder job) throws IOException {
         int id;
 <#list ENTITYINFO.field![] as field>
 <#if field.javatype == "String" >
@@ -1039,7 +1039,7 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.name},${ENTITYINFO.p
     }
 
     @Override
-    protected final void _values(JsonObjectBuilder job) throws IOException {
+    protected final void entityValues(JsonObjectBuilder job) throws IOException {
         int id;
 <#list ENTITYINFO.field![] as field>
 <#if field.type == "ref" || field.type == "reference" >
@@ -1101,8 +1101,8 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.name},${ENTITYINFO.p
         }
 
         @Override
-        protected final EntityPersistenceManager createEntityPersistenceManager() {
-            return EntityPersistenceManagerManager.getEntityPersistenceManager("${ENTITYINFO.dbkey}", "${ENTITYINFO.dbtablename}");
+        protected final EntityPersistenceProvider createEntityPersistenceProvider() {
+            return EntityPersistenceProviderManager.getEntityPersistenceProvider("${ENTITYINFO.dbkey}", "${ENTITYINFO.dbtablename}");
         }
     }
 <#list ENTITYINFO.child![] as child>

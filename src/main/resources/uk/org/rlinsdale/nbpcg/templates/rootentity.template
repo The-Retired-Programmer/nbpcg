@@ -225,7 +225,7 @@ public class ${ENTITYINFO.name} extends CoreEntity {
 </#list>
 
         @Override
-        protected final void _restoreState() throws IOException {
+        protected final void entityRestoreState() throws IOException {
 <#list ENTITYINFO.child![] as child>
             ${child.name}s.restoreState();
 </#list>
