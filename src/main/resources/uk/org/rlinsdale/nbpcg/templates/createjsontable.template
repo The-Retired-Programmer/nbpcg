@@ -1,0 +1,50 @@
+<#--
+ * Copyright (C) 2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ -->
+<#-- Freemarker Template for any json datasource file -->
+<#assign templateauthor = "Richard Linsdale (richard.linsdale at blueyonder.co.uk)" />
+<#assign ENTITYINFO = entityinfo[useentityinfo] >
+<#assign DBINFO = dbinfo[ENTITYINFO.dbkey] >
+{"name":"${ENTITYINFO.dbtablename}", "nextid":1, "nextidx":1, "records":[
+<#list DBINFO.table![] as dbtable >
+<#if dbtable.name = ENTITYINFO.dbtablename >
+<#assign id = 1>
+<#list dbtable.insertrecord![] as insert>
+    {
+        "createdby":"${USERCODE}"
+        ,"createdon":"${NOW}"
+        ,"updatedby":"${USERCODE}"
+        ,"updatedon":"${NOW}"
+<#list ENTITYINFO.field![] as field >
+<#if field.type != "rootref" >
+<#list insert.insertfield![] as insertfield>
+<#if field.name = insertfield.name>
+<#if field.jsontype = "String" >
+        ,"${field.name}":"${insertfield.value}"
+<#else>
+        ,"${field.name}":${insertfield.value}
+</#if>
+</#if>
+</#list>
+</#if>
+</#list>
+        ,"id": ${id}
+    },
+<#assign id = id+1>
+</#list>
+</#if>
+</#list>
+]};

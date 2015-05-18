@@ -16,14 +16,15 @@
  */
 /**
  * Registration of templates used by NBPCG.
- * 
+ *
  * @author Richard Linsdale (richard.linsdale at blueyonder.co.uk)
  */
 @TemplateRegistrations({
     @TemplateRegistration(folder = "Other", displayName = "NBPCG Definition File", content = "NBPCG.xml"),
     @TemplateRegistration(folder = "uk-org-rlinsdale-nbpcg", displayName = "backupscript", content = "templates/backupscript.template", scriptEngine = "freemarker"),
-    @TemplateRegistration(folder = "uk-org-rlinsdale-nbpcg", displayName = "create", content = "templates/create.template", scriptEngine = "freemarker"),
-    @TemplateRegistration(folder = "uk-org-rlinsdale-nbpcg", displayName = "createtables", content = "templates/createtables.template", scriptEngine = "freemarker"),
+    @TemplateRegistration(folder = "uk-org-rlinsdale-nbpcg", displayName = "createsqldatabase", content = "templates/createsqldatabase.template", scriptEngine = "freemarker"),
+    @TemplateRegistration(folder = "uk-org-rlinsdale-nbpcg", displayName = "createsqltables", content = "templates/createsqltables.template", scriptEngine = "freemarker"),
+    @TemplateRegistration(folder = "uk-org-rlinsdale-nbpcg", displayName = "createjsontable", content = "templates/createjsontable.template", scriptEngine = "freemarker"),
     @TemplateRegistration(folder = "uk-org-rlinsdale-nbpcg", displayName = "entity", content = "templates/entity.template", scriptEngine = "freemarker"),
     @TemplateRegistration(folder = "uk-org-rlinsdale-nbpcg", displayName = "enumchoice", content = "templates/enumchoice.template", scriptEngine = "freemarker"),
     @TemplateRegistration(folder = "uk-org-rlinsdale-nbpcg", displayName = "choice", content = "templates/choice.template", scriptEngine = "freemarker"),

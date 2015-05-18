@@ -109,13 +109,7 @@ public final class NBPCG {
                     FreemarkerListMap buildfolders = buildmap.getFreemarkerListMap("folder");
                     if (buildfolders != null) {
                         for (FreemarkerHashMap buildfolder : buildfolders) {
-                            folders.put(buildfolder.getString("name"), findFolder(buildfolder.getString("project"), buildfolder.getString("package"), openProjects));
-                        }
-                    }
-                    FreemarkerListMap buildscriptfolders = buildmap.getFreemarkerListMap("scriptfolder");
-                    if (buildscriptfolders != null) {
-                        for (FreemarkerHashMap buildscriptfolder : buildscriptfolders) {
-                            folders.put("script", findInConfigFolder(buildscriptfolder.getString("project"), "generated-scripts", openProjects));
+                            folders.put(buildfolder.getString("name"), findFolder(buildfolder.getString("location"), buildfolder.getString("project"), buildfolder.getString("package"), openProjects));
                         }
                     }
                     //
@@ -171,12 +165,26 @@ public final class NBPCG {
             counter.increment();
         }
 
-        private FileObject findFolder(String project, String pkage, Map<String, Project> openProjects) throws IOException {
+        private FileObject findFolder(String location, String project, String pkage, Map<String, Project> openProjects) throws IOException {
             Project p = openProjects.get(project);
             if (p == null) {
                 throw new IOException("Required project is not open (" + project + ")");
             }
-            FileObject pfo = childfolder(p.getProjectDirectory(), mavenProject ? "src/main/java" : "src");
+            String basepath;
+            switch (location) {
+                case "java":
+                    basepath=mavenProject ? "src/main/java" : "src";   
+                    break;
+                case "project":
+                    basepath=mavenProject ? "src/main" : "";
+                    break;
+                case "resource":
+                    basepath=mavenProject ? "src/main/resources" : "src";
+                    break;
+                default:
+                    throw new IOException("Illegal location code defined (" + location + ")");
+            }
+            FileObject pfo = childfolder(p.getProjectDirectory(), basepath);
             for (String name : pkage.split("\\.")) {
                 pfo = childfolder(pfo, name);
             }
@@ -189,25 +197,28 @@ public final class NBPCG {
             return pfo;
         }
 
-        private FileObject findInConfigFolder(String project, String folder, Map<String, Project> openProjects) throws IOException {
-            Project p = openProjects.get(project);
-            if (p == null) {
-                throw new IOException("Required project is not open (" + project + ")");
-            }
-            FileObject pfo = childfolder(p.getProjectDirectory(), mavenProject ? "src/main" : "nbpcg-files");
-            pfo = childfolder(pfo, folder);
-            // and empty folder of all contents prior to rebuilding code
-            for (FileObject fd : pfo.getChildren()) {
-                if (fd.isData() ){
-                    fd.delete(); // only delete data not other packages - fixes #21
-                }
-            }
-            return pfo;
-        }
+//        private FileObject findInConfigFolder(String project, String folder, Map<String, Project> openProjects) throws IOException {
+//            Project p = openProjects.get(project);
+//            if (p == null) {
+//                throw new IOException("Required project is not open (" + project + ")");
+//            }
+//            FileObject pfo = childfolder(p.getProjectDirectory(), mavenProject ? "src/main" : "nbpcg-files");
+//            pfo = childfolder(pfo, folder);
+//            // and empty folder of all contents prior to rebuilding code
+//            for (FileObject fd : pfo.getChildren()) {
+//                if (fd.isData() ){
+//                    fd.delete(); // only delete data not other packages - fixes #21
+//                }
+//            }
+//            return pfo;
+//        }
 
         private FileObject childfolder(FileObject folder, String name) throws IOException {
-            FileObject cfo = folder.getFileObject(name);
-            return cfo != null ? cfo : folder.createFolder(name);
+           if (name.equals("")){
+               return folder;
+           }
+           FileObject cfo = folder.getFileObject(name);
+           return cfo != null ? cfo : folder.createFolder(name);
         }
 
         private class Counter {

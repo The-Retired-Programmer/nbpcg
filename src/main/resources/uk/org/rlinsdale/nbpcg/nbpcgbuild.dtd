@@ -5,19 +5,16 @@
     Author     : Richard Linsdale (richard.linsdale at blueyonder.co.uk)
 -->
 
-<!ELEMENT nbpcg-build (folder+, scriptfolder, execute+) >
+<!ELEMENT nbpcg-build (folder+, execute+) >
     <!ATTLIST nbpcg-build
         name CDATA #REQUIRED
         >
     <!ELEMENT folder EMPTY >
         <!ATTLIST folder
+            location (java|resource|project) #REQUIRED
             name CDATA #REQUIRED
             project CDATA #REQUIRED
-            package CDATA #REQUIRED
-            >
-    <!ELEMENT scriptfolder EMPTY >
-        <!ATTLIST scriptfolder
-            project CDATA #REQUIRED
+            package CDATA #IMPLIED
             >
     <!ELEMENT execute EMPTY >
         <!ATTLIST execute

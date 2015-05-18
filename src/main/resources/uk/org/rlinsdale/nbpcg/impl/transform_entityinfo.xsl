@@ -80,8 +80,12 @@
                         </xsl:choose>
                     </xsl:variable>
                     <table name="{$tname}" type="{$ttype}" withfields="{$twithfields}">
-                        <xsl:for-each select="insert">
-                            <insert values="{@values}"/>
+                        <xsl:for-each select="insertrecord">
+                            <insertrecord>
+                                 <xsl:for-each select="insertfield">
+                                     <xsl:copy-of select="." />
+                                 </xsl:for-each>
+                            </insertrecord>
                         </xsl:for-each>
                     </table>
                 </xsl:for-each>

@@ -98,13 +98,15 @@
             name CDATA #REQUIRED
             db CDATA #REQUIRED
             >
-        <!ELEMENT table (insert*) >
+        <!ELEMENT table (insertrecord*) >
             <!ATTLIST table
                 name CDATA #REQUIRED
                 type CDATA #REQUIRED
                 withfields CDATA #REQUIRED
                 >
-        <!ELEMENT insert EMPTY >
-            <!ATTLIST insert
-                values CDATA #REQUIRED
-                >
+            <!ELEMENT insertrecord (insertfield*)>
+                <!ELEMENT insertfield EMPTY>
+                    <!ATTLIST insertfield
+                        name CDATA #REQUIRED
+                        value CDATA #REQUIRED
+                    >

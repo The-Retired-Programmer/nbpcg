@@ -101,7 +101,7 @@ CREATE TABLE ${table.dbtablename}(
 </#list>
 ) ENGINE = INNODB;
 
-<#list dbtable.insert![] as insert>
+<#list dbtable.insertrecord![] as insert>
 INSERT INTO ${table.dbtablename} (
     createdby
     ,createdon
@@ -118,8 +118,16 @@ VALUES (
     ,'${NOW}'
     ,'${USERCODE}'
     ,'${NOW}'
-<#list insert.values?split(",") as value >
-    ,${value?trim}
+<#list table.field![] as field >
+<#list insert.insertfield![] as insertfield >
+<#if field.name = insertfield.name >
+<#if field.jsontype = "String" >
+    ,'${insertfield.value}'
+<#else>
+    ,${insertfield.value}
+</#if>
+</#if>
+</#list>
 </#list>
 );
 

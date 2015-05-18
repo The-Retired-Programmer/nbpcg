@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE nbpcg-entity-info PUBLIC "-//uk/org/rlinsdale/nbpcgentityinfo/DTD NBPCGENTITYINFO SCHEMA 1.0//EN" "nbres:/uk/org/rlinsdale/nbpcg/nbpcgentityinfo.dtd">
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE nbpcg-entity-info PUBLIC "-//uk/org/rlinsdale/nbpcgentityinfo/DTD NBPCGENTITYINFO SCHEMA 1.0//EN" "nbres:/uk/org/rlinsdale/nbpcg/nbpcgentityinfo.dtd">
 <nbpcg-entity-info name="Authentication">
     <entityinfo key="User" name="User" dbkey="authentication2" dbtablename="User" withfields="Idandstamp" type="Idkeyauto" icon="user" orderable="no" sort="no" nodeorder="1" parentname="UserRoot">
         <field name="root" references="UserRoot" type="rootref" label="Root" rvid="root" javatype="int" jsontype="Integer" initialisation="" javarsget="getInt"/>
@@ -67,23 +68,52 @@
     </entityinfo>
     <dbinfo key="authentication2" name="authentication2" db="Remote-MySQL">
         <table name="User" type="idkeyauto" withfields="idandstamp">
-            <insert values="'richard', 'ea27671eaac43ca1ecb782b7c9e9344a82b0702d', 'rl12', true"/>
+            <insertrecord>
+                <insertfield name="username" value="richard"/>
+                <insertfield name="encodedpassword" value="ea27671eaac43ca1ecb782b7c9e9344a82b0702d"/>
+                <insertfield name="usercode" value="rl12"/>
+                <insertfield name="enabled" value="true"/>
+            </insertrecord>
         </table>
         <table name="Application" type="idkeyauto" withfields="idandstamp">
-            <insert values="'accesscontrolmanager'"/>
-            <insert values="'photogallery'"/>
-            <insert values="'marktimingsrecorder'"/>
+            <insertrecord>
+                <insertfield name="application" value="accesscontrolmanager"/>
+            </insertrecord>
+            <insertrecord>
+                <insertfield name="application" value="photogallery"/>
+            </insertrecord>
+            <insertrecord>
+                <insertfield name="application" value="marktimingsrecorder"/>
+            </insertrecord>
         </table>
         <table name="Role" type="idkeyauto" withfields="idandstamp">
-            <insert values="'Manager',1"/>
-            <insert values="'Manager',2"/>
-            <insert values="'Coach',3"/>
+            <insertrecord>
+                <insertfield name="role" value="Manager"/>
+                <insertfield name="application" value="1"/>
+            </insertrecord>
+            <insertrecord>
+                <insertfield name="role" value="Manager"/>
+                <insertfield name="application" value="2"/>
+            </insertrecord>
+            <insertrecord>
+                <insertfield name="role" value="Coach"/>
+                <insertfield name="application" value="3"/>
+            </insertrecord>
         </table>
         <table name="Permission" type="idkeyauto" withfields="idandstamp"/>
         <table name="Userrole" type="idkeyauto" withfields="idandstamp">
-            <insert values="1,1"/>
-            <insert values="2,1"/>
-            <insert values="3,1"/>
+            <insertrecord>
+                <insertfield name="role" value="1"/>
+                <insertfield name="user" value="1"/>
+            </insertrecord>
+            <insertrecord>
+                <insertfield name="role" value="2"/>
+                <insertfield name="user" value="1"/>
+            </insertrecord>
+            <insertrecord>
+                <insertfield name="role" value="3"/>
+                <insertfield name="user" value="1"/>
+            </insertrecord>
         </table>
         <table name="Userpermission" type="idkeyauto" withfields="idandstamp"/>
     </dbinfo>

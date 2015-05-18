@@ -1,15 +1,24 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE nbpcg-build PUBLIC "-//uk/org/rlinsdale/nbpcgbuild/DTD NBPCGBUILD SCHEMA 1.0//EN" "nbres:/uk/org/rlinsdale/nbpcg/nbpcgbuild.dtd">
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE nbpcg-build PUBLIC "-//uk/org/rlinsdale/nbpcgbuild/DTD NBPCGBUILD SCHEMA 1.0//EN" "nbres:/uk/org/rlinsdale/nbpcg/nbpcgbuild.dtd">
 <nbpcg-build name="Authentication">
-    <folder name="data" project="Lindos LifeCycle" package="uk.org.rlinsdale.lindos.authentication.dataobjects"/>
-    <folder name="node" project="Access Control Manager - generated" package="uk.org.rlinsdale.accesscontrolmanager.nodes"/>
-    <folder name="nodeviewer" project="Access Control Manager - generated" package="uk.org.rlinsdale.accesscontrolmanager.topcomponents"/>
-    <folder name="nodeeditor" project="Access Control Manager - generated" package="uk.org.rlinsdale.accesscontrolmanager.topcomponents"/>
-    <folder name="remotedb" project="Authentication2" package="uk.org.rlinsdale.authentication2"/>
-    <scriptfolder project="Lindos LifeCycle"/>
+    <folder location="java" name="data" project="Lindos LifeCycle" package="uk.org.rlinsdale.lindos.authentication.dataobjects"/>
+    <folder location="java" name="node" project="Access Control Manager - generated" package="uk.org.rlinsdale.accesscontrolmanager.nodes"/>
+    <folder location="java" name="nodeviewer" project="Access Control Manager - generated" package="uk.org.rlinsdale.accesscontrolmanager.topcomponents"/>
+    <folder location="java" name="nodeeditor" project="Access Control Manager - generated" package="uk.org.rlinsdale.accesscontrolmanager.topcomponents"/>
+    <folder location="java" name="remotedb" project="Authentication2" package="uk.org.rlinsdale.authentication2"/>
+    <folder location="project" name="script" project="Lindos LifeCycle" package="generated-scripts"/>
+    <folder location="resource" name="authentication2" project="Lindos LifeCycle" package="uk.org.rlinsdale.lindos.lifecycle.authentication2"/>
     <execute action="message" message="generating script files"/>
-    <execute action="entitytemplate" template="create" folder="script" filename="authentication2-createdb.sql" usedbinfo="authentication2" log="lindos.lifecycle" package="generated-scripts" license="lgpl21" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="backupscript" folder="script" filename="authentication2-backupscript.sh" usedbinfo="authentication2" log="lindos.lifecycle" package="generated-scripts" license="lgpl21" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="createtables" folder="script" filename="authentication2-createtables.sql" usedbinfo="authentication2" log="lindos.lifecycle" package="generated-scripts" license="lgpl21" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
+    <execute action="entitytemplate" template="createsqldatabase" folder="script" filename="authentication2-createdb.sql" usedbinfo="authentication2" package="generated-scripts" license="lgpl21" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
+    <execute action="entitytemplate" template="backupscript" folder="script" filename="authentication2-backupscript.sh" usedbinfo="authentication2" package="generated-scripts" license="lgpl21" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
+    <execute action="entitytemplate" template="createsqltables" folder="script" filename="authentication2-createtables.sql" usedbinfo="authentication2" package="generated-scripts" license="lgpl21" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
+    <execute action="message" message="generating json database files"/>
+    <execute action="entitytemplate" template="createjsontable" folder="authentication2" filename="User" useentityinfo="User" package="uk.org.rlinsdale.lindos.lifecycle"/>
+    <execute action="entitytemplate" template="createjsontable" folder="authentication2" filename="Application" useentityinfo="Application" package="uk.org.rlinsdale.lindos.lifecycle"/>
+    <execute action="entitytemplate" template="createjsontable" folder="authentication2" filename="Role" useentityinfo="Role" package="uk.org.rlinsdale.lindos.lifecycle"/>
+    <execute action="entitytemplate" template="createjsontable" folder="authentication2" filename="Permission" useentityinfo="Permission" package="uk.org.rlinsdale.lindos.lifecycle"/>
+    <execute action="entitytemplate" template="createjsontable" folder="authentication2" filename="Userrole" useentityinfo="Userrole" package="uk.org.rlinsdale.lindos.lifecycle"/>
+    <execute action="entitytemplate" template="createjsontable" folder="authentication2" filename="Userpermission" useentityinfo="Userpermission" package="uk.org.rlinsdale.lindos.lifecycle"/>
     <execute action="message" message="generating data files"/>
     <execute action="entitytemplate" template="rootentity" folder="data" filename="UserRoot.java" useentityinfo="UserRoot" nodepackage="uk.org.rlinsdale.accesscontrolmanager.nodes" log="lindos.lifecycle" package="uk.org.rlinsdale.lindos.authentication.dataobjects" license="lgpl21" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
     <execute action="entitytemplate" template="rootentity" folder="data" filename="ApplicationRoot.java" useentityinfo="ApplicationRoot" nodepackage="uk.org.rlinsdale.accesscontrolmanager.nodes" log="lindos.lifecycle" package="uk.org.rlinsdale.lindos.authentication.dataobjects" license="lgpl21" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>

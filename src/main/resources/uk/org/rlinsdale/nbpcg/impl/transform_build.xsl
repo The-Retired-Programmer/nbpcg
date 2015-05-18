@@ -29,16 +29,49 @@
     <xsl:template match="/nbpcg">
         <nbpcg-build name="{@name}">
             <xsl:for-each select="build/project/generate">
-                <folder name="{@type}" project="{../@name}" package="{@package}" />
+                <folder location="java" name="{@type}" project="{../@name}" package="{@package}" />
             </xsl:for-each>
             <xsl:for-each select="build/project/generatescripts">
-                <scriptfolder project="{../@name}"/>
+                <xsl:variable name="package">
+                    <xsl:choose>
+                        <xsl:when test="@package">
+                            <xsl:value-of select="@package"/>
+                        </xsl:when>
+                        <xsl:otherwise>generated-scripts</xsl:otherwise>
+                    </xsl:choose>
+                </xsl:variable>
+                <folder location="project" name="script" project="{../@name}" package="{$package}"/>
             </xsl:for-each>
-            <execute action="message" message="generating script files" />
+            <xsl:for-each select="build/project/generatejsondatabase">
+                <xsl:variable name="package">
+                    <xsl:value-of select="@package"/>
+                </xsl:variable>
+                <xsl:variable name="project">
+                    <xsl:value-of select="../@name"/>
+                </xsl:variable>
+                <xsl:for-each select="/nbpcg/databases/database[not(@usepackage)]" >
+                    <xsl:variable name="name">
+                        <xsl:choose>
+                            <xsl:when test="@dbname">
+                                <xsl:value-of select="@dbname"/>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:value-of select="@name"/>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </xsl:variable>
+                    <folder location="resource" name="{$name}" project="{$project}" package="{$package}.{$name}"/>
+                </xsl:for-each>
+            </xsl:for-each>
             <xsl:if test="build/project/generatescripts">
-                <xsl:call-template name="createdatabase"/>
+                <execute action="message" message="generating script files" />
+                <xsl:call-template name="createsqldatabase"/>
                 <xsl:call-template name="backupscript"/>
-                <xsl:call-template name="createstandardtables"/>
+                <xsl:call-template name="createstandardsqltables"/>
+            </xsl:if>
+            <xsl:if test="build/project/generatejsondatabase">
+                <execute action="message" message="generating json database files" />
+                <xsl:call-template name="createstandardjsontables"/>
             </xsl:if>
             <xsl:if test="build/project/generate[@type='data']" >
                 <execute action="message"  message="generating data files" />
@@ -617,9 +650,9 @@
         </xsl:for-each>
     </xsl:template>
     
-    <xsl:template name="createdatabase">
+    <xsl:template name="createsqldatabase">
         <xsl:for-each select="databases/database[not(@usepackage)]" >
-            <execute action="entitytemplate" template="create" folder="script" filename="{@name}-createdb.sql" usedbinfo="{@name}">
+            <execute action="entitytemplate" template="createsqldatabase" folder="script" filename="{@name}-createdb.sql" usedbinfo="{@name}">
                 <xsl:call-template name="setbuildattributes">
                     <xsl:with-param name="type">script</xsl:with-param>
                 </xsl:call-template>
@@ -642,15 +675,25 @@
         </xsl:for-each>
     </xsl:template> 
     
-    <xsl:template name="createstandardtables">
+    <xsl:template name="createstandardsqltables">
         <xsl:for-each select="databases/database[not(@usepackage)]" > 
-            <execute action="entitytemplate" template="createtables" folder="script" filename="{@name}-createtables.sql" usedbinfo="{@name}">
+            <execute action="entitytemplate" template="createsqltables" folder="script" filename="{@name}-createtables.sql" usedbinfo="{@name}">
                 <xsl:call-template name="setbuildattributes">
                     <xsl:with-param name="type">script</xsl:with-param>
                 </xsl:call-template>
             </execute>
         </xsl:for-each>
     </xsl:template> 
+    
+    <xsl:template name="createstandardjsontables">
+        <xsl:for-each select="databases/database[not(@usepackage)]/table" >
+            <execute action="entitytemplate" template="createjsontable" folder="{../@name}" filename="{@name}" useentityinfo="{@name}">
+                <xsl:call-template name="setbuildattributes">
+                    <xsl:with-param name="type">jsondb</xsl:with-param>
+                </xsl:call-template>
+            </execute>
+        </xsl:for-each>
+    </xsl:template>
 
     
     <!-- set of useful utility templates -->
@@ -660,9 +703,6 @@
         <xsl:choose>
             <xsl:when test="$type='script'" >
                 <xsl:for-each select="/nbpcg/build/project/generatescripts" >
-                    <xsl:attribute name="log" >
-                        <xsl:value-of select="../@log" />
-                    </xsl:attribute>
                     <xsl:attribute name="package" >generated-scripts</xsl:attribute>
                     <xsl:attribute name="license">
                         <xsl:choose>
@@ -674,6 +714,13 @@
                     </xsl:attribute>
                     <xsl:attribute name="copyright" >
                         <xsl:value-of select="../../@copyright" />
+                    </xsl:attribute>
+                </xsl:for-each>
+            </xsl:when>
+            <xsl:when test="$type='jsondb'" >
+                <xsl:for-each select="/nbpcg/build/project/generatejsondatabase" >
+                    <xsl:attribute name="package" >
+                        <xsl:value-of select="@package" />
                     </xsl:attribute>
                 </xsl:for-each>
             </xsl:when>

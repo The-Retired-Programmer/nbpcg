@@ -14,13 +14,17 @@
             viewerroles CDATA #REQUIRED
             copyright CDATA #REQUIRED
             >
-        <!ELEMENT project (generatescripts?, generate*) >
+        <!ELEMENT project (generatescripts?, generatejsondatabase?, generate*) >
             <!ATTLIST project
                 name CDATA #REQUIRED
                 log CDATA #REQUIRED
                 license (gpl30|lgpl21) #IMPLIED
                 >
             <!ELEMENT generatescripts EMPTY>
+            <!ELEMENT generatejsondatabase EMPTY>
+                <!ATTLIST generatejsondatabase
+                    package CDATA #REQUIRED
+                    >
             <!ELEMENT generate EMPTY>
                 <!ATTLIST generate
                     type (data|node|nodeviewer|nodeeditor|remotedb) #REQUIRED
@@ -55,7 +59,7 @@
                 withfields (idandstamp) #IMPLIED
                 usepackage CDATA #IMPLIED
                 >
-            <!ELEMENT table (field*,insert*)>
+            <!ELEMENT table (field*,insertrecord*)>
                 <!ATTLIST table
                     name CDATA #REQUIRED
                     dbname CDATA #IMPLIED
@@ -81,5 +85,9 @@
                         entryfield CDATA #IMPLIED
                         passwordstrength (weak|strong|verystrong) #IMPLIED
                         >
-                <!ELEMENT insert EMPTY>
-                    <!ATTLIST insert values CDATA #REQUIRED>
+                <!ELEMENT insertrecord (insertfield*)>
+                    <!ELEMENT insertfield EMPTY>
+                        <!ATTLIST insertfield
+                            name CDATA #REQUIRED
+                            value CDATA #REQUIRED
+                        >
