@@ -259,11 +259,21 @@ public class ${ENTITYINFO.name} implements Serializable, IdandstampEntity<${ENTI
         return id;
     }
 
+    /**
+     * Set the id - do not use (but JPA needs getters and setters)
+     *
+     * @param id the primary key identifier
+     */
     public void setId(Integer id) {
         this.id = id;
     }
 
 </#if>
+    /**
+     * Get the createdby field value
+     *
+     * @return the value
+     */
     public String getCreatedby() {
         return createdby;
     }
@@ -273,6 +283,11 @@ public class ${ENTITYINFO.name} implements Serializable, IdandstampEntity<${ENTI
         this.createdby = createdby;
     }
 
+    /**
+     * Get the createdon field value
+     *
+     * @return the value
+     */    
     public String getCreatedon() {
         return createdon;
     }
@@ -282,6 +297,11 @@ public class ${ENTITYINFO.name} implements Serializable, IdandstampEntity<${ENTI
         this.createdon = createdon;
     }
 
+    /**
+     * Get the updatedBy field value
+     *
+     * @return the value
+     */
     public String getUpdatedby() {
         return updatedby;
     }
@@ -291,6 +311,11 @@ public class ${ENTITYINFO.name} implements Serializable, IdandstampEntity<${ENTI
         this.updatedby = updatedby;
     }
 
+    /**
+     * Get the updatedon field value
+     *
+     * @return the value
+     */
     public String getUpdatedon() {
         return updatedon;
     }
@@ -304,28 +329,58 @@ public class ${ENTITYINFO.name} implements Serializable, IdandstampEntity<${ENTI
 <#list ENTITYINFO.field![] as field >
 <#if field.type = "rootref">
 <#elseif field.type = "ref">
+    /**
+     * Get the ${field.name}
+     *
+     * @return the value
+     */
     public Integer get${field.name?cap_first}() {
         return ${field.name};
     }
 
+    /**
+     * Set the ${field.name}
+     *
+     * @param ${field.name} the value
+     */
     public void set${field.name?cap_first}(Integer ${field.name}) {
         this.${field.name} = ${field.name};
     }
 
 <#elseif field.type = "reference">
+    /**
+     * Get the ${field.name}
+     *
+     * @return the value
+     */
     public Integer get${field.name?cap_first}() {
         return ${field.name};
     }
 
+    /**
+     * Set the ${field.name}
+     *
+     * @param ${field.name} the value
+     */
     public void set${field.name?cap_first}(Integer ${field.name}) {
         this.${field.name} = ${field.name};
     }
 
 <#else>
+    /**
+     * Get the ${field.name}
+     *
+     * @return the value
+     */
     public ${field.javatype} get${field.name?cap_first}() {
         return ${field.name};
     }
 
+    /**
+     * Set the ${field.name}
+     *
+     * @param ${field.name} the value
+     */
     public void set${field.name?cap_first}(${field.jsontype} ${field.name}) {
         this.${field.name} = ${field.name};
     }
@@ -333,7 +388,7 @@ public class ${ENTITYINFO.name} implements Serializable, IdandstampEntity<${ENTI
 </#if>
 </#list>
 
-@Override
+    @Override
     public int hashCode() {
         int hash = 0;
         hash += (id != null ? id.hashCode() : 0);
