@@ -82,6 +82,9 @@ public class ${ENTITYINFO.name}CommandProcessor extends IdandstampCommandProcess
     @PersistenceContext(unitName = "${ENTITYINFO.dbkey?cap_first}_PU")
     private EntityManager em;
 
+    /**
+     * Constructor
+     */
     public ${ENTITYINFO.name}CommandProcessor() {
         super(${ENTITYINFO.name}.class);
     }
