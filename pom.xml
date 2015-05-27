@@ -4,7 +4,7 @@
     <parent>
         <groupId>uk.org.rlinsdale.poms</groupId>
         <artifactId>nb-plugin-module</artifactId>
-        <version>1.0.2</version>
+        <version>1.0.5</version>
     </parent>
     
     <groupId>uk.org.rlinsdale</groupId>
