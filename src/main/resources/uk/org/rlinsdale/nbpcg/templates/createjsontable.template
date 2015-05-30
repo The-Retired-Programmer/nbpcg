@@ -23,7 +23,7 @@
 <#if dbtable.name = ENTITYINFO.dbtablename >
 <#assign id = 1>
 <#list dbtable.insertrecord![] as insert>
-    {
+    <#if id != 1>,</#if>{
         "createdby":"${USERCODE}"
         ,"createdon":"${NOW}"
         ,"updatedby":"${USERCODE}"
@@ -42,7 +42,7 @@
 </#if>
 </#list>
         ,"id": ${id}
-    },
+    }
 <#assign id = id+1>
 </#list>
 </#if>
