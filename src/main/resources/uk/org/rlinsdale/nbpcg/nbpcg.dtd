@@ -14,20 +14,15 @@
             viewerroles CDATA #REQUIRED
             copyright CDATA #REQUIRED
             >
-        <!ELEMENT project (generatescripts?, generatejsondatabase?, generate*) >
+        <!ELEMENT project (generate*) >
             <!ATTLIST project
                 name CDATA #REQUIRED
                 log CDATA #REQUIRED
                 license (gpl30|lgpl21) #IMPLIED
                 >
-            <!ELEMENT generatescripts EMPTY>
-            <!ELEMENT generatejsondatabase EMPTY>
-                <!ATTLIST generatejsondatabase
-                    package CDATA #REQUIRED
-                    >
             <!ELEMENT generate EMPTY>
                 <!ATTLIST generate
-                    type (data|node|nodeviewer|nodeeditor|remotedb) #REQUIRED
+                    type (data|node|nodeviewer|nodeeditor|remotedb|mysqldatabase|jsondatabase) #REQUIRED
                     package CDATA #REQUIRED
                     >
     <!ELEMENT node (node*)>

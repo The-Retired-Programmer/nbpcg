@@ -5,33 +5,28 @@
     Author     : Richard Linsdale (richard.linsdale at blueyonder.co.uk)
 -->
 
-<!ELEMENT nbpcg-build (folder+, execute+) >
+<!ELEMENT nbpcg-build (folder*) >
     <!ATTLIST nbpcg-build
         name CDATA #REQUIRED
+        copyright CDATA #REQUIRED
         >
-    <!ELEMENT folder EMPTY >
+    <!ELEMENT folder (execute*) >
         <!ATTLIST folder
-            location (java|resource|project) #REQUIRED
-            name CDATA #REQUIRED
             project CDATA #REQUIRED
-            package CDATA #IMPLIED
+            location (java|resource|project) #REQUIRED
+            package CDATA #REQUIRED
+            message CDATA #REQUIRED
+            license CDATA #REQUIRED
+            log CDATA #REQUIRED
+            datapackage CDATA #IMPLIED
+            nodepackage CDATA #IMPLIED
             >
     <!ELEMENT execute EMPTY >
         <!ATTLIST execute
-            action (message|entitytemplate) #REQUIRED
-            message CDATA #IMPLIED
-            template CDATA #IMPLIED
+            template CDATA #REQUIRED
             type CDATA #IMPLIED
-            folder CDATA #IMPLIED
-            filename CDATA #IMPLIED
+            filename CDATA #REQUIRED
             usedbinfo CDATA #IMPLIED
             useentityinfo CDATA #IMPLIED
             usefield CDATA #IMPLIED
-            log CDATA #IMPLIED
-            package CDATA #IMPLIED
-            datapackage CDATA #IMPLIED
-            nodepackage CDATA #IMPLIED
-            nodeeditorpackage CDATA #IMPLIED
-            license CDATA #IMPLIED
-            copyright CDATA #IMPLIED
             >

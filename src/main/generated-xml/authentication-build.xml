@@ -1,88 +1,165 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE nbpcg-build PUBLIC "-//uk/org/rlinsdale/nbpcgbuild/DTD NBPCGBUILD SCHEMA 1.0//EN" "nbres:/uk/org/rlinsdale/nbpcg/nbpcgbuild.dtd">
-<nbpcg-build name="Authentication">
-    <folder location="java" name="data" project="Lindos LifeCycle" package="uk.org.rlinsdale.lindos.authentication.dataobjects"/>
-    <folder location="java" name="node" project="Access Control Manager - generated" package="uk.org.rlinsdale.accesscontrolmanager.nodes"/>
-    <folder location="java" name="nodeviewer" project="Access Control Manager - generated" package="uk.org.rlinsdale.accesscontrolmanager.topcomponents"/>
-    <folder location="java" name="nodeeditor" project="Access Control Manager - generated" package="uk.org.rlinsdale.accesscontrolmanager.topcomponents"/>
-    <folder location="java" name="remotedb" project="Authentication2" package="uk.org.rlinsdale.authentication2"/>
-    <folder location="project" name="script" project="Lindos LifeCycle" package="generated-scripts"/>
-    <folder location="resource" name="authentication2" project="Lindos LifeCycle" package="uk.org.rlinsdale.lindos.lifecycle.authentication2"/>
-    <execute action="message" message="generating script files"/>
-    <execute action="entitytemplate" template="createsqldatabase" folder="script" filename="authentication2-createdb.sql" usedbinfo="authentication2" package="generated-scripts" license="lgpl21" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="backupscript" folder="script" filename="authentication2-backupscript.sh" usedbinfo="authentication2" package="generated-scripts" license="lgpl21" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="createsqltables" folder="script" filename="authentication2-createtables.sql" usedbinfo="authentication2" package="generated-scripts" license="lgpl21" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="message" message="generating json database files"/>
-    <execute action="entitytemplate" template="createjsontable" folder="authentication2" filename="User" useentityinfo="User" package="uk.org.rlinsdale.lindos.lifecycle"/>
-    <execute action="entitytemplate" template="createjsontable" folder="authentication2" filename="Application" useentityinfo="Application" package="uk.org.rlinsdale.lindos.lifecycle"/>
-    <execute action="entitytemplate" template="createjsontable" folder="authentication2" filename="Role" useentityinfo="Role" package="uk.org.rlinsdale.lindos.lifecycle"/>
-    <execute action="entitytemplate" template="createjsontable" folder="authentication2" filename="Permission" useentityinfo="Permission" package="uk.org.rlinsdale.lindos.lifecycle"/>
-    <execute action="entitytemplate" template="createjsontable" folder="authentication2" filename="Userrole" useentityinfo="Userrole" package="uk.org.rlinsdale.lindos.lifecycle"/>
-    <execute action="entitytemplate" template="createjsontable" folder="authentication2" filename="Userpermission" useentityinfo="Userpermission" package="uk.org.rlinsdale.lindos.lifecycle"/>
-    <execute action="message" message="generating data files"/>
-    <execute action="entitytemplate" template="rootentity" folder="data" filename="UserRoot.java" useentityinfo="UserRoot" nodepackage="uk.org.rlinsdale.accesscontrolmanager.nodes" log="lindos.lifecycle" package="uk.org.rlinsdale.lindos.authentication.dataobjects" license="lgpl21" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="rootentity" folder="data" filename="ApplicationRoot.java" useentityinfo="ApplicationRoot" nodepackage="uk.org.rlinsdale.accesscontrolmanager.nodes" log="lindos.lifecycle" package="uk.org.rlinsdale.lindos.authentication.dataobjects" license="lgpl21" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="entity" folder="data" filename="User.java" useentityinfo="User" nodepackage="uk.org.rlinsdale.accesscontrolmanager.nodes" log="lindos.lifecycle" package="uk.org.rlinsdale.lindos.authentication.dataobjects" license="lgpl21" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="entity" folder="data" filename="Application.java" useentityinfo="Application" nodepackage="uk.org.rlinsdale.accesscontrolmanager.nodes" log="lindos.lifecycle" package="uk.org.rlinsdale.lindos.authentication.dataobjects" license="lgpl21" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="entity" folder="data" filename="Role.java" useentityinfo="Role" nodepackage="uk.org.rlinsdale.accesscontrolmanager.nodes" log="lindos.lifecycle" package="uk.org.rlinsdale.lindos.authentication.dataobjects" license="lgpl21" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="entity" folder="data" filename="Permission.java" useentityinfo="Permission" nodepackage="uk.org.rlinsdale.accesscontrolmanager.nodes" log="lindos.lifecycle" package="uk.org.rlinsdale.lindos.authentication.dataobjects" license="lgpl21" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="entity" folder="data" filename="Userrole.java" useentityinfo="Userrole" nodepackage="uk.org.rlinsdale.accesscontrolmanager.nodes" log="lindos.lifecycle" package="uk.org.rlinsdale.lindos.authentication.dataobjects" license="lgpl21" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="entity" folder="data" filename="Userpermission.java" useentityinfo="Userpermission" nodepackage="uk.org.rlinsdale.accesscontrolmanager.nodes" log="lindos.lifecycle" package="uk.org.rlinsdale.lindos.authentication.dataobjects" license="lgpl21" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="message" message="generating node files"/>
-    <execute action="entitytemplate" template="rootnode" type="" folder="node" filename="UserRootNode.java" useentityinfo="UserRoot" datapackage="uk.org.rlinsdale.lindos.authentication.dataobjects" nodepackage="uk.org.rlinsdale.accesscontrolmanager.nodes" log="accesscontrolmanager" package="uk.org.rlinsdale.accesscontrolmanager.nodes" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="rootnode" type="" folder="node" filename="ApplicationRootNode.java" useentityinfo="ApplicationRoot" datapackage="uk.org.rlinsdale.lindos.authentication.dataobjects" nodepackage="uk.org.rlinsdale.accesscontrolmanager.nodes" log="accesscontrolmanager" package="uk.org.rlinsdale.accesscontrolmanager.nodes" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="node" type="" folder="node" filename="UserNode.java" useentityinfo="User" datapackage="uk.org.rlinsdale.lindos.authentication.dataobjects" nodepackage="uk.org.rlinsdale.accesscontrolmanager.nodes" log="accesscontrolmanager" package="uk.org.rlinsdale.accesscontrolmanager.nodes" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="node" type="" folder="node" filename="ApplicationNode.java" useentityinfo="Application" datapackage="uk.org.rlinsdale.lindos.authentication.dataobjects" nodepackage="uk.org.rlinsdale.accesscontrolmanager.nodes" log="accesscontrolmanager" package="uk.org.rlinsdale.accesscontrolmanager.nodes" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="node" type="" folder="node" filename="UserpermissionNode.java" useentityinfo="Userpermission" datapackage="uk.org.rlinsdale.lindos.authentication.dataobjects" nodepackage="uk.org.rlinsdale.accesscontrolmanager.nodes" log="accesscontrolmanager" package="uk.org.rlinsdale.accesscontrolmanager.nodes" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="node" type="" folder="node" filename="UserroleNode.java" useentityinfo="Userrole" datapackage="uk.org.rlinsdale.lindos.authentication.dataobjects" nodepackage="uk.org.rlinsdale.accesscontrolmanager.nodes" log="accesscontrolmanager" package="uk.org.rlinsdale.accesscontrolmanager.nodes" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="node" type="" folder="node" filename="RoleNode.java" useentityinfo="Role" datapackage="uk.org.rlinsdale.lindos.authentication.dataobjects" nodepackage="uk.org.rlinsdale.accesscontrolmanager.nodes" log="accesscontrolmanager" package="uk.org.rlinsdale.accesscontrolmanager.nodes" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="node" type="" folder="node" filename="PermissionNode.java" useentityinfo="Permission" datapackage="uk.org.rlinsdale.lindos.authentication.dataobjects" nodepackage="uk.org.rlinsdale.accesscontrolmanager.nodes" log="accesscontrolmanager" package="uk.org.rlinsdale.accesscontrolmanager.nodes" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="nodefactory" type="" folder="node" filename="UserRootNodeChildFactory.java" useentityinfo="UserRoot" datapackage="uk.org.rlinsdale.lindos.authentication.dataobjects" log="accesscontrolmanager" package="uk.org.rlinsdale.accesscontrolmanager.nodes" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="nodefactory" type="" folder="node" filename="UserNodeChildFactory.java" useentityinfo="User" datapackage="uk.org.rlinsdale.lindos.authentication.dataobjects" log="accesscontrolmanager" package="uk.org.rlinsdale.accesscontrolmanager.nodes" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="nodefactory" type="" folder="node" filename="ApplicationRootNodeChildFactory.java" useentityinfo="ApplicationRoot" datapackage="uk.org.rlinsdale.lindos.authentication.dataobjects" log="accesscontrolmanager" package="uk.org.rlinsdale.accesscontrolmanager.nodes" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="nodefactory" type="" folder="node" filename="ApplicationNodeChildFactory.java" useentityinfo="Application" datapackage="uk.org.rlinsdale.lindos.authentication.dataobjects" log="accesscontrolmanager" package="uk.org.rlinsdale.accesscontrolmanager.nodes" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="undonode" folder="node" filename="UndoUserNode.java" useentityinfo="User" datapackage="uk.org.rlinsdale.lindos.authentication.dataobjects" nodepackage="uk.org.rlinsdale.accesscontrolmanager.nodes" log="accesscontrolmanager" package="uk.org.rlinsdale.accesscontrolmanager.nodes" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="undonode" folder="node" filename="UndoUserpermissionNode.java" useentityinfo="Userpermission" datapackage="uk.org.rlinsdale.lindos.authentication.dataobjects" nodepackage="uk.org.rlinsdale.accesscontrolmanager.nodes" log="accesscontrolmanager" package="uk.org.rlinsdale.accesscontrolmanager.nodes" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="undonode" folder="node" filename="UndoUserroleNode.java" useentityinfo="Userrole" datapackage="uk.org.rlinsdale.lindos.authentication.dataobjects" nodepackage="uk.org.rlinsdale.accesscontrolmanager.nodes" log="accesscontrolmanager" package="uk.org.rlinsdale.accesscontrolmanager.nodes" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="undonode" folder="node" filename="UndoApplicationNode.java" useentityinfo="Application" datapackage="uk.org.rlinsdale.lindos.authentication.dataobjects" nodepackage="uk.org.rlinsdale.accesscontrolmanager.nodes" log="accesscontrolmanager" package="uk.org.rlinsdale.accesscontrolmanager.nodes" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="undonode" folder="node" filename="UndoRoleNode.java" useentityinfo="Role" datapackage="uk.org.rlinsdale.lindos.authentication.dataobjects" nodepackage="uk.org.rlinsdale.accesscontrolmanager.nodes" log="accesscontrolmanager" package="uk.org.rlinsdale.accesscontrolmanager.nodes" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="undonode" folder="node" filename="UndoPermissionNode.java" useentityinfo="Permission" datapackage="uk.org.rlinsdale.lindos.authentication.dataobjects" nodepackage="uk.org.rlinsdale.accesscontrolmanager.nodes" log="accesscontrolmanager" package="uk.org.rlinsdale.accesscontrolmanager.nodes" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="addnode" folder="node" filename="AddUserNode.java" useentityinfo="User" datapackage="uk.org.rlinsdale.lindos.authentication.dataobjects" nodepackage="uk.org.rlinsdale.accesscontrolmanager.nodes" log="accesscontrolmanager" package="uk.org.rlinsdale.accesscontrolmanager.nodes" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="addnode" folder="node" filename="AddUserpermissionNode.java" useentityinfo="Userpermission" datapackage="uk.org.rlinsdale.lindos.authentication.dataobjects" nodepackage="uk.org.rlinsdale.accesscontrolmanager.nodes" log="accesscontrolmanager" package="uk.org.rlinsdale.accesscontrolmanager.nodes" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="addnode" folder="node" filename="AddUserroleNode.java" useentityinfo="Userrole" datapackage="uk.org.rlinsdale.lindos.authentication.dataobjects" nodepackage="uk.org.rlinsdale.accesscontrolmanager.nodes" log="accesscontrolmanager" package="uk.org.rlinsdale.accesscontrolmanager.nodes" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="addnode" folder="node" filename="AddApplicationNode.java" useentityinfo="Application" datapackage="uk.org.rlinsdale.lindos.authentication.dataobjects" nodepackage="uk.org.rlinsdale.accesscontrolmanager.nodes" log="accesscontrolmanager" package="uk.org.rlinsdale.accesscontrolmanager.nodes" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="addnode" folder="node" filename="AddRoleNode.java" useentityinfo="Role" datapackage="uk.org.rlinsdale.lindos.authentication.dataobjects" nodepackage="uk.org.rlinsdale.accesscontrolmanager.nodes" log="accesscontrolmanager" package="uk.org.rlinsdale.accesscontrolmanager.nodes" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="addnode" folder="node" filename="AddPermissionNode.java" useentityinfo="Permission" datapackage="uk.org.rlinsdale.lindos.authentication.dataobjects" nodepackage="uk.org.rlinsdale.accesscontrolmanager.nodes" log="accesscontrolmanager" package="uk.org.rlinsdale.accesscontrolmanager.nodes" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="message" message="generating node editor files"/>
-    <execute action="entitytemplate" template="nodeeditor" folder="nodeeditor" filename="UserNodeEditor.java" useentityinfo="User" datapackage="uk.org.rlinsdale.lindos.authentication.dataobjects" nodepackage="uk.org.rlinsdale.accesscontrolmanager.nodes" log="accesscontrolmanager" package="uk.org.rlinsdale.accesscontrolmanager.topcomponents" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="nodeeditor" folder="nodeeditor" filename="ApplicationNodeEditor.java" useentityinfo="Application" datapackage="uk.org.rlinsdale.lindos.authentication.dataobjects" nodepackage="uk.org.rlinsdale.accesscontrolmanager.nodes" log="accesscontrolmanager" package="uk.org.rlinsdale.accesscontrolmanager.topcomponents" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="nodeeditor" folder="nodeeditor" filename="RoleNodeEditor.java" useentityinfo="Role" datapackage="uk.org.rlinsdale.lindos.authentication.dataobjects" nodepackage="uk.org.rlinsdale.accesscontrolmanager.nodes" log="accesscontrolmanager" package="uk.org.rlinsdale.accesscontrolmanager.topcomponents" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="nodeeditor" folder="nodeeditor" filename="PermissionNodeEditor.java" useentityinfo="Permission" datapackage="uk.org.rlinsdale.lindos.authentication.dataobjects" nodepackage="uk.org.rlinsdale.accesscontrolmanager.nodes" log="accesscontrolmanager" package="uk.org.rlinsdale.accesscontrolmanager.topcomponents" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="nodeeditor" folder="nodeeditor" filename="UserroleNodeEditor.java" useentityinfo="Userrole" datapackage="uk.org.rlinsdale.lindos.authentication.dataobjects" nodepackage="uk.org.rlinsdale.accesscontrolmanager.nodes" log="accesscontrolmanager" package="uk.org.rlinsdale.accesscontrolmanager.topcomponents" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="nodeeditor" folder="nodeeditor" filename="UserpermissionNodeEditor.java" useentityinfo="Userpermission" datapackage="uk.org.rlinsdale.lindos.authentication.dataobjects" nodepackage="uk.org.rlinsdale.accesscontrolmanager.nodes" log="accesscontrolmanager" package="uk.org.rlinsdale.accesscontrolmanager.topcomponents" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="editnode" folder="nodeeditor" filename="EditUserNode.java" useentityinfo="User" datapackage="uk.org.rlinsdale.lindos.authentication.dataobjects" nodepackage="uk.org.rlinsdale.accesscontrolmanager.nodes" nodeeditorpackage="uk.org.rlinsdale.accesscontrolmanager.topcomponents" log="accesscontrolmanager" package="uk.org.rlinsdale.accesscontrolmanager.topcomponents" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="editnode" folder="nodeeditor" filename="EditUserpermissionNode.java" useentityinfo="Userpermission" datapackage="uk.org.rlinsdale.lindos.authentication.dataobjects" nodepackage="uk.org.rlinsdale.accesscontrolmanager.nodes" nodeeditorpackage="uk.org.rlinsdale.accesscontrolmanager.topcomponents" log="accesscontrolmanager" package="uk.org.rlinsdale.accesscontrolmanager.topcomponents" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="editnode" folder="nodeeditor" filename="EditUserroleNode.java" useentityinfo="Userrole" datapackage="uk.org.rlinsdale.lindos.authentication.dataobjects" nodepackage="uk.org.rlinsdale.accesscontrolmanager.nodes" nodeeditorpackage="uk.org.rlinsdale.accesscontrolmanager.topcomponents" log="accesscontrolmanager" package="uk.org.rlinsdale.accesscontrolmanager.topcomponents" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="editnode" folder="nodeeditor" filename="EditApplicationNode.java" useentityinfo="Application" datapackage="uk.org.rlinsdale.lindos.authentication.dataobjects" nodepackage="uk.org.rlinsdale.accesscontrolmanager.nodes" nodeeditorpackage="uk.org.rlinsdale.accesscontrolmanager.topcomponents" log="accesscontrolmanager" package="uk.org.rlinsdale.accesscontrolmanager.topcomponents" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="editnode" folder="nodeeditor" filename="EditRoleNode.java" useentityinfo="Role" datapackage="uk.org.rlinsdale.lindos.authentication.dataobjects" nodepackage="uk.org.rlinsdale.accesscontrolmanager.nodes" nodeeditorpackage="uk.org.rlinsdale.accesscontrolmanager.topcomponents" log="accesscontrolmanager" package="uk.org.rlinsdale.accesscontrolmanager.topcomponents" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="editnode" folder="nodeeditor" filename="EditPermissionNode.java" useentityinfo="Permission" datapackage="uk.org.rlinsdale.lindos.authentication.dataobjects" nodepackage="uk.org.rlinsdale.accesscontrolmanager.nodes" nodeeditorpackage="uk.org.rlinsdale.accesscontrolmanager.topcomponents" log="accesscontrolmanager" package="uk.org.rlinsdale.accesscontrolmanager.topcomponents" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="choice" folder="nodeeditor" filename="RoleChoiceField.java" useentityinfo="Role" datapackage="uk.org.rlinsdale.lindos.authentication.dataobjects" nodepackage="uk.org.rlinsdale.accesscontrolmanager.nodes" log="accesscontrolmanager" package="uk.org.rlinsdale.accesscontrolmanager.topcomponents" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="choice" folder="nodeeditor" filename="PermissionChoiceField.java" useentityinfo="Permission" datapackage="uk.org.rlinsdale.lindos.authentication.dataobjects" nodepackage="uk.org.rlinsdale.accesscontrolmanager.nodes" log="accesscontrolmanager" package="uk.org.rlinsdale.accesscontrolmanager.topcomponents" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="message" message="generating node viewer files"/>
-    <execute action="entitytemplate" template="rootnodeviewer" type="Tree" folder="nodeviewer" filename="UserRootNodeViewer.java" useentityinfo="UserRoot" datapackage="uk.org.rlinsdale.lindos.authentication.dataobjects" nodepackage="uk.org.rlinsdale.accesscontrolmanager.nodes" log="accesscontrolmanager" package="uk.org.rlinsdale.accesscontrolmanager.topcomponents" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="rootnodeviewer" type="Tree" folder="nodeviewer" filename="ApplicationRootNodeViewer.java" useentityinfo="ApplicationRoot" datapackage="uk.org.rlinsdale.lindos.authentication.dataobjects" nodepackage="uk.org.rlinsdale.accesscontrolmanager.nodes" log="accesscontrolmanager" package="uk.org.rlinsdale.accesscontrolmanager.topcomponents" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="message" message="generating remote files"/>
-    <execute action="entitytemplate" template="remoteentity" folder="remotedb" filename="User.java" useentityinfo="User" log="authentication2" package="uk.org.rlinsdale.authentication2" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="remoteentity" folder="remotedb" filename="Application.java" useentityinfo="Application" log="authentication2" package="uk.org.rlinsdale.authentication2" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="remoteentity" folder="remotedb" filename="Role.java" useentityinfo="Role" log="authentication2" package="uk.org.rlinsdale.authentication2" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="remoteentity" folder="remotedb" filename="Permission.java" useentityinfo="Permission" log="authentication2" package="uk.org.rlinsdale.authentication2" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="remoteentity" folder="remotedb" filename="Userrole.java" useentityinfo="Userrole" log="authentication2" package="uk.org.rlinsdale.authentication2" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="remoteentity" folder="remotedb" filename="Userpermission.java" useentityinfo="Userpermission" log="authentication2" package="uk.org.rlinsdale.authentication2" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="remotecommandprocessor" folder="remotedb" filename="UserCommandProcessor.java" useentityinfo="User" log="authentication2" package="uk.org.rlinsdale.authentication2" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="remotecommandprocessor" folder="remotedb" filename="ApplicationCommandProcessor.java" useentityinfo="Application" log="authentication2" package="uk.org.rlinsdale.authentication2" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="remotecommandprocessor" folder="remotedb" filename="RoleCommandProcessor.java" useentityinfo="Role" log="authentication2" package="uk.org.rlinsdale.authentication2" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="remotecommandprocessor" folder="remotedb" filename="PermissionCommandProcessor.java" useentityinfo="Permission" log="authentication2" package="uk.org.rlinsdale.authentication2" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="remotecommandprocessor" folder="remotedb" filename="UserroleCommandProcessor.java" useentityinfo="Userrole" log="authentication2" package="uk.org.rlinsdale.authentication2" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="remotecommandprocessor" folder="remotedb" filename="UserpermissionCommandProcessor.java" useentityinfo="Userpermission" log="authentication2" package="uk.org.rlinsdale.authentication2" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="remoteservlet" folder="remotedb" filename="Authentication2Servlet.java" usedbinfo="authentication2" log="authentication2" package="uk.org.rlinsdale.authentication2" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
+<nbpcg-build name="Authentication" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)">
+    <folder project="Lindos LifeCycle" location="resource" package="uk.org.rlinsdale.lindos.lifecycle.mysql.authentication2" message="generating script files for authentication2" log="lindos.lifecycle" license="lgpl21">
+        <execute template="createsqldatabase" filename="createdb.sql" usedbinfo="authentication2"/>
+        <execute template="backupscript" filename="backupscript.sh" usedbinfo="authentication2"/>
+        <execute template="createsqltables" filename="createtables.sql" usedbinfo="authentication2"/>
+    </folder>
+    <folder project="Lindos LifeCycle" location="resource" package="uk.org.rlinsdale.lindos.lifecycle.json.authentication2" message="generating json database files for authentication2" log="lindos.lifecycle" license="lgpl21">
+        <execute template="createjsontable" filename="User" useentityinfo="User"/>
+        <execute template="createjsontable" filename="Application" useentityinfo="Application"/>
+        <execute template="createjsontable" filename="Role" useentityinfo="Role"/>
+        <execute template="createjsontable" filename="Permission" useentityinfo="Permission"/>
+        <execute template="createjsontable" filename="Userrole" useentityinfo="Userrole"/>
+        <execute template="createjsontable" filename="Userpermission" useentityinfo="Userpermission"/>
+    </folder>
+    <folder project="Lindos LifeCycle" location="java" package="uk.org.rlinsdale.lindos.authentication.dataobjects" message="generating data files" log="lindos.lifecycle" license="lgpl21">
+        <execute template="rootentity" filename="UserRoot.java" useentityinfo="UserRoot"/>
+        <execute template="rootentity" filename="ApplicationRoot.java" useentityinfo="ApplicationRoot"/>
+        <execute template="entity" filename="User.java" useentityinfo="User"/>
+        <execute template="entity" filename="Application.java" useentityinfo="Application"/>
+        <execute template="entity" filename="Role.java" useentityinfo="Role"/>
+        <execute template="entity" filename="Permission.java" useentityinfo="Permission"/>
+        <execute template="entity" filename="Userrole.java" useentityinfo="Userrole"/>
+        <execute template="entity" filename="Userpermission.java" useentityinfo="Userpermission"/>
+    </folder>
+    <folder project="Access Control Manager - generated" location="java" package="uk.org.rlinsdale.accesscontrolmanager.nodes" message="generating node files" log="accesscontrolmanager" license="gpl30" datapackage="uk.org.rlinsdale.lindos.authentication.dataobjects">
+        <execute template="rootnode" type="" filename="UserRootNode.java" useentityinfo="UserRoot"/>
+        <execute template="rootnode" type="" filename="ApplicationRootNode.java" useentityinfo="ApplicationRoot"/>
+        <execute template="node" type="" filename="UserNode.java" useentityinfo="User"/>
+        <execute template="node" type="" filename="ApplicationNode.java" useentityinfo="Application"/>
+        <execute template="node" type="" filename="UserpermissionNode.java" useentityinfo="Userpermission"/>
+        <execute template="node" type="" filename="UserroleNode.java" useentityinfo="Userrole"/>
+        <execute template="node" type="" filename="RoleNode.java" useentityinfo="Role"/>
+        <execute template="node" type="" filename="PermissionNode.java" useentityinfo="Permission"/>
+        <execute template="nodefactory" type="" filename="UserRootNodeChildFactory.java" useentityinfo="UserRoot"/>
+        <execute template="nodefactory" type="" filename="UserNodeChildFactory.java" useentityinfo="User"/>
+        <execute template="nodefactory" type="" filename="ApplicationRootNodeChildFactory.java" useentityinfo="ApplicationRoot"/>
+        <execute template="nodefactory" type="" filename="ApplicationNodeChildFactory.java" useentityinfo="Application"/>
+        <execute template="undonode" filename="UndoUserNode.java" useentityinfo="User"/>
+        <execute template="undonode" filename="UndoUserpermissionNode.java" useentityinfo="Userpermission"/>
+        <execute template="undonode" filename="UndoUserroleNode.java" useentityinfo="Userrole"/>
+        <execute template="undonode" filename="UndoApplicationNode.java" useentityinfo="Application"/>
+        <execute template="undonode" filename="UndoRoleNode.java" useentityinfo="Role"/>
+        <execute template="undonode" filename="UndoPermissionNode.java" useentityinfo="Permission"/>
+        <execute template="addnode" filename="AddUserNode.java" useentityinfo="User"/>
+        <execute template="addnode" filename="AddUserpermissionNode.java" useentityinfo="Userpermission"/>
+        <execute template="addnode" filename="AddUserroleNode.java" useentityinfo="Userrole"/>
+        <execute template="addnode" filename="AddApplicationNode.java" useentityinfo="Application"/>
+        <execute template="addnode" filename="AddRoleNode.java" useentityinfo="Role"/>
+        <execute template="addnode" filename="AddPermissionNode.java" useentityinfo="Permission"/>
+    </folder>
+    <folder project="Access Control Manager - generated" location="java" package="uk.org.rlinsdale.accesscontrolmanager.topcomponents" message="generating node viewer files" log="accesscontrolmanager" license="gpl30" datapackage="uk.org.rlinsdale.lindos.authentication.dataobjects" nodepackage="uk.org.rlinsdale.accesscontrolmanager.nodes">
+        <execute template="rootnodeviewer" type="Tree" filename="UserRootNodeViewer.java" useentityinfo="UserRoot"/>
+        <execute template="rootnodeviewer" type="Tree" filename="ApplicationRootNodeViewer.java" useentityinfo="ApplicationRoot"/>
+    </folder>
+    <folder project="Access Control Manager - generated" location="java" package="uk.org.rlinsdale.accesscontrolmanager.topcomponents" message="generating node editor files" log="accesscontrolmanager" license="gpl30" datapackage="uk.org.rlinsdale.lindos.authentication.dataobjects" nodepackage="uk.org.rlinsdale.accesscontrolmanager.nodes">
+        <execute template="nodeeditor" filename="UserNodeEditor.java" useentityinfo="User"/>
+        <execute template="nodeeditor" filename="ApplicationNodeEditor.java" useentityinfo="Application"/>
+        <execute template="nodeeditor" filename="RoleNodeEditor.java" useentityinfo="Role"/>
+        <execute template="nodeeditor" filename="PermissionNodeEditor.java" useentityinfo="Permission"/>
+        <execute template="nodeeditor" filename="UserroleNodeEditor.java" useentityinfo="Userrole"/>
+        <execute template="nodeeditor" filename="UserpermissionNodeEditor.java" useentityinfo="Userpermission"/>
+        <execute template="editnode" filename="EditUserNode.java" useentityinfo="User"/>
+        <execute template="editnode" filename="EditUserpermissionNode.java" useentityinfo="Userpermission"/>
+        <execute template="editnode" filename="EditUserroleNode.java" useentityinfo="Userrole"/>
+        <execute template="editnode" filename="EditApplicationNode.java" useentityinfo="Application"/>
+        <execute template="editnode" filename="EditRoleNode.java" useentityinfo="Role"/>
+        <execute template="editnode" filename="EditPermissionNode.java" useentityinfo="Permission"/>
+        <execute template="choice" filename="RoleChoiceField.java" useentityinfo="Role"/>
+        <execute template="choice" filename="PermissionChoiceField.java" useentityinfo="Permission"/>
+    </folder>
+    <folder project="Authentication2" location="java" package="uk.org.rlinsdale.authentication2" message="generating remote files" log="authentication2" license="gpl30">
+        <execute template="remoteentity" filename="User.java" useentityinfo="User"/>
+        <execute template="remoteentity" filename="Application.java" useentityinfo="Application"/>
+        <execute template="remoteentity" filename="Role.java" useentityinfo="Role"/>
+        <execute template="remoteentity" filename="Permission.java" useentityinfo="Permission"/>
+        <execute template="remoteentity" filename="Userrole.java" useentityinfo="Userrole"/>
+        <execute template="remoteentity" filename="Userpermission.java" useentityinfo="Userpermission"/>
+        <execute template="remotecommandprocessor" filename="UserCommandProcessor.java" useentityinfo="User"/>
+        <execute template="remotecommandprocessor" filename="ApplicationCommandProcessor.java" useentityinfo="Application"/>
+        <execute template="remotecommandprocessor" filename="RoleCommandProcessor.java" useentityinfo="Role"/>
+        <execute template="remotecommandprocessor" filename="PermissionCommandProcessor.java" useentityinfo="Permission"/>
+        <execute template="remotecommandprocessor" filename="UserroleCommandProcessor.java" useentityinfo="Userrole"/>
+        <execute template="remotecommandprocessor" filename="UserpermissionCommandProcessor.java" useentityinfo="Userpermission"/>
+        <execute template="remoteservlet" filename="Authentication2Servlet.java" usedbinfo="authentication2"/>
+    </folder>
+    <folder project="Authentication2" location="resource" package="uk.org.rlinsdale.authentication2.mysql.authentication2" message="generating script files for authentication2" log="authentication2" license="gpl30">
+        <execute template="createsqldatabase" filename="createdb.sql" usedbinfo="authentication2"/>
+        <execute template="backupscript" filename="backupscript.sh" usedbinfo="authentication2"/>
+        <execute template="createsqltables" filename="createtables.sql" usedbinfo="authentication2"/>
+    </folder>
 </nbpcg-build>
+    
+        
+        
+    
+    
+        
+        
+    
+    
+        
+            
+                
+                
+                
+                
+                
+                    
+                    
+                    
+                    
+                
+            
+            
+                
+                
+                    
+                
+                
+                    
+                
+                
+                    
+                
+            
+            
+                
+                
+                    
+                    
+                
+                
+                    
+                    
+                
+                
+                    
+                    
+                
+            
+            
+                
+            
+            
+                
+                
+                    
+                    
+                
+                
+                    
+                    
+                
+                
+                    
+                    
+                
+            
+            
+                
+            
+        
+    

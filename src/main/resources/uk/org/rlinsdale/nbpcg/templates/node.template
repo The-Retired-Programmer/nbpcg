@@ -76,10 +76,10 @@ import uk.org.rlinsdale.nbpcglibrary.common.*;
 import org.openide.nodes.PropertySupport;
 import ${datapackage}.${ENTITYINFO.name}.${ENTITYINFO.name}Field;
 <#list ENTITYINFO.child![] as c>
-import static ${nodepackage}.${c.name?cap_first}Node.${c.name?upper_case}NODE_FLAVOR;
+import static ${package}.${c.name?cap_first}Node.${c.name?upper_case}NODE_FLAVOR;
 <#if c.copymovenode??>
 <#assign COPYMOVEENTITYINFO = entityinfo[c.copymoveentity] >
-import static ${nodepackage}.${COPYMOVEENTITYINFO.name}Node.${COPYMOVEENTITYINFO.name?upper_case}NODE_FLAVOR;
+import static ${package}.${COPYMOVEENTITYINFO.name}Node.${COPYMOVEENTITYINFO.name?upper_case}NODE_FLAVOR;
 </#if>
 </#list>
 import uk.org.rlinsdale.nbpcglibrary.data.entity.EntityFieldChangeEventParams.CommonEntityField;

@@ -32,8 +32,8 @@ import org.openide.windows.IOProvider;
 import org.openide.windows.InputOutput;
 import org.openide.windows.OutputWriter;
 import org.w3c.dom.Element;
-import uk.org.rlinsdale.nbpcg.impl.FreemarkerMapFactory.FreemarkerHashMap;
-import uk.org.rlinsdale.nbpcg.impl.FreemarkerMapFactory.FreemarkerListMap;
+import uk.org.rlinsdale.nbpcg.impl.FreemarkerMapFactory.FreemarkerMap;
+import uk.org.rlinsdale.nbpcg.impl.FreemarkerMapFactory.FreemarkerList;
 
 /**
  * The worker which executes the NBPCG script and generates the required files.
@@ -42,7 +42,6 @@ import uk.org.rlinsdale.nbpcg.impl.FreemarkerMapFactory.FreemarkerListMap;
  */
 public final class NBPCG {
 
-    private final static String INDENT = "    ";
     private final FileObject fo;
     private final String tabtext;
     private final boolean mavenProject;
@@ -87,49 +86,35 @@ public final class NBPCG {
                     msg.reset();
                     msg.println("Running the NETBEANS PLATFORM CODE GENERATOR for a "
                             + (mavenProject ? "Maven" : "Ant") + " project");
-                    msg.println("Loading Definition File");
                     Element root;
                     try (InputStream in = fo.getInputStream()) {
                         root = newInstance().newDocumentBuilder().parse(in).getDocumentElement();
                     }
                     FreemarkerMapFactory factory = new FreemarkerMapFactory(fo);
+                    FreemarkerMap entitymap = factory.createFreemarkerMapByTransformation(root, NBPCG.class.getResourceAsStream("transform_entityinfo.xsl"));
+                    FreemarkerMap buildmap = factory.createFreemarkerListByTransformation(root, NBPCG.class.getResourceAsStream("transform_build.xsl"));
                     //
-                    msg.println("Creating information definitions");
-                    FreemarkerHashMap entitymap = factory.createFreemarkerHashMapByTransformation(root, NBPCG.class.getResourceAsStream("transform_entityinfo.xsl"));
-                    //
-                    msg.println("Creating build definitions");
-                    FreemarkerHashMap buildmap = factory.createFreemarkerListMapByTransformation(root, NBPCG.class.getResourceAsStream("transform_build.xsl"));
-                    //
-                    msg.println("Creating required source packages and removing any content");
                     Map<String, Project> openProjects = new HashMap<>();
                     for (Project project : OpenProjects.getDefault().getOpenProjects()) {
                         openProjects.put(getInformation(project).getDisplayName(), project);
                     }
-                    Map<String, FileObject> folders = new HashMap<>();
-                    FreemarkerListMap buildfolders = buildmap.getFreemarkerListMap("folder");
-                    if (buildfolders != null) {
-                        for (FreemarkerHashMap buildfolder : buildfolders) {
-                            folders.put(buildfolder.getString("name"), findFolder(buildfolder.getString("location"), buildfolder.getString("project"), buildfolder.getString("package"), openProjects));
-                        }
+                    // now execute the build instructions
+                    FreemarkerList buildfolders = buildmap.getFreemarkerList("folder");
+                    if (buildfolders == null) {
+                        throw new Exception("No build instructions found");
                     }
-                    //
-                    msg.println("Creating the NBP Application Files");
+                    
                     Map<String, Freemarker> templates = new HashMap<>();
                     Counter counter = new Counter(msg);
-                    msg.print(INDENT);
-                    FreemarkerListMap buildcommands = buildmap.getFreemarkerListMap("execute");
-                    for (FreemarkerHashMap command : buildcommands) {
-                        switch (command.getString("action")) {
-                            case "message":
-                                counter.startofline();
-                                msg.println(command.get("message"));
-                                msg.print(INDENT);
-                                break;
-                            case "entitytemplate":
-                                processTemplate(command, entitymap, templates, folders, counter);
-                                break;
-                            default:
-                                throw new Exception("Illegal execute action parameter (" + command.getString("action") + ")");
+                    
+                    for (FreemarkerMap buildfolder : buildfolders) {
+                        buildfolder.addAttributes(buildmap);
+                        counter.startofline();
+                        msg.println(buildfolder.get("message"));
+                        FileObject folder = findFolder(buildfolder.getString("location"), buildfolder.getString("project"), buildfolder.getString("package"), openProjects);
+                        FreemarkerList buildcommands = buildfolder.getFreemarkerList("execute");
+                        for (FreemarkerMap command : buildcommands) {
+                            processTemplate(command.addAttributes(buildfolder),entitymap, templates, folder, counter);
                         }
                     }
                     msg.println();
@@ -150,9 +135,8 @@ public final class NBPCG {
             }
         }
 
-        private void processTemplate(FreemarkerHashMap command, FreemarkerHashMap infomodel,
-                Map<String, Freemarker> templates, Map<String, FileObject> folders,
-                Counter counter) throws Exception {
+        private void processTemplate(FreemarkerMap command, FreemarkerMap infomodel,
+                Map<String, Freemarker> templates, FileObject folder, Counter counter) throws Exception {
             String tn = command.getString("template");
             if (templates.get(tn) == null) {
                 Freemarker fm = new Freemarker();
@@ -161,7 +145,7 @@ public final class NBPCG {
             }
             Freemarker fm = templates.get(tn);
             infomodel.putAll(command);
-            fm.executeTemplate(folders.get(command.getString("folder")), command.getString("filename"), infomodel);
+            fm.executeTemplate(folder, command.getString("filename"), infomodel);
             counter.increment();
         }
 
@@ -236,7 +220,6 @@ public final class NBPCG {
             public void startofline() {
                 if (countonline > 0) {
                     msg.println();
-                    msg.print(INDENT);
                     countonline = 0;
                 }
             }
@@ -248,7 +231,6 @@ public final class NBPCG {
                 if (countonline >= 50) {
                     countonline = 0;
                     msg.println();
-                    msg.print(INDENT);
                 }
             }
 

@@ -20,6 +20,7 @@ import java.io.InputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.Map.Entry;
 import javax.xml.transform.Transformer;
 import static javax.xml.transform.TransformerFactory.newInstance;
 import javax.xml.transform.dom.DOMResult;
@@ -57,20 +58,20 @@ public class FreemarkerMapFactory {
     }
 
     /**
-     * Create a freemarker hash map - which is the top level of the parameter
+     * Create a freemarker map - which is the top level of the parameter
      * structure. An XML document will first be transformed and then the
      * resulting XML document will be parsed to extract parameter to create the
-     * top level freemarker Hashmap.
+     * top level freemarkermap.
      *
      * @param root the root element of the XML to be transformed
      * @param inxsl the transform to be applied
-     * @return the freemarker hashmap
+     * @return the freemarker map
      * @throws Exception if problems
      */
-    public FreemarkerHashMap createFreemarkerHashMapByTransformation(Element root, InputStream inxsl) throws Exception {
-        FreemarkerHashMap hash = createTopHash(transform(root, inxsl));
-        addSpecials(hash);
-        return hash;
+    public FreemarkerMap createFreemarkerMapByTransformation(Element root, InputStream inxsl) throws Exception {
+        FreemarkerMap map = createMap(transform(root, inxsl));
+        addSpecials(map);
+        return map;
     }
 
     /**
@@ -84,10 +85,10 @@ public class FreemarkerMapFactory {
      * @return the freemarker hashmap
      * @throws Exception if problems
      */
-    public FreemarkerHashMap createFreemarkerListMapByTransformation(Element root, InputStream inxsl) throws Exception {
-        FreemarkerHashMap hash = createLowerHash(transform(root, inxsl));
-        addSpecials(hash);
-        return hash;
+    public FreemarkerMap createFreemarkerListByTransformation(Element root, InputStream inxsl) throws Exception {
+        FreemarkerMap map = createChildList(transform(root, inxsl));
+        addSpecials(map);
+        return map;
     }
 
     private Element transform(Element root, InputStream inxsl) throws Exception {
@@ -99,8 +100,8 @@ public class FreemarkerMapFactory {
         return ((Document) dr.getNode()).getDocumentElement();
     }
 
-    private FreemarkerHashMap createTopHash(Element element) throws Exception {
-        FreemarkerHashMap hash = new FreemarkerHashMap();
+    private FreemarkerMap createMap(Element element) throws Exception {
+        FreemarkerMap hash = new FreemarkerMap();
         NamedNodeMap atts = element.getAttributes();
         for (int i = 0; i < atts.getLength(); i++) {
             Node att = atts.item(i);
@@ -113,10 +114,10 @@ public class FreemarkerMapFactory {
                 Element child = (Element) node;
                 String name = child.getTagName();
                 if (!hash.containsKey(name)) {
-                    hash.put(name, new FreemarkerHashMap());
+                    hash.put(name, new FreemarkerMap());
                 }
                 if (child.hasAttribute("key")) {
-                    ((FreemarkerHashMap) hash.get(name)).put(child.getAttribute("key"), createLowerHash(child));
+                    ((FreemarkerMap) hash.get(name)).put(child.getAttribute("key"), createChildList(child));
                 } else {
                     throw new Exception("FreemarkerHashMap element without key (" + name + ")");
                 }
@@ -125,8 +126,8 @@ public class FreemarkerMapFactory {
         return hash;
     }
 
-    private FreemarkerHashMap createLowerHash(Element element) {
-        FreemarkerHashMap hash = new FreemarkerHashMap();
+    private FreemarkerMap createChildList(Element element) {
+        FreemarkerMap hash = new FreemarkerMap();
         NamedNodeMap atts = element.getAttributes();
         for (int i = 0; i < atts.getLength(); i++) {
             Node att = atts.item(i);
@@ -139,35 +140,35 @@ public class FreemarkerMapFactory {
                 Element child = (Element) node;
                 String name = child.getTagName();
                 if (!hash.containsKey(name)) {
-                    hash.put(name, new FreemarkerListMap());
+                    hash.put(name, new FreemarkerList());
                 }
-                ((FreemarkerListMap) hash.get(name)).add(createLowerHash(child));
+                ((FreemarkerList) hash.get(name)).add(createChildList(child));
             }
         }
         return hash;
     }
 
-    private void addSpecials(FreemarkerHashMap hash) throws Exception {
-        hash.put("TODAY", today);
-        hash.put("NOW", timestamp);
-        hash.put("DEFINITION_FILE", deffile);
-        hash.put("USER", "NetBeans Platform Code Generator");
-        hash.put("USERCODE", "nbcg");
+    private void addSpecials(FreemarkerMap map) throws Exception {
+        map.put("TODAY", today);
+        map.put("NOW", timestamp);
+        map.put("DEFINITION_FILE", deffile);
+        map.put("USER", "NetBeans Platform Code Generator");
+        map.put("USERCODE", "nbcg");
     }
 
     /**
      * The Freemarker Hash Map
      */
-    public class FreemarkerHashMap extends LinkedHashMap<String, Object> {
-
+    public class FreemarkerMap extends LinkedHashMap<String, Object> {
+        
         /**
          * Constructor
          */
-        protected FreemarkerHashMap() {
+        protected FreemarkerMap() {
         }
 
         /**
-         * Get a value from the hash map, looked up by key
+         * Get a value from the map, looked up by key
          *
          * @param key the key to be used in the lookup
          * @return the value
@@ -177,19 +178,33 @@ public class FreemarkerMapFactory {
         }
 
         /**
-         * Get a Freemarker ListMap from the hashmap, looked up by key
+         * Get a FreemarkerList from the Map, looked up by key
          *
          * @param key the key to be used in the lookup
          * @return the freemarker ListMap
          */
-        public FreemarkerListMap getFreemarkerListMap(String key) {
-            return (FreemarkerListMap) get(key);
+        public FreemarkerList getFreemarkerList(String key) {
+            return (FreemarkerList) get(key);
+        }
+
+        /**
+         * Add a set of attributes from one FreeMarker map to another. Typical
+         * usecase: copy parent attributes to children (ie inheritance)
+         */
+        public FreemarkerMap addAttributes(FreemarkerMap from) {
+            for (Entry<String, Object> e: from.entrySet()){
+                Object item = e.getValue();
+                if (!(item instanceof FreemarkerList)){
+                    this.put(e.getKey(), item);
+                }
+            }
+            return this;
         }
     }
 
     /**
      * The FreeMarker List Map
      */
-    public class FreemarkerListMap extends ArrayList<FreemarkerHashMap> {
+    public class FreemarkerList extends ArrayList<FreemarkerMap> {
     }
 }
