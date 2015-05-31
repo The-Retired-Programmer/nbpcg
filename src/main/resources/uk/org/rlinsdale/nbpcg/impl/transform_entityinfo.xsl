@@ -47,7 +47,7 @@
                     </xsl:otherwise>
                 </xsl:choose>
             </xsl:variable>
-            <dbinfo key="{@name}" name="{$database}" db="{@db}">
+            <dbinfo name="{$database}">
                 <xsl:for-each select="table">
                     <xsl:variable name="tname">
                         <xsl:choose>
@@ -95,7 +95,7 @@
     
     <xsl:template name="usepackageentityinfo">
         <xsl:for-each select="databases/database[@usepackage]/table" >
-            <entityinfo  key="{@name}" name="{@name}">
+            <entityinfo name="{@name}">
                 <xsl:call-template name="commonentityattributes" />
                 <xsl:variable name="ename" select="@name" />
                 <xsl:for-each select="/nbpcg/node[@name=$ename]" >
@@ -135,7 +135,7 @@
    
     <xsl:template name="entityinfo">
         <xsl:for-each select="/nbpcg/databases/database[not(@usepackage)]/table" >
-            <entityinfo key="{@name}" name="{@name}" >
+            <entityinfo name="{@name}" >
                 <xsl:call-template name="commonentityattributes" />
                 <xsl:variable name="ename" select="@name" />
                 <xsl:if test="//node[@name=$ename and @orderable='yes']">
@@ -525,7 +525,7 @@
             </entityinfo>
         </xsl:for-each>
         <xsl:for-each select="node">
-            <entityinfo key="{@name}Root" name="{concat(@name,'Root')}" isroot="" >
+            <entityinfo name="{concat(@name,'Root')}" isroot="" >
                 <xsl:attribute name="label" >
                     <xsl:choose>
                         <xsl:when test="@rootlabel" >

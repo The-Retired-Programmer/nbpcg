@@ -101,11 +101,11 @@ public class FreemarkerMapFactory {
     }
 
     private FreemarkerMap createMap(Element element) throws Exception {
-        FreemarkerMap hash = new FreemarkerMap();
+        FreemarkerMap map = new FreemarkerMap();
         NamedNodeMap atts = element.getAttributes();
         for (int i = 0; i < atts.getLength(); i++) {
             Node att = atts.item(i);
-            hash.put(att.getNodeName(), att.getNodeValue());
+            map.put(att.getNodeName(), att.getNodeValue());
         }
         NodeList nodelist = element.getChildNodes();
         for (int i = 0; i < nodelist.getLength(); i++) {
@@ -113,17 +113,17 @@ public class FreemarkerMapFactory {
             if (node.getNodeType() == Node.ELEMENT_NODE) {
                 Element child = (Element) node;
                 String name = child.getTagName();
-                if (!hash.containsKey(name)) {
-                    hash.put(name, new FreemarkerMap());
+                if (!map.containsKey(name)) {
+                    map.put(name, new FreemarkerMap());
                 }
-                if (child.hasAttribute("key")) {
-                    ((FreemarkerMap) hash.get(name)).put(child.getAttribute("key"), createChildList(child));
+                if (child.hasAttribute("name")) {
+                    ((FreemarkerMap) map.get(name)).put(child.getAttribute("name"), createChildList(child));
                 } else {
-                    throw new Exception("FreemarkerHashMap element without key (" + name + ")");
+                    throw new Exception("FreemarkerMap element without name attribute (" + name + ")");
                 }
             }
         }
-        return hash;
+        return map;
     }
 
     private FreemarkerMap createChildList(Element element) {

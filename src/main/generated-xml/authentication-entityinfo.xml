@@ -1,7 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE nbpcg-entity-info PUBLIC "-//uk/org/rlinsdale/nbpcgentityinfo/DTD NBPCGENTITYINFO SCHEMA 1.0//EN" "nbres:/uk/org/rlinsdale/nbpcg/nbpcgentityinfo.dtd">
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE nbpcg-entity-info PUBLIC "-//uk/org/rlinsdale/nbpcgentityinfo/DTD NBPCGENTITYINFO SCHEMA 1.0//EN" "nbres:/uk/org/rlinsdale/nbpcg/nbpcgentityinfo.dtd">
 <nbpcg-entity-info name="Authentication">
-    <entityinfo key="User" name="User" dbkey="authentication2" dbtablename="User" withfields="Idandstamp" type="Idkeyauto" icon="user" orderable="no" sort="no" nodeorder="1" parentname="UserRoot">
+    <entityinfo name="User" dbkey="authentication2" dbtablename="User" withfields="Idandstamp" type="Idkeyauto" icon="user" orderable="no" sort="no" nodeorder="1" parentname="UserRoot">
         <field name="root" references="UserRoot" type="rootref" label="Root" rvid="root" javatype="int" jsontype="Integer" initialisation="" javarsget="getInt"/>
         <field name="username" nullsql="NOT NULL" uniquesql="UNIQUE" unique="yes" min="1" max="100" fieldclass="TextField" sqltype="VARCHAR(100)" type="String" dbcolumnname="username" label="Username" rvid="username" javatype="String" jsontype="String" initialisation=" = &quot;&quot;" javarsget="getString"/>
         <field name="encodedpassword" nullsql="NOT NULL" uniquesql="" entryfield="password" passwordsupport="uk.org.rlinsdale.lindos.authentication.Authentication" passwordstrength="strong" max="40" min="40" fieldclass="PasswordField" sqltype="CHAR(40)" type="password" dbcolumnname="encodedpassword" label="Password" rvid="encodedpassword" javatype="String" jsontype="String" initialisation=" = &quot;&quot;" javarsget="getString"/>
@@ -13,7 +12,7 @@
             <display field="Username"/>
         </displaynameformat>
     </entityinfo>
-    <entityinfo key="Application" name="Application" dbkey="authentication2" dbtablename="Application" withfields="Idandstamp" type="Idkeyauto" icon="application" orderable="no" sort="no" nodeorder="1" parentname="ApplicationRoot">
+    <entityinfo name="Application" dbkey="authentication2" dbtablename="Application" withfields="Idandstamp" type="Idkeyauto" icon="application" orderable="no" sort="no" nodeorder="1" parentname="ApplicationRoot">
         <field name="root" references="ApplicationRoot" type="rootref" label="Root" rvid="root" javatype="int" jsontype="Integer" initialisation="" javarsget="getInt"/>
         <field name="application" nullsql="NOT NULL" uniquesql="UNIQUE" unique="yes" min="1" max="100" fieldclass="TextField" sqltype="VARCHAR(100)" type="String" dbcolumnname="application" label="Application" rvid="application" javatype="String" jsontype="String" initialisation=" = &quot;&quot;" javarsget="getString"/>
         <child name="role" dbname="application" references="Role" orderable="no" sort="no"/>
@@ -22,7 +21,7 @@
             <display field="Application"/>
         </displaynameformat>
     </entityinfo>
-    <entityinfo key="Role" name="Role" dbkey="authentication2" dbtablename="Role" withfields="Idandstamp" type="Idkeyauto" icon="key" orderable="no" sort="no" parentname="Application" nodeorder="1">
+    <entityinfo name="Role" dbkey="authentication2" dbtablename="Role" withfields="Idandstamp" type="Idkeyauto" icon="key" orderable="no" sort="no" parentname="Application" nodeorder="1">
         <field name="role" nullsql="NOT NULL" uniquesql="" min="1" max="100" fieldclass="TextField" sqltype="VARCHAR(100)" type="String" dbcolumnname="role" label="Role" rvid="role" javatype="String" jsontype="String" initialisation=" = &quot;&quot;" javarsget="getString"/>
         <field name="application" references="Application" referencestable="Application" parentfactory="ApplicationRoot" pprvu="Root" pcvu="Application" fieldclass="ReferenceChoiceField" sqltype="MEDIUMINT UNSIGNED" nullsql="NOT NULL" uniquesql="" type="ref" dbcolumnname="application" label="Application" rvid="applicationId" javatype="int" jsontype="Integer" initialisation="" javarsget="getInt"/>
         <referenced name="Userrole" field="role" dbfield="role"/>
@@ -34,7 +33,7 @@
             <display field="Role"/>
         </displaynameformat>
     </entityinfo>
-    <entityinfo key="Permission" name="Permission" dbkey="authentication2" dbtablename="Permission" withfields="Idandstamp" type="Idkeyauto" icon="thumb_up" orderable="no" sort="no" parentname="Application" nodeorder="2">
+    <entityinfo name="Permission" dbkey="authentication2" dbtablename="Permission" withfields="Idandstamp" type="Idkeyauto" icon="thumb_up" orderable="no" sort="no" parentname="Application" nodeorder="2">
         <field name="permission" nullsql="NOT NULL" uniquesql="" min="1" max="100" fieldclass="TextField" sqltype="VARCHAR(100)" type="String" dbcolumnname="permission" label="Permission" rvid="permission" javatype="String" jsontype="String" initialisation=" = &quot;&quot;" javarsget="getString"/>
         <field name="application" references="Application" referencestable="Application" parentfactory="ApplicationRoot" pprvu="Root" pcvu="Application" fieldclass="ReferenceChoiceField" sqltype="MEDIUMINT UNSIGNED" nullsql="NOT NULL" uniquesql="" type="ref" dbcolumnname="application" label="Application" rvid="applicationId" javatype="int" jsontype="Integer" initialisation="" javarsget="getInt"/>
         <referenced name="Userpermission" field="permission" dbfield="permission"/>
@@ -46,27 +45,27 @@
             <display field="Permission"/>
         </displaynameformat>
     </entityinfo>
-    <entityinfo key="Userrole" name="Userrole" dbkey="authentication2" dbtablename="Userrole" withfields="Idandstamp" type="Idkeyauto" icon="key" orderable="no" sort="no" parentname="User" nodeorder="2">
+    <entityinfo name="Userrole" dbkey="authentication2" dbtablename="Userrole" withfields="Idandstamp" type="Idkeyauto" icon="key" orderable="no" sort="no" parentname="User" nodeorder="2">
         <field name="role" nullsql="NOT NULL" uniquesql="" fieldclass="ReferenceChoiceField" sqltype="MEDIUMINT UNSIGNED" references="Role" referencestable="Role" parentfactory="Application" pcvu="Role" type="reference" dbcolumnname="role" label="Role" rvid="roleId" javatype="int" jsontype="Integer" initialisation="" javarsget="getInt"/>
         <field name="user" references="User" referencestable="User" parentfactory="UserRoot" pprvu="Root" pcvu="User" fieldclass="ReferenceChoiceField" sqltype="MEDIUMINT UNSIGNED" nullsql="NOT NULL" uniquesql="" type="ref" dbcolumnname="user" label="User" rvid="userId" javatype="int" jsontype="Integer" initialisation="" javarsget="getInt"/>
         <displaynameformat format="{0}">
             <display field="Role"/>
         </displaynameformat>
     </entityinfo>
-    <entityinfo key="Userpermission" name="Userpermission" dbkey="authentication2" dbtablename="Userpermission" withfields="Idandstamp" type="Idkeyauto" icon="thumb_up" orderable="no" sort="no" parentname="User" nodeorder="1">
+    <entityinfo name="Userpermission" dbkey="authentication2" dbtablename="Userpermission" withfields="Idandstamp" type="Idkeyauto" icon="thumb_up" orderable="no" sort="no" parentname="User" nodeorder="1">
         <field name="permission" nullsql="NOT NULL" uniquesql="" fieldclass="ReferenceChoiceField" sqltype="MEDIUMINT UNSIGNED" references="Permission" referencestable="Permission" parentfactory="Application" pcvu="Permission" type="reference" dbcolumnname="permission" label="Permission" rvid="permissionId" javatype="int" jsontype="Integer" initialisation="" javarsget="getInt"/>
         <field name="user" references="User" referencestable="User" parentfactory="UserRoot" pprvu="Root" pcvu="User" fieldclass="ReferenceChoiceField" sqltype="MEDIUMINT UNSIGNED" nullsql="NOT NULL" uniquesql="" type="ref" dbcolumnname="user" label="User" rvid="userId" javatype="int" jsontype="Integer" initialisation="" javarsget="getInt"/>
         <displaynameformat format="{0}">
             <display field="Permission"/>
         </displaynameformat>
     </entityinfo>
-    <entityinfo key="UserRoot" name="UserRoot" isroot="" label="Users" viewers="Manager" icon="folder_user">
+    <entityinfo name="UserRoot" isroot="" label="Users" viewers="Manager" icon="folder_user">
         <child name="user" nodekey="UserRootChildFactory.UserNode" references="User" orderable="no" sort="no"/>
     </entityinfo>
-    <entityinfo key="ApplicationRoot" name="ApplicationRoot" isroot="" label="Applications" viewers="Manager" icon="folder_table">
+    <entityinfo name="ApplicationRoot" isroot="" label="Applications" viewers="Manager" icon="folder_table">
         <child name="application" nodekey="ApplicationRootChildFactory.ApplicationNode" references="Application" orderable="no" sort="no"/>
     </entityinfo>
-    <dbinfo key="authentication2" name="authentication2" db="Remote-MySQL">
+    <dbinfo name="authentication2">
         <table name="User" type="idkeyauto" withfields="idandstamp">
             <insertrecord>
                 <insertfield name="username" value="richard"/>

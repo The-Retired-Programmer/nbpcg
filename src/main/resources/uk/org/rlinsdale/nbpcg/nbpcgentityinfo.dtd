@@ -11,7 +11,6 @@
         >
     <!ELEMENT entityinfo (field*, child*, referenced*, sortformat*, displaytitleformat*, displaynameformat*)  >
         <!ATTLIST entityinfo
-            key CDATA #REQUIRED
             name CDATA #REQUIRED
             isroot CDATA #IMPLIED
             nodeorder CDATA #IMPLIED
@@ -94,9 +93,7 @@
                     >
     <!ELEMENT dbinfo (table+) >
         <!ATTLIST dbinfo
-            key CDATA #REQUIRED
             name CDATA #REQUIRED
-            db CDATA #REQUIRED
             >
         <!ELEMENT table (insertrecord*) >
             <!ATTLIST table
