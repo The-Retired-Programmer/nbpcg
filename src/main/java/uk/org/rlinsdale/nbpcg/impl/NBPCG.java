@@ -20,7 +20,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import static java.lang.Math.round;
 import static java.lang.System.currentTimeMillis;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import static javax.xml.parsers.DocumentBuilderFactory.newInstance;
 import org.netbeans.api.project.Project;
@@ -103,18 +105,23 @@ public final class NBPCG {
                     if (buildfolders == null) {
                         throw new Exception("No build instructions found");
                     }
-                    
+
                     Map<String, Freemarker> templates = new HashMap<>();
                     Counter counter = new Counter(msg);
-                    
+                    List<String> foldersEmptied = new ArrayList<>();
+
                     for (FreemarkerMap buildfolder : buildfolders) {
                         buildfolder.addAttributes(buildmap);
                         counter.startofline();
                         msg.println(buildfolder.get("message"));
                         FileObject folder = findFolder(buildfolder.getString("location"), buildfolder.getString("project"), buildfolder.getString("package"), openProjects);
+                        if (emptyFolder(folder, foldersEmptied)) {
+                            counter.incrementX();
+                        }
+
                         FreemarkerList buildcommands = buildfolder.getFreemarkerList("execute");
                         for (FreemarkerMap command : buildcommands) {
-                            processTemplate(command.addAttributes(buildfolder),entitymap, templates, folder, counter);
+                            processTemplate(command.addAttributes(buildfolder), entitymap, templates, folder, counter);
                         }
                     }
                     msg.println();
@@ -146,7 +153,7 @@ public final class NBPCG {
             Freemarker fm = templates.get(tn);
             infomodel.putAll(command);
             fm.executeTemplate(folder, command.getString("filename"), infomodel);
-            counter.increment();
+            counter.incrementDot();
         }
 
         private FileObject findFolder(String location, String project, String pkage, Map<String, Project> openProjects) throws IOException {
@@ -157,13 +164,13 @@ public final class NBPCG {
             String basepath;
             switch (location) {
                 case "java":
-                    basepath=mavenProject ? "src/main/java" : "src";   
+                    basepath = mavenProject ? "src/main/java" : "src";
                     break;
                 case "project":
-                    basepath=mavenProject ? "src/main" : "";
+                    basepath = mavenProject ? "src/main" : "";
                     break;
                 case "resource":
-                    basepath=mavenProject ? "src/main/resources" : "src";
+                    basepath = mavenProject ? "src/main/resources" : "src";
                     break;
                 default:
                     throw new IOException("Illegal location code defined (" + location + ")");
@@ -172,37 +179,46 @@ public final class NBPCG {
             for (String name : pkage.split("\\.")) {
                 pfo = childfolder(pfo, name);
             }
-            // and empty folder of all contents prior to rebuilding code
-            for (FileObject fd : pfo.getChildren()) {
-                if (fd.isData() ){
-                    fd.delete(); // only delete data not other packages - fixes #21
-                }
-            }
             return pfo;
         }
 
-//        private FileObject findInConfigFolder(String project, String folder, Map<String, Project> openProjects) throws IOException {
-//            Project p = openProjects.get(project);
-//            if (p == null) {
-//                throw new IOException("Required project is not open (" + project + ")");
-//            }
-//            FileObject pfo = childfolder(p.getProjectDirectory(), mavenProject ? "src/main" : "nbpcg-files");
-//            pfo = childfolder(pfo, folder);
-//            // and empty folder of all contents prior to rebuilding code
-//            for (FileObject fd : pfo.getChildren()) {
-//                if (fd.isData() ){
-//                    fd.delete(); // only delete data not other packages - fixes #21
-//                }
-//            }
-//            return pfo;
-//        }
+        private boolean emptyFolder(FileObject pfo, List<String> foldersEmptied) throws IOException {
+            String path = pfo.getPath();
+            for (String previouspath : foldersEmptied) {
+                if (path.equals(previouspath)) {
+                    return false;
+                }
+            }
+            for (FileObject fd : pfo.getChildren()) {
+                if (fd.isData()) {
+                    fd.delete(); // only delete data not other packages - fixes #21
+                }
+            }
+            foldersEmptied.add(path);
+            return true;
+        }
+        //        private FileObject findInConfigFolder(String project, String folder, Map<String, Project> openProjects) throws IOException {
+        //            Project p = openProjects.get(project);
+        //            if (p == null) {
+        //                throw new IOException("Required project is not open (" + project + ")");
+        //            }
+        //            FileObject pfo = childfolder(p.getProjectDirectory(), mavenProject ? "src/main" : "nbpcg-files");
+        //            pfo = childfolder(pfo, folder);
+        //            // and empty folder of all contents prior to rebuilding code
+        //            for (FileObject fd : pfo.getChildren()) {
+        //                if (fd.isData() ){
+        //                    fd.delete(); // only delete data not other packages - fixes #21
+        //                }
+        //            }
+        //            return pfo;
+        //        }
 
         private FileObject childfolder(FileObject folder, String name) throws IOException {
-           if (name.equals("")){
-               return folder;
-           }
-           FileObject cfo = folder.getFileObject(name);
-           return cfo != null ? cfo : folder.createFolder(name);
+            if (name.equals("")) {
+                return folder;
+            }
+            FileObject cfo = folder.getFileObject(name);
+            return cfo != null ? cfo : folder.createFolder(name);
         }
 
         private class Counter {
@@ -224,9 +240,17 @@ public final class NBPCG {
                 }
             }
 
-            public void increment() {
-                msg.print(".");
+            public void incrementDot() {
+                increment('.');
                 count++;
+            }
+
+            public void incrementX() {
+                increment('x');
+            }
+
+            private void increment(char c) {
+                msg.print(c);
                 countonline++;
                 if (countonline >= 50) {
                     countonline = 0;
