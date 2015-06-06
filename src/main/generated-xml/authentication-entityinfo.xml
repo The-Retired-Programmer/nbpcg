@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE nbpcg-entity-info PUBLIC "-//uk/org/rlinsdale/nbpcgentityinfo/DTD NBPCGENTITYINFO SCHEMA 1.0//EN" "nbres:/uk/org/rlinsdale/nbpcg/nbpcgentityinfo.dtd">
 <nbpcg-entity-info name="Authentication">
     <entityinfo name="User" dbkey="authentication2" dbtablename="User" withfields="Idandstamp" type="Idkeyauto" icon="user" orderable="no" sort="no" nodeorder="1" parentname="UserRoot">
-        <field name="root" references="UserRoot" type="rootref" label="Root" rvid="root" javatype="int" jsontype="Integer" initialisation="" javarsget="getInt"/>
-        <field name="username" nullsql="NOT NULL" uniquesql="UNIQUE" unique="yes" min="1" max="100" fieldclass="TextField" sqltype="VARCHAR(100)" type="String" dbcolumnname="username" label="Username" rvid="username" javatype="String" jsontype="String" initialisation=" = &quot;&quot;" javarsget="getString"/>
-        <field name="encodedpassword" nullsql="NOT NULL" uniquesql="" entryfield="password" passwordsupport="uk.org.rlinsdale.lindos.authentication.Authentication" passwordstrength="strong" max="40" min="40" fieldclass="PasswordField" sqltype="CHAR(40)" type="password" dbcolumnname="encodedpassword" label="Password" rvid="encodedpassword" javatype="String" jsontype="String" initialisation=" = &quot;&quot;" javarsget="getString"/>
-        <field name="usercode" nullsql="NOT NULL" uniquesql="UNIQUE" unique="yes" min="4" max="4" fieldclass="TextField" sqltype="CHAR(4)" type="String" dbcolumnname="usercode" label="Usercode" rvid="usercode" javatype="String" jsontype="String" initialisation=" = &quot;&quot;" javarsget="getString"/>
-        <field name="enabled" nullsql="NOT NULL" uniquesql="" fieldclass="CheckboxField" sqltype="BOOLEAN" type="boolean" dbcolumnname="enabled" label="Enabled" rvid="enabled" javatype="boolean" jsontype="Boolean" initialisation=" = false" javarsget="getBoolean"/>
+        <field name="root" pkey="no" references="UserRoot" type="rootref" label="Root" rvid="root" javatype="int" jsontype="Integer" initialisation="" javarsget="getInt"/>
+        <field name="username" pkey="no" nullsql="NOT NULL" uniquesql="UNIQUE" unique="yes" min="1" max="100" fieldclass="TextField" sqltype="VARCHAR(100)" type="String" dbcolumnname="username" label="Username" rvid="username" javatype="String" jsontype="String" initialisation=" = &quot;&quot;" javarsget="getString"/>
+        <field name="encodedpassword" pkey="no" nullsql="NOT NULL" uniquesql="" entryfield="password" passwordsupport="uk.org.rlinsdale.lindos.authentication.Authentication" passwordstrength="strong" max="40" min="40" fieldclass="PasswordField" sqltype="CHAR(40)" type="password" dbcolumnname="encodedpassword" label="Password" rvid="encodedpassword" javatype="String" jsontype="String" initialisation=" = &quot;&quot;" javarsget="getString"/>
+        <field name="usercode" pkey="no" nullsql="NOT NULL" uniquesql="UNIQUE" unique="yes" min="4" max="4" fieldclass="TextField" sqltype="CHAR(4)" type="String" dbcolumnname="usercode" label="Usercode" rvid="usercode" javatype="String" jsontype="String" initialisation=" = &quot;&quot;" javarsget="getString"/>
+        <field name="enabled" pkey="no" nullsql="NOT NULL" uniquesql="" fieldclass="CheckboxField" sqltype="BOOLEAN" type="boolean" dbcolumnname="enabled" label="Enabled" rvid="enabled" javatype="boolean" jsontype="Boolean" initialisation=" = false" javarsget="getBoolean"/>
+        <field name="id" pkey="yes" type="int" nullsql="" uniquesql="" fieldclass="TextField" sqltype="MEDIUMINT UNSIGNED AUTO_INCREMENT" dbcolumnname="id" label="Id" rvid="id" javatype="int" jsontype="Integer" initialisation="" javarsget="getInt"/>
+        <field name="createdby" pkey="no" type="String" nullsql="NOT NULL" uniquesql="" fieldclass="TextField" sqltype="CHAR(4)" dbcolumnname="createdby" label="Created by" rvid="createdby" javatype="String" jsontype="String" initialisation="" javarsget="getString"/>
+        <field name="createdon" pkey="no" type="datetime" nullsql="NOT NULL" uniquesql="" fieldclass="TextField" sqltype="CHAR(14)" dbcolumnname="createdon" label="Created on" rvid="createdon" javatype="Timestamp" jsontype="Timestamp" initialisation="" javarsget="getString"/>
+        <field name="updatedby" pkey="no" type="String" nullsql="NOT NULL" uniquesql="" fieldclass="TextField" sqltype="CHAR(4)" dbcolumnname="updatedby" label="Updated by" rvid="updatedby" javatype="String" jsontype="String" initialisation="" javarsget="getString"/>
+        <field name="updatedon" pkey="no" type="datetime" nullsql="NOT NULL" uniquesql="" fieldclass="TextField" sqltype="CHAR(14)" dbcolumnname="updatedon" label="Updated on" rvid="updatedon" javatype="Timestamp" jsontype="Timestamp" initialisation="" javarsget="getString"/>
         <child name="userpermission" dbname="user" references="Userpermission" orderable="no" sort="no" copymoveentity="Permission" copymovefield="permission"/>
         <child name="userrole" dbname="user" references="Userrole" orderable="no" sort="no" copymoveentity="Role" copymovefield="role"/>
         <displaynameformat format="{0}">
@@ -13,8 +18,13 @@
         </displaynameformat>
     </entityinfo>
     <entityinfo name="Application" dbkey="authentication2" dbtablename="Application" withfields="Idandstamp" type="Idkeyauto" icon="application" orderable="no" sort="no" nodeorder="1" parentname="ApplicationRoot">
-        <field name="root" references="ApplicationRoot" type="rootref" label="Root" rvid="root" javatype="int" jsontype="Integer" initialisation="" javarsget="getInt"/>
-        <field name="application" nullsql="NOT NULL" uniquesql="UNIQUE" unique="yes" min="1" max="100" fieldclass="TextField" sqltype="VARCHAR(100)" type="String" dbcolumnname="application" label="Application" rvid="application" javatype="String" jsontype="String" initialisation=" = &quot;&quot;" javarsget="getString"/>
+        <field name="root" pkey="no" references="ApplicationRoot" type="rootref" label="Root" rvid="root" javatype="int" jsontype="Integer" initialisation="" javarsget="getInt"/>
+        <field name="application" pkey="no" nullsql="NOT NULL" uniquesql="UNIQUE" unique="yes" min="1" max="100" fieldclass="TextField" sqltype="VARCHAR(100)" type="String" dbcolumnname="application" label="Application" rvid="application" javatype="String" jsontype="String" initialisation=" = &quot;&quot;" javarsget="getString"/>
+        <field name="id" pkey="yes" type="int" nullsql="" uniquesql="" fieldclass="TextField" sqltype="MEDIUMINT UNSIGNED AUTO_INCREMENT" dbcolumnname="id" label="Id" rvid="id" javatype="int" jsontype="Integer" initialisation="" javarsget="getInt"/>
+        <field name="createdby" pkey="no" type="String" nullsql="NOT NULL" uniquesql="" fieldclass="TextField" sqltype="CHAR(4)" dbcolumnname="createdby" label="Created by" rvid="createdby" javatype="String" jsontype="String" initialisation="" javarsget="getString"/>
+        <field name="createdon" pkey="no" type="datetime" nullsql="NOT NULL" uniquesql="" fieldclass="TextField" sqltype="CHAR(14)" dbcolumnname="createdon" label="Created on" rvid="createdon" javatype="Timestamp" jsontype="Timestamp" initialisation="" javarsget="getString"/>
+        <field name="updatedby" pkey="no" type="String" nullsql="NOT NULL" uniquesql="" fieldclass="TextField" sqltype="CHAR(4)" dbcolumnname="updatedby" label="Updated by" rvid="updatedby" javatype="String" jsontype="String" initialisation="" javarsget="getString"/>
+        <field name="updatedon" pkey="no" type="datetime" nullsql="NOT NULL" uniquesql="" fieldclass="TextField" sqltype="CHAR(14)" dbcolumnname="updatedon" label="Updated on" rvid="updatedon" javatype="Timestamp" jsontype="Timestamp" initialisation="" javarsget="getString"/>
         <child name="role" dbname="application" references="Role" orderable="no" sort="no"/>
         <child name="permission" dbname="application" references="Permission" orderable="no" sort="no"/>
         <displaynameformat format="{0}">
@@ -22,8 +32,13 @@
         </displaynameformat>
     </entityinfo>
     <entityinfo name="Role" dbkey="authentication2" dbtablename="Role" withfields="Idandstamp" type="Idkeyauto" icon="key" orderable="no" sort="no" parentname="Application" nodeorder="1">
-        <field name="role" nullsql="NOT NULL" uniquesql="" min="1" max="100" fieldclass="TextField" sqltype="VARCHAR(100)" type="String" dbcolumnname="role" label="Role" rvid="role" javatype="String" jsontype="String" initialisation=" = &quot;&quot;" javarsget="getString"/>
-        <field name="application" references="Application" referencestable="Application" parentfactory="ApplicationRoot" pprvu="Root" pcvu="Application" fieldclass="ReferenceChoiceField" sqltype="MEDIUMINT UNSIGNED" nullsql="NOT NULL" uniquesql="" type="ref" dbcolumnname="application" label="Application" rvid="applicationId" javatype="int" jsontype="Integer" initialisation="" javarsget="getInt"/>
+        <field name="role" pkey="no" nullsql="NOT NULL" uniquesql="" min="1" max="100" fieldclass="TextField" sqltype="VARCHAR(100)" type="String" dbcolumnname="role" label="Role" rvid="role" javatype="String" jsontype="String" initialisation=" = &quot;&quot;" javarsget="getString"/>
+        <field name="application" pkey="no" references="Application" referencestable="Application" parentfactory="ApplicationRoot" pprvu="Root" pcvu="Application" fieldclass="ReferenceChoiceField" sqltype="MEDIUMINT UNSIGNED" nullsql="NOT NULL" uniquesql="" type="ref" dbcolumnname="application" label="Application" rvid="applicationId" javatype="int" jsontype="Integer" initialisation="" javarsget="getInt"/>
+        <field name="id" pkey="yes" type="int" nullsql="" uniquesql="" fieldclass="TextField" sqltype="MEDIUMINT UNSIGNED AUTO_INCREMENT" dbcolumnname="id" label="Id" rvid="id" javatype="int" jsontype="Integer" initialisation="" javarsget="getInt"/>
+        <field name="createdby" pkey="no" type="String" nullsql="NOT NULL" uniquesql="" fieldclass="TextField" sqltype="CHAR(4)" dbcolumnname="createdby" label="Created by" rvid="createdby" javatype="String" jsontype="String" initialisation="" javarsget="getString"/>
+        <field name="createdon" pkey="no" type="datetime" nullsql="NOT NULL" uniquesql="" fieldclass="TextField" sqltype="CHAR(14)" dbcolumnname="createdon" label="Created on" rvid="createdon" javatype="Timestamp" jsontype="Timestamp" initialisation="" javarsget="getString"/>
+        <field name="updatedby" pkey="no" type="String" nullsql="NOT NULL" uniquesql="" fieldclass="TextField" sqltype="CHAR(4)" dbcolumnname="updatedby" label="Updated by" rvid="updatedby" javatype="String" jsontype="String" initialisation="" javarsget="getString"/>
+        <field name="updatedon" pkey="no" type="datetime" nullsql="NOT NULL" uniquesql="" fieldclass="TextField" sqltype="CHAR(14)" dbcolumnname="updatedon" label="Updated on" rvid="updatedon" javatype="Timestamp" jsontype="Timestamp" initialisation="" javarsget="getString"/>
         <referenced name="Userrole" field="role" dbfield="role"/>
         <displaytitleformat format="{0} for {1}">
             <display field="Role"/>
@@ -34,8 +49,13 @@
         </displaynameformat>
     </entityinfo>
     <entityinfo name="Permission" dbkey="authentication2" dbtablename="Permission" withfields="Idandstamp" type="Idkeyauto" icon="thumb_up" orderable="no" sort="no" parentname="Application" nodeorder="2">
-        <field name="permission" nullsql="NOT NULL" uniquesql="" min="1" max="100" fieldclass="TextField" sqltype="VARCHAR(100)" type="String" dbcolumnname="permission" label="Permission" rvid="permission" javatype="String" jsontype="String" initialisation=" = &quot;&quot;" javarsget="getString"/>
-        <field name="application" references="Application" referencestable="Application" parentfactory="ApplicationRoot" pprvu="Root" pcvu="Application" fieldclass="ReferenceChoiceField" sqltype="MEDIUMINT UNSIGNED" nullsql="NOT NULL" uniquesql="" type="ref" dbcolumnname="application" label="Application" rvid="applicationId" javatype="int" jsontype="Integer" initialisation="" javarsget="getInt"/>
+        <field name="permission" pkey="no" nullsql="NOT NULL" uniquesql="" min="1" max="100" fieldclass="TextField" sqltype="VARCHAR(100)" type="String" dbcolumnname="permission" label="Permission" rvid="permission" javatype="String" jsontype="String" initialisation=" = &quot;&quot;" javarsget="getString"/>
+        <field name="application" pkey="no" references="Application" referencestable="Application" parentfactory="ApplicationRoot" pprvu="Root" pcvu="Application" fieldclass="ReferenceChoiceField" sqltype="MEDIUMINT UNSIGNED" nullsql="NOT NULL" uniquesql="" type="ref" dbcolumnname="application" label="Application" rvid="applicationId" javatype="int" jsontype="Integer" initialisation="" javarsget="getInt"/>
+        <field name="id" pkey="yes" type="int" nullsql="" uniquesql="" fieldclass="TextField" sqltype="MEDIUMINT UNSIGNED AUTO_INCREMENT" dbcolumnname="id" label="Id" rvid="id" javatype="int" jsontype="Integer" initialisation="" javarsget="getInt"/>
+        <field name="createdby" pkey="no" type="String" nullsql="NOT NULL" uniquesql="" fieldclass="TextField" sqltype="CHAR(4)" dbcolumnname="createdby" label="Created by" rvid="createdby" javatype="String" jsontype="String" initialisation="" javarsget="getString"/>
+        <field name="createdon" pkey="no" type="datetime" nullsql="NOT NULL" uniquesql="" fieldclass="TextField" sqltype="CHAR(14)" dbcolumnname="createdon" label="Created on" rvid="createdon" javatype="Timestamp" jsontype="Timestamp" initialisation="" javarsget="getString"/>
+        <field name="updatedby" pkey="no" type="String" nullsql="NOT NULL" uniquesql="" fieldclass="TextField" sqltype="CHAR(4)" dbcolumnname="updatedby" label="Updated by" rvid="updatedby" javatype="String" jsontype="String" initialisation="" javarsget="getString"/>
+        <field name="updatedon" pkey="no" type="datetime" nullsql="NOT NULL" uniquesql="" fieldclass="TextField" sqltype="CHAR(14)" dbcolumnname="updatedon" label="Updated on" rvid="updatedon" javatype="Timestamp" jsontype="Timestamp" initialisation="" javarsget="getString"/>
         <referenced name="Userpermission" field="permission" dbfield="permission"/>
         <displaytitleformat format="{0} for {1}">
             <display field="Permission"/>
@@ -46,15 +66,25 @@
         </displaynameformat>
     </entityinfo>
     <entityinfo name="Userrole" dbkey="authentication2" dbtablename="Userrole" withfields="Idandstamp" type="Idkeyauto" icon="key" orderable="no" sort="no" parentname="User" nodeorder="2">
-        <field name="role" nullsql="NOT NULL" uniquesql="" fieldclass="ReferenceChoiceField" sqltype="MEDIUMINT UNSIGNED" references="Role" referencestable="Role" parentfactory="Application" pcvu="Role" type="reference" dbcolumnname="role" label="Role" rvid="roleId" javatype="int" jsontype="Integer" initialisation="" javarsget="getInt"/>
-        <field name="user" references="User" referencestable="User" parentfactory="UserRoot" pprvu="Root" pcvu="User" fieldclass="ReferenceChoiceField" sqltype="MEDIUMINT UNSIGNED" nullsql="NOT NULL" uniquesql="" type="ref" dbcolumnname="user" label="User" rvid="userId" javatype="int" jsontype="Integer" initialisation="" javarsget="getInt"/>
+        <field name="role" pkey="no" nullsql="NOT NULL" uniquesql="" fieldclass="ReferenceChoiceField" sqltype="MEDIUMINT UNSIGNED" references="Role" referencestable="Role" parentfactory="Application" pcvu="Role" type="reference" dbcolumnname="role" label="Role" rvid="roleId" javatype="int" jsontype="Integer" initialisation="" javarsget="getInt"/>
+        <field name="user" pkey="no" references="User" referencestable="User" parentfactory="UserRoot" pprvu="Root" pcvu="User" fieldclass="ReferenceChoiceField" sqltype="MEDIUMINT UNSIGNED" nullsql="NOT NULL" uniquesql="" type="ref" dbcolumnname="user" label="User" rvid="userId" javatype="int" jsontype="Integer" initialisation="" javarsget="getInt"/>
+        <field name="id" pkey="yes" type="int" nullsql="" uniquesql="" fieldclass="TextField" sqltype="MEDIUMINT UNSIGNED AUTO_INCREMENT" dbcolumnname="id" label="Id" rvid="id" javatype="int" jsontype="Integer" initialisation="" javarsget="getInt"/>
+        <field name="createdby" pkey="no" type="String" nullsql="NOT NULL" uniquesql="" fieldclass="TextField" sqltype="CHAR(4)" dbcolumnname="createdby" label="Created by" rvid="createdby" javatype="String" jsontype="String" initialisation="" javarsget="getString"/>
+        <field name="createdon" pkey="no" type="datetime" nullsql="NOT NULL" uniquesql="" fieldclass="TextField" sqltype="CHAR(14)" dbcolumnname="createdon" label="Created on" rvid="createdon" javatype="Timestamp" jsontype="Timestamp" initialisation="" javarsget="getString"/>
+        <field name="updatedby" pkey="no" type="String" nullsql="NOT NULL" uniquesql="" fieldclass="TextField" sqltype="CHAR(4)" dbcolumnname="updatedby" label="Updated by" rvid="updatedby" javatype="String" jsontype="String" initialisation="" javarsget="getString"/>
+        <field name="updatedon" pkey="no" type="datetime" nullsql="NOT NULL" uniquesql="" fieldclass="TextField" sqltype="CHAR(14)" dbcolumnname="updatedon" label="Updated on" rvid="updatedon" javatype="Timestamp" jsontype="Timestamp" initialisation="" javarsget="getString"/>
         <displaynameformat format="{0}">
             <display field="Role"/>
         </displaynameformat>
     </entityinfo>
     <entityinfo name="Userpermission" dbkey="authentication2" dbtablename="Userpermission" withfields="Idandstamp" type="Idkeyauto" icon="thumb_up" orderable="no" sort="no" parentname="User" nodeorder="1">
-        <field name="permission" nullsql="NOT NULL" uniquesql="" fieldclass="ReferenceChoiceField" sqltype="MEDIUMINT UNSIGNED" references="Permission" referencestable="Permission" parentfactory="Application" pcvu="Permission" type="reference" dbcolumnname="permission" label="Permission" rvid="permissionId" javatype="int" jsontype="Integer" initialisation="" javarsget="getInt"/>
-        <field name="user" references="User" referencestable="User" parentfactory="UserRoot" pprvu="Root" pcvu="User" fieldclass="ReferenceChoiceField" sqltype="MEDIUMINT UNSIGNED" nullsql="NOT NULL" uniquesql="" type="ref" dbcolumnname="user" label="User" rvid="userId" javatype="int" jsontype="Integer" initialisation="" javarsget="getInt"/>
+        <field name="permission" pkey="no" nullsql="NOT NULL" uniquesql="" fieldclass="ReferenceChoiceField" sqltype="MEDIUMINT UNSIGNED" references="Permission" referencestable="Permission" parentfactory="Application" pcvu="Permission" type="reference" dbcolumnname="permission" label="Permission" rvid="permissionId" javatype="int" jsontype="Integer" initialisation="" javarsget="getInt"/>
+        <field name="user" pkey="no" references="User" referencestable="User" parentfactory="UserRoot" pprvu="Root" pcvu="User" fieldclass="ReferenceChoiceField" sqltype="MEDIUMINT UNSIGNED" nullsql="NOT NULL" uniquesql="" type="ref" dbcolumnname="user" label="User" rvid="userId" javatype="int" jsontype="Integer" initialisation="" javarsget="getInt"/>
+        <field name="id" pkey="yes" type="int" nullsql="" uniquesql="" fieldclass="TextField" sqltype="MEDIUMINT UNSIGNED AUTO_INCREMENT" dbcolumnname="id" label="Id" rvid="id" javatype="int" jsontype="Integer" initialisation="" javarsget="getInt"/>
+        <field name="createdby" pkey="no" type="String" nullsql="NOT NULL" uniquesql="" fieldclass="TextField" sqltype="CHAR(4)" dbcolumnname="createdby" label="Created by" rvid="createdby" javatype="String" jsontype="String" initialisation="" javarsget="getString"/>
+        <field name="createdon" pkey="no" type="datetime" nullsql="NOT NULL" uniquesql="" fieldclass="TextField" sqltype="CHAR(14)" dbcolumnname="createdon" label="Created on" rvid="createdon" javatype="Timestamp" jsontype="Timestamp" initialisation="" javarsget="getString"/>
+        <field name="updatedby" pkey="no" type="String" nullsql="NOT NULL" uniquesql="" fieldclass="TextField" sqltype="CHAR(4)" dbcolumnname="updatedby" label="Updated by" rvid="updatedby" javatype="String" jsontype="String" initialisation="" javarsget="getString"/>
+        <field name="updatedon" pkey="no" type="datetime" nullsql="NOT NULL" uniquesql="" fieldclass="TextField" sqltype="CHAR(14)" dbcolumnname="updatedon" label="Updated on" rvid="updatedon" javatype="Timestamp" jsontype="Timestamp" initialisation="" javarsget="getString"/>
         <displaynameformat format="{0}">
             <display field="Permission"/>
         </displaynameformat>
@@ -65,55 +95,61 @@
     <entityinfo name="ApplicationRoot" isroot="" label="Applications" viewers="Manager" icon="folder_table">
         <child name="application" nodekey="ApplicationRootChildFactory.ApplicationNode" references="Application" orderable="no" sort="no"/>
     </entityinfo>
-    <dbinfo name="authentication2">
-        <table name="User" type="idkeyauto" withfields="idandstamp">
-            <insertrecord>
-                <insertfield name="username" value="richard"/>
-                <insertfield name="encodedpassword" value="ea27671eaac43ca1ecb782b7c9e9344a82b0702d"/>
-                <insertfield name="usercode" value="rl12"/>
-                <insertfield name="enabled" value="true"/>
-            </insertrecord>
-        </table>
-        <table name="Application" type="idkeyauto" withfields="idandstamp">
-            <insertrecord>
-                <insertfield name="application" value="accesscontrolmanager"/>
-            </insertrecord>
-            <insertrecord>
-                <insertfield name="application" value="photogallery"/>
-            </insertrecord>
-            <insertrecord>
-                <insertfield name="application" value="marktimingsrecorder"/>
-            </insertrecord>
-        </table>
-        <table name="Role" type="idkeyauto" withfields="idandstamp">
-            <insertrecord>
-                <insertfield name="role" value="Manager"/>
-                <insertfield name="application" value="1"/>
-            </insertrecord>
-            <insertrecord>
-                <insertfield name="role" value="Manager"/>
-                <insertfield name="application" value="2"/>
-            </insertrecord>
-            <insertrecord>
-                <insertfield name="role" value="Coach"/>
-                <insertfield name="application" value="3"/>
-            </insertrecord>
-        </table>
-        <table name="Permission" type="idkeyauto" withfields="idandstamp"/>
-        <table name="Userrole" type="idkeyauto" withfields="idandstamp">
-            <insertrecord>
-                <insertfield name="role" value="1"/>
-                <insertfield name="user" value="1"/>
-            </insertrecord>
-            <insertrecord>
-                <insertfield name="role" value="2"/>
-                <insertfield name="user" value="1"/>
-            </insertrecord>
-            <insertrecord>
-                <insertfield name="role" value="3"/>
-                <insertfield name="user" value="1"/>
-            </insertrecord>
-        </table>
-        <table name="Userpermission" type="idkeyauto" withfields="idandstamp"/>
-    </dbinfo>
+    <persistencestore name="authentication2">
+        <persistenceentity name="User">
+            <persistencefield name="username" quote="yes" createsql=" VARCHAR(100) UNIQUE NOT NULL"/>
+            <persistencefield name="encodedpassword" quote="yes" createsql=" CHAR(40)  NOT NULL"/>
+            <persistencefield name="usercode" quote="yes" createsql=" CHAR(4) UNIQUE NOT NULL"/>
+            <persistencefield name="enabled" quote="no" createsql=" BOOLEAN  NOT NULL"/>
+            <persistencefield name="id" createsql="MEDIUMINT UNSIGNED AUTO_INCREMENT PRIMARY KEY"/>
+            <persistencefield name="createdby" createsql="CHAR(4) NOTNULL"/>
+            <persistencefield name="createdon" createsql="CHAR(14) NOTNULL"/>
+            <persistencefield name="updatedby" createsql="CHAR(4) NOTNULL"/>
+            <persistencefield name="updatedon" createsql="CHAR(14) NOTNULL"/>
+        </persistenceentity>
+        <persistenceentity name="Application">
+            <persistencefield name="application" quote="yes" createsql=" VARCHAR(100) UNIQUE NOT NULL"/>
+            <persistencefield name="id" createsql="MEDIUMINT UNSIGNED AUTO_INCREMENT PRIMARY KEY"/>
+            <persistencefield name="createdby" createsql="CHAR(4) NOTNULL"/>
+            <persistencefield name="createdon" createsql="CHAR(14) NOTNULL"/>
+            <persistencefield name="updatedby" createsql="CHAR(4) NOTNULL"/>
+            <persistencefield name="updatedon" createsql="CHAR(14) NOTNULL"/>
+        </persistenceentity>
+        <persistenceentity name="Role">
+            <persistencefield name="role" quote="yes" createsql=" VARCHAR(100)  NOT NULL"/>
+            <persistencefield name="application" createsql="MEDIUMINT UNSIGNED NOT NULL ,FOREIGN KEY (application) REFERENCES Application(id)"/>
+            <persistencefield name="id" createsql="MEDIUMINT UNSIGNED AUTO_INCREMENT PRIMARY KEY"/>
+            <persistencefield name="createdby" createsql="CHAR(4) NOTNULL"/>
+            <persistencefield name="createdon" createsql="CHAR(14) NOTNULL"/>
+            <persistencefield name="updatedby" createsql="CHAR(4) NOTNULL"/>
+            <persistencefield name="updatedon" createsql="CHAR(14) NOTNULL"/>
+        </persistenceentity>
+        <persistenceentity name="Permission">
+            <persistencefield name="permission" quote="yes" createsql=" VARCHAR(100)  NOT NULL"/>
+            <persistencefield name="application" createsql="MEDIUMINT UNSIGNED NOT NULL ,FOREIGN KEY (application) REFERENCES Application(id)"/>
+            <persistencefield name="id" createsql="MEDIUMINT UNSIGNED AUTO_INCREMENT PRIMARY KEY"/>
+            <persistencefield name="createdby" createsql="CHAR(4) NOTNULL"/>
+            <persistencefield name="createdon" createsql="CHAR(14) NOTNULL"/>
+            <persistencefield name="updatedby" createsql="CHAR(4) NOTNULL"/>
+            <persistencefield name="updatedon" createsql="CHAR(14) NOTNULL"/>
+        </persistenceentity>
+        <persistenceentity name="Userrole">
+            <persistencefield name="role" quote="no" createsql=" MEDIUMINT UNSIGNED  NOT NULL ,FOREIGN KEY (role) REFERENCES Role(id)"/>
+            <persistencefield name="user" createsql="MEDIUMINT UNSIGNED NOT NULL ,FOREIGN KEY (user) REFERENCES User(id)"/>
+            <persistencefield name="id" createsql="MEDIUMINT UNSIGNED AUTO_INCREMENT PRIMARY KEY"/>
+            <persistencefield name="createdby" createsql="CHAR(4) NOTNULL"/>
+            <persistencefield name="createdon" createsql="CHAR(14) NOTNULL"/>
+            <persistencefield name="updatedby" createsql="CHAR(4) NOTNULL"/>
+            <persistencefield name="updatedon" createsql="CHAR(14) NOTNULL"/>
+        </persistenceentity>
+        <persistenceentity name="Userpermission">
+            <persistencefield name="permission" quote="no" createsql=" MEDIUMINT UNSIGNED  NOT NULL ,FOREIGN KEY (permission) REFERENCES Permission(id)"/>
+            <persistencefield name="user" createsql="MEDIUMINT UNSIGNED NOT NULL ,FOREIGN KEY (user) REFERENCES User(id)"/>
+            <persistencefield name="id" createsql="MEDIUMINT UNSIGNED AUTO_INCREMENT PRIMARY KEY"/>
+            <persistencefield name="createdby" createsql="CHAR(4) NOTNULL"/>
+            <persistencefield name="createdon" createsql="CHAR(14) NOTNULL"/>
+            <persistencefield name="updatedby" createsql="CHAR(4) NOTNULL"/>
+            <persistencefield name="updatedon" createsql="CHAR(14) NOTNULL"/>
+        </persistenceentity>
+    </persistencestore>
 </nbpcg-entity-info>

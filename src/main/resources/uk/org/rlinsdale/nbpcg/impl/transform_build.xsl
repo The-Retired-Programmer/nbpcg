@@ -64,7 +64,7 @@
                                     </xsl:otherwise>
                                 </xsl:choose>
                             </xsl:variable>
-                            <folder project="{$project}" location="resource" package="{$package}.{$name}" message="generating json database files for {$name}" log="{$log}" license="{$license}">
+                            <folder project="{$project}" location="resource" package="{$package}.{$name}" message="generating json persistence files for {$name}" log="{$log}" license="{$license}">
                                 <xsl:call-template name="createstandardjsontables"/>
                             </folder>
                         </xsl:for-each>
@@ -81,7 +81,7 @@
                                     </xsl:otherwise>
                                 </xsl:choose>
                             </xsl:variable>
-                            <folder project="{$project}" location="resource" package="{$package}.{$name}" message="generating script files for {$name}" log="{$log}" license="{$license}">
+                            <folder project="{$project}" location="resource" package="{$package}.{$name}" message="generating mysql script files for {$name}" log="{$log}" license="{$license}">
                                 <xsl:call-template name="createsqldatabase"/>
                                 <xsl:call-template name="backupscript"/>
                                 <xsl:call-template name="createstandardsqltables"/>
@@ -89,7 +89,7 @@
                         </xsl:for-each>
                     </xsl:when>
                     <xsl:when test="@type = 'data' ">
-                        <folder project="{$project}" location="java" package="{$package}" message="generating data files" log="{$log}" license="{$license}">
+                        <folder project="{$project}" location="java" package="{$package}" message="generating entity files" log="{$log}" license="{$license}">
                             <xsl:call-template name="rootentity" />
                             <xsl:call-template name="entity" />
                             <xsl:call-template name="alias" />
@@ -364,13 +364,13 @@
     
     <xsl:template name="remoteentity">
         <xsl:for-each select="/nbpcg/databases/database[not(@usepackage)]/table" >
-            <execute template="remoteentity" filename="{@name}.java" useentityinfo="{@name}"/>
+            <execute template="remoteentity" filename="{@name}.java"  usepersistencestore="{../@name}" useentity="{@name}"/>
         </xsl:for-each>
     </xsl:template>
     
     <xsl:template name="remotecp">
         <xsl:for-each select="/nbpcg/databases/database[not(@usepackage)]/table" >
-            <execute template="remotecommandprocessor" filename="{@name}CommandProcessor.java" useentityinfo="{@name}"/>
+            <execute template="remotecommandprocessor" filename="{@name}CommandProcessor.java"  usepersistencestore="{../@name}" useentity="{@name}"/>
         </xsl:for-each>
     </xsl:template>
     
@@ -381,13 +381,13 @@
                     <xsl:with-param name="string" select="@name" />
                 </xsl:call-template>
             </xsl:variable>
-            <execute template="remoteservlet" filename="{$nameuc}Servlet.java" usedbinfo="{@name}"/>
+            <execute template="remoteservlet" filename="{$nameuc}Servlet.java" usepersistencestore="{@name}"/>
         </xsl:for-each>
     </xsl:template>
     
     <xsl:template name="createsqldatabase">
         <xsl:for-each select="/nbpcg/databases/database[not(@usepackage)]" >
-            <execute template="createsqldatabase" filename="createdb.sql" usedbinfo="{@name}"/>
+            <execute template="createsqldatabase" filename="createdb.sql" usepersistencestore="{@name}"/>
         </xsl:for-each>
     </xsl:template> 
     
@@ -398,19 +398,19 @@
                     <xsl:with-param name="string" select="@name" />
                 </xsl:call-template>
             </xsl:variable>      
-            <execute template="backupscript" filename="backupscript.sh" usedbinfo="{@name}"/>
+            <execute template="backupscript" filename="backupscript.sh" usepersistencestore="{@name}"/>
         </xsl:for-each>
     </xsl:template> 
     
     <xsl:template name="createstandardsqltables">
         <xsl:for-each select="/nbpcg/databases/database[not(@usepackage)]" > 
-            <execute template="createsqltables" filename="createtables.sql" usedbinfo="{@name}"/>
+            <execute template="createsqltables" filename="createtables.sql" usepersistencestore="{@name}"/>
         </xsl:for-each>
     </xsl:template> 
     
     <xsl:template name="createstandardjsontables">
-        <xsl:for-each select="table" >
-            <execute template="createjsontable" filename="{@name}" useentityinfo="{@name}">
+        <xsl:for-each select="/nbpcg/databases/database[not(@usepackage)]/table" >
+            <execute template="createjsontable" filename="{@name}" usepersistencestore="{../@name}" useentity="{@name}">
             </execute>
         </xsl:for-each>
     </xsl:template>

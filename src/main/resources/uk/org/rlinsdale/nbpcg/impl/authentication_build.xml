@@ -7,12 +7,12 @@
         <execute template="createsqltables" filename="createtables.sql" usepersistencestore="authentication2"/>
     </folder>
     <folder project="Lindos LifeCycle" location="resource" package="uk.org.rlinsdale.lindos.lifecycle.json.authentication2" message="generating json persistence files for authentication2" log="lindos.lifecycle" license="lgpl21">
-        <execute template="createjsontable" filename="User" usepersistencestore="authentication2"/>
-        <execute template="createjsontable" filename="Application" usepersistencestore="authentication2"/>
-        <execute template="createjsontable" filename="Role" usepersistencestore="authentication2"/>
-        <execute template="createjsontable" filename="Permission" usepersistencestore="authentication2"/>
-        <execute template="createjsontable" filename="Userrole" usepersistencestore="authentication2"/>
-        <execute template="createjsontable" filename="Userpermission" usepersistencestore="authentication2"/>
+        <execute template="createjsontable" filename="User" usepersistencestore="authentication2" useentity="User"/>
+        <execute template="createjsontable" filename="Application" usepersistencestore="authentication2" useentity="Application"/>
+        <execute template="createjsontable" filename="Role" usepersistencestore="authentication2" useentity="Role"/>
+        <execute template="createjsontable" filename="Permission" usepersistencestore="authentication2" useentity="Permission"/>
+        <execute template="createjsontable" filename="Userrole" usepersistencestore="authentication2" useentity="Userrole"/>
+        <execute template="createjsontable" filename="Userpermission" usepersistencestore="authentication2" useentity="Userpermission"/>
     </folder>
     <folder project="Lindos LifeCycle" location="java" package="uk.org.rlinsdale.lindos.authentication.dataobjects" message="generating entity files" log="lindos.lifecycle" license="lgpl21">
         <execute template="rootentity" filename="UserRoot.java" useentityinfo="UserRoot"/>
@@ -71,18 +71,18 @@
         <execute template="choice" filename="PermissionChoiceField.java" useentityinfo="Permission"/>
     </folder>
     <folder project="Authentication2" location="java" package="uk.org.rlinsdale.authentication2" message="generating remote files" log="authentication2" license="gpl30">
-        <execute template="remoteentity" filename="User.java" useentityinfo="User"/>
-        <execute template="remoteentity" filename="Application.java" useentityinfo="Application"/>
-        <execute template="remoteentity" filename="Role.java" useentityinfo="Role"/>
-        <execute template="remoteentity" filename="Permission.java" useentityinfo="Permission"/>
-        <execute template="remoteentity" filename="Userrole.java" useentityinfo="Userrole"/>
-        <execute template="remoteentity" filename="Userpermission.java" useentityinfo="Userpermission"/>
-        <execute template="remotecommandprocessor" filename="UserCommandProcessor.java" useentityinfo="User"/>
-        <execute template="remotecommandprocessor" filename="ApplicationCommandProcessor.java" useentityinfo="Application"/>
-        <execute template="remotecommandprocessor" filename="RoleCommandProcessor.java" useentityinfo="Role"/>
-        <execute template="remotecommandprocessor" filename="PermissionCommandProcessor.java" useentityinfo="Permission"/>
-        <execute template="remotecommandprocessor" filename="UserroleCommandProcessor.java" useentityinfo="Userrole"/>
-        <execute template="remotecommandprocessor" filename="UserpermissionCommandProcessor.java" useentityinfo="Userpermission"/>
+        <execute template="remoteentity" filename="User.java" usepersistencestore="authentication2" useentity="User"/>
+        <execute template="remoteentity" filename="Application.java" usepersistencestore="authentication2" useentity="Application"/>
+        <execute template="remoteentity" filename="Role.java" usepersistencestore="authentication2" useentity="Role"/>
+        <execute template="remoteentity" filename="Permission.java" usepersistencestore="authentication2" useentity="Permission"/>
+        <execute template="remoteentity" filename="Userrole.java" usepersistencestore="authentication2" useentity="Userrole"/>
+        <execute template="remoteentity" filename="Userpermission.java" usepersistencestore="authentication2" useentity="Userpermission"/>
+        <execute template="remotecommandprocessor" filename="UserCommandProcessor.java" usepersistencestore="authentication2" useentity="User"/>
+        <execute template="remotecommandprocessor" filename="ApplicationCommandProcessor.java" usepersistencestore="authentication2" useentity="Application"/>
+        <execute template="remotecommandprocessor" filename="RoleCommandProcessor.java" usepersistencestore="authentication2" useentity="Role"/>
+        <execute template="remotecommandprocessor" filename="PermissionCommandProcessor.java" usepersistencestore="authentication2" useentity="Permission"/>
+        <execute template="remotecommandprocessor" filename="UserroleCommandProcessor.java" usepersistencestore="authentication2" useentity="Userrole"/>
+        <execute template="remotecommandprocessor" filename="UserpermissionCommandProcessor.java" usepersistencestore="authentication2" useentity="Userpermission"/>
         <execute template="remoteservlet" filename="Authentication2Servlet.java" usepersistencestore="authentication2"/>
     </folder>
     <folder project="Authentication2" location="resource" package="uk.org.rlinsdale.authentication2.mysql.authentication2" message="generating mysql script files for authentication2" log="authentication2" license="gpl30">

@@ -16,35 +16,42 @@
  -->
 <#-- Freemarker Template for any json datasource file -->
 <#assign templateauthor = "Richard Linsdale (richard.linsdale at blueyonder.co.uk)" />
-<#assign ENTITYINFO = entityinfo[useentityinfo] >
-<#assign DBINFO = dbinfo[ENTITYINFO.dbkey] >
-{"name":"${ENTITYINFO.dbtablename}", "nextid":1, "nextidx":1, "records":[
-<#list DBINFO.table![] as dbtable >
-<#if dbtable.name = ENTITYINFO.dbtablename >
+<#assign PSTORE = persistencestore[usepersistencestore] >
+<#list PSTORE.persistenceentity![] as entity >
+<#if entity.name = useentity >
+{"name":"${entity.name}", "records":[
 <#assign id = 1>
-<#list dbtable.insertrecord![] as insert>
-    <#if id != 1>,</#if>{
-        "createdby":"${USERCODE}"
-        ,"createdon":"${NOW}"
-        ,"updatedby":"${USERCODE}"
-        ,"updatedon":"${NOW}"
-<#list ENTITYINFO.field![] as field >
-<#if field.type != "rootref" >
-<#list insert.insertfield![] as insertfield>
-<#if field.name = insertfield.name>
-<#if field.jsontype = "String" >
-        ,"${field.name}":"${insertfield.value}"
+<#assign eprefix = "" >
+<#list entity.insertentity![] as insertentity >
+    ${eprefix}{
+<#assign prefix = "" >
+<#list insertentity.insertfield![] as insertfield >
+<#if insertfield.value??>
+<#if insertfield.quote?? &&  insertfield.quote = "yes" >
+        ${prefix}"${insertfield.name}":"${insertfield.value}"
 <#else>
-        ,"${field.name}":${insertfield.value}
+        ${prefix}"${insertfield.name}":${insertfield.value}
+</#if>
+<#else>
+<#assign value = .vars[insertfield.var] >
+<#if insertfield.quote?? &&  insertfield.quote = "yes" >
+        ${prefix}"${insertfield.name}":"${value}"
+<#else>
+        ${prefix}"${insertfield.name}":${value}
 </#if>
 </#if>
+<#assign prefix = "," >
 </#list>
-</#if>
+<#list insertentity.insertorderablefield![] as insertorderablefield >
+        ${prefix}"${insertorderablefield.name}":${id}
 </#list>
-        ,"id": ${id}
+<#list insertentity.insertautopkfield![] as insertautopkfield >
+        ${prefix}"${insertautopkfield.name}":${id}
+</#list>
     }
+<#assign eprefix = "," >
 <#assign id = id+1>
 </#list>
+], "nextid": ${id}, "nextidx": ${id}};
 </#if>
 </#list>
-]};

@@ -54,7 +54,7 @@
 </#if>
 <#-- Freemarker Template for Create Tables sql -->
 <#assign templateauthor = "Richard Linsdale (richard.linsdale at blueyonder.co.uk)" />
-<#assign DBINFO = dbinfo[usedbinfo] >
+<#assign PSTORE = persistencestore[usepersistencestore] >
 --
 -- CREATE TABLES & INSERTS
 --
@@ -65,69 +65,54 @@
 -- @package generated-scripts
 -- @author ${templateauthor}
 --
-DROP DATABASE IF EXISTS ${DBINFO.name};
-CREATE DATABASE ${DBINFO.name} CHARACTER SET utf8 COLLATE utf8_bin;
-USE ${DBINFO.name};
+DROP DATABASE IF EXISTS ${PSTORE.name};
+CREATE DATABASE ${PSTORE.name} CHARACTER SET utf8 COLLATE utf8_bin;
+USE ${PSTORE.name};
 --
-<#list DBINFO.table![] as dbtable >
-<#assign table = entityinfo[dbtable.name] >
-CREATE TABLE ${table.dbtablename}(
-    id MEDIUMINT UNSIGNED AUTO_INCREMENT PRIMARY KEY
-    ,createdby CHAR(4) NOT NULL
-    ,createdon CHAR(14) NOT NULL
-    ,updatedby CHAR(4) NOT NULL
-    ,updatedon CHAR(14) NOT NULL
-<#list table.field![] as field >
-<#if field.type != "rootref" >
-    ,${field.dbcolumnname} ${field.sqltype} ${field.uniquesql} ${field.nullsql}
-<#if field.type == "reference" || field.type == "ref">
-<#assign REFERENCEDENTITYINFO=entityinfo[field.references] >
-<#if REFERENCEDENTITYINFO.package??>
-    -- references ${field.referencestable}(id) in ${REFERENCEDENTITYINFO.dbkey} database
-<#elseif field.fkey?? && field.fkey == "no" >
-    -- references ${field.referencestable}(id)
-<#else>
-    ,FOREIGN KEY (${field.dbcolumnname}) REFERENCES ${field.referencestable}(id)
-</#if>
-</#if>
-<#if field.index??>
-<#if field.index=="unique">
-    ,UNIQUE INDEX (${field.name})
-<#else>
-    ,INDEX (${field.name})
-</#if>
-</#if>
-</#if>
+<#list PSTORE.persistenceentity![] as entity >
+<#assign prefix = "" >
+CREATE TABLE ${entity.name}(
+<#list entity.persistencefield![] as field >
+    ${prefix}${field.name} ${field.createsql}
+<#assign prefix = "," >
 </#list>
 ) ENGINE = INNODB;
 
-<#list dbtable.insertrecord![] as insert>
-INSERT INTO ${table.dbtablename} (
-    createdby
-    ,createdon
-    ,updatedby
-    ,updatedon
-<#list table.field![] as field >
-<#if field.type != "rootref" >
-    ,${field.name}
-</#if>
+<#assign prefix = "" >
+<#assign orderindex = 1 >
+<#list entity.insertentity![] as insert>
+INSERT INTO ${entity.name} (
+<#list insert.insertfield![] as field >
+    ${prefix}${field.name}
+<#assign prefix = "," >
+</#list>
+<#list insert.insertorderablefield![] as field >
+    ${prefix}${field.name}
+<#assign prefix = "," >
 </#list>
 )
 VALUES (
-    '${USERCODE}'
-    ,'${NOW}'
-    ,'${USERCODE}'
-    ,'${NOW}'
-<#list table.field![] as field >
-<#list insert.insertfield![] as insertfield >
-<#if field.name = insertfield.name >
-<#if field.jsontype = "String" >
-    ,'${insertfield.value}'
+<#assign prefix = "" >
+<#list insert.insertfield![] as field >
+<#if field.value??>
+<#if field.quote?? &&  field.quote = "yes" >
+    ${prefix}'${field.value}'
 <#else>
-    ,${insertfield.value}
+    ${prefix}${field.value}
+</#if>
+<#else>
+    <#assign value = .vars[field.var] >
+    <#if field.quote?? &&  field.quote = "yes" >
+    ${prefix}'${value}'
+<#else>
+    ${prefix}${value}
 </#if>
 </#if>
+<#assign prefix = "," >
 </#list>
+<#list insert.insertorderablefield![] as field >
+    ${prefix}, $orderindex
+<#assign orderindex = orderindex + 1>
 </#list>
 );
 

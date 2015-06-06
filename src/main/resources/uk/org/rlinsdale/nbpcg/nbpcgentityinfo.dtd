@@ -5,7 +5,7 @@
     Author     : Richard Linsdale (richard.linsdale at blueyonder.co.uk)
 -->
 
-<!ELEMENT nbpcg-entity-info (entityinfo+, dbinfo) >
+<!ELEMENT nbpcg-entity-info (entityinfo+, persistencestore) >
     <!ATTLIST nbpcg-entity-info
         name CDATA #REQUIRED
         >
@@ -16,8 +16,8 @@
             nodeorder CDATA #IMPLIED
             dbkey CDATA #IMPLIED
             dbtablename CDATA #IMPLIED 
-            withfields (Idandstamp) #IMPLIED 
-            type (Idkeyauto) #IMPLIED
+            extrafields (usertimestamp) #IMPLIED 
+            pkey (idauto) #IMPLIED
             parentname CDATA #IMPLIED
             ordercolumn CDATA #IMPLIED
             orderable (yes|no) #IMPLIED
@@ -29,6 +29,7 @@
         <!ELEMENT field EMPTY  >
             <!ATTLIST field
                 name CDATA #REQUIRED
+                pkey (yes|no) #REQUIRED
                 type (rootref|ref|String|int|reference|date|enum|idx|datetime|boolean|long|password) #REQUIRED
                 references CDATA #IMPLIED
                 referencestable CDATA #IMPLIED
@@ -39,9 +40,8 @@
                 pprvu CDATA #IMPLIED
                 values CDATA #IMPLIED
                 javatype (int|String|DateOnly|Timestamp|boolean|long) #REQUIRED
-                jsontype (Integer|String|DateOnly|Timestamp|Boolean|Long) #REQUIRED
+                jsontype (Integer|String|Boolean|Long) #REQUIRED
                 initialisation CDATA #REQUIRED
-                javarsget (getInt|getString|getLong|getBoolean) #REQUIRED
                 nullsql CDATA #IMPLIED
                 uniquesql CDATA #IMPLIED
                 unique (yes) #IMPLIED
@@ -91,19 +91,37 @@
                     field CDATA #REQUIRED
                     length CDATA #IMPLIED
                     >
-    <!ELEMENT dbinfo (table+) >
-        <!ATTLIST dbinfo
+    <!ELEMENT persistencestore (persistenceentity+) >
+        <!ATTLIST persistencestore
             name CDATA #REQUIRED
             >
-        <!ELEMENT table (insertrecord*) >
-            <!ATTLIST table
+        <!ELEMENT persistenceentity (persistencefield*, insertentity*) >
+            <!ATTLIST persistenceentity
                 name CDATA #REQUIRED
-                type CDATA #REQUIRED
-                withfields CDATA #REQUIRED
                 >
-            <!ELEMENT insertrecord (insertfield*)>
+            <!ELEMENT persistencefield EMPTY>
+                    <!ATTLIST persistencefield
+                        name CDATA #REQUIRED
+                        jsontype (String|Integer|Reference|Boolean) #REQUIRED
+                        primarykey CDATA #REQUIRED
+                        createsql CDATA #REQUIRED
+                        min CDATA #IMPLIED
+                        max CDATA #IMPLIED
+                        nullallowed CDATA #IMPLIED
+                        >
+            <!ELEMENT insertentity (insertfield*, insertautopkfield*, insertorderablefield*)>
                 <!ELEMENT insertfield EMPTY>
                     <!ATTLIST insertfield
                         name CDATA #REQUIRED
-                        value CDATA #REQUIRED
-                    >
+                        quote CDATA #IMPLIED
+                        value CDATA #IMPLIED
+                        var CDATA #IMPLIED
+                        >
+                <!ELEMENT insertautopkfield EMPTY>
+                    <!ATTLIST insertautopkfield
+                        name CDATA #REQUIRED
+                        >
+                <!ELEMENT insertorderablefield EMPTY>
+                    <!ATTLIST insertorderablefield
+                        name CDATA #REQUIRED
+                        >

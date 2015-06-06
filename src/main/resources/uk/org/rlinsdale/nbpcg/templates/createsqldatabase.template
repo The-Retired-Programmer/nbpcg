@@ -54,7 +54,7 @@
 </#if>
 <#-- Freemarker Template for database sql -->
 <#assign templateauthor = "Richard Linsdale (richard.linsdale at blueyonder.co.uk)" />
-<#assign DBINFO = dbinfo[usedbinfo] >
+<#assign PSTORE = persistencestore[usepersistencestore] >
 --
 -- CREATE DATABASE - use to create the initial database only (use XxxxCreateTables.sql
 --   to replace)
@@ -66,5 +66,5 @@
 -- @package generated-scripts
 -- @author ${templateauthor}
 --
-CREATE DATABASE ${DBINFO.name} CHARACTER SET utf8 COLLATE utf8_bin;
-GRANT DELETE,INSERT,SELECT,UPDATE ON ${DBINFO.name}.* TO 'nbplatform'@'localhost';
+CREATE DATABASE ${PSTORE.name} CHARACTER SET utf8 COLLATE utf8_bin;
+GRANT DELETE,INSERT,SELECT,UPDATE ON ${PSTORE.name}.* TO 'nbplatform'@'localhost';

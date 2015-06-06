@@ -49,19 +49,20 @@
             <!ATTLIST database
                 name CDATA #REQUIRED
                 dbname CDATA #IMPLIED
-                db (MySQL|Remote-MySQL) #IMPLIED
-                type (idkeyauto) #IMPLIED
-                withfields (idandstamp) #IMPLIED
+                pkey (idauto) #IMPLIED
+                extrafields (usertimestamp) #IMPLIED
                 usepackage CDATA #IMPLIED
                 >
-            <!ELEMENT table (field*,insertrecord*)>
+            <!ELEMENT table (field*,insertentity*)>
                 <!ATTLIST table
                     name CDATA #REQUIRED
                     dbname CDATA #IMPLIED
-                    type (idkeyauto) #IMPLIED
-                    withfields (idandstamp) #IMPLIED>
+                    pkey (idauto) #IMPLIED
+                    extrafields (usertimestamp) #IMPLIED
+                    >
                 <!ELEMENT field EMPTY>
                     <!ATTLIST field
+                        pkey (yes) #IMPLIED
                         name CDATA #REQUIRED
                         dbname  CDATA #IMPLIED
                         index (unique|yes) #IMPLIED
@@ -80,9 +81,9 @@
                         entryfield CDATA #IMPLIED
                         passwordstrength (weak|strong|verystrong) #IMPLIED
                         >
-                <!ELEMENT insertrecord (insertfield*)>
+                <!ELEMENT insertentity (insertfield*)>
                     <!ELEMENT insertfield EMPTY>
                         <!ATTLIST insertfield
                             name CDATA #REQUIRED
                             value CDATA #REQUIRED
-                        >
+                            >
