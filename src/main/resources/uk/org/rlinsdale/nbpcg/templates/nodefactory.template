@@ -62,7 +62,6 @@
 </#if>
 package ${package};
 
-import java.io.IOException;
 import java.util.List;
 import  ${datapackage}.*;
 import uk.org.rlinsdale.nbpcglibrary.data.entity.*;
@@ -81,7 +80,7 @@ import org.openide.nodes.Node;
 <#if ENTITYINFO.isroot??>
 public class ${ENTITYINFO.name}NodeChildFactory extends RootChildFactory<${ENTITYINFO.name}> {
 <#else>
-public class ${ENTITYINFO.name}NodeChildFactory extends BasicChildFactory<${ENTITYINFO.name}, ${ENTITYINFO.parentname}> {
+public class ${ENTITYINFO.name}NodeChildFactory extends BasicChildFactory<${ENTITYINFO.pkeytype},${ENTITYINFO.name}, ${ENTITYINFO.parentname}> {
 </#if>
 
 <#list ENTITYINFO.child![] as child>
@@ -119,7 +118,6 @@ public class ${ENTITYINFO.name}NodeChildFactory extends BasicChildFactory<${ENTI
     protected boolean createKeys(List<CoreEntity> list) {
 <#assign previous = "" >
 <#list ENTITYINFO.child![] as child>
-        try {
 <#if previous = "" >
             offsetMin${child.name?cap_first}s = 0; 
 <#else>
@@ -130,8 +128,6 @@ public class ${ENTITYINFO.name}NodeChildFactory extends BasicChildFactory<${ENTI
             list.addAll(${child.name}s);
             offsetMax${child.name?cap_first}s = offsetMin${child.name?cap_first}s + ${child.name}s.size() -1;
 <#assign previous = "offsetMax${child.name?cap_first}s" >
-        } catch (IOException ex) {
-        }
 </#list>
         return true;
     }

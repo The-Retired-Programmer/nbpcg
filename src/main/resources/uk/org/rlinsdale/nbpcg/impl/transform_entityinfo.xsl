@@ -760,13 +760,13 @@
                     </xsl:choose>
                 </xsl:variable>
                 <xsl:if test="$pkey = 'idauto' ">
-                    <field name="id" pkey="yes" type="int" nullsql="" uniquesql="" fieldclass="TextField" sqltype="MEDIUMINT UNSIGNED AUTO_INCREMENT" dbcolumnname="id" label="Id" rvid="id" javatype="int" jsontype="Integer" initialisation=""/>
+                    <field name="id" pkey="yes" type="int" nullsql="" uniquesql="" fieldclass="TextField" sqltype="MEDIUMINT UNSIGNED AUTO_INCREMENT" dbcolumnname="id" label="Id" rvid="id" javatype="int" jsontype="Integer" initialisation=" = 0"/>
                 </xsl:if>
                 <xsl:if test="$extrafields = 'usertimestamp' ">
-                    <field name="createdby" pkey="no" type="String" nullsql="NOT NULL" uniquesql="" fieldclass="TextField" sqltype="CHAR(4)" dbcolumnname="createdby" label="Created by" rvid="createdby" javatype="String" jsontype="String" initialisation=""/>
-                    <field name="createdon" pkey="no" type="datetime" nullsql="NOT NULL" uniquesql="" fieldclass="TextField" sqltype="CHAR(14)" dbcolumnname="createdon" label="Created on" rvid="createdon" javatype="Timestamp" jsontype="String" initialisation=""/>
-                    <field name="updatedby" pkey="no" type="String" nullsql="NOT NULL" uniquesql="" fieldclass="TextField" sqltype="CHAR(4)" dbcolumnname="updatedby" label="Updated by" rvid="updatedby" javatype="String" jsontype="String" initialisation=""/>
-                    <field name="updatedon" pkey="no" type="datetime" nullsql="NOT NULL" uniquesql="" fieldclass="TextField" sqltype="CHAR(14)" dbcolumnname="updatedon" label="Updated on" rvid="updatedon" javatype="Timestamp" jsontype="String" initialisation=""/>
+                    <field name="createdby" pkey="no" ro="yes" type="String" min="4" max="4" nullsql="NOT NULL" uniquesql="" fieldclass="TextField" sqltype="CHAR(4)" dbcolumnname="createdby" label="Created by" rvid="createdby" javatype="String" jsontype="String" initialisation=" = &quot;&quot;"/>
+                    <field name="createdon" pkey="no" ro="yes" type="datetime" nullsql="NOT NULL" uniquesql="" fieldclass="TextField" sqltype="CHAR(14)" dbcolumnname="createdon" label="Created on" rvid="createdon" javatype="Timestamp" jsontype="String" initialisation=" = new Timestamp()"/>
+                    <field name="updatedby" pkey="no" ro="yes" type="String" min="4" max="4" nullsql="NOT NULL" uniquesql="" fieldclass="TextField" sqltype="CHAR(4)" dbcolumnname="updatedby" label="Updated by" rvid="updatedby" javatype="String" jsontype="String" initialisation=" = &quot;&quot;"/>
+                    <field name="updatedon" pkey="no" ro="yes" type="datetime" nullsql="NOT NULL" uniquesql="" fieldclass="TextField" sqltype="CHAR(14)" dbcolumnname="updatedon" label="Updated on" rvid="updatedon" javatype="Timestamp" jsontype="String" initialisation=" = new Timestamp()"/>
                 </xsl:if>
                 <xsl:call-template name="children" >
                     <xsl:with-param name="entityname" select="$ename"/>
@@ -937,24 +937,45 @@
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:attribute>
+        <xsl:variable name="pk">
+            <xsl:for-each select="/nbpcg/databases/database[not(@usepackage)]/table/field[@pk='yes']">
+                <xsl:value-of select="@name"/>
+            </xsl:for-each>
+        </xsl:variable>
+        <xsl:variable name="pkt">
+            <xsl:for-each select="/nbpcg/databases/database[not(@usepackage)]/table/field[@pk='yes']">
+                <xsl:choose>
+                    <xsl:when test="@type='int'">Integer</xsl:when>
+                    <xsl:when test="@type='long'">Long</xsl:when>
+                    <xsl:when test="@type='boolean'">Boolean</xsl:when>
+                    <xsl:when test="@type='reference'">Integer</xsl:when> <!-- this might need improvement (lookup reference class) -->
+                    <xsl:when test="@type='datetime'">Timestamp</xsl:when>
+                    <xsl:when test="@type='date'">DateOnly</xsl:when>
+                    <xsl:otherwise>String</xsl:otherwise>
+                </xsl:choose>
+            </xsl:for-each>
+        </xsl:variable>
         <xsl:attribute name="pkey">
             <xsl:choose>
-                <xsl:when test="@pkey">
-                    <xsl:value-of select="@pkey" />
+                <xsl:when test="$pk != '' ">
+                    <xsl:value-of select="$pk"/>
                 </xsl:when>
                 <xsl:otherwise>
-                    <xsl:value-of select="../@pkey" />
+                    <xsl:choose>
+                        <xsl:when test="@pkey = 'idauto' ">id</xsl:when>
+                        <xsl:otherwise>
+                            <xsl:if test="../@pkey = 'idauto' ">id</xsl:if>
+                        </xsl:otherwise>
+                    </xsl:choose>
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:attribute>
-        <xsl:attribute name="extrafields">
+        <xsl:attribute name="pkeytype">
             <xsl:choose>
-                <xsl:when test="@extrafields">
-                    <xsl:value-of select="@extrafields" />
+                <xsl:when test="$pkt != '' ">
+                    <xsl:value-of select="$pkt"/>
                 </xsl:when>
-                <xsl:otherwise>
-                    <xsl:value-of select="../@extrafields" />
-                </xsl:otherwise>
+                <xsl:otherwise>Integer</xsl:otherwise>
             </xsl:choose>
         </xsl:attribute>
     </xsl:template>

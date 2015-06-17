@@ -69,9 +69,6 @@ import java.util.Comparator;
 import java.util.List;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
-<#list ENTITYINFO.child as child>
-import static ${package}.${ENTITYINFO.name}.${ENTITYINFO.name}Field.${child.name?upper_case}S;
-</#list>
 <#if haschildren >
 import uk.org.rlinsdale.nbpcglibrary.common.Listener;
 </#if>
@@ -103,12 +100,13 @@ public class ${ENTITYINFO.name} extends CoreEntity {
     }
 
 <#list ENTITYINFO.child![] as child>
+<#assign CHILDENTITY = entityinfo[child.name?cap_first]>
 <#if child.orderable = "yes" >
-    private final EntityIndexedReferenceSet<${child.references}, ${ENTITYINFO.name}, ${ENTITYINFO.name}Field> ${child.name}s;
+    private final EntityIndexedReferenceSet<${CHILDENTITY.pkeytype}, ${child.references}, ${ENTITYINFO.name}> ${child.name}s;
 <#elseif child.sort = "yes" >
-    private final EntitySortedReferenceSet<${child.references}, ${ENTITYINFO.name}, ${ENTITYINFO.name}Field> ${child.name}s;
+    private final EntitySortedReferenceSet<${CHILDENTITY.pkeytype}, ${child.references}, ${ENTITYINFO.name}> ${child.name}s;
 <#else>
-    private final EntityReferenceSet<${child.references}, ${ENTITYINFO.name}, ${ENTITYINFO.name}Field> ${child.name}s;
+    private final EntityReferenceSet<${CHILDENTITY.pkeytype}, ${child.references}, ${ENTITYINFO.name}> ${child.name}s;
 </#if>
 </#list>
 
@@ -134,11 +132,11 @@ public class ${ENTITYINFO.name} extends CoreEntity {
         super("${ENTITYINFO.name}", "${ENTITYINFO.icon}");
 <#list ENTITYINFO.child![] as child>
 <#if child.orderable = "yes" >
-        ${child.name}s = new EntityIndexedReferenceSet<>(instanceDescription()+">${child.name?cap_first}s", ${child.name?upper_case}S, ${child.references}.EM.class);
+        ${child.name}s = new EntityIndexedReferenceSet<>(instanceDescription()+">${child.name?cap_first}s", ${child.references}.EM.class);
 <#elseif child.sort = "yes" >
-        ${child.name}s = new EntitySortedReferenceSet<>(instanceDescription()+">${child.name?cap_first}s", ${child.name?upper_case}S, new ${child.references}Comparator(), ${child.references}.EM.class);
+        ${child.name}s = new EntitySortedReferenceSet<>(instanceDescription()+">${child.name?cap_first}s", new ${child.references}Comparator(), ${child.references}.EM.class);
 <#else>
-        ${child.name}s = new EntityReferenceSet<>(instanceDescription()+">${child.name?cap_first}s", ${child.name?upper_case}S, ${child.references}.EM.class);
+        ${child.name}s = new EntityReferenceSet<>(instanceDescription()+">${child.name?cap_first}s", ${child.references}.EM.class);
 </#if>
 </#list>
     }
@@ -148,9 +146,8 @@ public class ${ENTITYINFO.name} extends CoreEntity {
      * Add a ${child.references} to the root's list
      *
      * @param e the ${child.name}
-     * @throws IOException if problem with adding data
      */
-    public void add${child.references}(${child.references} e) throws IOException {
+    public void add${child.references}(${child.references} e) {
         ${child.name}s.add(e);
     }
 
@@ -203,9 +200,8 @@ public class ${ENTITYINFO.name} extends CoreEntity {
      * Get the list of ${child.references}s
      *
      * @return the list of ${child.references}s
-     * @throws IOException if problem with obtaining/parsing data
      */
-    public List<${child.references}> get${child.references}s() throws IOException { 
+    public List<${child.references}> get${child.references}s() { 
         return ${child.name}s.get();
     }
 <#if child.orderable = "yes" >
@@ -225,7 +221,7 @@ public class ${ENTITYINFO.name} extends CoreEntity {
 </#list>
 
         @Override
-        protected final void entityRestoreState() throws IOException {
+        protected final void entityRestoreState() {
 <#list ENTITYINFO.child![] as child>
             ${child.name}s.restoreState();
 </#list>

@@ -12,12 +12,12 @@
     <!ELEMENT entityinfo (field*, child*, referenced*, sortformat*, displaytitleformat*, displaynameformat*)  >
         <!ATTLIST entityinfo
             name CDATA #REQUIRED
+            pkey CDATA #IMPLIED
+            pkeytype (Integer|String|Boolean) #IMPLIED
             isroot CDATA #IMPLIED
             nodeorder CDATA #IMPLIED
             dbkey CDATA #IMPLIED
             dbtablename CDATA #IMPLIED 
-            extrafields (usertimestamp) #IMPLIED 
-            pkey (idauto) #IMPLIED
             parentname CDATA #IMPLIED
             ordercolumn CDATA #IMPLIED
             orderable (yes|no) #IMPLIED
@@ -29,7 +29,8 @@
         <!ELEMENT field EMPTY  >
             <!ATTLIST field
                 name CDATA #REQUIRED
-                pkey (yes|no) #REQUIRED
+                pkey CDATA #REQUIRED
+                ro (yes) #IMPLIED
                 type (rootref|ref|String|int|reference|date|enum|idx|datetime|boolean|long|password) #REQUIRED
                 references CDATA #IMPLIED
                 referencestable CDATA #IMPLIED

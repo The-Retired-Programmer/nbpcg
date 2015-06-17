@@ -61,13 +61,14 @@ package ${package};
 
 import java.util.List;
 import javax.ejb.Stateless;
-import javax.json.JsonValue;
+import javax.json.JsonObject;
+import javax.json.stream.JsonGenerator;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import uk.org.rlinsdale.nbpcglibrary.common.LogicException;
 import uk.org.rlinsdale.nbpcglibrary.remotedb.IdandstampCommandProcessor;
 import uk.org.rlinsdale.nbpcglibrary.json.JsonConversionException;
-import uk.org.rlinsdale.nbpcglibrary.json.JsonUtil;
 
 /**
  * Command Processor for the ${entity.name} Entity.
@@ -102,17 +103,17 @@ public class ${entity.name}CommandProcessor extends IdandstampCommandProcessor<$
     }
 
     @Override
-    protected List<${entity.name}> queryByName(JsonValue field, JsonValue value) throws JsonConversionException {
+    protected List<${entity.name}> queryByName(String field, Object value) {
         Query query;
-switch (JsonUtil.getStringValue(field)) {
+switch (field) {
 <#list entity.persistencefield![] as field>
             case "${field.name}":
                 query = em.createNamedQuery("${entity.name}.findBy${field.name?cap_first}");
-                query.setParameter("${field.name}", JsonUtil.get${field.jsontype}Value(value));
+                query.setParameter("${field.name}", value);
                 return query.getResultList();
 </#list>
             default:
-                throw new JsonConversionException();
+                throw new LogicException("Unknown filter field requested ("+field+")");
         }
     }
 
@@ -120,6 +121,16 @@ switch (JsonUtil.getStringValue(field)) {
     protected List<${entity.name}> queryAll() throws JsonConversionException {
         Query query = em.createNamedQuery("${entity.name}.findAll");
         return query.getResultList();
+    }
+
+    @Override
+    protected Integer getPK(JsonObject command) {
+        return command.getInt("pkey");
+    }
+
+    @Override
+    protected void writePK(JsonGenerator generator, Integer pkey) {
+       generator.write("pkey",pkey);
     }
 }
 </#if>

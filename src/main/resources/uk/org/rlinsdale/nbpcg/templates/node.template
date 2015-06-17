@@ -93,7 +93,7 @@ import static uk.org.rlinsdale.nbpcglibrary.data.entity.EntityFieldChangeEventPa
  *
  * @author ${templateauthor}
  */
-public class ${ENTITYINFO.name}Node extends ${type2}Node<${ENTITYINFO.name}, ${ENTITYINFO.parentname},${ENTITYINFO.name}Field> {
+public class ${ENTITYINFO.name}Node extends ${type2}Node<${ENTITYINFO.pkeytype},${ENTITYINFO.name}, ${ENTITYINFO.parentname},${ENTITYINFO.name}Field> {
 
     public static final DataFlavor ${ENTITYINFO.name?upper_case}NODE_FLAVOR = new DataFlavor(${ENTITYINFO.name}Node.class, "${ENTITYINFO.name}Node");
 
@@ -193,7 +193,6 @@ public class ${ENTITYINFO.name}Node extends ${type2}Node<${ENTITYINFO.name}, ${E
             return getEntity() != null? getEntity().getDisplayTitle(): "#undefined#";
         }
 
-        IntegerReadonlyProperty idproperty;
 <#list ENTITYINFO.field![] as field>
 <#if field.type != "rootref" >
         StringReadonlyProperty ${field.name}property;
@@ -205,7 +204,6 @@ public class ${ENTITYINFO.name}Node extends ${type2}Node<${ENTITYINFO.name}, ${E
             ${ENTITYINFO.name} e =  getEntity();
             if (e != null) {
                 props.add(new StringReadonlyProperty("Node Type", "${ENTITYINFO.name}Node"));
-                props.add(idproperty = new IntegerReadonlyProperty("Id",e.getId()));
 <#list ENTITYINFO.field![] as field>
 <#if field.type != "rootref" >
                 props.add(${field.name}property = new StringReadonlyProperty("${field.label}", e.format${field.name?cap_first}()));
@@ -221,19 +219,12 @@ public class ${ENTITYINFO.name}Node extends ${type2}Node<${ENTITYINFO.name}, ${E
             switch (field) {
                 case ALL:
                     if (e != null && idproperty != null) {
-                        idproperty.update(e.getId());
 <#list ENTITYINFO.field![] as field>
 <#if field.type != "rootref" >
                         ${field.name}property.update(e.format${field.name?cap_first}());
 </#if>
 </#list>
                         propertyChange();
-                    }
-                    break;
-                case ID:
-                    if (e != null && idproperty != null) {
-                        idproperty.update(e.getId());
-                        propertyChange("Id");
                     }
                     break;
             }

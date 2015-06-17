@@ -62,7 +62,6 @@
 </#list>
 package ${package};
 
-import java.io.IOException;
 import java.text.MessageFormat;
 <#if ENTITYINFO.parentname??>
 import java.util.ArrayList;
@@ -71,9 +70,6 @@ import java.util.ArrayList;
 import java.util.Comparator;
 </#if>
 import java.util.List;
-import javax.json.JsonObject;
-import javax.json.JsonObjectBuilder;
-import javax.json.JsonValue;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
 <#list ENTITYINFO.field![] as field>
@@ -82,20 +78,12 @@ import static ${field.passwordsupport}.*;
 </#if>
 </#list>
 import static ${package}.${ENTITYINFO.name}.${ENTITYINFO.name}Field;
-<#list ENTITYINFO.field![] as field>
-<#if field.type != "rootref" >
-<#if field.type != "idx" >
-import static ${package}.${ENTITYINFO.name}.${ENTITYINFO.name}Field.${field.name?upper_case};
-</#if>
-</#if>
-</#list>
-<#list ENTITYINFO.child![] as child>
-import static ${package}.${ENTITYINFO.name}.${ENTITYINFO.name}Field.${child.name?upper_case}S;
-</#list>
+import uk.org.rlinsdale.nbpcglibrary.api.BadFormatException;
+import uk.org.rlinsdale.nbpcglibrary.api.EntityFields;
 import uk.org.rlinsdale.nbpcglibrary.api.EntityPersistenceProvider;
 import uk.org.rlinsdale.nbpcglibrary.api.EntityPersistenceProviderManager;
+import uk.org.rlinsdale.nbpcglibrary.api.Timestamp;
 import uk.org.rlinsdale.nbpcglibrary.common.*;
-import uk.org.rlinsdale.nbpcglibrary.data.dbfields.${ENTITYINFO.withfields?lower_case}.*;
 import uk.org.rlinsdale.nbpcglibrary.data.entity.*;
 <#assign er_written = "n" >
 <#list ENTITYINFO.field![] as field >
@@ -120,21 +108,11 @@ import uk.org.rlinsdale.nbpcglibrary.data.entityreferences.EntitySortedReference
 </#if>
 <#else>
 <#if ers_written = "n" >
-import uk.org.rlinsdale.nbpcglibrary.data.entityreferences.EntityReferenceSet;
+import uk.org.rlinsdale.nbpcglibrary.data.entityreferences.EntityReferenceFilterSet;
 <#assign ers_written = "y" >
 </#if>
 </#if>
 </#list>
-<#assign none_written = "n" >
-<#list ENTITYINFO.field![] as field >
-<#if field.type="reference" >
-<#if none_written = "n" >
-import static uk.org.rlinsdale.nbpcglibrary.data.entityreferences.EntityReference.NONE;
-<#assign none_written = "y" >
-</#if>
-</#if>
-</#list>
-import uk.org.rlinsdale.nbpcglibrary.json.JsonUtil;
 
 /**
  * The ${ENTITYINFO.name} Entity.
@@ -145,9 +123,9 @@ import uk.org.rlinsdale.nbpcglibrary.json.JsonUtil;
  * @author ${templateauthor}
  */
 <#if ENTITYINFO.ordercolumn??>
-public class ${ENTITYINFO.name} extends EntityIndexed<${ENTITYINFO.name},${ENTITYINFO.parentname}, ${ENTITYINFO.name}Field> {
+public class ${ENTITYINFO.name} extends EntityIndexed<${ENTITYINFO.pkeytype},${ENTITYINFO.name},${ENTITYINFO.parentname}, ${ENTITYINFO.name}Field> {
 <#else>
-public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.name},${ENTITYINFO.parentname}, ${ENTITYINFO.name}Field> {
+public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.pkeytype},${ENTITYINFO.name},${ENTITYINFO.parentname}, ${ENTITYINFO.name}Field> {
 </#if>
 
     /**
@@ -172,8 +150,11 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.name},${ENTITYINFO.p
 
     private final Rules entityRules = new Rules();
 <#list ENTITYINFO.field![] as field>
-<#if field.type == "ref" || field.type == "reference">
-    private final EntityReference<${field.references}, ${field.name?cap_first}> ${field.name};
+<#if field.type == "ref">
+    private final EntityReference<${PARENTENTITYINFO.pkeytype},${field.references}, ${PARENTENTITYINFO.parentname}> ${field.name};
+<#elseif field.type == "reference">
+<#assign FIELDENTITY = entityinfo[field.name?cap_first]>
+    private final EntityReference<${FIELDENTITY.pkeytype},${field.references}, ${FIELDENTITY.parentname}> ${field.name};
 <#elseif field.type == "rootref" >
     private final ${field.references} ${field.name};
 <#elseif field.type == "idx">
@@ -189,42 +170,24 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.name},${ENTITYINFO.p
 </#if>
 </#list>
 <#list ENTITYINFO.child![] as child>
+<#assign CHILDENTITY = entityinfo[child.name?cap_first]>
 <#if child.orderable = "yes">
-    private final EntityIndexedReferenceSet<${child.references}, ${ENTITYINFO.name}, ${ENTITYINFO.name}Field> ${child.name}s;
+    private final EntityIndexedReferenceSet<${CHILDENTITY.pkeytype},${child.references}, ${ENTITYINFO.name}> ${child.name}s;
 <#elseif child.sort = "yes" >
-    private final EntitySortedReferenceSet<${child.references}, ${ENTITYINFO.name}, ${ENTITYINFO.name}Field> ${child.name}s;
+    private final EntitySortedReferenceSet<${CHILDENTITY.pkeytype},${child.references}, ${ENTITYINFO.name}> ${child.name}s;
 <#else>
-    private final EntityReferenceSet<${child.references}, ${ENTITYINFO.name}, ${ENTITYINFO.name}Field> ${child.name}s;
+    private final EntityReferenceFilterSet<${CHILDENTITY.pkeytype},${child.references}, ${ENTITYINFO.name}> ${child.name}s;
 </#if>
 </#list>
-
-<#if ENTITYINFO.ordercolumn??>
-        private final DBFieldsIndexed${ENTITYINFO.withfields}<${ENTITYINFO.name}> dbfields;
-<#else>
-        private final DBFields${ENTITYINFO.withfields}<${ENTITYINFO.name}> dbfields;
-</#if>
 
     /**
      * Constructor - ${ENTITYINFO.name}.
      * @param id the unique id for this entity
      * @param em - the entity manager for this entity type
-     * @throws IOException if problem in obtaining / parsing data
      */
-    public ${ENTITYINFO.name}(int id, ${ENTITYINFO.name}.EM em) throws IOException {
-<#if ENTITYINFO.ordercolumn??>
-        this(id, em, new  DBFieldsIndexed${ENTITYINFO.withfields}<>());
-    }
-
-    private ${ENTITYINFO.name}(int id, ${ENTITYINFO.name}.EM em, DBFieldsIndexed${ENTITYINFO.withfields}<${ENTITYINFO.name}> dbfields) throws IOException {
-        super("${ENTITYINFO.name}["+Integer.toString(id)+"]", "${ENTITYINFO.icon}", id, em, dbfields);
-<#else>
-        this(id, em, new DBFields${ENTITYINFO.withfields}<>());
-    }
-
-    private ${ENTITYINFO.name}(int id, ${ENTITYINFO.name}.EM em, DBFields${ENTITYINFO.withfields}<${ENTITYINFO.name}> dbfields) throws IOException {
-        super("${ENTITYINFO.name}["+Integer.toString(id)+"]", "${ENTITYINFO.icon}", id, em, dbfields);
-</#if>
-        this.dbfields = dbfields;
+    public ${ENTITYINFO.name}(int id, ${ENTITYINFO.name}.EM em) {
+        super("${ENTITYINFO.name}["+Integer.toString(id)+"]", "${ENTITYINFO.icon}", em);
+        this.id = id;
 <#list ENTITYINFO.field![] as field>
 <#if field.type == "ref" || field.type == "reference" >
 <#assign needreflistener = "no">
@@ -245,9 +208,9 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.name},${ENTITYINFO.p
 </#list>
 </#if>
 <#if needreflistener = "yes" >
-        ${field.name} = new EntityReference<>("${ENTITYINFO.name}>${field.name?cap_first}", ${field.references}.EM.class, new ReferencedEntityTitleChangeListener("${ENTITYINFO.name}>${field.name?cap_first}"));
+        ${field.name} = new EntityReference<>("${ENTITYINFO.name}>${field.name?cap_first}", ${field.references}.getEM(), new ReferencedEntityTitleChangeListener("${ENTITYINFO.name}>${field.name?cap_first}"));
 <#else>
-        ${field.name} = new EntityReference<>("${ENTITYINFO.name}>${field.name?cap_first}", ${field.references}.EM.class);
+        ${field.name} = new EntityReference<>("${ENTITYINFO.name}>${field.name?cap_first}", ${field.references}.getEM());
 </#if>
 <#if !field.optional??>
         addRule(${field.name}.getDefinedRule());
@@ -285,11 +248,11 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.name},${ENTITYINFO.p
 </#list>
 <#list ENTITYINFO.child![] as child>
 <#if child.orderable = "yes" >
-        ${child.name}s = new EntityIndexedReferenceSet<>(instanceDescription()+">${child.references}s", ${child.name?upper_case}S, "${child.dbname}", getId(), ${child.references}.EM.class);
+        ${child.name}s = new EntityIndexedReferenceSet<>(instanceDescription()+">${child.references}s", "${child.dbname}", getId(), ${child.references}.EM.class);
 <#elseif child.sort = "yes" >
-        ${child.name}s = new EntitySortedReferenceSet<>(instanceDescription()+">${child.references}s", ${child.name?upper_case}S, new ${child.references}Comparator(), "${child.dbname}", getId(), ${child.references}.EM.class);
+        ${child.name}s = new EntitySortedReferenceSet<>(instanceDescription()+">${child.references}s", new ${child.references}Comparator(), "${child.dbname}", getId(), ${child.references}.EM.class);
 <#else>
-        ${child.name}s = new EntityReferenceSet<>(instanceDescription()+">${child.references}s", ${child.name?upper_case}S, "${child.dbname}", getId(), ${child.references}.EM.class);
+        ${child.name}s = new EntityReferenceFilterSet<>(instanceDescription()+">${child.references}s", "${child.dbname}", getId(), ${child.references}.EM.class);
 </#if>
 <#if child.min??>
         addRule(${child.name}s.getMinRule(${child.min}));
@@ -299,6 +262,11 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.name},${ENTITYINFO.p
 </#if>
 </#list>
         checkRulesAtLoad();
+    }
+
+    @Override
+    public final ${ENTITYINFO.pkeytype} getPK() {
+        return getId();
     }
 
     /**
@@ -383,11 +351,7 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.name},${ENTITYINFO.p
         protected boolean ruleCheck() {
 <#list ENTITYINFO.field![] as pref>
 <#if pref.type="ref" || pref.type="rootref" >
-            try {
-                return getParent().get${ENTITYINFO.name}s().stream().noneMatch((e) -> (e != ${ENTITYINFO.name}.this && e.get${field.name?cap_first}().equals(${field.name})));
-            } catch (IOException ex) {
-                return false;
-            }        
+            return getParent().get${ENTITYINFO.name}s().stream().noneMatch((e) -> (e != ${ENTITYINFO.name}.this && e.get${field.name?cap_first}().equals(${field.name})));
 </#if>
 </#list>
         }
@@ -484,9 +448,8 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.name},${ENTITYINFO.p
      * Get the parent Entity associated with this entity.
      *
      * @return the ${field.name?cap_first} entity
-     * @throws IOException if problem obtaining / parsing data
      */
-    public ${field.references} getParent() throws IOException {
+    public ${field.references} getParent() {
         return ${field.name}.get();
     }
 
@@ -495,12 +458,11 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.name},${ENTITYINFO.p
      * Called from the parent entity as part of the add${ENTITYINFO.name} method
      *
      * @param e the parent ${field.name} entity
-     * @throws IOException if problem obtaining / parsing data
      */
-    protected void linkToParent(${field.references} e) throws IOException {
+    protected void linkToParent(${field.references} e) {
         ensureEditing();
-        if (${field.name}.set(e) ) {
-            fireFieldChange(${field.name?upper_case});
+        if (${field.name}.set(e.getPK()) ) {
+            fireFieldChange(${ENTITYINFO.name}Field.${field.name?upper_case});
             fireNameAndOrTitleChangeOn${field.name?cap_first}();
         }
     }
@@ -508,13 +470,11 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.name},${ENTITYINFO.p
     /**
      * Clear the parent (${field.name?cap_first}) Entity associated with this entity.
      * Called from the parent entity as part of the remove${ENTITYINFO.name} method
-     *
-     * @throws IOException if problem obtaining / parsing data
      */
-    protected void unlinkFromParent() throws IOException {
+    protected void unlinkFromParent() {
         ensureEditing();
         if (${field.name}.set() ) {
-            fireFieldChange(${field.name?upper_case});
+            fireFieldChange(${ENTITYINFO.name}Field.${field.name?upper_case});
             fireNameAndOrTitleChangeOn${field.name?cap_first}();
         }
     }
@@ -524,9 +484,8 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.name},${ENTITYINFO.p
      * Get the ${field.name?cap_first} Entity associated with this entity.
      *
      * @return the ${field.name?cap_first} entity
-     * @throws IOException if problem obtaining / parsing data
      */
-    public ${field.references} get${field.name?cap_first}() throws IOException {
+    public ${field.references} get${field.name?cap_first}() {
         return ${field.name}.get();
     }
 
@@ -534,27 +493,25 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.name},${ENTITYINFO.p
      * Set the ${field.name?cap_first} Entity associated with this entity.
      *
      * @param e the ${field.name} entity
-     * @throws IOException if problem obtaining / parsing data
      */
-    public void set${field.name?cap_first}(${field.references} e) throws IOException {
+    public void set${field.name?cap_first}(${field.references} e) {
         if (e == null) {
-            if (${field.name}.getId() != NONE) {
+            if (${field.name}.getPK() != null) {
                 ensureEditing();
                 if (${field.name}.set()) {
-                    fireFieldChange(${field.name?upper_case});
+                    fireFieldChange(${ENTITYINFO.name}Field.${field.name?upper_case});
                     fireNameAndOrTitleChangeOn${field.name?cap_first}();
                 }
             }
         } else {
-            if (${field.name}.getId() != e.getId()) {
+            if (${field.name}.getPK().equals(e.getPK())) {
                 ensureEditing();
-                if (${field.name}.set(e)) {
-                    fireFieldChange(${field.name?upper_case});
+                if (${field.name}.set(e.getPK())) {
+                    fireFieldChange(${ENTITYINFO.name}Field.${field.name?upper_case});
                     fireNameAndOrTitleChangeOn${field.name?cap_first}();
                 }
             }
         }
-
     }
 <#elseif field.type = "rootref" >
 
@@ -583,7 +540,7 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.name},${ENTITYINFO.p
      *
      * @return the ${field.rvid}
      */
-    public ${field.javatype} get${field.name?cap_first}() {
+    public final ${field.javatype} get${field.name?cap_first}() {
         return ${field.rvid};
     }
 <#if field.type == "int" >
@@ -640,7 +597,7 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.name},${ENTITYINFO.p
             if (!this.${field.rvid}.equals(encoded)) {
                 ensureEditing();
                 this.${field.rvid} = encoded;
-                fireFieldChange(${field.name?upper_case});
+                fireFieldChange(${ENTITYINFO.name}Field.${field.name?upper_case});
                 fireNameAndOrTitleChangeOn${field.name?cap_first}();
             }
         }
@@ -665,7 +622,7 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.name},${ENTITYINFO.p
 <#if field.type=="int" || field.type=="long" || field.type == "date" || field.type == "datetime" >
             ${field.rvid}BadFormat = false;
 </#if>
-            fireFieldChange(${field.name?upper_case});
+            fireFieldChange(${ENTITYINFO.name}Field.${field.name?upper_case});
             fireNameAndOrTitleChangeOn${field.name?cap_first}();
         }
     }
@@ -702,12 +659,12 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.name},${ENTITYINFO.p
             new${field.rvid}=Integer.parseInt(${field.rvid}Text);
         } catch (NumberFormatException ex) {
             ${field.rvid}BadFormat = true;
-            fireFieldChange(${field.name?upper_case}, false);
+            fireFieldChange(${ENTITYINFO.name}Field.${field.name?upper_case}, false);
             return;
         } 
         set${field.name?cap_first}(new${field.rvid});
         ${field.rvid}BadFormat = false;
-        fireFieldChange(${field.name?upper_case});
+        fireFieldChange(${ENTITYINFO.name}Field.${field.name?upper_case});
         fireNameAndOrTitleChangeOn${field.name?cap_first}();
     }
 <#elseif field.type == "long" >
@@ -723,12 +680,12 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.name},${ENTITYINFO.p
             new${field.rvid}=Long.parseLong(${field.rvid}Text);
         } catch (NumberFormatException ex) {
             ${field.rvid}BadFormat = true;
-            fireFieldChange(${field.name?upper_case}, false);
+            fireFieldChange(${ENTITYINFO.name}Field.${field.name?upper_case}, false);
             return;
         } 
         set${field.name?cap_first}(new${field.rvid});
         ${field.rvid}BadFormat = false;
-        fireFieldChange(${field.name?upper_case});
+        fireFieldChange(${ENTITYINFO.name}Field.${field.name?upper_case});
         fireNameAndOrTitleChangeOn${field.name?cap_first}();
     }
 <#elseif field.type == "date" >
@@ -744,12 +701,12 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.name},${ENTITYINFO.p
             new${field.rvid}=new DateOnly(${field.rvid}Text);
         } catch (BadFormatException ex) {
             ${field.rvid}BadFormat = true;
-            fireFieldChange(${field.name?upper_case}, false);
+            fireFieldChange(${ENTITYINFO.name}Field.${field.name?upper_case}, false);
             return;
         } 
         set${field.name?cap_first}(new${field.rvid});
         ${field.rvid}BadFormat = false;
-        fireFieldChange(${field.name?upper_case});
+        fireFieldChange(${ENTITYINFO.name}Field.${field.name?upper_case});
         fireNameAndOrTitleChangeOn${field.name?cap_first}();
     }
 <#elseif field.type == "datetime" >
@@ -765,12 +722,12 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.name},${ENTITYINFO.p
             new${field.rvid}=new Timestamp(${field.rvid}Text);
         } catch (BadFormatException ex) {
             ${field.rvid}BadFormat = true;
-            fireFieldChange(${field.name?upper_case}, false);
+            fireFieldChange(${ENTITYINFO.name}Field.${field.name?upper_case}, false);
             return;
         } 
         set${field.name?cap_first}(new${field.rvid});
         ${field.rvid}BadFormat = false;
-        fireFieldChange(${field.name?upper_case});
+        fireFieldChange(${ENTITYINFO.name}Field.${field.name?upper_case});
         fireNameAndOrTitleChangeOn${field.name?cap_first}();
     }
 </#if>
@@ -810,9 +767,8 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.name},${ENTITYINFO.p
      * Add a ${child.references} to this entity.
      *
      * @param e the ${child.name}
-     * @throws IOException if problem in obtaining / parsing data
      */
-    public void add${child.references}(${child.references} e) throws IOException {
+    public void add${child.references}(${child.references} e) {
         e.linkToParent(this);
         ${child.name}s.add(e);
     }
@@ -821,9 +777,8 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.name},${ENTITYINFO.p
      * Remove a ${child.references} from this entity.
      *
      * @param e the ${child.name}
-     * @throws IOException if problem in obtaining / parsing data
      */
-    public void remove${child.references}(${child.references} e) throws IOException {
+    public void remove${child.references}(${child.references} e) {
         e.unlinkFromParent();
         ${child.name}s.remove(e);
     }
@@ -850,9 +805,8 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.name},${ENTITYINFO.p
      * Add set listener to all ${child.name}s (and parent) collections
      *
      * @param listener the set change listener to add
-     * @throws IOException if problem obtaining / parsing data
      */
-    public static void add${child.references}sSetChangeListeners (Listener<SetChangeEventParams> listener) throws IOException {
+    public static void add${child.references}sSetChangeListeners (Listener<SetChangeEventParams> listener) {
        ${ENTITYINFO.name}.getAll${ENTITYINFO.name}s().stream().forEach((${ENTITYINFO.name?lower_case}) -> {
             ${ENTITYINFO.name?lower_case}.${child.name}s.addSetListener(listener);
         });
@@ -863,9 +817,8 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.name},${ENTITYINFO.p
      * Remove set listener from all ${child.name}s (and parent) collections
      *
      * @param listener the set change listener to remove
-     * @throws IOException if problem obtaining / parsing data
      */
-    public static void remove${child.references}sSetChangeListeners(Listener<SetChangeEventParams> listener) throws IOException {
+    public static void remove${child.references}sSetChangeListeners(Listener<SetChangeEventParams> listener) {
         ${ENTITYINFO.name}.getAll${ENTITYINFO.name}s().stream().forEach((${ENTITYINFO.name?lower_case}) -> {
             ${ENTITYINFO.name?lower_case}.${child.name}s.removeSetListener(listener);
         });
@@ -876,9 +829,8 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.name},${ENTITYINFO.p
      * Get List of ${child.name}s associated with entity.
      *
      * @return list of ${child.name}s
-     * @throws IOException if problem obtaining / parsing data
      */
-    public List<${child.references}> get${child.references}s() throws IOException { 
+    public List<${child.references}> get${child.references}s() { 
         return ${child.name}s.get();
     }
 <#if child.orderable = "yes">
@@ -910,7 +862,7 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.name},${ENTITYINFO.p
         }
 
     @Override
-    protected final void entityRestoreState() throws IOException {
+    protected final void entityRestoreState() {
 <#list ENTITYINFO.field![] as field>
 <#if field.type == "ref" || field.type == "reference">
         ${field.name}.restoreState();
@@ -928,24 +880,24 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.name},${ENTITYINFO.p
     }
 
     @Override
-    protected final void entityRemove() throws IOException {
+    protected final void entityRemove(){
 <#list ENTITYINFO.referenced![] as referenced>
-        ${referenced.name}.EM em = ${referenced.name}.getEM();
-        EntityPersistenceProvider epp = em.getEntityPersistenceProvider();
-        for (JsonValue id : epp.find("${referenced.dbfield}", JsonUtil.createJsonValue(getId()))) {
+        ${referenced.name}.EM em${referenced.name} = ${referenced.name}.getEM();
+        EntityPersistenceProvider<${ENTITYINFO.pkeytype}> epp = em${referenced.name}.getEntityPersistenceProvider();
+        epp.find("${referenced.dbfield}", getPK()).stream().forEach((id) -> {
 <#if referenced.optional??>
-            ${referenced.name} ${referenced.name?lower_case} = em.get(JsonUtil.getIntegerValue(id));
+            ${referenced.name} ${referenced.name?lower_case} = em${referenced.name}.get(id);
             ${referenced.name?lower_case}.set${referenced.field?cap_first}(null);
             ${referenced.name?lower_case}.save();
 <#else>
-            em.get(JsonUtil.getIntegerValue(id)).remove();
+            em${referenced.name}.get(id).remove();
 </#if>
-        }
+        });
 </#list>
 <#list ENTITYINFO.child![] as child>
-        for (${child.references} ${child.name} : get${child.references}s()) {
+        get${child.references}s().stream().forEach((${child.name}) -> {
             ${child.name}.remove();
-        }
+        });
 </#list>
 <#list ENTITYINFO.field as field>
 <#if field.type = "ref"  || field.type = "rootref" >
@@ -955,23 +907,33 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.name},${ENTITYINFO.p
     }
 
     @Override
-    protected final void entityLoad(JsonObject data) throws IOException {
+    protected final void entityLoad(EntityFields data) {
 <#list ENTITYINFO.field![] as field>
 <#if field.javatype == "DateOnly">
-        ${field.rvid}.setDateUsingSQLString(data.getString("${field.name}"));
+        try {
+            ${field.rvid}.setDateUsingSQLString((String) data.get("${field.name}"));
+        } catch (BadFormatException ex) {
+            throw new LogicException("Load reported bad Timestamp format - should never happen!!");
+        }
 <#elseif field.javatype == "Timestamp" >
-        ${field.rvid}.setDateUsingSQLString(data.getString("${field.name}"));
+        try {
+            ${field.rvid}.setDateUsingSQLString((String) data.get("${field.name}"));
+        } catch (BadFormatException ex) {
+            throw new LogicException("Load reported bad Timestamp format - should never happen!!");
+        }
 <#elseif field.type == "ref" || field.type == "reference">
-        ${field.name}.set(data.getInt("${field.name}"));
+        ${field.name}.set((Integer) data.get("${field.name}"));
 <#elseif field.type == "rootref">
 <#elseif field.type == "idx" >
 <#elseif field.type == "password" >
-        ${field.rvid} = data.getString("${field.name}");
+        ${field.rvid} = (String) data.get("${field.name}");
         passwordrule.encodedPasswordLoaded();
 <#elseif field.type == "boolean" >
-        ${field.rvid} = data.getBoolean("${field.name}");
+        ${field.rvid} = (Boolean) data.get("${field.name}");
+<#elseif field.type == "int">
+        ${field.rvid} = (Integer) data.get("${field.name}");
 <#else>
-        ${field.rvid} = data.getString("${field.name}");
+        ${field.rvid} = (String) data.get("${field.name}");
 </#if>
 </#list>
     }
@@ -1000,71 +962,77 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.name},${ENTITYINFO.p
     }
 
     @Override
-    protected final void entityDiffs(JsonObjectBuilder job) throws IOException {
-        int id;
+    protected final void entityDiffs(EntityFields data) {
+        int idref;
 <#list ENTITYINFO.field![] as field>
 <#if field.javatype == "String" >
         if (!${field.rvid}.equals(${field.rvid}Original)) {
-            job.add("${field.name}", ${field.rvid});
+            data.put("${field.name}", ${field.rvid});
+        }
+<#elseif field.type == "datetime" | field.type == "date">
+        if (!${field.rvid}.equals(${field.rvid}Original)) {
+            data.put("${field.name}", ${field.rvid}.toSQLString());
         }
 <#elseif field.type == "ref" || field.type == "reference" >
         if (${field.name}.isDirty()) {
 <#if field.optional??>
-            id = ${field.name}.getId();
-            if (id < 0 ) {
+            idref = ${field.name}.getPK();
+            if (idref < 0 ) {
                 ${field.name}.get().save();
-                job.add("${field.name}", ${field.name}.get().getId());
-            } else if (id == 0) {
-                job.add("${field.name}", null);
+                data.put("${field.name}", ${field.name}.get().getPK());
+            } else if (idref == 0) {
+                data.put("${field.name}", null);
             } else {
-                job.add("${field.name}", id);
+                data.put("${field.name}", idref);
             }
 <#else>
-            id = ${field.name}.getId();
-            if (id < 0 ) {
+            idref = ${field.name}.getPK();
+            if (idref < 0 ) {
                 ${field.name}.get().save();
-                id = ${field.name}.get().getId();
+                idref = ${field.name}.get().getPK();
             }
-            job.add("${field.name}", id);
+            data.put("${field.name}", idref);
 </#if>
         }
 <#elseif field.type == "rootref">
 <#elseif field.type == "idx" >
 <#else>
         if (${field.rvid} != ${field.rvid}Original) {
-            job.add("${field.name}", ${field.rvid});
+            data.put("${field.name}", ${field.rvid});
         }
 </#if>
 </#list>
     }
 
     @Override
-    protected final void entityValues(JsonObjectBuilder job) throws IOException {
-        int id;
+    protected final void entityValues(EntityFields data) {
+        int idref;
 <#list ENTITYINFO.field![] as field>
 <#if field.type == "ref" || field.type == "reference" >
 <#if field.optional??>
-        id = ${field.name}.getId();
-        if (id < 0 ) {
+        idref = ${field.name}.getPK();
+        if (idref < 0 ) {
             ${field.name}.get().save();
-            job.add("${field.name}", ${field.name}.get().getId());
-        } else if (id == 0) {
-            job.add("${field.name}", null);
+            data.put("${field.name}", ${field.name}.get().getPK());
+        } else if (idref == 0) {
+            data.put("${field.name}", null);
         } else {
-            job.add("${field.name}", id);
+            data.put("${field.name}", idref);
         }
 <#else>
-        id = ${field.name}.getId();
-        if (id < 0 ) {
+        idref = ${field.name}.getPK();
+        if (idref < 0 ) {
             ${field.name}.get().save();
-            id = ${field.name}.get().getId();
+            idref = ${field.name}.get().getPK();
         }
-        job.add("${field.name}", id);
+        data.put("${field.name}", idref);
 </#if>
 <#elseif field.type == "rootref">
 <#elseif field.type == "idx" >
+<#elseif field.type == "datetime" | field.type == "date">
+        data.put("${field.name}", ${field.rvid}.toSQLString());
 <#else>
-        job.add("${field.name}", ${field.rvid});
+        data.put("${field.name}", ${field.rvid});
 </#if>
 </#list>
     }
@@ -1081,8 +1049,11 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.name},${ENTITYINFO.p
      * The ${ENTITYINFO.name} Entity Manager
      */
     @ServiceProvider(service=${ENTITYINFO.name}.EM.class)
-    public static class EM extends EntityManager<${ENTITYINFO.name},${ENTITYINFO.parentname}> {
+    public static class EM extends EntityManager<${ENTITYINFO.pkeytype},${ENTITYINFO.name},${ENTITYINFO.parentname}> {
    
+<#if ENTITYINFO.pkey = "id" >
+        private static int tpk = -1;
+</#if>
         /**
          * Constructor.
          */
@@ -1091,13 +1062,18 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.name},${ENTITYINFO.p
         }
 
         @Override
-        protected final void link2parent(${ENTITYINFO.name} e, ${ENTITYINFO.parentname} parent) throws IOException {
+        protected final void link2parent(${ENTITYINFO.name} e, ${ENTITYINFO.parentname} parent) {
                 parent.add${ENTITYINFO.name}(e);
         }
         
         @Override
-        protected final ${ENTITYINFO.name} createNewEntity(int id) throws IOException {
-            return new ${ENTITYINFO.name}(id, this);
+        protected final ${ENTITYINFO.name} createNewEntity() {
+            return new ${ENTITYINFO.name}(tpk--, this);
+        }
+
+        @Override
+        protected final ${ENTITYINFO.name} createNewEntity(${ENTITYINFO.pkeytype} pk) {
+            return new ${ENTITYINFO.name}(pk, this);
         }
 
         @Override
@@ -1120,14 +1096,13 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.name},${ENTITYINFO.p
      * Get the set of all ${ENTITYINFO.name}s.
      * 
      * @return the set of all ${ENTITYINFO.name}s
-     * @throws IOException - if problems with obtaining / parse entity data
      */
-    public static List<${ENTITYINFO.name}> getAll${ENTITYINFO.name}s() throws IOException {
+    public static List<${ENTITYINFO.name}> getAll${ENTITYINFO.name}s() {
         List<${ENTITYINFO.name}> list = new ArrayList<>();
 <#if PARENTENTITYINFO.parentname?? >
-        for (${ENTITYINFO.parentname} parent : ${ENTITYINFO.parentname}.getAll${ENTITYINFO.parentname}s()){
+        ${ENTITYINFO.parentname}.getAll${ENTITYINFO.parentname}s().stream().forEach((parent) -> {
             list.addAll(parent.get${ENTITYINFO.name}s());
-        }
+        });
 <#else>
         list.addAll(${ENTITYINFO.parentname}.get().get${ENTITYINFO.name}s());
 </#if>
@@ -1172,17 +1147,9 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.name},${ENTITYINFO.p
      */
     public String format${field.name?cap_first}() {
 <#if field.type="reference" >
-            try {
                 return get${field.name?cap_first}()!=null ? get${field.name?cap_first}().getDisplayTitle(): "undefined";
-            } catch (IOException ex) {
-                return "????";
-            }
 <#elseif field.type="ref" >
-            try {
                 return getParent()!=null ? getParent().getDisplayName(): "undefined" ;
-            } catch (IOException ex) {
-                return "????";
-            }
 <#elseif field.type="int" >
             return Integer.toString(get${field.name?cap_first}());
 <#elseif field.type="idx"  >
@@ -1205,7 +1172,7 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.name},${ENTITYINFO.p
      * Get the formatted text version of ${field.name} field left padded with
      * zeros if less than minimum size.
      *
-     * @param minChars minimum size
+     * @param minDigits minimum size
      * @return the formatted String
      */
     public String format${field.name?cap_first}(int minDigits) {

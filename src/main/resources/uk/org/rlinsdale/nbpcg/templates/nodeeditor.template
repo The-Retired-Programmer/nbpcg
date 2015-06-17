@@ -58,7 +58,6 @@
 <#assign ENTITYINFO = entityinfo[useentityinfo] >
 package ${package};
 
-import java.io.IOException;
 <#assign needListImport = "no" >
 <#list ENTITYINFO.field![] as field>
 <#if field.type="reference" || field.type="reference" || field.type="enum" >
@@ -68,7 +67,6 @@ import java.io.IOException;
 <#if needListImport = "yes">
 import java.util.List;
 </#if>
-import java.util.logging.Level;
 import ${datapackage}.*;
 import ${nodepackage}.${ENTITYINFO.name}Node;
 import uk.org.rlinsdale.nbpcglibrary.data.entity.*;
@@ -100,7 +98,7 @@ persistenceType = TopComponent.PERSISTENCE_NEVER)
     "CTL_${ENTITYINFO.name}NodeEditor=${ENTITYINFO.name} Editor",
     "HINT_${ENTITYINFO.name}NodeEditor=This is the ${ENTITYINFO.name} Editor"
 })
-public final class ${ENTITYINFO.name}NodeEditor extends NodeEditorTopComponent<${ENTITYINFO.name}, ${ENTITYINFO.parentname}, ${ENTITYINFO.name}Field> {
+public final class ${ENTITYINFO.name}NodeEditor extends NodeEditorTopComponent<${ENTITYINFO.pkeytype}, ${ENTITYINFO.name}, ${ENTITYINFO.parentname}, ${ENTITYINFO.name}Field> {
     
     private final EntityFieldChangeListener entityfieldchangelistener;
     private final TitleChangeListener titlechangelistener;
@@ -212,23 +210,12 @@ public final class ${ENTITYINFO.name}NodeEditor extends NodeEditorTopComponent<$
 
         @Override
         public void set(String value) {
-            try {
-                entity.set${field.name?cap_first}(${field.name}Field.convertTexttoEntity(value));
-            } catch (IOException ex) {
-                LogBuilder.create("accesscontrolmanager", Level.SEVERE).addMethodName(this, "set")
-                            .addExceptionMessage(ex).write();
-            }
+            entity.set${field.name?cap_first}(${field.name}Field.convertTexttoEntity(value));
         }
 
         @Override
         public String get() {
-            try {
-                return entity.get${field.name?cap_first}() != null ? entity.get${field.name?cap_first}().getDisplayTitle() : "";
-            } catch (IOException ex) {
-                 LogBuilder.create("${log}", Level.SEVERE).addMethodName(this, "get")
-                            .addExceptionMessage(ex).write();
-                 return "";
-            }
+            return entity.get${field.name?cap_first}() != null ? entity.get${field.name?cap_first}().getDisplayTitle() : "";
         }
     }
 <#elseif field.type="ref"  >
@@ -248,13 +235,7 @@ public final class ${ENTITYINFO.name}NodeEditor extends NodeEditorTopComponent<$
 
         @Override
         public String get() {
-            try {
-                return entity.get${field.name?cap_first}();
-            } catch (IOException ex) {
-                 LogBuilder.create("${log}", Level.SEVERE).addMethodName(this, "get")
-                            .addExceptionMessage(ex).write();
-                 return "";
-            }
+            return entity.get${field.name?cap_first}();
         }
     }
 <#elseif field.type == "rootref" || field.type="idx" >
