@@ -19,7 +19,7 @@
 <#assign PSTORE = persistencestore[usepersistencestore] >
 <#list PSTORE.persistenceentity![] as entity >
 <#if entity.name = useentity >
-{"name":"${entity.name}", "records":[
+{"name":"${entity.name}", "entities":[
 <#assign id = 1>
 <#assign eprefix = "" >
 <#list entity.insertentity![] as insertentity >
