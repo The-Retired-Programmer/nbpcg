@@ -21,7 +21,6 @@
             parentname CDATA #IMPLIED
             ordercolumn CDATA #IMPLIED
             orderable (yes|no) #IMPLIED
-            sort (yes|no) #IMPLIED
             label CDATA #IMPLIED
             viewers CDATA #IMPLIED
             icon CDATA #REQUIRED 
@@ -30,30 +29,20 @@
             <!ATTLIST field
                 name CDATA #REQUIRED
                 pkey CDATA #REQUIRED
-                ro (yes) #IMPLIED
+                hidden (yes) #IMPLIED
                 type (rootref|ref|String|int|reference|date|enum|idx|datetime|boolean|long|password) #REQUIRED
                 references CDATA #IMPLIED
-                referencestable CDATA #IMPLIED
-                parentfactory CDATA #IMPLIED
                 label CDATA #REQUIRED
-                rvid CDATA #REQUIRED
-                pcvu CDATA #IMPLIED
-                pprvu CDATA #IMPLIED
                 values CDATA #IMPLIED
                 javatype (int|String|DateOnly|Timestamp|boolean|long) #REQUIRED
                 jsontype (Integer|String|Boolean|Long) #REQUIRED
                 initialisation CDATA #REQUIRED
-                nullsql CDATA #IMPLIED
-                uniquesql CDATA #IMPLIED
                 unique (yes) #IMPLIED
                 optional (yes) #IMPLIED
-                sort CDATA #IMPLIED
                 index (yes) #IMPLIED
                 min CDATA #IMPLIED
                 max CDATA #IMPLIED
                 fieldclass (TextField|ReferenceChoiceField|EnumChoiceField|PasswordField|CheckboxField) #IMPLIED
-                sqltype CDATA #IMPLIED
-                dbcolumnname CDATA #IMPLIED
                 entryfield CDATA #IMPLIED
                 passwordsupport CDATA #IMPLIED
                 passwordstrength (none|weak|strong|verystrong) #IMPLIED
@@ -62,7 +51,6 @@
             <!ATTLIST child
                 name CDATA #REQUIRED
                 dbname CDATA #IMPLIED 
-                nodekey CDATA #IMPLIED 
                 references CDATA #REQUIRED
                 sort (yes|no) #REQUIRED
                 orderable (yes|no) #REQUIRED
@@ -73,7 +61,7 @@
             <!ATTLIST referenced
                 name CDATA #REQUIRED
                 field CDATA #REQUIRED
-                dbfield CDATA #REQUIRED
+                optional CDATA #IMPLIED
                 >
         <!ELEMENT sortformat (display*)  >
             <!ATTLIST sortformat

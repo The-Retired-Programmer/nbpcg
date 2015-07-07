@@ -190,14 +190,17 @@ public class FreemarkerMapFactory {
         /**
          * Add a set of attributes from one FreeMarker map to another. Typical
          * usecase: copy parent attributes to children (ie inheritance)
+         * 
+         * @param from the source map
+         * @return the updated freemarkermap
          */
         public FreemarkerMap addAttributes(FreemarkerMap from) {
-            for (Entry<String, Object> e: from.entrySet()){
+            from.entrySet().stream().forEach((e) -> {
                 Object item = e.getValue();
-                if (!(item instanceof FreemarkerList)){
+                if (!(item instanceof FreemarkerList)) {
                     this.put(e.getKey(), item);
                 }
-            }
+            });
             return this;
         }
     }

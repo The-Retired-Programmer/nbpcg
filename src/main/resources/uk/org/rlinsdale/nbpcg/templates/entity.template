@@ -133,11 +133,13 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.pkeytype},${ENTITYIN
      */
     public enum ${ENTITYINFO.name}Field {
 <#list ENTITYINFO.field![] as field >
+<#if !(field.hidden??) >
 <#if field.type != "rootref" >
         /**
          * the ${field.name} field
          */
         ${field.name?upper_case},
+</#if>
 </#if>
 </#list>
 <#list ENTITYINFO.child![] as child>
@@ -159,13 +161,17 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.pkeytype},${ENTITYIN
     private final ${field.references} ${field.name};
 <#elseif field.type == "idx">
 <#else>
-    private final Rules ${field.rvid}Rules = new Rules();
-    private ${field.javatype} ${field.rvid}${field.initialisation};
-    private ${field.javatype} ${field.rvid}Original;
+    private ${field.javatype} ${field.name}${field.initialisation};
+<#if !(field.hidden??) >
+    private ${field.javatype} ${field.name}Original;
+    private final Rules ${field.name}Rules = new Rules();
+</#if>
 <#if field.type == "password" >
     private final PasswordRule passwordrule;
 <#elseif field.type=="int" || field.type=="long" || field.type == "date" || field.type == "datetime" >
+<#if !(field.hidden??) >
     private boolean ${field.name}BadFormat=false;
+</#if>
 </#if>
 </#if>
 </#list>
@@ -220,30 +226,32 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.pkeytype},${ENTITYIN
 </#if>
 </#list>
 <#list ENTITYINFO.field![] as field>
+<#if !(field.hidden??) >
 <#if field.type = "String" >
-        addRule(${field.rvid}Rules, new ${field.name?cap_first}MinRule());
-        addRule(${field.rvid}Rules, new ${field.name?cap_first}MaxRule());
+        addRule(${field.name}Rules, new ${field.name?cap_first}MinRule());
+        addRule(${field.name}Rules, new ${field.name?cap_first}MaxRule());
 <#if field.unique??>
-        addRule(${field.rvid}Rules, new ${field.name?cap_first}UniqueRule());
+        addRule(${field.name}Rules, new ${field.name?cap_first}UniqueRule());
 </#if>
 <#elseif field.type = "int" || field.type = "long">
 <#if field.min??>
-        addRule(${field.rvid}Rules, new ${field.name?cap_first}MinRule());
+        addRule(${field.name}Rules, new ${field.name?cap_first}MinRule());
 </#if>
 <#if field.max??>
-        addRule(${field.rvid}Rules, new ${field.name?cap_first}MaxRule());
+        addRule(${field.name}Rules, new ${field.name?cap_first}MaxRule());
 </#if>
-        addRule(${field.rvid}Rules, new ${field.name?cap_first}BadFormatRule());
+        addRule(${field.name}Rules, new ${field.name?cap_first}BadFormatRule());
 <#elseif field.type = "date" || field.type = "datetime" >
 <#if field.future??>
-        addRule(${field.rvid}Rules, new ${field.name?cap_first}FutureRule()); 
+        addRule(${field.name}Rules, new ${field.name?cap_first}FutureRule()); 
 </#if>
 <#if field.past??>
-        addRule(${field.rvid}Rules, new ${field.name?cap_first}PastRule());
+        addRule(${field.name}Rules, new ${field.name?cap_first}PastRule());
 </#if>
-        addRule(${field.rvid}Rules, new ${field.name?cap_first}BadFormatRule());
+        addRule(${field.name}Rules, new ${field.name?cap_first}BadFormatRule());
 <#elseif field.type = "password" >
-        addRule(${field.rvid}Rules, passwordrule = new PasswordRule());
+        addRule(${field.name}Rules, passwordrule = new PasswordRule());
+</#if>
 </#if>
 </#list>
 <#list ENTITYINFO.child![] as child>
@@ -262,6 +270,11 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.pkeytype},${ENTITYIN
 </#if>
 </#list>
         checkRulesAtLoad();
+    }
+
+    @Override
+    public boolean isPersistent() {
+        return id > 0;
     }
 
     @Override
@@ -315,6 +328,7 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.pkeytype},${ENTITYIN
 </#list>
 
 <#list ENTITYINFO.field![] as field>
+<#if !(field.hidden??) >
 <#if field.type = "String" >
     private class ${field.name?cap_first}MinRule extends Rule {
 
@@ -440,6 +454,7 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.pkeytype},${ENTITYIN
     }
 
 </#if>
+</#if>
 </#list>
 <#list ENTITYINFO.field![] as field>
 <#if field.type = "ref" >
@@ -504,7 +519,7 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.pkeytype},${ENTITYIN
                 }
             }
         } else {
-            if (${field.name}.getPK().equals(e.getPK())) {
+            if (!e.getPK().equals(${field.name}.getPK())) {
                 ensureEditing();
                 if (${field.name}.set(e.getPK())) {
                     fireFieldChange(${ENTITYINFO.name}Field.${field.name?upper_case});
@@ -525,63 +540,65 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.pkeytype},${ENTITYIN
     }
 <#elseif field.type == "idx" >
 <#else>
+<#if !(field.hidden??) >
 
     /**
-     * Get the username field rules.
+     * Get the ${field.name} field rules.
      *
-     * @return the username
+     * @return the ${field.name}
      */
-    public Rules get${field.rvid?cap_first}Rules() {
-        return ${field.rvid}Rules;
+    public Rules get${field.name?cap_first}Rules() {
+        return ${field.name}Rules;
     }
+</#if>
 
     /**
-     * Get the ${field.rvid}.
+     * Get the ${field.name}.
      *
-     * @return the ${field.rvid}
+     * @return the ${field.name}
      */
     public final ${field.javatype} get${field.name?cap_first}() {
-        return ${field.rvid};
+        return ${field.name};
     }
 <#if field.type == "int" >
 
     /**
-     * Get the ${field.rvid} in String format.
+     * Get the ${field.name} in String format.
      *
-     * @return the ${field.rvid}
+     * @return the ${field.name}
      */
     public String get${field.name?cap_first}Text() {
-        return Integer.toString(${field.rvid});
+        return Integer.toString(${field.name});
     }
 <#elseif field.type == "long" >
 
     /**
-     * Get the ${field.rvid} in String format.
+     * Get the ${field.name} in String format.
      *
-     * @return the ${field.rvid}
+     * @return the ${field.name}
      */
     public String get${field.name?cap_first}Text() {
-        return Long.toString(${field.rvid});
+        return Long.toString(${field.name});
     }
 <#elseif field.type == "date" >
 
     /**
-     * Get the ${field.rvid} in String format.
+     * Get the ${field.name} in String format.
      *
-     * @return the ${field.rvid}
+     * @return the ${field.name}
      */
     public String get${field.name?cap_first}Text() {
-        return ${field.rvid}.toString();
+        return ${field.name}.toString();
     }
 <#elseif field.type == "datetime" >
 
     /**
-     * Get the ${field.rvid} in String format.
+     * Get the ${field.name} in String format.
      *
-     * @return the ${field.rvid}
+     * @return the ${field.name}
      */
     public String get${field.name?cap_first}Text() {
-        return ${field.rvid}.toString();
+        return ${field.name}.toString();
     }
 </#if>
 <#if field.type = "password" >
@@ -594,56 +611,59 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.pkeytype},${ENTITYIN
     public void set${field.entryfield?cap_first}(String ${field.entryfield}) {
         if (passwordrule.checkPassword(PasswordStrength.${field.passwordstrength?upper_case}, password)) {
             String encoded = encode(${field.entryfield});
-            if (!this.${field.rvid}.equals(encoded)) {
+            if (!this.${field.name}.equals(encoded)) {
                 ensureEditing();
-                this.${field.rvid} = encoded;
+                this.${field.name} = encoded;
                 fireFieldChange(${ENTITYINFO.name}Field.${field.name?upper_case});
                 fireNameAndOrTitleChangeOn${field.name?cap_first}();
             }
         }
     }
 <#else>
+<#if !(field.hidden??) >
 
     /**
      * Define the ${field.name?cap_first}.
      *
-     * @param ${field.rvid} the ${field.rvid}
+     * @param ${field.name} the ${field.name}
      */
-    public void set${field.name?cap_first}(${field.javatype} ${field.rvid}) {
+    public void set${field.name?cap_first}(${field.javatype} ${field.name}) {
 <#if field.type == "String" | field.type == "enum" >
-        if (!this.${field.rvid}.equals(${field.rvid})) {
+        if (!this.${field.name}.equals(${field.name})) {
 <#elseif field.type == "date" || field.type == "datetime" >
-        if (!this.${field.rvid}.toString().equals(${field.rvid}.toString())) {
+        if (!this.${field.name}.toString().equals(${field.name}.toString())) {
 <#else>
-        if (this.${field.rvid} != ${field.rvid}) {
+        if (this.${field.name} != ${field.name}) {
 </#if>
             ensureEditing();
-            this.${field.rvid} = ${field.rvid};
+            this.${field.name} = ${field.name};
 <#if field.type=="int" || field.type=="long" || field.type == "date" || field.type == "datetime" >
-            ${field.rvid}BadFormat = false;
+            ${field.name}BadFormat = false;
 </#if>
             fireFieldChange(${ENTITYINFO.name}Field.${field.name?upper_case});
             fireNameAndOrTitleChangeOn${field.name?cap_first}();
         }
     }
 </#if>
+</#if>
 <#if field.type=="int" || field.type=="long" || field.type == "date" || field.type == "datetime" >
+<#if !(field.hidden??) >
     
-    private class ${field.rvid?cap_first}BadFormatRule extends Rule {
+    private class ${field.name?cap_first}BadFormatRule extends Rule {
         
-        public ${field.rvid?cap_first}BadFormatRule() {
+        public ${field.name?cap_first}BadFormatRule() {
 <#if field.type = "int" || field.type=="long" >
-            super("${field.rvid?cap_first} is not in Number format");
+            super("${field.name?cap_first} is not in Number format");
 <#elseif field.type == "date" >
-            super("${field.rvid?cap_first} is not in Date format");
+            super("${field.name?cap_first} is not in Date format");
 <#else>
-            super("${field.rvid?cap_first} is not in Date Time format");
+            super("${field.name?cap_first} is not in Date Time format");
 </#if>
         }
         
         @Override
         public boolean ruleCheck() {
-            return !${field.rvid}BadFormat;
+            return !${field.name}BadFormat;
         }
     }
 <#if field.type == "int" >
@@ -651,19 +671,19 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.pkeytype},${ENTITYIN
     /**
      * Define the ${field.name?cap_first}.
      *
-     * @param ${field.rvid}Text the ${field.rvid}
+     * @param ${field.name}Text the ${field.name}
      */
-    public void set${field.name?cap_first}(String ${field.rvid}Text) {
-        int new${field.rvid};
+    public void set${field.name?cap_first}(String ${field.name}Text) {
+        int new${field.name};
         try {
-            new${field.rvid}=Integer.parseInt(${field.rvid}Text);
+            new${field.name}=Integer.parseInt(${field.name}Text);
         } catch (NumberFormatException ex) {
-            ${field.rvid}BadFormat = true;
+            ${field.name}BadFormat = true;
             fireFieldChange(${ENTITYINFO.name}Field.${field.name?upper_case}, false);
             return;
         } 
-        set${field.name?cap_first}(new${field.rvid});
-        ${field.rvid}BadFormat = false;
+        set${field.name?cap_first}(new${field.name});
+        ${field.name}BadFormat = false;
         fireFieldChange(${ENTITYINFO.name}Field.${field.name?upper_case});
         fireNameAndOrTitleChangeOn${field.name?cap_first}();
     }
@@ -672,19 +692,19 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.pkeytype},${ENTITYIN
     /**
      * Define the ${field.name?cap_first}.
      *
-     * @param ${field.rvid}Text the ${field.rvid}
+     * @param ${field.name}Text the ${field.name}
      */
-    public void set${field.name?cap_first}(String ${field.rvid}Text) {
-        long new${field.rvid};
+    public void set${field.name?cap_first}(String ${field.name}Text) {
+        long new${field.name};
         try {
-            new${field.rvid}=Long.parseLong(${field.rvid}Text);
+            new${field.name}=Long.parseLong(${field.name}Text);
         } catch (NumberFormatException ex) {
-            ${field.rvid}BadFormat = true;
+            ${field.name}BadFormat = true;
             fireFieldChange(${ENTITYINFO.name}Field.${field.name?upper_case}, false);
             return;
         } 
-        set${field.name?cap_first}(new${field.rvid});
-        ${field.rvid}BadFormat = false;
+        set${field.name?cap_first}(new${field.name});
+        ${field.name}BadFormat = false;
         fireFieldChange(${ENTITYINFO.name}Field.${field.name?upper_case});
         fireNameAndOrTitleChangeOn${field.name?cap_first}();
     }
@@ -693,19 +713,19 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.pkeytype},${ENTITYIN
     /**
      * Define the ${field.name?cap_first}.
      *
-     * @param ${field.rvid}Text the ${field.rvid}
+     * @param ${field.name}Text the ${field.name}
      */
-    public void set${field.name?cap_first}(String ${field.rvid}Text) {
-        DateOnly new${field.rvid};
+    public void set${field.name?cap_first}(String ${field.name}Text) {
+        DateOnly new${field.name};
         try {
-            new${field.rvid}=new DateOnly(${field.rvid}Text);
+            new${field.name}=new DateOnly(${field.name}Text);
         } catch (BadFormatException ex) {
-            ${field.rvid}BadFormat = true;
+            ${field.name}BadFormat = true;
             fireFieldChange(${ENTITYINFO.name}Field.${field.name?upper_case}, false);
             return;
         } 
-        set${field.name?cap_first}(new${field.rvid});
-        ${field.rvid}BadFormat = false;
+        set${field.name?cap_first}(new${field.name});
+        ${field.name}BadFormat = false;
         fireFieldChange(${ENTITYINFO.name}Field.${field.name?upper_case});
         fireNameAndOrTitleChangeOn${field.name?cap_first}();
     }
@@ -714,25 +734,27 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.pkeytype},${ENTITYIN
     /**
      * Define the ${field.name?cap_first}.
      *
-     * @param ${field.rvid}Text the ${field.rvid}
+     * @param ${field.name}Text the ${field.name}
      */
-    public void set${field.name?cap_first}(String ${field.rvid}Text) {
-        Timestamp new${field.rvid};
+    public void set${field.name?cap_first}(String ${field.name}Text) {
+        Timestamp new${field.name};
         try {
-            new${field.rvid}=new Timestamp(${field.rvid}Text);
+            new${field.name}=new Timestamp(${field.name}Text);
         } catch (BadFormatException ex) {
-            ${field.rvid}BadFormat = true;
+            ${field.name}BadFormat = true;
             fireFieldChange(${ENTITYINFO.name}Field.${field.name?upper_case}, false);
             return;
         } 
-        set${field.name?cap_first}(new${field.rvid});
-        ${field.rvid}BadFormat = false;
+        set${field.name?cap_first}(new${field.name});
+        ${field.name}BadFormat = false;
         fireFieldChange(${ENTITYINFO.name}Field.${field.name?upper_case});
         fireNameAndOrTitleChangeOn${field.name?cap_first}();
     }
 </#if>
 </#if>
 </#if>
+</#if>
+<#if !(field.hidden??) >
     private void fireNameAndOrTitleChangeOn${field.name?cap_first}() {
 <#assign namechange = "no">
 <#list ENTITYINFO.displaynameformat as df >
@@ -761,6 +783,7 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.pkeytype},${ENTITYIN
         titleListenerFire();
 </#if>
     }
+</#if>
 </#list>
 <#list ENTITYINFO.child![] as child>
     /**
@@ -852,11 +875,13 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.pkeytype},${ENTITYIN
     @Override
     protected final void entitySaveState() {
 <#list ENTITYINFO.field![] as field>
+<#if !(field.hidden??) >
 <#if field.type == "ref" || field.type == "reference" >
             ${field.name}.saveState();
 <#elseif field.type == "idx" || field.type == "rootref" >
 <#else>
             ${field.name}Original = ${field.name};
+</#if>
 </#if>
 </#list>
         }
@@ -864,6 +889,7 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.pkeytype},${ENTITYIN
     @Override
     protected final void entityRestoreState() {
 <#list ENTITYINFO.field![] as field>
+<#if !(field.hidden??) >
 <#if field.type == "ref" || field.type == "reference">
         ${field.name}.restoreState();
 <#elseif field.type == "idx"  || field.type == "rootref" >
@@ -872,6 +898,7 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.pkeytype},${ENTITYIN
 <#if field.type=="int" || field.type=="long" || field.type == "date" || field.type == "datetime" >
         ${field.name}BadFormat=false;
 </#if>      
+</#if>
 </#if>
 </#list>
 <#list ENTITYINFO.child![] as child>
@@ -884,13 +911,13 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.pkeytype},${ENTITYIN
 <#list ENTITYINFO.referenced![] as referenced>
         ${referenced.name}.EM em${referenced.name} = ${referenced.name}.getEM();
         EntityPersistenceProvider<${ENTITYINFO.pkeytype}> epp = em${referenced.name}.getEntityPersistenceProvider();
-        epp.find("${referenced.dbfield}", getPK()).stream().forEach((id) -> {
+        epp.find("${referenced.field}", getPK()).stream().forEach((pk) -> {
 <#if referenced.optional??>
-            ${referenced.name} ${referenced.name?lower_case} = em${referenced.name}.get(id);
+            ${referenced.name} ${referenced.name?lower_case} = em${referenced.name}.get(pk);
             ${referenced.name?lower_case}.set${referenced.field?cap_first}(null);
             ${referenced.name?lower_case}.save();
 <#else>
-            em${referenced.name}.get(id).remove();
+            em${referenced.name}.get(pk).remove();
 </#if>
         });
 </#list>
@@ -911,13 +938,13 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.pkeytype},${ENTITYIN
 <#list ENTITYINFO.field![] as field>
 <#if field.javatype == "DateOnly">
         try {
-            ${field.rvid}.setDateUsingSQLString((String) data.get("${field.name}"));
+            ${field.name}.setDateUsingSQLString((String) data.get("${field.name}"));
         } catch (BadFormatException ex) {
             throw new LogicException("Load reported bad Timestamp format - should never happen!!");
         }
 <#elseif field.javatype == "Timestamp" >
         try {
-            ${field.rvid}.setDateUsingSQLString((String) data.get("${field.name}"));
+            ${field.name}.setDateUsingSQLString((String) data.get("${field.name}"));
         } catch (BadFormatException ex) {
             throw new LogicException("Load reported bad Timestamp format - should never happen!!");
         }
@@ -926,14 +953,14 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.pkeytype},${ENTITYIN
 <#elseif field.type == "rootref">
 <#elseif field.type == "idx" >
 <#elseif field.type == "password" >
-        ${field.rvid} = (String) data.get("${field.name}");
+        ${field.name} = (String) data.get("${field.name}");
         passwordrule.encodedPasswordLoaded();
 <#elseif field.type == "boolean" >
-        ${field.rvid} = (Boolean) data.get("${field.name}");
+        ${field.name} = (Boolean) data.get("${field.name}");
 <#elseif field.type == "int">
-        ${field.rvid} = (Integer) data.get("${field.name}");
+        ${field.name} = (Integer) data.get("${field.name}");
 <#else>
-        ${field.rvid} = (String) data.get("${field.name}");
+        ${field.name} = (String) data.get("${field.name}");
 </#if>
 </#list>
     }
@@ -941,98 +968,102 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.pkeytype},${ENTITYIN
     @Override
     protected final void entityCopy(${ENTITYINFO.name} from) {
 <#list ENTITYINFO.field![] as field>
+<#if !(field.hidden??) >
 <#if field.javatype == "DateOnly">
         try {
-            ${field.rvid} = new DateOnly(from.get${field.name?cap_first}().toString());
+            ${field.name} = new DateOnly(from.get${field.name?cap_first}().toString());
         } catch (BadFormatException ex) {
             throw new LogicException("Copy reported bad DateOnly format - should never happen!!");
         }
 <#elseif field.javatype == "Timestamp" >
         try {
-            ${field.rvid}= new Timestamp(from.get${field.name?cap_first}().toString());
+            ${field.name}= new Timestamp(from.get${field.name?cap_first}().toString());
         } catch (BadFormatException ex) {
             throw new LogicException("Copy reported bad Timestamp format - should never happen!!");
         }
 <#elseif field.type == "ref" || field.type == "reference"|| field.type == "rootref" >
 <#elseif field.type == "idx" >
 <#else>
-        ${field.rvid} = from.get${field.name?cap_first}();
+        ${field.name} = from.get${field.name?cap_first}();
+</#if>
 </#if>
 </#list>
     }
 
     @Override
     protected final void entityDiffs(EntityFields data) {
-        int idref;
 <#list ENTITYINFO.field![] as field>
+<#if !(field.hidden??) >
 <#if field.javatype == "String" >
-        if (!${field.rvid}.equals(${field.rvid}Original)) {
-            data.put("${field.name}", ${field.rvid});
+        if (!${field.name}.equals(${field.name}Original)) {
+            data.put("${field.name}", ${field.name});
         }
 <#elseif field.type == "datetime" | field.type == "date">
-        if (!${field.rvid}.equals(${field.rvid}Original)) {
-            data.put("${field.name}", ${field.rvid}.toSQLString());
+        if (!${field.name}.equals(${field.name}Original)) {
+            data.put("${field.name}", ${field.name}.toSQLString());
         }
 <#elseif field.type == "ref" || field.type == "reference" >
         if (${field.name}.isDirty()) {
 <#if field.optional??>
-            idref = ${field.name}.getPK();
-            if (idref < 0 ) {
+            int idref${field.references} = ${field.name}.getPK();
+            if (idref${field.references} < 0 ) {
                 ${field.name}.get().save();
                 data.put("${field.name}", ${field.name}.get().getPK());
-            } else if (idref == 0) {
+            } else if (idref${field.references} == 0) {
                 data.put("${field.name}", null);
             } else {
-                data.put("${field.name}", idref);
+                data.put("${field.name}", idref${field.references});
             }
 <#else>
-            idref = ${field.name}.getPK();
-            if (idref < 0 ) {
+            int idref${field.references} = ${field.name}.getPK();
+            if (idref${field.references} < 0 ) {
                 ${field.name}.get().save();
-                idref = ${field.name}.get().getPK();
+                idref${field.references} = ${field.name}.get().getPK();
             }
-            data.put("${field.name}", idref);
+            data.put("${field.name}", idref${field.references});
 </#if>
         }
 <#elseif field.type == "rootref">
 <#elseif field.type == "idx" >
 <#else>
-        if (${field.rvid} != ${field.rvid}Original) {
-            data.put("${field.name}", ${field.rvid});
+        if (${field.name} != ${field.name}Original) {
+            data.put("${field.name}", ${field.name});
         }
+</#if>
 </#if>
 </#list>
     }
 
     @Override
     protected final void entityValues(EntityFields data) {
-        int idref;
 <#list ENTITYINFO.field![] as field>
+<#if !(field.hidden??) >
 <#if field.type == "ref" || field.type == "reference" >
 <#if field.optional??>
-        idref = ${field.name}.getPK();
-        if (idref < 0 ) {
+        int idref${field.references} = ${field.name}.getPK();
+        if (idref${field.references} < 0 ) {
             ${field.name}.get().save();
             data.put("${field.name}", ${field.name}.get().getPK());
-        } else if (idref == 0) {
+        } else if (idref${field.references} == 0) {
             data.put("${field.name}", null);
         } else {
-            data.put("${field.name}", idref);
+            data.put("${field.name}", idref${field.references});
         }
 <#else>
-        idref = ${field.name}.getPK();
-        if (idref < 0 ) {
+        int idref${field.references} = ${field.name}.getPK();
+        if (idref${field.references} < 0 ) {
             ${field.name}.get().save();
-            idref = ${field.name}.get().getPK();
+            idref${field.references} = ${field.name}.get().getPK();
         }
-        data.put("${field.name}", idref);
+        data.put("${field.name}", idref${field.references});
 </#if>
 <#elseif field.type == "rootref">
 <#elseif field.type == "idx" >
 <#elseif field.type == "datetime" | field.type == "date">
-        data.put("${field.name}", ${field.rvid}.toSQLString());
+        data.put("${field.name}", ${field.name}.toSQLString());
 <#else>
-        data.put("${field.name}", ${field.rvid});
+        data.put("${field.name}", ${field.name});
+</#if>
 </#if>
 </#list>
     }
@@ -1080,6 +1111,13 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.pkeytype},${ENTITYIN
         protected final EntityPersistenceProvider createEntityPersistenceProvider() {
             return EntityPersistenceProviderManager.getEntityPersistenceProvider("${ENTITYINFO.dbkey}", "${ENTITYINFO.dbtablename}");
         }
+
+<#if ENTITYINFO.pkey = "id" >
+        @Override
+        protected boolean isPersistent(Integer pkey) {
+            return pkey > 0;
+        }
+</#if>
     }
 <#list ENTITYINFO.child![] as child>
 <#if child.sort = "yes" >
