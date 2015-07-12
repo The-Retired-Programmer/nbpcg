@@ -162,7 +162,7 @@ public class ${entity.name} implements Serializable, IdandstampEntity<${entity.n
     
     @Override
     public void writePKwithkey(JsonGenerator generator) {
-        JsonUtil.writeIntegerValue(generator, "id", id);
+        JsonUtil.writeIntegerValue(generator, "pkey", id);
     }
 
     @Override
@@ -181,6 +181,19 @@ public class ${entity.name} implements Serializable, IdandstampEntity<${entity.n
 
 <#list entity.persistencefield![] as field >
 <#if field.jsontype = "Reference" | field.jsontype = "Integer" >
+<#if field.sys??>
+    @Override
+    public Integer get${field.name?cap_first}() {
+        return ${field.name};
+    }
+
+    @Override
+    public void set${field.name?cap_first}(Integer ${field.name}) {
+        this.${field.name} = ${field.name};
+    }
+
+<#else>
+
     /**
      * Get the ${field.name}
      *
@@ -199,6 +212,7 @@ public class ${entity.name} implements Serializable, IdandstampEntity<${entity.n
         this.${field.name} = ${field.name};
     }
 
+</#if>
 <#elseif field.jsontype = "Boolean" >
 /**
      * Get the ${field.name}
@@ -228,6 +242,12 @@ public class ${entity.name} implements Serializable, IdandstampEntity<${entity.n
         return ${field.name};
     }
 
+<#if field.sys??>
+    @Override
+    public void set${field.name?cap_first}(String ${field.name}) {
+        this.${field.name} = ${field.name};
+    }
+<#else>
     /**
      * Set the ${field.name}
      *
@@ -236,6 +256,7 @@ public class ${entity.name} implements Serializable, IdandstampEntity<${entity.n
     public void set${field.name?cap_first}(String ${field.name}) {
         this.${field.name} = ${field.name};
     }
+</#if>
 
 </#if>
 </#list>
@@ -254,7 +275,7 @@ public class ${entity.name} implements Serializable, IdandstampEntity<${entity.n
             return false;
         }
         ${entity.name} other = (${entity.name}) object;
-        return !((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id)));
+        return this.id.equals(other.id);
     }
 
     @Override

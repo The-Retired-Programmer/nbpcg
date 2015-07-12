@@ -161,8 +161,8 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.pkeytype},${ENTITYIN
     private final ${field.references} ${field.name};
 <#elseif field.type == "idx">
 <#else>
-    private ${field.javatype} ${field.name}${field.initialisation};
-<#if !(field.hidden??) >
+    private <#if field.final??>final </#if>${field.javatype} ${field.name}${field.initialisation};
+<#if !field.hidden??>
     private ${field.javatype} ${field.name}Original;
     private final Rules ${field.name}Rules = new Rules();
 </#if>

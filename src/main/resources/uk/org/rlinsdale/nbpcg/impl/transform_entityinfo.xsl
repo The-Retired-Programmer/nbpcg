@@ -306,16 +306,16 @@
                             </xsl:choose>
                         </xsl:variable>
                         <xsl:if test="$pkey = 'idauto' ">
-                            <persistencefield name="id" jsontype="Integer" primarykey="auto" createsql="MEDIUMINT UNSIGNED AUTO_INCREMENT PRIMARY KEY"/>
+                            <persistencefield name="id" sys="yes" jsontype="Integer" primarykey="auto" createsql="MEDIUMINT UNSIGNED AUTO_INCREMENT PRIMARY KEY"/>
                         </xsl:if>
                         <xsl:if test="//node[@name=$ename and @orderable='yes']">
-                            <persistencefield name="idx" jsontype="Integer" primarykey="no" createsql="MEDIUMINT UNSIGNED NOT NULL" />
+                            <persistencefield name="idx" sys="yes" jsontype="Integer" primarykey="no" createsql="MEDIUMINT UNSIGNED NOT NULL" />
                         </xsl:if>
                         <xsl:if test="$extrafields = 'usertimestamp' ">
-                            <persistencefield name="createdby" primarykey="no" jsontype="String" min="4" max="4" createsql="CHAR(4) NOTNULL" />
-                            <persistencefield name="createdon" primarykey="no" jsontype="String" min="14" max="14" createsql="CHAR(14) NOTNULL" />
-                            <persistencefield name="updatedby" primarykey="no" jsontype="String" min="4" max="4" createsql="CHAR(4) NOTNULL" />
-                            <persistencefield name="updatedon" primarykey="no" jsontype="String" min="14" max="14" createsql="CHAR(14) NOTNULL" />
+                            <persistencefield name="createdby" sys="yes" primarykey="no" jsontype="String" min="4" max="4" createsql="CHAR(4) NOTNULL" />
+                            <persistencefield name="createdon" final="yes" sys="yes" primarykey="no" jsontype="String" min="14" max="14" createsql="CHAR(14) NOTNULL" />
+                            <persistencefield name="updatedby" sys="yes" primarykey="no" jsontype="String" min="4" max="4" createsql="CHAR(4) NOTNULL" />
+                            <persistencefield name="updatedon" final="yes" sys="yes" primarykey="no" jsontype="String" min="14" max="14" createsql="CHAR(14) NOTNULL" />
                         </xsl:if>
                         <!-- insert data into persistenceentity -->
                         <xsl:for-each select="insertentity">
@@ -629,9 +629,9 @@
                 </xsl:if>
                 <xsl:if test="$extrafields = 'usertimestamp' ">
                     <field name="createdby" pkey="no" hidden="yes" type="String" min="4" max="4" fieldclass="TextField" label="Created by" javatype="String" jsontype="String" initialisation=" = &quot;&quot;"/>
-                    <field name="createdon" pkey="no" hidden="yes" type="datetime" fieldclass="TextField" label="Created on" javatype="Timestamp" jsontype="String" initialisation=" = new Timestamp()"/>
+                    <field name="createdon" pkey="no" final="yes" hidden="yes" type="datetime" fieldclass="TextField" label="Created on" javatype="Timestamp" jsontype="String" initialisation=" = new Timestamp()"/>
                     <field name="updatedby" pkey="no" hidden="yes" type="String" min="4" max="4" fieldclass="TextField" label="Updated by" javatype="String" jsontype="String" initialisation=" = &quot;&quot;"/>
-                    <field name="updatedon" pkey="no" hidden="yes" type="datetime" fieldclass="TextField" label="Updated on" javatype="Timestamp" jsontype="String" initialisation=" = new Timestamp()"/>
+                    <field name="updatedon" pkey="no" final="yes" hidden="yes" type="datetime" fieldclass="TextField" label="Updated on" javatype="Timestamp" jsontype="String" initialisation=" = new Timestamp()"/>
                 </xsl:if>
                 <xsl:call-template name="children" >
                     <xsl:with-param name="entityname" select="$ename"/>

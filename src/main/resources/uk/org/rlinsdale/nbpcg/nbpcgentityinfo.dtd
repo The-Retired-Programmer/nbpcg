@@ -30,6 +30,7 @@
                 name CDATA #REQUIRED
                 pkey CDATA #REQUIRED
                 hidden (yes) #IMPLIED
+                final (yes) #IMPLIED
                 type (rootref|ref|String|int|reference|date|enum|idx|datetime|boolean|long|password) #REQUIRED
                 references CDATA #IMPLIED
                 label CDATA #REQUIRED
@@ -91,6 +92,8 @@
             <!ELEMENT persistencefield EMPTY>
                     <!ATTLIST persistencefield
                         name CDATA #REQUIRED
+                        final (yes) #IMPLIED
+                        sys (yes) #IMPLIED
                         jsontype (String|Integer|Reference|Boolean) #REQUIRED
                         primarykey CDATA #REQUIRED
                         createsql CDATA #REQUIRED
