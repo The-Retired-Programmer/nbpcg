@@ -66,7 +66,7 @@ import javax.json.stream.JsonGenerator;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import uk.org.rlinsdale.nbpcglibrary.common.LogicException;
+import uk.org.rlinsdale.nbpcglibrary.api.LogicException;
 import uk.org.rlinsdale.nbpcglibrary.remotedb.IdandstampCommandProcessor;
 import uk.org.rlinsdale.nbpcglibrary.json.JsonConversionException;
 

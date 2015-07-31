@@ -1,109 +1,168 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE nbpcg-build PUBLIC "-//uk/org/rlinsdale/nbpcgbuild/DTD NBPCGBUILD SCHEMA 1.0//EN" "nbres:/uk/org/rlinsdale/nbpcg/nbpcgbuild.dtd">
-<nbpcg-build name="Mark Timings">
-    <folder name="data" project="Mark Timings Recorder - generated code" package="uk.org.rlinsdale.marktimingsrecorder.dataobjects"/>
-    <folder name="node" project="Mark Timings Recorder - generated code" package="uk.org.rlinsdale.marktimingsrecorder.nodes"/>
-    <folder name="nodeviewer" project="Mark Timings Recorder - generated code" package="uk.org.rlinsdale.marktimingsrecorder.topcomponents"/>
-    <folder name="nodeeditor" project="Mark Timings Recorder - generated code" package="uk.org.rlinsdale.marktimingsrecorder.topcomponents"/>
-    <scriptfolder project="Mark Timings Recorder - generated code"/>
-    <execute action="message" message="generating script files"/>
-    <execute action="entitytemplate" template="create" folder="script" filename="coaching-createdb.sql" usedbinfo="coaching" log="uk.org.rlinsdale.marktimingsrecorder" package="generated-scripts" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="backupscript" folder="script" filename="coaching-backupscript.sh" usedbinfo="coaching" log="uk.org.rlinsdale.marktimingsrecorder" package="generated-scripts" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="createtables" folder="script" filename="coaching-createtables.sql" usedbinfo="coaching" log="uk.org.rlinsdale.marktimingsrecorder" package="generated-scripts" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="message" message="generating data files"/>
-    <execute action="entitytemplate" template="rootentity" folder="data" filename="DinghyclassRoot.java" useentityinfo="DinghyclassRoot" nodepackage="uk.org.rlinsdale.marktimingsrecorder.nodes" log="uk.org.rlinsdale.marktimingsrecorder" package="uk.org.rlinsdale.marktimingsrecorder.dataobjects" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="rootentity" folder="data" filename="DinghyRoot.java" useentityinfo="DinghyRoot" nodepackage="uk.org.rlinsdale.marktimingsrecorder.nodes" log="uk.org.rlinsdale.marktimingsrecorder" package="uk.org.rlinsdale.marktimingsrecorder.dataobjects" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="rootentity" folder="data" filename="CompetitorRoot.java" useentityinfo="CompetitorRoot" nodepackage="uk.org.rlinsdale.marktimingsrecorder.nodes" log="uk.org.rlinsdale.marktimingsrecorder" package="uk.org.rlinsdale.marktimingsrecorder.dataobjects" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="rootentity" folder="data" filename="MarkRoot.java" useentityinfo="MarkRoot" nodepackage="uk.org.rlinsdale.marktimingsrecorder.nodes" log="uk.org.rlinsdale.marktimingsrecorder" package="uk.org.rlinsdale.marktimingsrecorder.dataobjects" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="rootentity" folder="data" filename="EntryRoot.java" useentityinfo="EntryRoot" nodepackage="uk.org.rlinsdale.marktimingsrecorder.nodes" log="uk.org.rlinsdale.marktimingsrecorder" package="uk.org.rlinsdale.marktimingsrecorder.dataobjects" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="rootentity" folder="data" filename="RaceseriesRoot.java" useentityinfo="RaceseriesRoot" nodepackage="uk.org.rlinsdale.marktimingsrecorder.nodes" log="uk.org.rlinsdale.marktimingsrecorder" package="uk.org.rlinsdale.marktimingsrecorder.dataobjects" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="entity" folder="data" filename="Mark.java" useentityinfo="Mark" nodepackage="uk.org.rlinsdale.marktimingsrecorder.nodes" log="uk.org.rlinsdale.marktimingsrecorder" package="uk.org.rlinsdale.marktimingsrecorder.dataobjects" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="entity" folder="data" filename="Competitor.java" useentityinfo="Competitor" nodepackage="uk.org.rlinsdale.marktimingsrecorder.nodes" log="uk.org.rlinsdale.marktimingsrecorder" package="uk.org.rlinsdale.marktimingsrecorder.dataobjects" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="entity" folder="data" filename="Dinghyclass.java" useentityinfo="Dinghyclass" nodepackage="uk.org.rlinsdale.marktimingsrecorder.nodes" log="uk.org.rlinsdale.marktimingsrecorder" package="uk.org.rlinsdale.marktimingsrecorder.dataobjects" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="entity" folder="data" filename="Dinghy.java" useentityinfo="Dinghy" nodepackage="uk.org.rlinsdale.marktimingsrecorder.nodes" log="uk.org.rlinsdale.marktimingsrecorder" package="uk.org.rlinsdale.marktimingsrecorder.dataobjects" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="entity" folder="data" filename="Raceseries.java" useentityinfo="Raceseries" nodepackage="uk.org.rlinsdale.marktimingsrecorder.nodes" log="uk.org.rlinsdale.marktimingsrecorder" package="uk.org.rlinsdale.marktimingsrecorder.dataobjects" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="entity" folder="data" filename="Race.java" useentityinfo="Race" nodepackage="uk.org.rlinsdale.marktimingsrecorder.nodes" log="uk.org.rlinsdale.marktimingsrecorder" package="uk.org.rlinsdale.marktimingsrecorder.dataobjects" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="entity" folder="data" filename="Entry.java" useentityinfo="Entry" nodepackage="uk.org.rlinsdale.marktimingsrecorder.nodes" log="uk.org.rlinsdale.marktimingsrecorder" package="uk.org.rlinsdale.marktimingsrecorder.dataobjects" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="entity" folder="data" filename="Raceentry.java" useentityinfo="Raceentry" nodepackage="uk.org.rlinsdale.marktimingsrecorder.nodes" log="uk.org.rlinsdale.marktimingsrecorder" package="uk.org.rlinsdale.marktimingsrecorder.dataobjects" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="entity" folder="data" filename="Coursemark.java" useentityinfo="Coursemark" nodepackage="uk.org.rlinsdale.marktimingsrecorder.nodes" log="uk.org.rlinsdale.marktimingsrecorder" package="uk.org.rlinsdale.marktimingsrecorder.dataobjects" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="entity" folder="data" filename="Timing.java" useentityinfo="Timing" nodepackage="uk.org.rlinsdale.marktimingsrecorder.nodes" log="uk.org.rlinsdale.marktimingsrecorder" package="uk.org.rlinsdale.marktimingsrecorder.dataobjects" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="message" message="generating node files"/>
-    <execute action="entitytemplate" template="rootnode" type="" folder="node" filename="DinghyclassRootNode.java" useentityinfo="DinghyclassRoot" datapackage="uk.org.rlinsdale.marktimingsrecorder.dataobjects" nodepackage="uk.org.rlinsdale.marktimingsrecorder.nodes" log="uk.org.rlinsdale.marktimingsrecorder" package="uk.org.rlinsdale.marktimingsrecorder.nodes" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="rootnode" type="" folder="node" filename="DinghyRootNode.java" useentityinfo="DinghyRoot" datapackage="uk.org.rlinsdale.marktimingsrecorder.dataobjects" nodepackage="uk.org.rlinsdale.marktimingsrecorder.nodes" log="uk.org.rlinsdale.marktimingsrecorder" package="uk.org.rlinsdale.marktimingsrecorder.nodes" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="rootnode" type="" folder="node" filename="CompetitorRootNode.java" useentityinfo="CompetitorRoot" datapackage="uk.org.rlinsdale.marktimingsrecorder.dataobjects" nodepackage="uk.org.rlinsdale.marktimingsrecorder.nodes" log="uk.org.rlinsdale.marktimingsrecorder" package="uk.org.rlinsdale.marktimingsrecorder.nodes" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="rootnode" type="" folder="node" filename="MarkRootNode.java" useentityinfo="MarkRoot" datapackage="uk.org.rlinsdale.marktimingsrecorder.dataobjects" nodepackage="uk.org.rlinsdale.marktimingsrecorder.nodes" log="uk.org.rlinsdale.marktimingsrecorder" package="uk.org.rlinsdale.marktimingsrecorder.nodes" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="rootnode" type="" folder="node" filename="EntryRootNode.java" useentityinfo="EntryRoot" datapackage="uk.org.rlinsdale.marktimingsrecorder.dataobjects" nodepackage="uk.org.rlinsdale.marktimingsrecorder.nodes" log="uk.org.rlinsdale.marktimingsrecorder" package="uk.org.rlinsdale.marktimingsrecorder.nodes" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="rootnode" type="" folder="node" filename="RaceseriesRootNode.java" useentityinfo="RaceseriesRoot" datapackage="uk.org.rlinsdale.marktimingsrecorder.dataobjects" nodepackage="uk.org.rlinsdale.marktimingsrecorder.nodes" log="uk.org.rlinsdale.marktimingsrecorder" package="uk.org.rlinsdale.marktimingsrecorder.nodes" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="node" type="" folder="node" filename="DinghyclassNode.java" useentityinfo="Dinghyclass" datapackage="uk.org.rlinsdale.marktimingsrecorder.dataobjects" nodepackage="uk.org.rlinsdale.marktimingsrecorder.nodes" log="uk.org.rlinsdale.marktimingsrecorder" package="uk.org.rlinsdale.marktimingsrecorder.nodes" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="node" type="" folder="node" filename="DinghyNode.java" useentityinfo="Dinghy" datapackage="uk.org.rlinsdale.marktimingsrecorder.dataobjects" nodepackage="uk.org.rlinsdale.marktimingsrecorder.nodes" log="uk.org.rlinsdale.marktimingsrecorder" package="uk.org.rlinsdale.marktimingsrecorder.nodes" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="node" type="" folder="node" filename="CompetitorNode.java" useentityinfo="Competitor" datapackage="uk.org.rlinsdale.marktimingsrecorder.dataobjects" nodepackage="uk.org.rlinsdale.marktimingsrecorder.nodes" log="uk.org.rlinsdale.marktimingsrecorder" package="uk.org.rlinsdale.marktimingsrecorder.nodes" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="node" type="" folder="node" filename="MarkNode.java" useentityinfo="Mark" datapackage="uk.org.rlinsdale.marktimingsrecorder.dataobjects" nodepackage="uk.org.rlinsdale.marktimingsrecorder.nodes" log="uk.org.rlinsdale.marktimingsrecorder" package="uk.org.rlinsdale.marktimingsrecorder.nodes" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="node" type="" folder="node" filename="EntryNode.java" useentityinfo="Entry" datapackage="uk.org.rlinsdale.marktimingsrecorder.dataobjects" nodepackage="uk.org.rlinsdale.marktimingsrecorder.nodes" log="uk.org.rlinsdale.marktimingsrecorder" package="uk.org.rlinsdale.marktimingsrecorder.nodes" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="node" type="" folder="node" filename="RaceseriesNode.java" useentityinfo="Raceseries" datapackage="uk.org.rlinsdale.marktimingsrecorder.dataobjects" nodepackage="uk.org.rlinsdale.marktimingsrecorder.nodes" log="uk.org.rlinsdale.marktimingsrecorder" package="uk.org.rlinsdale.marktimingsrecorder.nodes" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="node" type="" folder="node" filename="RaceNode.java" useentityinfo="Race" datapackage="uk.org.rlinsdale.marktimingsrecorder.dataobjects" nodepackage="uk.org.rlinsdale.marktimingsrecorder.nodes" log="uk.org.rlinsdale.marktimingsrecorder" package="uk.org.rlinsdale.marktimingsrecorder.nodes" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="node" type="" folder="node" filename="CoursemarkNode.java" useentityinfo="Coursemark" datapackage="uk.org.rlinsdale.marktimingsrecorder.dataobjects" nodepackage="uk.org.rlinsdale.marktimingsrecorder.nodes" log="uk.org.rlinsdale.marktimingsrecorder" package="uk.org.rlinsdale.marktimingsrecorder.nodes" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="node" type="" folder="node" filename="TimingNode.java" useentityinfo="Timing" datapackage="uk.org.rlinsdale.marktimingsrecorder.dataobjects" nodepackage="uk.org.rlinsdale.marktimingsrecorder.nodes" log="uk.org.rlinsdale.marktimingsrecorder" package="uk.org.rlinsdale.marktimingsrecorder.nodes" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="node" type="" folder="node" filename="RaceentryNode.java" useentityinfo="Raceentry" datapackage="uk.org.rlinsdale.marktimingsrecorder.dataobjects" nodepackage="uk.org.rlinsdale.marktimingsrecorder.nodes" log="uk.org.rlinsdale.marktimingsrecorder" package="uk.org.rlinsdale.marktimingsrecorder.nodes" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="nodefactory" type="" folder="node" filename="DinghyclassRootNodeChildFactory.java" useentityinfo="DinghyclassRoot" datapackage="uk.org.rlinsdale.marktimingsrecorder.dataobjects" log="uk.org.rlinsdale.marktimingsrecorder" package="uk.org.rlinsdale.marktimingsrecorder.nodes" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="nodefactory" type="" folder="node" filename="DinghyRootNodeChildFactory.java" useentityinfo="DinghyRoot" datapackage="uk.org.rlinsdale.marktimingsrecorder.dataobjects" log="uk.org.rlinsdale.marktimingsrecorder" package="uk.org.rlinsdale.marktimingsrecorder.nodes" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="nodefactory" type="" folder="node" filename="CompetitorRootNodeChildFactory.java" useentityinfo="CompetitorRoot" datapackage="uk.org.rlinsdale.marktimingsrecorder.dataobjects" log="uk.org.rlinsdale.marktimingsrecorder" package="uk.org.rlinsdale.marktimingsrecorder.nodes" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="nodefactory" type="" folder="node" filename="MarkRootNodeChildFactory.java" useentityinfo="MarkRoot" datapackage="uk.org.rlinsdale.marktimingsrecorder.dataobjects" log="uk.org.rlinsdale.marktimingsrecorder" package="uk.org.rlinsdale.marktimingsrecorder.nodes" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="nodefactory" type="" folder="node" filename="EntryRootNodeChildFactory.java" useentityinfo="EntryRoot" datapackage="uk.org.rlinsdale.marktimingsrecorder.dataobjects" log="uk.org.rlinsdale.marktimingsrecorder" package="uk.org.rlinsdale.marktimingsrecorder.nodes" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="nodefactory" type="" folder="node" filename="RaceseriesRootNodeChildFactory.java" useentityinfo="RaceseriesRoot" datapackage="uk.org.rlinsdale.marktimingsrecorder.dataobjects" log="uk.org.rlinsdale.marktimingsrecorder" package="uk.org.rlinsdale.marktimingsrecorder.nodes" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="nodefactory" type="" folder="node" filename="RaceseriesNodeChildFactory.java" useentityinfo="Raceseries" datapackage="uk.org.rlinsdale.marktimingsrecorder.dataobjects" log="uk.org.rlinsdale.marktimingsrecorder" package="uk.org.rlinsdale.marktimingsrecorder.nodes" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="nodefactory" type="" folder="node" filename="RaceNodeChildFactory.java" useentityinfo="Race" datapackage="uk.org.rlinsdale.marktimingsrecorder.dataobjects" log="uk.org.rlinsdale.marktimingsrecorder" package="uk.org.rlinsdale.marktimingsrecorder.nodes" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="nodefactory" type="" folder="node" filename="CoursemarkNodeChildFactory.java" useentityinfo="Coursemark" datapackage="uk.org.rlinsdale.marktimingsrecorder.dataobjects" log="uk.org.rlinsdale.marktimingsrecorder" package="uk.org.rlinsdale.marktimingsrecorder.nodes" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="undonode" folder="node" filename="UndoDinghyclassNode.java" useentityinfo="Dinghyclass" datapackage="uk.org.rlinsdale.marktimingsrecorder.dataobjects" nodepackage="uk.org.rlinsdale.marktimingsrecorder.nodes" log="uk.org.rlinsdale.marktimingsrecorder" package="uk.org.rlinsdale.marktimingsrecorder.nodes" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="undonode" folder="node" filename="UndoDinghyNode.java" useentityinfo="Dinghy" datapackage="uk.org.rlinsdale.marktimingsrecorder.dataobjects" nodepackage="uk.org.rlinsdale.marktimingsrecorder.nodes" log="uk.org.rlinsdale.marktimingsrecorder" package="uk.org.rlinsdale.marktimingsrecorder.nodes" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="undonode" folder="node" filename="UndoCompetitorNode.java" useentityinfo="Competitor" datapackage="uk.org.rlinsdale.marktimingsrecorder.dataobjects" nodepackage="uk.org.rlinsdale.marktimingsrecorder.nodes" log="uk.org.rlinsdale.marktimingsrecorder" package="uk.org.rlinsdale.marktimingsrecorder.nodes" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="undonode" folder="node" filename="UndoMarkNode.java" useentityinfo="Mark" datapackage="uk.org.rlinsdale.marktimingsrecorder.dataobjects" nodepackage="uk.org.rlinsdale.marktimingsrecorder.nodes" log="uk.org.rlinsdale.marktimingsrecorder" package="uk.org.rlinsdale.marktimingsrecorder.nodes" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="undonode" folder="node" filename="UndoEntryNode.java" useentityinfo="Entry" datapackage="uk.org.rlinsdale.marktimingsrecorder.dataobjects" nodepackage="uk.org.rlinsdale.marktimingsrecorder.nodes" log="uk.org.rlinsdale.marktimingsrecorder" package="uk.org.rlinsdale.marktimingsrecorder.nodes" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="undonode" folder="node" filename="UndoRaceseriesNode.java" useentityinfo="Raceseries" datapackage="uk.org.rlinsdale.marktimingsrecorder.dataobjects" nodepackage="uk.org.rlinsdale.marktimingsrecorder.nodes" log="uk.org.rlinsdale.marktimingsrecorder" package="uk.org.rlinsdale.marktimingsrecorder.nodes" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="undonode" folder="node" filename="UndoRaceNode.java" useentityinfo="Race" datapackage="uk.org.rlinsdale.marktimingsrecorder.dataobjects" nodepackage="uk.org.rlinsdale.marktimingsrecorder.nodes" log="uk.org.rlinsdale.marktimingsrecorder" package="uk.org.rlinsdale.marktimingsrecorder.nodes" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="undonode" folder="node" filename="UndoCoursemarkNode.java" useentityinfo="Coursemark" datapackage="uk.org.rlinsdale.marktimingsrecorder.dataobjects" nodepackage="uk.org.rlinsdale.marktimingsrecorder.nodes" log="uk.org.rlinsdale.marktimingsrecorder" package="uk.org.rlinsdale.marktimingsrecorder.nodes" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="undonode" folder="node" filename="UndoTimingNode.java" useentityinfo="Timing" datapackage="uk.org.rlinsdale.marktimingsrecorder.dataobjects" nodepackage="uk.org.rlinsdale.marktimingsrecorder.nodes" log="uk.org.rlinsdale.marktimingsrecorder" package="uk.org.rlinsdale.marktimingsrecorder.nodes" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="undonode" folder="node" filename="UndoRaceentryNode.java" useentityinfo="Raceentry" datapackage="uk.org.rlinsdale.marktimingsrecorder.dataobjects" nodepackage="uk.org.rlinsdale.marktimingsrecorder.nodes" log="uk.org.rlinsdale.marktimingsrecorder" package="uk.org.rlinsdale.marktimingsrecorder.nodes" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="addnode" folder="node" filename="AddDinghyclassNode.java" useentityinfo="Dinghyclass" datapackage="uk.org.rlinsdale.marktimingsrecorder.dataobjects" nodepackage="uk.org.rlinsdale.marktimingsrecorder.nodes" log="uk.org.rlinsdale.marktimingsrecorder" package="uk.org.rlinsdale.marktimingsrecorder.nodes" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="addnode" folder="node" filename="AddDinghyNode.java" useentityinfo="Dinghy" datapackage="uk.org.rlinsdale.marktimingsrecorder.dataobjects" nodepackage="uk.org.rlinsdale.marktimingsrecorder.nodes" log="uk.org.rlinsdale.marktimingsrecorder" package="uk.org.rlinsdale.marktimingsrecorder.nodes" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="addnode" folder="node" filename="AddCompetitorNode.java" useentityinfo="Competitor" datapackage="uk.org.rlinsdale.marktimingsrecorder.dataobjects" nodepackage="uk.org.rlinsdale.marktimingsrecorder.nodes" log="uk.org.rlinsdale.marktimingsrecorder" package="uk.org.rlinsdale.marktimingsrecorder.nodes" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="addnode" folder="node" filename="AddMarkNode.java" useentityinfo="Mark" datapackage="uk.org.rlinsdale.marktimingsrecorder.dataobjects" nodepackage="uk.org.rlinsdale.marktimingsrecorder.nodes" log="uk.org.rlinsdale.marktimingsrecorder" package="uk.org.rlinsdale.marktimingsrecorder.nodes" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="addnode" folder="node" filename="AddEntryNode.java" useentityinfo="Entry" datapackage="uk.org.rlinsdale.marktimingsrecorder.dataobjects" nodepackage="uk.org.rlinsdale.marktimingsrecorder.nodes" log="uk.org.rlinsdale.marktimingsrecorder" package="uk.org.rlinsdale.marktimingsrecorder.nodes" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="addnode" folder="node" filename="AddRaceseriesNode.java" useentityinfo="Raceseries" datapackage="uk.org.rlinsdale.marktimingsrecorder.dataobjects" nodepackage="uk.org.rlinsdale.marktimingsrecorder.nodes" log="uk.org.rlinsdale.marktimingsrecorder" package="uk.org.rlinsdale.marktimingsrecorder.nodes" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="addnode" folder="node" filename="AddRaceNode.java" useentityinfo="Race" datapackage="uk.org.rlinsdale.marktimingsrecorder.dataobjects" nodepackage="uk.org.rlinsdale.marktimingsrecorder.nodes" log="uk.org.rlinsdale.marktimingsrecorder" package="uk.org.rlinsdale.marktimingsrecorder.nodes" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="addnode" folder="node" filename="AddCoursemarkNode.java" useentityinfo="Coursemark" datapackage="uk.org.rlinsdale.marktimingsrecorder.dataobjects" nodepackage="uk.org.rlinsdale.marktimingsrecorder.nodes" log="uk.org.rlinsdale.marktimingsrecorder" package="uk.org.rlinsdale.marktimingsrecorder.nodes" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="addnode" folder="node" filename="AddTimingNode.java" useentityinfo="Timing" datapackage="uk.org.rlinsdale.marktimingsrecorder.dataobjects" nodepackage="uk.org.rlinsdale.marktimingsrecorder.nodes" log="uk.org.rlinsdale.marktimingsrecorder" package="uk.org.rlinsdale.marktimingsrecorder.nodes" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="addnode" folder="node" filename="AddRaceentryNode.java" useentityinfo="Raceentry" datapackage="uk.org.rlinsdale.marktimingsrecorder.dataobjects" nodepackage="uk.org.rlinsdale.marktimingsrecorder.nodes" log="uk.org.rlinsdale.marktimingsrecorder" package="uk.org.rlinsdale.marktimingsrecorder.nodes" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="message" message="generating node editor files"/>
-    <execute action="entitytemplate" template="nodeeditor" folder="nodeeditor" filename="MarkNodeEditor.java" useentityinfo="Mark" datapackage="uk.org.rlinsdale.marktimingsrecorder.dataobjects" nodepackage="uk.org.rlinsdale.marktimingsrecorder.nodes" log="uk.org.rlinsdale.marktimingsrecorder" package="uk.org.rlinsdale.marktimingsrecorder.topcomponents" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="nodeeditor" folder="nodeeditor" filename="CompetitorNodeEditor.java" useentityinfo="Competitor" datapackage="uk.org.rlinsdale.marktimingsrecorder.dataobjects" nodepackage="uk.org.rlinsdale.marktimingsrecorder.nodes" log="uk.org.rlinsdale.marktimingsrecorder" package="uk.org.rlinsdale.marktimingsrecorder.topcomponents" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="nodeeditor" folder="nodeeditor" filename="DinghyclassNodeEditor.java" useentityinfo="Dinghyclass" datapackage="uk.org.rlinsdale.marktimingsrecorder.dataobjects" nodepackage="uk.org.rlinsdale.marktimingsrecorder.nodes" log="uk.org.rlinsdale.marktimingsrecorder" package="uk.org.rlinsdale.marktimingsrecorder.topcomponents" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="nodeeditor" folder="nodeeditor" filename="DinghyNodeEditor.java" useentityinfo="Dinghy" datapackage="uk.org.rlinsdale.marktimingsrecorder.dataobjects" nodepackage="uk.org.rlinsdale.marktimingsrecorder.nodes" log="uk.org.rlinsdale.marktimingsrecorder" package="uk.org.rlinsdale.marktimingsrecorder.topcomponents" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="nodeeditor" folder="nodeeditor" filename="RaceseriesNodeEditor.java" useentityinfo="Raceseries" datapackage="uk.org.rlinsdale.marktimingsrecorder.dataobjects" nodepackage="uk.org.rlinsdale.marktimingsrecorder.nodes" log="uk.org.rlinsdale.marktimingsrecorder" package="uk.org.rlinsdale.marktimingsrecorder.topcomponents" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="nodeeditor" folder="nodeeditor" filename="RaceNodeEditor.java" useentityinfo="Race" datapackage="uk.org.rlinsdale.marktimingsrecorder.dataobjects" nodepackage="uk.org.rlinsdale.marktimingsrecorder.nodes" log="uk.org.rlinsdale.marktimingsrecorder" package="uk.org.rlinsdale.marktimingsrecorder.topcomponents" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="nodeeditor" folder="nodeeditor" filename="EntryNodeEditor.java" useentityinfo="Entry" datapackage="uk.org.rlinsdale.marktimingsrecorder.dataobjects" nodepackage="uk.org.rlinsdale.marktimingsrecorder.nodes" log="uk.org.rlinsdale.marktimingsrecorder" package="uk.org.rlinsdale.marktimingsrecorder.topcomponents" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="nodeeditor" folder="nodeeditor" filename="RaceentryNodeEditor.java" useentityinfo="Raceentry" datapackage="uk.org.rlinsdale.marktimingsrecorder.dataobjects" nodepackage="uk.org.rlinsdale.marktimingsrecorder.nodes" log="uk.org.rlinsdale.marktimingsrecorder" package="uk.org.rlinsdale.marktimingsrecorder.topcomponents" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="nodeeditor" folder="nodeeditor" filename="CoursemarkNodeEditor.java" useentityinfo="Coursemark" datapackage="uk.org.rlinsdale.marktimingsrecorder.dataobjects" nodepackage="uk.org.rlinsdale.marktimingsrecorder.nodes" log="uk.org.rlinsdale.marktimingsrecorder" package="uk.org.rlinsdale.marktimingsrecorder.topcomponents" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="nodeeditor" folder="nodeeditor" filename="TimingNodeEditor.java" useentityinfo="Timing" datapackage="uk.org.rlinsdale.marktimingsrecorder.dataobjects" nodepackage="uk.org.rlinsdale.marktimingsrecorder.nodes" log="uk.org.rlinsdale.marktimingsrecorder" package="uk.org.rlinsdale.marktimingsrecorder.topcomponents" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="editnode" folder="nodeeditor" filename="EditDinghyclassNode.java" useentityinfo="Dinghyclass" datapackage="uk.org.rlinsdale.marktimingsrecorder.dataobjects" nodepackage="uk.org.rlinsdale.marktimingsrecorder.nodes" nodeeditorpackage="uk.org.rlinsdale.marktimingsrecorder.topcomponents" log="uk.org.rlinsdale.marktimingsrecorder" package="uk.org.rlinsdale.marktimingsrecorder.topcomponents" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="editnode" folder="nodeeditor" filename="EditDinghyNode.java" useentityinfo="Dinghy" datapackage="uk.org.rlinsdale.marktimingsrecorder.dataobjects" nodepackage="uk.org.rlinsdale.marktimingsrecorder.nodes" nodeeditorpackage="uk.org.rlinsdale.marktimingsrecorder.topcomponents" log="uk.org.rlinsdale.marktimingsrecorder" package="uk.org.rlinsdale.marktimingsrecorder.topcomponents" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="editnode" folder="nodeeditor" filename="EditCompetitorNode.java" useentityinfo="Competitor" datapackage="uk.org.rlinsdale.marktimingsrecorder.dataobjects" nodepackage="uk.org.rlinsdale.marktimingsrecorder.nodes" nodeeditorpackage="uk.org.rlinsdale.marktimingsrecorder.topcomponents" log="uk.org.rlinsdale.marktimingsrecorder" package="uk.org.rlinsdale.marktimingsrecorder.topcomponents" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="editnode" folder="nodeeditor" filename="EditMarkNode.java" useentityinfo="Mark" datapackage="uk.org.rlinsdale.marktimingsrecorder.dataobjects" nodepackage="uk.org.rlinsdale.marktimingsrecorder.nodes" nodeeditorpackage="uk.org.rlinsdale.marktimingsrecorder.topcomponents" log="uk.org.rlinsdale.marktimingsrecorder" package="uk.org.rlinsdale.marktimingsrecorder.topcomponents" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="editnode" folder="nodeeditor" filename="EditEntryNode.java" useentityinfo="Entry" datapackage="uk.org.rlinsdale.marktimingsrecorder.dataobjects" nodepackage="uk.org.rlinsdale.marktimingsrecorder.nodes" nodeeditorpackage="uk.org.rlinsdale.marktimingsrecorder.topcomponents" log="uk.org.rlinsdale.marktimingsrecorder" package="uk.org.rlinsdale.marktimingsrecorder.topcomponents" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="editnode" folder="nodeeditor" filename="EditRaceseriesNode.java" useentityinfo="Raceseries" datapackage="uk.org.rlinsdale.marktimingsrecorder.dataobjects" nodepackage="uk.org.rlinsdale.marktimingsrecorder.nodes" nodeeditorpackage="uk.org.rlinsdale.marktimingsrecorder.topcomponents" log="uk.org.rlinsdale.marktimingsrecorder" package="uk.org.rlinsdale.marktimingsrecorder.topcomponents" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="editnode" folder="nodeeditor" filename="EditRaceNode.java" useentityinfo="Race" datapackage="uk.org.rlinsdale.marktimingsrecorder.dataobjects" nodepackage="uk.org.rlinsdale.marktimingsrecorder.nodes" nodeeditorpackage="uk.org.rlinsdale.marktimingsrecorder.topcomponents" log="uk.org.rlinsdale.marktimingsrecorder" package="uk.org.rlinsdale.marktimingsrecorder.topcomponents" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="editnode" folder="nodeeditor" filename="EditCoursemarkNode.java" useentityinfo="Coursemark" datapackage="uk.org.rlinsdale.marktimingsrecorder.dataobjects" nodepackage="uk.org.rlinsdale.marktimingsrecorder.nodes" nodeeditorpackage="uk.org.rlinsdale.marktimingsrecorder.topcomponents" log="uk.org.rlinsdale.marktimingsrecorder" package="uk.org.rlinsdale.marktimingsrecorder.topcomponents" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="editnode" folder="nodeeditor" filename="EditTimingNode.java" useentityinfo="Timing" datapackage="uk.org.rlinsdale.marktimingsrecorder.dataobjects" nodepackage="uk.org.rlinsdale.marktimingsrecorder.nodes" nodeeditorpackage="uk.org.rlinsdale.marktimingsrecorder.topcomponents" log="uk.org.rlinsdale.marktimingsrecorder" package="uk.org.rlinsdale.marktimingsrecorder.topcomponents" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="editnode" folder="nodeeditor" filename="EditRaceentryNode.java" useentityinfo="Raceentry" datapackage="uk.org.rlinsdale.marktimingsrecorder.dataobjects" nodepackage="uk.org.rlinsdale.marktimingsrecorder.nodes" nodeeditorpackage="uk.org.rlinsdale.marktimingsrecorder.topcomponents" log="uk.org.rlinsdale.marktimingsrecorder" package="uk.org.rlinsdale.marktimingsrecorder.topcomponents" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="choice" folder="nodeeditor" filename="MarkChoiceField.java" useentityinfo="Mark" datapackage="uk.org.rlinsdale.marktimingsrecorder.dataobjects" nodepackage="uk.org.rlinsdale.marktimingsrecorder.nodes" log="uk.org.rlinsdale.marktimingsrecorder" package="uk.org.rlinsdale.marktimingsrecorder.topcomponents" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="choice" folder="nodeeditor" filename="CompetitorChoiceField.java" useentityinfo="Competitor" datapackage="uk.org.rlinsdale.marktimingsrecorder.dataobjects" nodepackage="uk.org.rlinsdale.marktimingsrecorder.nodes" log="uk.org.rlinsdale.marktimingsrecorder" package="uk.org.rlinsdale.marktimingsrecorder.topcomponents" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="choice" folder="nodeeditor" filename="DinghyclassChoiceField.java" useentityinfo="Dinghyclass" datapackage="uk.org.rlinsdale.marktimingsrecorder.dataobjects" nodepackage="uk.org.rlinsdale.marktimingsrecorder.nodes" log="uk.org.rlinsdale.marktimingsrecorder" package="uk.org.rlinsdale.marktimingsrecorder.topcomponents" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="choice" folder="nodeeditor" filename="DinghyChoiceField.java" useentityinfo="Dinghy" datapackage="uk.org.rlinsdale.marktimingsrecorder.dataobjects" nodepackage="uk.org.rlinsdale.marktimingsrecorder.nodes" log="uk.org.rlinsdale.marktimingsrecorder" package="uk.org.rlinsdale.marktimingsrecorder.topcomponents" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="choice" folder="nodeeditor" filename="EntryChoiceField.java" useentityinfo="Entry" datapackage="uk.org.rlinsdale.marktimingsrecorder.dataobjects" nodepackage="uk.org.rlinsdale.marktimingsrecorder.nodes" log="uk.org.rlinsdale.marktimingsrecorder" package="uk.org.rlinsdale.marktimingsrecorder.topcomponents" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="enumchoice" folder="nodeeditor" filename="RaceseriesTypeChoiceField.java" useentityinfo="Raceseries" usefield="type" datapackage="uk.org.rlinsdale.marktimingsrecorder.dataobjects" nodepackage="uk.org.rlinsdale.marktimingsrecorder.nodes" log="uk.org.rlinsdale.marktimingsrecorder" package="uk.org.rlinsdale.marktimingsrecorder.topcomponents" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="message" message="generating node viewer files"/>
-    <execute action="entitytemplate" template="rootnodeviewer" type="Tree" folder="nodeviewer" filename="DinghyclassRootNodeViewer.java" useentityinfo="DinghyclassRoot" datapackage="uk.org.rlinsdale.marktimingsrecorder.dataobjects" nodepackage="uk.org.rlinsdale.marktimingsrecorder.nodes" log="uk.org.rlinsdale.marktimingsrecorder" package="uk.org.rlinsdale.marktimingsrecorder.topcomponents" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="rootnodeviewer" type="Tree" folder="nodeviewer" filename="DinghyRootNodeViewer.java" useentityinfo="DinghyRoot" datapackage="uk.org.rlinsdale.marktimingsrecorder.dataobjects" nodepackage="uk.org.rlinsdale.marktimingsrecorder.nodes" log="uk.org.rlinsdale.marktimingsrecorder" package="uk.org.rlinsdale.marktimingsrecorder.topcomponents" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="rootnodeviewer" type="Tree" folder="nodeviewer" filename="CompetitorRootNodeViewer.java" useentityinfo="CompetitorRoot" datapackage="uk.org.rlinsdale.marktimingsrecorder.dataobjects" nodepackage="uk.org.rlinsdale.marktimingsrecorder.nodes" log="uk.org.rlinsdale.marktimingsrecorder" package="uk.org.rlinsdale.marktimingsrecorder.topcomponents" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="rootnodeviewer" type="Tree" folder="nodeviewer" filename="MarkRootNodeViewer.java" useentityinfo="MarkRoot" datapackage="uk.org.rlinsdale.marktimingsrecorder.dataobjects" nodepackage="uk.org.rlinsdale.marktimingsrecorder.nodes" log="uk.org.rlinsdale.marktimingsrecorder" package="uk.org.rlinsdale.marktimingsrecorder.topcomponents" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="rootnodeviewer" type="Tree" folder="nodeviewer" filename="EntryRootNodeViewer.java" useentityinfo="EntryRoot" datapackage="uk.org.rlinsdale.marktimingsrecorder.dataobjects" nodepackage="uk.org.rlinsdale.marktimingsrecorder.nodes" log="uk.org.rlinsdale.marktimingsrecorder" package="uk.org.rlinsdale.marktimingsrecorder.topcomponents" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
-    <execute action="entitytemplate" template="rootnodeviewer" type="Tree" folder="nodeviewer" filename="RaceseriesRootNodeViewer.java" useentityinfo="RaceseriesRoot" datapackage="uk.org.rlinsdale.marktimingsrecorder.dataobjects" nodepackage="uk.org.rlinsdale.marktimingsrecorder.nodes" log="uk.org.rlinsdale.marktimingsrecorder" package="uk.org.rlinsdale.marktimingsrecorder.topcomponents" license="gpl30" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)"/>
+<?xml version="1.0" encoding="UTF-8"?>
+
+    <!DOCTYPE nbpcg-build PUBLIC "-//uk/org/rlinsdale/nbpcgbuild/DTD NBPCGBUILD SCHEMA 1.0//EN" "nbres:/uk/org/rlinsdale/nbpcg/nbpcgbuild.dtd">
+<nbpcg-build name="Mark Timings" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)">
+    <folder project="Mark Timings Recorder - generated code" location="resource" package="uk.org.rlinsdale.marktimingsrecorder.mysql.coaching" message="generating mysql script files for coaching" log="marktimingsrecorder" license="gpl30">
+        <execute template="createsqldatabase" filename="createdb.sql" usepersistencestore="coaching"/>
+        <execute template="backupscript" filename="backupscript.sh" usepersistencestore="coaching"/>
+        <execute template="createsqltables" filename="createtables.sql" usepersistencestore="coaching"/>
+    </folder>
+    <folder project="Mark Timings Recorder - generated code" location="java" package="uk.org.rlinsdale.marktimingsrecorder.dataobjects" message="generating entity files" log="marktimingsrecorder" license="gpl30">
+        <execute template="rootentity" filename="DinghyclassRoot.java" useentityinfo="DinghyclassRoot"/>
+        <execute template="rootentity" filename="CompetitorRoot.java" useentityinfo="CompetitorRoot"/>
+        <execute template="rootentity" filename="MarkRoot.java" useentityinfo="MarkRoot"/>
+        <execute template="rootentity" filename="RaceseriesRoot.java" useentityinfo="RaceseriesRoot"/>
+        <execute template="entity" filename="Mark.java" useentityinfo="Mark"/>
+        <execute template="entity" filename="Competitor.java" useentityinfo="Competitor"/>
+        <execute template="entity" filename="Dinghyclass.java" useentityinfo="Dinghyclass"/>
+        <execute template="entity" filename="Dinghy.java" useentityinfo="Dinghy"/>
+        <execute template="entity" filename="Raceseries.java" useentityinfo="Raceseries"/>
+        <execute template="entity" filename="Race.java" useentityinfo="Race"/>
+        <execute template="entity" filename="Entry.java" useentityinfo="Entry"/>
+        <execute template="entity" filename="Raceentry.java" useentityinfo="Raceentry"/>
+        <execute template="entity" filename="Coursemark.java" useentityinfo="Coursemark"/>
+        <execute template="entity" filename="Timing.java" useentityinfo="Timing"/>
+    </folder>
+    <folder project="Mark Timings Recorder - generated code" location="java" package="uk.org.rlinsdale.marktimingsrecorder.nodes" message="generating node files" log="marktimingsrecorder" license="gpl30" datapackage="uk.org.rlinsdale.marktimingsrecorder.dataobjects">
+        <execute template="rootnode" type="" filename="DinghyclassRootNode.java" useentityinfo="DinghyclassRoot"/>
+        <execute template="rootnode" type="" filename="CompetitorRootNode.java" useentityinfo="CompetitorRoot"/>
+        <execute template="rootnode" type="" filename="MarkRootNode.java" useentityinfo="MarkRoot"/>
+        <execute template="rootnode" type="" filename="RaceseriesRootNode.java" useentityinfo="RaceseriesRoot"/>
+        <execute template="node" type="" filename="DinghyclassNode.java" useentityinfo="Dinghyclass"/>
+        <execute template="node" type="" filename="CompetitorNode.java" useentityinfo="Competitor"/>
+        <execute template="node" type="" filename="MarkNode.java" useentityinfo="Mark"/>
+        <execute template="node" type="" filename="RaceseriesNode.java" useentityinfo="Raceseries"/>
+        <execute template="node" type="" filename="DinghyNode.java" useentityinfo="Dinghy"/>
+        <execute template="node" type="" filename="EntryNode.java" useentityinfo="Entry"/>
+        <execute template="node" type="" filename="RaceNode.java" useentityinfo="Race"/>
+        <execute template="node" type="" filename="CoursemarkNode.java" useentityinfo="Coursemark"/>
+        <execute template="node" type="" filename="TimingNode.java" useentityinfo="Timing"/>
+        <execute template="node" type="" filename="RaceentryNode.java" useentityinfo="Raceentry"/>
+        <execute template="nodefactory" type="" filename="DinghyclassRootNodeChildFactory.java" useentityinfo="DinghyclassRoot"/>
+        <execute template="nodefactory" type="" filename="DinghyclassNodeChildFactory.java" useentityinfo="Dinghyclass"/>
+        <execute template="nodefactory" type="" filename="CompetitorRootNodeChildFactory.java" useentityinfo="CompetitorRoot"/>
+        <execute template="nodefactory" type="" filename="MarkRootNodeChildFactory.java" useentityinfo="MarkRoot"/>
+        <execute template="nodefactory" type="" filename="RaceseriesRootNodeChildFactory.java" useentityinfo="RaceseriesRoot"/>
+        <execute template="nodefactory" type="" filename="RaceseriesNodeChildFactory.java" useentityinfo="Raceseries"/>
+        <execute template="nodefactory" type="" filename="DinghyNodeChildFactory.java" useentityinfo="Dinghy"/>
+        <execute template="nodefactory" type="" filename="RaceNodeChildFactory.java" useentityinfo="Race"/>
+        <execute template="nodefactory" type="" filename="CoursemarkNodeChildFactory.java" useentityinfo="Coursemark"/>
+        <execute template="undonode" filename="UndoDinghyclassNode.java" useentityinfo="Dinghyclass"/>
+        <execute template="undonode" filename="UndoDinghyNode.java" useentityinfo="Dinghy"/>
+        <execute template="undonode" filename="UndoEntryNode.java" useentityinfo="Entry"/>
+        <execute template="undonode" filename="UndoCompetitorNode.java" useentityinfo="Competitor"/>
+        <execute template="undonode" filename="UndoMarkNode.java" useentityinfo="Mark"/>
+        <execute template="undonode" filename="UndoRaceseriesNode.java" useentityinfo="Raceseries"/>
+        <execute template="undonode" filename="UndoRaceNode.java" useentityinfo="Race"/>
+        <execute template="undonode" filename="UndoCoursemarkNode.java" useentityinfo="Coursemark"/>
+        <execute template="undonode" filename="UndoTimingNode.java" useentityinfo="Timing"/>
+        <execute template="undonode" filename="UndoRaceentryNode.java" useentityinfo="Raceentry"/>
+        <execute template="addnode" filename="AddDinghyclassNode.java" useentityinfo="Dinghyclass"/>
+        <execute template="addnode" filename="AddDinghyNode.java" useentityinfo="Dinghy"/>
+        <execute template="addnode" filename="AddEntryNode.java" useentityinfo="Entry"/>
+        <execute template="addnode" filename="AddCompetitorNode.java" useentityinfo="Competitor"/>
+        <execute template="addnode" filename="AddMarkNode.java" useentityinfo="Mark"/>
+        <execute template="addnode" filename="AddRaceseriesNode.java" useentityinfo="Raceseries"/>
+        <execute template="addnode" filename="AddRaceNode.java" useentityinfo="Race"/>
+        <execute template="addnode" filename="AddCoursemarkNode.java" useentityinfo="Coursemark"/>
+        <execute template="addnode" filename="AddTimingNode.java" useentityinfo="Timing"/>
+        <execute template="addnode" filename="AddRaceentryNode.java" useentityinfo="Raceentry"/>
+    </folder>
+    <folder project="Mark Timings Recorder - generated code" location="java" package="uk.org.rlinsdale.marktimingsrecorder.topcomponents" message="generating node viewer files" log="marktimingsrecorder" license="gpl30" datapackage="uk.org.rlinsdale.marktimingsrecorder.dataobjects" nodepackage="uk.org.rlinsdale.marktimingsrecorder.nodes">
+        <execute template="rootnodeviewer" type="Tree" filename="DinghyclassRootNodeViewer.java" useentityinfo="DinghyclassRoot"/>
+        <execute template="rootnodeviewer" type="Tree" filename="CompetitorRootNodeViewer.java" useentityinfo="CompetitorRoot"/>
+        <execute template="rootnodeviewer" type="Tree" filename="MarkRootNodeViewer.java" useentityinfo="MarkRoot"/>
+        <execute template="rootnodeviewer" type="Tree" filename="RaceseriesRootNodeViewer.java" useentityinfo="RaceseriesRoot"/>
+    </folder>
+    <folder project="Mark Timings Recorder - generated code" location="java" package="uk.org.rlinsdale.marktimingsrecorder.topcomponents" message="generating node editor files" log="marktimingsrecorder" license="gpl30" datapackage="uk.org.rlinsdale.marktimingsrecorder.dataobjects" nodepackage="uk.org.rlinsdale.marktimingsrecorder.nodes">
+        <execute template="nodeeditor" filename="MarkNodeEditor.java" useentityinfo="Mark"/>
+        <execute template="nodeeditor" filename="CompetitorNodeEditor.java" useentityinfo="Competitor"/>
+        <execute template="nodeeditor" filename="DinghyclassNodeEditor.java" useentityinfo="Dinghyclass"/>
+        <execute template="nodeeditor" filename="DinghyNodeEditor.java" useentityinfo="Dinghy"/>
+        <execute template="nodeeditor" filename="RaceseriesNodeEditor.java" useentityinfo="Raceseries"/>
+        <execute template="nodeeditor" filename="RaceNodeEditor.java" useentityinfo="Race"/>
+        <execute template="nodeeditor" filename="EntryNodeEditor.java" useentityinfo="Entry"/>
+        <execute template="nodeeditor" filename="RaceentryNodeEditor.java" useentityinfo="Raceentry"/>
+        <execute template="nodeeditor" filename="CoursemarkNodeEditor.java" useentityinfo="Coursemark"/>
+        <execute template="nodeeditor" filename="TimingNodeEditor.java" useentityinfo="Timing"/>
+        <execute template="editnode" filename="EditDinghyclassNode.java" useentityinfo="Dinghyclass"/>
+        <execute template="editnode" filename="EditDinghyNode.java" useentityinfo="Dinghy"/>
+        <execute template="editnode" filename="EditEntryNode.java" useentityinfo="Entry"/>
+        <execute template="editnode" filename="EditCompetitorNode.java" useentityinfo="Competitor"/>
+        <execute template="editnode" filename="EditMarkNode.java" useentityinfo="Mark"/>
+        <execute template="editnode" filename="EditRaceseriesNode.java" useentityinfo="Raceseries"/>
+        <execute template="editnode" filename="EditRaceNode.java" useentityinfo="Race"/>
+        <execute template="editnode" filename="EditCoursemarkNode.java" useentityinfo="Coursemark"/>
+        <execute template="editnode" filename="EditTimingNode.java" useentityinfo="Timing"/>
+        <execute template="editnode" filename="EditRaceentryNode.java" useentityinfo="Raceentry"/>
+        <execute template="choice" filename="MarkChoiceField.java" useentityinfo="Mark"/>
+        <execute template="choice" filename="CompetitorChoiceField.java" useentityinfo="Competitor"/>
+        <execute template="choice" filename="EntryChoiceField.java" useentityinfo="Entry"/>
+        <execute template="choice" filename="RaceentryChoiceField.java" useentityinfo="Raceentry"/>
+        <execute template="enumchoice" filename="RaceseriesTypeChoiceField.java" useentityinfo="Raceseries" usefield="type"/>
+    </folder>
 </nbpcg-build>
+    
+    
+        
+        
+        
+    
+    
+    
+    
+    
+        
+             
+                
+            
+            
+        
+    
+    
+    
+        
+            
+                
+            
+            
+                
+                
+            
+            
+                
+                
+            
+            
+                
+            
+            
+                
+                
+                
+                
+            
+            
+                
+                
+                
+                
+            
+            
+                
+                
+            
+            
+                
+            
+            
+                
+            
+            
+                
+                
+                
+                
+            
+        
+    

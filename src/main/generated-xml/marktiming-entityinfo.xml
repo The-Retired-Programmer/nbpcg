@@ -1,8 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE nbpcg-entity-info PUBLIC "-//uk/org/rlinsdale/nbpcgentityinfo/DTD NBPCGENTITYINFO SCHEMA 1.0//EN" "nbres:/uk/org/rlinsdale/nbpcg/nbpcgentityinfo.dtd">
 <nbpcg-entity-info name="Mark Timings">
-    <entityinfo key="Mark" name="Mark" dbkey="coaching" access="rw" dbtablename="Mark" withfields="Idandstamp" type="Idkeyauto" icon="flag_blue" orderable="no" sort="no" nodeorder="1" parentname="MarkRoot">
-        <field name="root" references="MarkRoot" type="rootref" label="Root" rvid="root" javatype="int" initialisation="" javarsget="getInt"/>
-        <field name="name" nullsql="NOT NULL" uniquesql="" min="1" max="10" fieldclass="TextField" sqltype="VARCHAR(10)" type="String" dbcolumnname="name" label="Name" rvid="name" javatype="String" initialisation=" = &quot;&quot;" javarsget="getString"/>
+    <entityinfo name="Mark" dbkey="coaching" dbtablename="Mark" pkey="id" pkeytype="Integer" icon="flag_blue" orderable="no" nodeorder="1" parentname="MarkRoot">
+        <field name="root" pkey="no" references="MarkRoot" type="rootref" label="Root" javatype="int" jsontype="Integer" initialisation=""/>
+        <field name="name" pkey="no" min="1" max="10" fieldclass="TextField" type="String" label="Name" javatype="String" jsontype="String" initialisation=" = &quot;&quot;"/>
+        <field name="id" pkey="yes" hidden="yes" type="int" fieldclass="TextField" label="Id" javatype="int" jsontype="Integer" initialisation=" = 0"/>
+        <field name="createdby" pkey="no" hidden="yes" type="String" min="4" max="4" fieldclass="TextField" label="Created by" javatype="String" jsontype="String" initialisation=" = &quot;&quot;"/>
+        <field name="createdon" pkey="no" final="yes" hidden="yes" type="datetime" fieldclass="TextField" label="Created on" javatype="Timestamp" jsontype="String" initialisation=" = new Timestamp()"/>
+        <field name="updatedby" pkey="no" hidden="yes" type="String" min="4" max="4" fieldclass="TextField" label="Updated by" javatype="String" jsontype="String" initialisation=" = &quot;&quot;"/>
+        <field name="updatedon" pkey="no" final="yes" hidden="yes" type="datetime" fieldclass="TextField" label="Updated on" javatype="Timestamp" jsontype="String" initialisation=" = new Timestamp()"/>
+        <referenced name="Race" field="startmark"/>
+        <referenced name="Race" field="finishmark" optional="yes"/>
+        <referenced name="Coursemark" field="mark"/>
         <sortformat format="{0}">
             <display field="Name" length="2"/>
         </sortformat>
@@ -10,10 +18,17 @@
             <display field="Name"/>
         </displaynameformat>
     </entityinfo>
-    <entityinfo key="Competitor" name="Competitor" dbkey="coaching" access="rw" dbtablename="Competitor" withfields="Idandstamp" type="Idkeyauto" icon="user" orderable="no" sort="no" nodeorder="1" parentname="CompetitorRoot">
-        <field name="root" references="CompetitorRoot" type="rootref" label="Root" rvid="root" javatype="int" initialisation="" javarsget="getInt"/>
-        <field name="firstname" nullsql="NOT NULL" uniquesql="" min="1" max="100" fieldclass="TextField" sqltype="VARCHAR(100)" type="String" dbcolumnname="firstname" label="Firstname" rvid="firstname" javatype="String" initialisation=" = &quot;&quot;" javarsget="getString"/>
-        <field name="familyname" nullsql="NOT NULL" uniquesql="" min="1" max="100" fieldclass="TextField" sqltype="VARCHAR(100)" type="String" dbcolumnname="familyname" label="Familyname" rvid="familyname" javatype="String" initialisation=" = &quot;&quot;" javarsget="getString"/>
+    <entityinfo name="Competitor" dbkey="coaching" dbtablename="Competitor" pkey="id" pkeytype="Integer" icon="user" orderable="no" nodeorder="1" parentname="CompetitorRoot">
+        <field name="root" pkey="no" references="CompetitorRoot" type="rootref" label="Root" javatype="int" jsontype="Integer" initialisation=""/>
+        <field name="firstname" pkey="no" min="1" max="100" fieldclass="TextField" type="String" label="Firstname" javatype="String" jsontype="String" initialisation=" = &quot;&quot;"/>
+        <field name="familyname" pkey="no" min="1" max="100" fieldclass="TextField" type="String" label="Familyname" javatype="String" jsontype="String" initialisation=" = &quot;&quot;"/>
+        <field name="id" pkey="yes" hidden="yes" type="int" fieldclass="TextField" label="Id" javatype="int" jsontype="Integer" initialisation=" = 0"/>
+        <field name="createdby" pkey="no" hidden="yes" type="String" min="4" max="4" fieldclass="TextField" label="Created by" javatype="String" jsontype="String" initialisation=" = &quot;&quot;"/>
+        <field name="createdon" pkey="no" final="yes" hidden="yes" type="datetime" fieldclass="TextField" label="Created on" javatype="Timestamp" jsontype="String" initialisation=" = new Timestamp()"/>
+        <field name="updatedby" pkey="no" hidden="yes" type="String" min="4" max="4" fieldclass="TextField" label="Updated by" javatype="String" jsontype="String" initialisation=" = &quot;&quot;"/>
+        <field name="updatedon" pkey="no" final="yes" hidden="yes" type="datetime" fieldclass="TextField" label="Updated on" javatype="Timestamp" jsontype="String" initialisation=" = new Timestamp()"/>
+        <referenced name="Entry" field="helm"/>
+        <referenced name="Entry" field="crew" optional="yes"/>
         <sortformat format="{0} {1}">
             <display field="Familyname"/>
             <display field="Firstname"/>
@@ -23,10 +38,16 @@
             <display field="Familyname"/>
         </displaynameformat>
     </entityinfo>
-    <entityinfo key="Dinghyclass" name="Dinghyclass" dbkey="coaching" access="rw" dbtablename="Dinghyclass" withfields="Idandstamp" type="Idkeyauto" icon="star" orderable="no" sort="no" nodeorder="1" parentname="DinghyclassRoot">
-        <field name="root" references="DinghyclassRoot" type="rootref" label="Root" rvid="root" javatype="int" initialisation="" javarsget="getInt"/>
-        <field name="name" nullsql="NOT NULL" uniquesql="UNIQUE" unique="yes" min="1" max="100" fieldclass="TextField" sqltype="VARCHAR(100)" type="String" dbcolumnname="name" label="Name" rvid="name" javatype="String" initialisation=" = &quot;&quot;" javarsget="getString"/>
-        <field name="py" nullsql="NOT NULL" uniquesql="" min="900" max="1700" fieldclass="TextField" sqltype="MEDIUMINT" type="int" dbcolumnname="py" label="Py" rvid="py" javatype="int" initialisation=" = 0" javarsget="getInt"/>
+    <entityinfo name="Dinghyclass" dbkey="coaching" dbtablename="Dinghyclass" pkey="id" pkeytype="Integer" icon="star" orderable="no" nodeorder="1" parentname="DinghyclassRoot">
+        <field name="root" pkey="no" references="DinghyclassRoot" type="rootref" label="Root" javatype="int" jsontype="Integer" initialisation=""/>
+        <field name="name" pkey="no" unique="yes" min="1" max="100" fieldclass="TextField" type="String" label="Name" javatype="String" jsontype="String" initialisation=" = &quot;&quot;"/>
+        <field name="py" pkey="no" min="900" max="1700" fieldclass="TextField" type="int" label="Py" javatype="int" jsontype="Integer" initialisation=" = 0"/>
+        <field name="id" pkey="yes" hidden="yes" type="int" fieldclass="TextField" label="Id" javatype="int" jsontype="Integer" initialisation=" = 0"/>
+        <field name="createdby" pkey="no" hidden="yes" type="String" min="4" max="4" fieldclass="TextField" label="Created by" javatype="String" jsontype="String" initialisation=" = &quot;&quot;"/>
+        <field name="createdon" pkey="no" final="yes" hidden="yes" type="datetime" fieldclass="TextField" label="Created on" javatype="Timestamp" jsontype="String" initialisation=" = new Timestamp()"/>
+        <field name="updatedby" pkey="no" hidden="yes" type="String" min="4" max="4" fieldclass="TextField" label="Updated by" javatype="String" jsontype="String" initialisation=" = &quot;&quot;"/>
+        <field name="updatedon" pkey="no" final="yes" hidden="yes" type="datetime" fieldclass="TextField" label="Updated on" javatype="Timestamp" jsontype="String" initialisation=" = new Timestamp()"/>
+        <child name="dinghy" dbname="dinghyclass" references="Dinghy" orderable="no" sort="yes"/>
         <sortformat format="{0} {1}">
             <display field="Py" length="4"/>
             <display field="Name"/>
@@ -35,10 +56,15 @@
             <display field="Name"/>
         </displaynameformat>
     </entityinfo>
-    <entityinfo key="Dinghy" name="Dinghy" dbkey="coaching" access="rw" dbtablename="Dinghy" withfields="Idandstamp" type="Idkeyauto" icon="tag_green" orderable="no" sort="no" nodeorder="1" parentname="DinghyRoot">
-        <field name="root" references="DinghyRoot" type="rootref" label="Root" rvid="root" javatype="int" initialisation="" javarsget="getInt"/>
-        <field name="sailnumber" nullsql="NOT NULL" uniquesql="" min="0" fieldclass="TextField" sqltype="MEDIUMINT" type="int" dbcolumnname="sailnumber" label="Sailnumber" rvid="sailnumber" javatype="int" initialisation=" = 0" javarsget="getInt"/>
-        <field name="dinghyclass" nullsql="NOT NULL" uniquesql="" fieldclass="ReferenceChoiceField" sqltype="MEDIUMINT UNSIGNED" references="Dinghyclass" referencestable="Dinghyclass" parentfactory="DinghyclassRoot" pcvu="Dinghyclass" type="reference" dbcolumnname="dinghyclass" label="Dinghyclass" rvid="dinghyclassId" javatype="int" initialisation="" javarsget="getInt"/>
+    <entityinfo name="Dinghy" dbkey="coaching" dbtablename="Dinghy" pkey="id" pkeytype="Integer" icon="tag_green" orderable="no" parentname="Dinghyclass" nodeorder="1">
+        <field name="sailnumber" pkey="no" min="0" fieldclass="TextField" type="int" label="Sailnumber" javatype="int" jsontype="Integer" initialisation=" = 0"/>
+        <field name="dinghyclass" pkey="no" references="Dinghyclass" fieldclass="ReferenceChoiceField" type="ref" label="Dinghyclass" javatype="int" jsontype="Integer" initialisation=""/>
+        <field name="id" pkey="yes" hidden="yes" type="int" fieldclass="TextField" label="Id" javatype="int" jsontype="Integer" initialisation=" = 0"/>
+        <field name="createdby" pkey="no" hidden="yes" type="String" min="4" max="4" fieldclass="TextField" label="Created by" javatype="String" jsontype="String" initialisation=" = &quot;&quot;"/>
+        <field name="createdon" pkey="no" final="yes" hidden="yes" type="datetime" fieldclass="TextField" label="Created on" javatype="Timestamp" jsontype="String" initialisation=" = new Timestamp()"/>
+        <field name="updatedby" pkey="no" hidden="yes" type="String" min="4" max="4" fieldclass="TextField" label="Updated by" javatype="String" jsontype="String" initialisation=" = &quot;&quot;"/>
+        <field name="updatedon" pkey="no" final="yes" hidden="yes" type="datetime" fieldclass="TextField" label="Updated on" javatype="Timestamp" jsontype="String" initialisation=" = new Timestamp()"/>
+        <child name="entry" dbname="dinghy" references="Entry" orderable="no" sort="yes"/>
         <sortformat format="{0}.{1}">
             <display field="Dinghyclass"/>
             <display field="Sailnumber"/>
@@ -48,13 +74,18 @@
             <display field="Sailnumber"/>
         </displaynameformat>
     </entityinfo>
-    <entityinfo key="Raceseries" name="Raceseries" dbkey="coaching" access="rw" dbtablename="Raceseries" withfields="Idandstamp" type="Idkeyauto" icon="calendar" orderable="no" sort="no" nodeorder="1" parentname="RaceseriesRoot">
-        <field name="root" references="RaceseriesRoot" type="rootref" label="Root" rvid="root" javatype="int" initialisation="" javarsget="getInt"/>
-        <field name="name" nullsql="NOT NULL" uniquesql="" min="1" max="100" fieldclass="TextField" sqltype="VARCHAR(100)" type="String" dbcolumnname="name" label="Name" rvid="name" javatype="String" initialisation=" = &quot;&quot;" javarsget="getString"/>
-        <field name="first" nullsql="NOT NULL" uniquesql="" fieldclass="TextField" sqltype="VARCHAR(8)" type="date" dbcolumnname="first" label="First" rvid="first" javatype="DateOnly" initialisation=" = new DateOnly()" javarsget="getString"/>
-        <field name="last" nullsql="NOT NULL" uniquesql="" fieldclass="TextField" sqltype="VARCHAR(8)" type="date" dbcolumnname="last" label="Last" rvid="last" javatype="DateOnly" initialisation=" = new DateOnly()" javarsget="getString"/>
-        <field name="type" nullsql="NOT NULL" uniquesql="" values="'Handicap', 'Pursuit', 'Class'" fieldclass="EnumChoiceField" sqltype="ENUM ('Handicap', 'Pursuit', 'Class')" type="enum" dbcolumnname="type" label="Type" rvid="type" javatype="String" initialisation=" = &quot;&quot;" javarsget="getString"/>
-        <child name="race" dbname="raceseries" references="Race" orderable="no" sort="yes" access="rw"/>
+    <entityinfo name="Raceseries" dbkey="coaching" dbtablename="Raceseries" pkey="id" pkeytype="Integer" icon="calendar" orderable="no" nodeorder="1" parentname="RaceseriesRoot">
+        <field name="root" pkey="no" references="RaceseriesRoot" type="rootref" label="Root" javatype="int" jsontype="Integer" initialisation=""/>
+        <field name="name" pkey="no" min="1" max="100" fieldclass="TextField" type="String" label="Name" javatype="String" jsontype="String" initialisation=" = &quot;&quot;"/>
+        <field name="first" pkey="no" fieldclass="TextField" type="date" label="First" javatype="DateOnly" jsontype="String" initialisation=" = new DateOnly()"/>
+        <field name="last" pkey="no" fieldclass="TextField" type="date" label="Last" javatype="DateOnly" jsontype="String" initialisation=" = new DateOnly()"/>
+        <field name="type" pkey="no" values="'Handicap', 'Pursuit', 'Class'" fieldclass="EnumChoiceField" type="enum" label="Type" javatype="String" jsontype="String" initialisation=" = &quot;&quot;"/>
+        <field name="id" pkey="yes" hidden="yes" type="int" fieldclass="TextField" label="Id" javatype="int" jsontype="Integer" initialisation=" = 0"/>
+        <field name="createdby" pkey="no" hidden="yes" type="String" min="4" max="4" fieldclass="TextField" label="Created by" javatype="String" jsontype="String" initialisation=" = &quot;&quot;"/>
+        <field name="createdon" pkey="no" final="yes" hidden="yes" type="datetime" fieldclass="TextField" label="Created on" javatype="Timestamp" jsontype="String" initialisation=" = new Timestamp()"/>
+        <field name="updatedby" pkey="no" hidden="yes" type="String" min="4" max="4" fieldclass="TextField" label="Updated by" javatype="String" jsontype="String" initialisation=" = &quot;&quot;"/>
+        <field name="updatedon" pkey="no" final="yes" hidden="yes" type="datetime" fieldclass="TextField" label="Updated on" javatype="Timestamp" jsontype="String" initialisation=" = new Timestamp()"/>
+        <child name="race" dbname="raceseries" references="Race" orderable="no" sort="yes"/>
         <sortformat format="{0}">
             <display field="First"/>
         </sortformat>
@@ -63,14 +94,19 @@
             <display field="Type"/>
         </displaynameformat>
     </entityinfo>
-    <entityinfo key="Race" name="Race" dbkey="coaching" access="rw" dbtablename="Race" withfields="Idandstamp" type="Idkeyauto" icon="rosette" orderable="no" sort="no" parentname="Raceseries" nodeorder="1">
-        <field name="dateofrace" nullsql="NOT NULL" uniquesql="" fieldclass="TextField" sqltype="VARCHAR(8)" type="date" dbcolumnname="dateofrace" label="Dateofrace" rvid="dateofrace" javatype="DateOnly" initialisation=" = new DateOnly()" javarsget="getString"/>
-        <field name="racenumber" nullsql="NOT NULL" uniquesql="" min="1" fieldclass="TextField" sqltype="MEDIUMINT" type="int" dbcolumnname="racenumber" label="Racenumber" rvid="racenumber" javatype="int" initialisation=" = 0" javarsget="getInt"/>
-        <field name="startmark" nullsql="NOT NULL" uniquesql="" fieldclass="ReferenceChoiceField" sqltype="MEDIUMINT UNSIGNED" references="Mark" referencestable="Mark" parentfactory="MarkRoot" pcvu="Mark" type="reference" dbcolumnname="startmark" label="Startmark" rvid="startmarkId" javatype="int" initialisation="" javarsget="getInt"/>
-        <field name="finishmark" nullsql="NULL" uniquesql="" fieldclass="ReferenceChoiceField" sqltype="MEDIUMINT UNSIGNED" references="Mark" referencestable="Mark" parentfactory="MarkRoot" pcvu="Mark" type="reference" dbcolumnname="finishmark" label="Finishmark" rvid="finishmarkId" javatype="int" initialisation="" javarsget="getInt" optional="yes"/>
-        <field name="raceseries" references="Raceseries" referencestable="Raceseries" parentfactory="RaceseriesRoot" pprvu="Root" pcvu="Raceseries" fieldclass="ReferenceChoiceField" sqltype="MEDIUMINT UNSIGNED" nullsql="NOT NULL" uniquesql="" type="ref" dbcolumnname="raceseries" label="Raceseries" rvid="raceseriesId" javatype="int" initialisation="" javarsget="getInt"/>
-        <child name="coursemark" dbname="race" references="Coursemark" orderable="yes" sort="no" access="rw" copymoveentity="Mark" copymovefield="mark"/>
-        <child name="raceentry" dbname="race" references="Raceentry" orderable="no" sort="yes" access="rw" copymoveentity="Entry" copymovefield="entry"/>
+    <entityinfo name="Race" dbkey="coaching" dbtablename="Race" pkey="id" pkeytype="Integer" icon="rosette" orderable="no" parentname="Raceseries" nodeorder="1">
+        <field name="dateofrace" pkey="no" fieldclass="TextField" type="date" label="Dateofrace" javatype="DateOnly" jsontype="String" initialisation=" = new DateOnly()"/>
+        <field name="racenumber" pkey="no" min="1" fieldclass="TextField" type="int" label="Racenumber" javatype="int" jsontype="Integer" initialisation=" = 0"/>
+        <field name="startmark" pkey="no" fieldclass="ReferenceChoiceField" references="Mark" type="reference" label="Startmark" javatype="int" jsontype="Integer" initialisation=""/>
+        <field name="finishmark" pkey="no" fieldclass="ReferenceChoiceField" references="Mark" type="reference" label="Finishmark" javatype="int" jsontype="Integer" initialisation="" optional="yes"/>
+        <field name="raceseries" pkey="no" references="Raceseries" fieldclass="ReferenceChoiceField" type="ref" label="Raceseries" javatype="int" jsontype="Integer" initialisation=""/>
+        <field name="id" pkey="yes" hidden="yes" type="int" fieldclass="TextField" label="Id" javatype="int" jsontype="Integer" initialisation=" = 0"/>
+        <field name="createdby" pkey="no" hidden="yes" type="String" min="4" max="4" fieldclass="TextField" label="Created by" javatype="String" jsontype="String" initialisation=" = &quot;&quot;"/>
+        <field name="createdon" pkey="no" final="yes" hidden="yes" type="datetime" fieldclass="TextField" label="Created on" javatype="Timestamp" jsontype="String" initialisation=" = new Timestamp()"/>
+        <field name="updatedby" pkey="no" hidden="yes" type="String" min="4" max="4" fieldclass="TextField" label="Updated by" javatype="String" jsontype="String" initialisation=" = &quot;&quot;"/>
+        <field name="updatedon" pkey="no" final="yes" hidden="yes" type="datetime" fieldclass="TextField" label="Updated on" javatype="Timestamp" jsontype="String" initialisation=" = new Timestamp()"/>
+        <child name="coursemark" dbname="race" references="Coursemark" orderable="yes" sort="no" copymoveentity="Mark" copymovefield="mark"/>
+        <child name="raceentry" dbname="race" references="Raceentry" orderable="no" sort="yes" copymoveentity="Entry" copymovefield="entry"/>
         <sortformat format="{0}">
             <display field="Racenumber" length="2"/>
         </sortformat>
@@ -83,11 +119,16 @@
             <display field="Racenumber"/>
         </displaynameformat>
     </entityinfo>
-    <entityinfo key="Entry" name="Entry" dbkey="coaching" access="rw" dbtablename="Entry" withfields="Idandstamp" type="Idkeyauto" icon="group" orderable="no" sort="no" nodeorder="1" parentname="EntryRoot">
-        <field name="root" references="EntryRoot" type="rootref" label="Root" rvid="root" javatype="int" initialisation="" javarsget="getInt"/>
-        <field name="helm" nullsql="NOT NULL" uniquesql="" fieldclass="ReferenceChoiceField" sqltype="MEDIUMINT UNSIGNED" references="Competitor" referencestable="Competitor" parentfactory="CompetitorRoot" pcvu="Competitor" type="reference" dbcolumnname="helm" label="Helm" rvid="helmId" javatype="int" initialisation="" javarsget="getInt"/>
-        <field name="crew" nullsql="NULL" uniquesql="" fieldclass="ReferenceChoiceField" sqltype="MEDIUMINT UNSIGNED" references="Competitor" referencestable="Competitor" parentfactory="CompetitorRoot" pcvu="Competitor" type="reference" dbcolumnname="crew" label="Crew" rvid="crewId" javatype="int" initialisation="" javarsget="getInt" optional="yes"/>
-        <field name="dinghy" nullsql="NOT NULL" uniquesql="" fieldclass="ReferenceChoiceField" sqltype="MEDIUMINT UNSIGNED" references="Dinghy" referencestable="Dinghy" parentfactory="DinghyRoot" pcvu="Dinghy" type="reference" dbcolumnname="dinghy" label="Dinghy" rvid="dinghyId" javatype="int" initialisation="" javarsget="getInt"/>
+    <entityinfo name="Entry" dbkey="coaching" dbtablename="Entry" pkey="id" pkeytype="Integer" icon="group" orderable="no" parentname="Dinghy" nodeorder="1">
+        <field name="helm" pkey="no" fieldclass="ReferenceChoiceField" references="Competitor" type="reference" label="Helm" javatype="int" jsontype="Integer" initialisation=""/>
+        <field name="crew" pkey="no" fieldclass="ReferenceChoiceField" references="Competitor" type="reference" label="Crew" javatype="int" jsontype="Integer" initialisation="" optional="yes"/>
+        <field name="dinghy" pkey="no" references="Dinghy" fieldclass="ReferenceChoiceField" type="ref" label="Dinghy" javatype="int" jsontype="Integer" initialisation=""/>
+        <field name="id" pkey="yes" hidden="yes" type="int" fieldclass="TextField" label="Id" javatype="int" jsontype="Integer" initialisation=" = 0"/>
+        <field name="createdby" pkey="no" hidden="yes" type="String" min="4" max="4" fieldclass="TextField" label="Created by" javatype="String" jsontype="String" initialisation=" = &quot;&quot;"/>
+        <field name="createdon" pkey="no" final="yes" hidden="yes" type="datetime" fieldclass="TextField" label="Created on" javatype="Timestamp" jsontype="String" initialisation=" = new Timestamp()"/>
+        <field name="updatedby" pkey="no" hidden="yes" type="String" min="4" max="4" fieldclass="TextField" label="Updated by" javatype="String" jsontype="String" initialisation=" = &quot;&quot;"/>
+        <field name="updatedon" pkey="no" final="yes" hidden="yes" type="datetime" fieldclass="TextField" label="Updated on" javatype="Timestamp" jsontype="String" initialisation=" = new Timestamp()"/>
+        <referenced name="Raceentry" field="entry"/>
         <sortformat format="{0}">
             <display field="Dinghy"/>
         </sortformat>
@@ -99,9 +140,15 @@
             <display field="Dinghy"/>
         </displaynameformat>
     </entityinfo>
-    <entityinfo key="Raceentry" name="Raceentry" dbkey="coaching" access="rw" dbtablename="Raceentry" withfields="Idandstamp" type="Idkeyauto" icon="group" orderable="no" sort="no" parentname="Race" nodeorder="2">
-        <field name="entry" nullsql="NOT NULL" uniquesql="" fieldclass="ReferenceChoiceField" sqltype="MEDIUMINT UNSIGNED" references="Entry" referencestable="Entry" parentfactory="EntryRoot" pcvu="Entry" type="reference" dbcolumnname="entry" label="Entry" rvid="entryId" javatype="int" initialisation="" javarsget="getInt"/>
-        <field name="race" references="Race" referencestable="Race" parentfactory="Raceseries" pprvu="Raceseries" pcvu="Race" fieldclass="ReferenceChoiceField" sqltype="MEDIUMINT UNSIGNED" nullsql="NOT NULL" uniquesql="" type="ref" dbcolumnname="race" label="Race" rvid="raceId" javatype="int" initialisation="" javarsget="getInt"/>
+    <entityinfo name="Raceentry" dbkey="coaching" dbtablename="Raceentry" pkey="id" pkeytype="Integer" icon="group" orderable="no" parentname="Race" nodeorder="2">
+        <field name="entry" pkey="no" fieldclass="ReferenceChoiceField" references="Entry" type="reference" label="Entry" javatype="int" jsontype="Integer" initialisation=""/>
+        <field name="race" pkey="no" references="Race" fieldclass="ReferenceChoiceField" type="ref" label="Race" javatype="int" jsontype="Integer" initialisation=""/>
+        <field name="id" pkey="yes" hidden="yes" type="int" fieldclass="TextField" label="Id" javatype="int" jsontype="Integer" initialisation=" = 0"/>
+        <field name="createdby" pkey="no" hidden="yes" type="String" min="4" max="4" fieldclass="TextField" label="Created by" javatype="String" jsontype="String" initialisation=" = &quot;&quot;"/>
+        <field name="createdon" pkey="no" final="yes" hidden="yes" type="datetime" fieldclass="TextField" label="Created on" javatype="Timestamp" jsontype="String" initialisation=" = new Timestamp()"/>
+        <field name="updatedby" pkey="no" hidden="yes" type="String" min="4" max="4" fieldclass="TextField" label="Updated by" javatype="String" jsontype="String" initialisation=" = &quot;&quot;"/>
+        <field name="updatedon" pkey="no" final="yes" hidden="yes" type="datetime" fieldclass="TextField" label="Updated on" javatype="Timestamp" jsontype="String" initialisation=" = new Timestamp()"/>
+        <referenced name="Timing" field="raceentry"/>
         <displaytitleformat format="{0} in {1}">
             <display field="Entry"/>
             <display field="Race"/>
@@ -110,11 +157,16 @@
             <display field="Entry"/>
         </displaynameformat>
     </entityinfo>
-    <entityinfo key="Coursemark" name="Coursemark" dbkey="coaching" access="rw" dbtablename="Coursemark" withfields="Idandstamp" type="Idkeyauto" ordercolumn="idx" icon="flag_blue" orderable="yes" sort="no" parentname="Race" nodeorder="1">
-        <field name="mark" nullsql="NOT NULL" uniquesql="" fieldclass="ReferenceChoiceField" sqltype="MEDIUMINT UNSIGNED" references="Mark" referencestable="Mark" parentfactory="MarkRoot" pcvu="Mark" type="reference" dbcolumnname="mark" label="Mark" rvid="markId" javatype="int" initialisation="" javarsget="getInt"/>
-        <field name="race" references="Race" referencestable="Race" parentfactory="Raceseries" pprvu="Raceseries" pcvu="Race" fieldclass="ReferenceChoiceField" sqltype="MEDIUMINT UNSIGNED" nullsql="NOT NULL" uniquesql="" type="ref" dbcolumnname="race" label="Race" rvid="raceId" javatype="int" initialisation="" javarsget="getInt"/>
-        <field name="idx" type="idx" nullsql="NOT NULL" uniquesql="" index="yes" fieldclass="TextField" sqltype="MEDIUMINT UNSIGNED" dbcolumnname="idx" label="Idx" rvid="idx" javatype="int" initialisation=" = 0" javarsget="getInt"/>
-        <child name="timing" dbname="coursemark" references="Timing" orderable="no" sort="yes" access="rw"/>
+    <entityinfo name="Coursemark" dbkey="coaching" dbtablename="Coursemark" pkey="id" pkeytype="Integer" icon="flag_blue" orderable="yes" parentname="Race" nodeorder="1">
+        <field name="mark" pkey="no" fieldclass="ReferenceChoiceField" references="Mark" type="reference" label="Mark" javatype="int" jsontype="Integer" initialisation=""/>
+        <field name="race" pkey="no" references="Race" fieldclass="ReferenceChoiceField" type="ref" label="Race" javatype="int" jsontype="Integer" initialisation=""/>
+        <field name="id" pkey="yes" hidden="yes" type="int" fieldclass="TextField" label="Id" javatype="int" jsontype="Integer" initialisation=" = 0"/>
+        <field name="idx" pkey="no" hidden="yes" type="idx" index="yes" fieldclass="TextField" label="Idx" javatype="int" jsontype="Integer" initialisation=" = Integer.MAX_VALUE"/>
+        <field name="createdby" pkey="no" hidden="yes" type="String" min="4" max="4" fieldclass="TextField" label="Created by" javatype="String" jsontype="String" initialisation=" = &quot;&quot;"/>
+        <field name="createdon" pkey="no" final="yes" hidden="yes" type="datetime" fieldclass="TextField" label="Created on" javatype="Timestamp" jsontype="String" initialisation=" = new Timestamp()"/>
+        <field name="updatedby" pkey="no" hidden="yes" type="String" min="4" max="4" fieldclass="TextField" label="Updated by" javatype="String" jsontype="String" initialisation=" = &quot;&quot;"/>
+        <field name="updatedon" pkey="no" final="yes" hidden="yes" type="datetime" fieldclass="TextField" label="Updated on" javatype="Timestamp" jsontype="String" initialisation=" = new Timestamp()"/>
+        <child name="timing" dbname="coursemark" references="Timing" orderable="no" sort="yes"/>
         <displaytitleformat format="{0} for {1}">
             <display field="Mark"/>
             <display field="Race"/>
@@ -123,11 +175,17 @@
             <display field="Mark"/>
         </displaynameformat>
     </entityinfo>
-    <entityinfo key="Timing" name="Timing" dbkey="coaching" access="rw" dbtablename="Timing" withfields="Idandstamp" type="Idkeyauto" icon="time" orderable="no" sort="no" parentname="Coursemark" nodeorder="1">
-        <field name="lap" nullsql="NOT NULL" uniquesql="" min="1" fieldclass="TextField" sqltype="MEDIUMINT" type="int" dbcolumnname="lap" label="Lap" rvid="lap" javatype="int" initialisation=" = 0" javarsget="getInt"/>
-        <field name="at" nullsql="NOT NULL" uniquesql="" fieldclass="TextField" sqltype="VARCHAR(14)" type="datetime" dbcolumnname="at" label="At" rvid="at" javatype="Timestamp" initialisation=" = new Timestamp()" javarsget="getString"/>
-        <field name="estimated" nullsql="NOT NULL" uniquesql="" fieldclass="TextField" sqltype="VARCHAR(14)" type="datetime" dbcolumnname="estimated" label="Estimated" rvid="estimated" javatype="Timestamp" initialisation=" = new Timestamp()" javarsget="getString"/>
-        <field name="coursemark" references="Coursemark" referencestable="Coursemark" parentfactory="Race" pprvu="Race" pcvu="Coursemark" fieldclass="ReferenceChoiceField" sqltype="MEDIUMINT UNSIGNED" nullsql="NOT NULL" uniquesql="" type="ref" dbcolumnname="coursemark" label="Coursemark" rvid="coursemarkId" javatype="int" initialisation="" javarsget="getInt"/>
+    <entityinfo name="Timing" dbkey="coaching" dbtablename="Timing" pkey="id" pkeytype="Integer" icon="time" orderable="no" parentname="Coursemark" nodeorder="1">
+        <field name="raceentry" pkey="no" fieldclass="ReferenceChoiceField" references="Raceentry" type="reference" label="Raceentry" javatype="int" jsontype="Integer" initialisation=""/>
+        <field name="lap" pkey="no" min="1" fieldclass="TextField" type="int" label="Lap" javatype="int" jsontype="Integer" initialisation=" = 0"/>
+        <field name="at" pkey="no" fieldclass="TextField" type="datetime" label="At" javatype="Timestamp" jsontype="String" initialisation=" = new Timestamp()"/>
+        <field name="estimated" pkey="no" fieldclass="TextField" type="datetime" label="Estimated" javatype="Timestamp" jsontype="String" initialisation=" = new Timestamp()"/>
+        <field name="coursemark" pkey="no" references="Coursemark" fieldclass="ReferenceChoiceField" type="ref" label="Coursemark" javatype="int" jsontype="Integer" initialisation=""/>
+        <field name="id" pkey="yes" hidden="yes" type="int" fieldclass="TextField" label="Id" javatype="int" jsontype="Integer" initialisation=" = 0"/>
+        <field name="createdby" pkey="no" hidden="yes" type="String" min="4" max="4" fieldclass="TextField" label="Created by" javatype="String" jsontype="String" initialisation=" = &quot;&quot;"/>
+        <field name="createdon" pkey="no" final="yes" hidden="yes" type="datetime" fieldclass="TextField" label="Created on" javatype="Timestamp" jsontype="String" initialisation=" = new Timestamp()"/>
+        <field name="updatedby" pkey="no" hidden="yes" type="String" min="4" max="4" fieldclass="TextField" label="Updated by" javatype="String" jsontype="String" initialisation=" = &quot;&quot;"/>
+        <field name="updatedon" pkey="no" final="yes" hidden="yes" type="datetime" fieldclass="TextField" label="Updated on" javatype="Timestamp" jsontype="String" initialisation=" = new Timestamp()"/>
         <sortformat format="{0}">
             <display field="Lap" length="2"/>
         </sortformat>
@@ -136,37 +194,120 @@
             <display field="Coursemark"/>
         </displaytitleformat>
         <displaynameformat format="{0}">
-            <display field="Lap"/>
+            <display field="Raceentry"/>
         </displaynameformat>
     </entityinfo>
-    <entityinfo key="DinghyclassRoot" name="DinghyclassRoot" isroot="" label="Dinghyclasss" viewers="Coach" icon="folder_star">
-        <child name="dinghyclass" nodekey="DinghyclassRootChildFactory.DinghyclassNode" references="Dinghyclass" orderable="no" sort="yes" access="rw"/>
+    <entityinfo name="DinghyclassRoot" isroot="" label="Dinghyclasss" viewers="Coach" icon="folder_star">
+        <child name="dinghyclass" references="Dinghyclass" orderable="no" sort="yes"/>
     </entityinfo>
-    <entityinfo key="DinghyRoot" name="DinghyRoot" isroot="" label="Dinghys" viewers="Coach" icon="folder">
-        <child name="dinghy" nodekey="DinghyRootChildFactory.DinghyNode" references="Dinghy" orderable="no" sort="yes" access="rw"/>
+    <entityinfo name="CompetitorRoot" isroot="" label="Competitors" viewers="Coach" icon="folder">
+        <child name="competitor" references="Competitor" orderable="no" sort="yes"/>
     </entityinfo>
-    <entityinfo key="CompetitorRoot" name="CompetitorRoot" isroot="" label="Competitors" viewers="Coach" icon="folder">
-        <child name="competitor" nodekey="CompetitorRootChildFactory.CompetitorNode" references="Competitor" orderable="no" sort="yes" access="rw"/>
+    <entityinfo name="MarkRoot" isroot="" label="Marks" viewers="Coach" icon="folder">
+        <child name="mark" references="Mark" orderable="no" sort="yes"/>
     </entityinfo>
-    <entityinfo key="MarkRoot" name="MarkRoot" isroot="" label="Marks" viewers="Coach" icon="folder">
-        <child name="mark" nodekey="MarkRootChildFactory.MarkNode" references="Mark" orderable="no" sort="yes" access="rw"/>
+    <entityinfo name="RaceseriesRoot" isroot="" label="Raceseriess" viewers="Coach" icon="book_open">
+        <child name="raceseries" references="Raceseries" orderable="no" sort="yes"/>
     </entityinfo>
-    <entityinfo key="EntryRoot" name="EntryRoot" isroot="" label="Entrys" viewers="Coach" icon="folder">
-        <child name="entry" nodekey="EntryRootChildFactory.EntryNode" references="Entry" orderable="no" sort="yes" access="rw"/>
-    </entityinfo>
-    <entityinfo key="RaceseriesRoot" name="RaceseriesRoot" isroot="" label="Raceseriess" viewers="Coach" icon="book_open">
-        <child name="raceseries" nodekey="RaceseriesRootChildFactory.RaceseriesNode" references="Raceseries" orderable="no" sort="yes" access="rw"/>
-    </entityinfo>
-    <dbinfo key="coaching" name="coaching" db="MySQL">
-        <table name="Mark"/>
-        <table name="Competitor"/>
-        <table name="Dinghyclass"/>
-        <table name="Dinghy"/>
-        <table name="Raceseries"/>
-        <table name="Race"/>
-        <table name="Entry"/>
-        <table name="Raceentry"/>
-        <table name="Coursemark"/>
-        <table name="Timing"/>
-    </dbinfo>
+    <persistencestore name="coaching">
+        <persistenceentity name="Mark">
+            <persistencefield name="name" primarykey="no" jsontype="String" min="1" max="10" createsql=" VARCHAR(10)  NOT NULL"/>
+            <persistencefield name="id" sys="yes" jsontype="Integer" primarykey="auto" createsql="MEDIUMINT UNSIGNED AUTO_INCREMENT PRIMARY KEY"/>
+            <persistencefield name="createdby" sys="yes" primarykey="no" jsontype="String" min="4" max="4" createsql="CHAR(4) NOT NULL"/>
+            <persistencefield name="createdon" final="yes" sys="yes" primarykey="no" jsontype="String" min="14" max="14" createsql="CHAR(14) NOT NULL"/>
+            <persistencefield name="updatedby" sys="yes" primarykey="no" jsontype="String" min="4" max="4" createsql="CHAR(4) NOT NULL"/>
+            <persistencefield name="updatedon" final="yes" sys="yes" primarykey="no" jsontype="String" min="14" max="14" createsql="CHAR(14) NOT NULL"/>
+        </persistenceentity>
+        <persistenceentity name="Competitor">
+            <persistencefield name="firstname" primarykey="no" jsontype="String" min="1" max="100" createsql=" VARCHAR(100)  NOT NULL"/>
+            <persistencefield name="familyname" primarykey="no" jsontype="String" min="1" max="100" createsql=" VARCHAR(100)  NOT NULL"/>
+            <persistencefield name="id" sys="yes" jsontype="Integer" primarykey="auto" createsql="MEDIUMINT UNSIGNED AUTO_INCREMENT PRIMARY KEY"/>
+            <persistencefield name="createdby" sys="yes" primarykey="no" jsontype="String" min="4" max="4" createsql="CHAR(4) NOT NULL"/>
+            <persistencefield name="createdon" final="yes" sys="yes" primarykey="no" jsontype="String" min="14" max="14" createsql="CHAR(14) NOT NULL"/>
+            <persistencefield name="updatedby" sys="yes" primarykey="no" jsontype="String" min="4" max="4" createsql="CHAR(4) NOT NULL"/>
+            <persistencefield name="updatedon" final="yes" sys="yes" primarykey="no" jsontype="String" min="14" max="14" createsql="CHAR(14) NOT NULL"/>
+        </persistenceentity>
+        <persistenceentity name="Dinghyclass">
+            <persistencefield name="name" primarykey="no" jsontype="String" min="1" max="100" createsql=" VARCHAR(100) UNIQUE NOT NULL"/>
+            <persistencefield name="py" primarykey="no" jsontype="Integer" createsql=" MEDIUMINT  NOT NULL"/>
+            <persistencefield name="id" sys="yes" jsontype="Integer" primarykey="auto" createsql="MEDIUMINT UNSIGNED AUTO_INCREMENT PRIMARY KEY"/>
+            <persistencefield name="createdby" sys="yes" primarykey="no" jsontype="String" min="4" max="4" createsql="CHAR(4) NOT NULL"/>
+            <persistencefield name="createdon" final="yes" sys="yes" primarykey="no" jsontype="String" min="14" max="14" createsql="CHAR(14) NOT NULL"/>
+            <persistencefield name="updatedby" sys="yes" primarykey="no" jsontype="String" min="4" max="4" createsql="CHAR(4) NOT NULL"/>
+            <persistencefield name="updatedon" final="yes" sys="yes" primarykey="no" jsontype="String" min="14" max="14" createsql="CHAR(14) NOT NULL"/>
+        </persistenceentity>
+        <persistenceentity name="Dinghy">
+            <persistencefield name="sailnumber" primarykey="no" jsontype="Integer" createsql=" MEDIUMINT  NOT NULL"/>
+            <persistencefield name="dinghyclass" primarykey="no" jsontype="Reference" createsql="MEDIUMINT UNSIGNED NOT NULL ,FOREIGN KEY (dinghyclass) REFERENCES Dinghyclass(id)"/>
+            <persistencefield name="id" sys="yes" jsontype="Integer" primarykey="auto" createsql="MEDIUMINT UNSIGNED AUTO_INCREMENT PRIMARY KEY"/>
+            <persistencefield name="createdby" sys="yes" primarykey="no" jsontype="String" min="4" max="4" createsql="CHAR(4) NOT NULL"/>
+            <persistencefield name="createdon" final="yes" sys="yes" primarykey="no" jsontype="String" min="14" max="14" createsql="CHAR(14) NOT NULL"/>
+            <persistencefield name="updatedby" sys="yes" primarykey="no" jsontype="String" min="4" max="4" createsql="CHAR(4) NOT NULL"/>
+            <persistencefield name="updatedon" final="yes" sys="yes" primarykey="no" jsontype="String" min="14" max="14" createsql="CHAR(14) NOT NULL"/>
+        </persistenceentity>
+        <persistenceentity name="Raceseries">
+            <persistencefield name="name" primarykey="no" jsontype="String" min="1" max="100" createsql=" VARCHAR(100)  NOT NULL"/>
+            <persistencefield name="first" primarykey="no" jsontype="String" min="8" max="8" createsql=" CHAR(8)  NOT NULL"/>
+            <persistencefield name="last" primarykey="no" jsontype="String" min="8" max="8" createsql=" CHAR(8)  NOT NULL"/>
+            <persistencefield name="type" primarykey="no" jsontype="String" min="0" max="255" createsql=" ENUM ('Handicap', 'Pursuit', 'Class')  NOT NULL"/>
+            <persistencefield name="id" sys="yes" jsontype="Integer" primarykey="auto" createsql="MEDIUMINT UNSIGNED AUTO_INCREMENT PRIMARY KEY"/>
+            <persistencefield name="createdby" sys="yes" primarykey="no" jsontype="String" min="4" max="4" createsql="CHAR(4) NOT NULL"/>
+            <persistencefield name="createdon" final="yes" sys="yes" primarykey="no" jsontype="String" min="14" max="14" createsql="CHAR(14) NOT NULL"/>
+            <persistencefield name="updatedby" sys="yes" primarykey="no" jsontype="String" min="4" max="4" createsql="CHAR(4) NOT NULL"/>
+            <persistencefield name="updatedon" final="yes" sys="yes" primarykey="no" jsontype="String" min="14" max="14" createsql="CHAR(14) NOT NULL"/>
+        </persistenceentity>
+        <persistenceentity name="Race">
+            <persistencefield name="dateofrace" primarykey="no" jsontype="String" min="8" max="8" createsql=" CHAR(8)  NOT NULL"/>
+            <persistencefield name="racenumber" primarykey="no" jsontype="Integer" createsql=" MEDIUMINT  NOT NULL"/>
+            <persistencefield name="startmark" primarykey="no" jsontype="Reference" createsql=" MEDIUMINT UNSIGNED  NOT NULL ,FOREIGN KEY (startmark) REFERENCES Mark(id)"/>
+            <persistencefield name="finishmark" primarykey="no" jsontype="Reference" createsql=" MEDIUMINT UNSIGNED  NULL ,FOREIGN KEY (finishmark) REFERENCES Mark(id)"/>
+            <persistencefield name="raceseries" primarykey="no" jsontype="Reference" createsql="MEDIUMINT UNSIGNED NOT NULL ,FOREIGN KEY (raceseries) REFERENCES Raceseries(id)"/>
+            <persistencefield name="id" sys="yes" jsontype="Integer" primarykey="auto" createsql="MEDIUMINT UNSIGNED AUTO_INCREMENT PRIMARY KEY"/>
+            <persistencefield name="createdby" sys="yes" primarykey="no" jsontype="String" min="4" max="4" createsql="CHAR(4) NOT NULL"/>
+            <persistencefield name="createdon" final="yes" sys="yes" primarykey="no" jsontype="String" min="14" max="14" createsql="CHAR(14) NOT NULL"/>
+            <persistencefield name="updatedby" sys="yes" primarykey="no" jsontype="String" min="4" max="4" createsql="CHAR(4) NOT NULL"/>
+            <persistencefield name="updatedon" final="yes" sys="yes" primarykey="no" jsontype="String" min="14" max="14" createsql="CHAR(14) NOT NULL"/>
+        </persistenceentity>
+        <persistenceentity name="Entry">
+            <persistencefield name="helm" primarykey="no" jsontype="Reference" createsql=" MEDIUMINT UNSIGNED  NOT NULL ,FOREIGN KEY (helm) REFERENCES Competitor(id)"/>
+            <persistencefield name="crew" primarykey="no" jsontype="Reference" createsql=" MEDIUMINT UNSIGNED  NULL ,FOREIGN KEY (crew) REFERENCES Competitor(id)"/>
+            <persistencefield name="dinghy" primarykey="no" jsontype="Reference" createsql="MEDIUMINT UNSIGNED NOT NULL ,FOREIGN KEY (dinghy) REFERENCES Dinghy(id)"/>
+            <persistencefield name="id" sys="yes" jsontype="Integer" primarykey="auto" createsql="MEDIUMINT UNSIGNED AUTO_INCREMENT PRIMARY KEY"/>
+            <persistencefield name="createdby" sys="yes" primarykey="no" jsontype="String" min="4" max="4" createsql="CHAR(4) NOT NULL"/>
+            <persistencefield name="createdon" final="yes" sys="yes" primarykey="no" jsontype="String" min="14" max="14" createsql="CHAR(14) NOT NULL"/>
+            <persistencefield name="updatedby" sys="yes" primarykey="no" jsontype="String" min="4" max="4" createsql="CHAR(4) NOT NULL"/>
+            <persistencefield name="updatedon" final="yes" sys="yes" primarykey="no" jsontype="String" min="14" max="14" createsql="CHAR(14) NOT NULL"/>
+        </persistenceentity>
+        <persistenceentity name="Raceentry">
+            <persistencefield name="entry" primarykey="no" jsontype="Reference" createsql=" MEDIUMINT UNSIGNED  NOT NULL ,FOREIGN KEY (entry) REFERENCES Entry(id)"/>
+            <persistencefield name="race" primarykey="no" jsontype="Reference" createsql="MEDIUMINT UNSIGNED NOT NULL ,FOREIGN KEY (race) REFERENCES Race(id)"/>
+            <persistencefield name="id" sys="yes" jsontype="Integer" primarykey="auto" createsql="MEDIUMINT UNSIGNED AUTO_INCREMENT PRIMARY KEY"/>
+            <persistencefield name="createdby" sys="yes" primarykey="no" jsontype="String" min="4" max="4" createsql="CHAR(4) NOT NULL"/>
+            <persistencefield name="createdon" final="yes" sys="yes" primarykey="no" jsontype="String" min="14" max="14" createsql="CHAR(14) NOT NULL"/>
+            <persistencefield name="updatedby" sys="yes" primarykey="no" jsontype="String" min="4" max="4" createsql="CHAR(4) NOT NULL"/>
+            <persistencefield name="updatedon" final="yes" sys="yes" primarykey="no" jsontype="String" min="14" max="14" createsql="CHAR(14) NOT NULL"/>
+        </persistenceentity>
+        <persistenceentity name="Coursemark">
+            <persistencefield name="mark" primarykey="no" jsontype="Reference" createsql=" MEDIUMINT UNSIGNED  NOT NULL ,FOREIGN KEY (mark) REFERENCES Mark(id)"/>
+            <persistencefield name="race" primarykey="no" jsontype="Reference" createsql="MEDIUMINT UNSIGNED NOT NULL ,FOREIGN KEY (race) REFERENCES Race(id)"/>
+            <persistencefield name="id" sys="yes" jsontype="Integer" primarykey="auto" createsql="MEDIUMINT UNSIGNED AUTO_INCREMENT PRIMARY KEY"/>
+            <persistencefield name="idx" jsontype="Integer" primarykey="no" createsql="MEDIUMINT UNSIGNED NOT NULL"/>
+            <persistencefield name="createdby" sys="yes" primarykey="no" jsontype="String" min="4" max="4" createsql="CHAR(4) NOT NULL"/>
+            <persistencefield name="createdon" final="yes" sys="yes" primarykey="no" jsontype="String" min="14" max="14" createsql="CHAR(14) NOT NULL"/>
+            <persistencefield name="updatedby" sys="yes" primarykey="no" jsontype="String" min="4" max="4" createsql="CHAR(4) NOT NULL"/>
+            <persistencefield name="updatedon" final="yes" sys="yes" primarykey="no" jsontype="String" min="14" max="14" createsql="CHAR(14) NOT NULL"/>
+        </persistenceentity>
+        <persistenceentity name="Timing">
+            <persistencefield name="raceentry" primarykey="no" jsontype="Reference" createsql=" MEDIUMINT UNSIGNED  NOT NULL ,FOREIGN KEY (raceentry) REFERENCES Raceentry(id)"/>
+            <persistencefield name="lap" primarykey="no" jsontype="Integer" createsql=" MEDIUMINT  NOT NULL"/>
+            <persistencefield name="at" primarykey="no" jsontype="String" min="14" max="14" createsql=" CHAR(14)  NOT NULL"/>
+            <persistencefield name="estimated" primarykey="no" jsontype="String" min="14" max="14" createsql=" CHAR(14)  NOT NULL"/>
+            <persistencefield name="coursemark" primarykey="no" jsontype="Reference" createsql="MEDIUMINT UNSIGNED NOT NULL ,FOREIGN KEY (coursemark) REFERENCES Coursemark(id)"/>
+            <persistencefield name="id" sys="yes" jsontype="Integer" primarykey="auto" createsql="MEDIUMINT UNSIGNED AUTO_INCREMENT PRIMARY KEY"/>
+            <persistencefield name="createdby" sys="yes" primarykey="no" jsontype="String" min="4" max="4" createsql="CHAR(4) NOT NULL"/>
+            <persistencefield name="createdon" final="yes" sys="yes" primarykey="no" jsontype="String" min="14" max="14" createsql="CHAR(14) NOT NULL"/>
+            <persistencefield name="updatedby" sys="yes" primarykey="no" jsontype="String" min="4" max="4" createsql="CHAR(4) NOT NULL"/>
+            <persistencefield name="updatedon" final="yes" sys="yes" primarykey="no" jsontype="String" min="14" max="14" createsql="CHAR(14) NOT NULL"/>
+        </persistenceentity>
+    </persistencestore>
 </nbpcg-entity-info>

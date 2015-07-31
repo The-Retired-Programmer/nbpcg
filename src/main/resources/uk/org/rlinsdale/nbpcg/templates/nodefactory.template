@@ -64,6 +64,7 @@ package ${package};
 
 import java.util.List;
 import  ${datapackage}.*;
+import uk.org.rlinsdale.nbpcglibrary.api.LogicException;
 import uk.org.rlinsdale.nbpcglibrary.data.entity.*;
 import uk.org.rlinsdale.nbpcglibrary.node.nodes.*;
 import uk.org.rlinsdale.nbpcglibrary.common.*;

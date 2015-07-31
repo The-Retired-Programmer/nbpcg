@@ -67,7 +67,7 @@ import uk.org.rlinsdale.nbpcglibrary.annotations.UseCommonNodeAction;
 import uk.org.rlinsdale.nbpcglibrary.annotations.UseCommonNodeActions;
 import uk.org.rlinsdale.nbpcglibrary.node.nodes.RootNode;
 import uk.org.rlinsdale.nbpcglibrary.node.properties.StringReadonlyProperty;
-import uk.org.rlinsdale.nbpcglibrary.common.LogicException;
+import uk.org.rlinsdale.nbpcglibrary.api.LogicException;
 import org.openide.nodes.*;
 <#list ENTITYINFO.child![] as child>
 import static ${package}.${child.name?cap_first}Node.${child.name?upper_case}NODE_FLAVOR;

@@ -78,41 +78,24 @@ import static ${field.passwordsupport}.*;
 </#if>
 </#list>
 import static ${package}.${ENTITYINFO.name}.${ENTITYINFO.name}Field;
-import uk.org.rlinsdale.nbpcglibrary.api.BadFormatException;
-import uk.org.rlinsdale.nbpcglibrary.api.EntityFields;
-import uk.org.rlinsdale.nbpcglibrary.api.EntityPersistenceProvider;
-import uk.org.rlinsdale.nbpcglibrary.api.EntityPersistenceProviderManager;
-import uk.org.rlinsdale.nbpcglibrary.api.Timestamp;
+import uk.org.rlinsdale.nbpcglibrary.api.*;
 import uk.org.rlinsdale.nbpcglibrary.common.*;
 import uk.org.rlinsdale.nbpcglibrary.data.entity.*;
+<#if ENTITYINFO.orderable = "yes">
+import uk.org.rlinsdale.nbpcglibrary.data.entity.EntityStateChangeEventParams.EntityState;
+import static uk.org.rlinsdale.nbpcglibrary.data.entity.EntityStateChangeEventParams.EntityState.NEW;
+import static uk.org.rlinsdale.nbpcglibrary.data.entity.EntityStateChangeEventParams.EntityState.NEWEDITING;
+</#if>
 <#assign er_written = "n" >
 <#list ENTITYINFO.field![] as field >
 <#if (field.type = "reference" || field.type = "ref") && er_written = "n" >
-import uk.org.rlinsdale.nbpcglibrary.data.entityreferences.EntityReference;
+import uk.org.rlinsdale.nbpcglibrary.data.entityreferences.*;
 <#assign er_written = "y" >
 </#if>
 </#list>
-<#assign ers_written = "n" >
-<#assign erss_written = "n" >
-<#assign ersi_written = "n" >
-<#list ENTITYINFO.child![] as child >
-<#if child.orderable = "yes">
-<#if ersi_written = "n" >
-import uk.org.rlinsdale.nbpcglibrary.data.entityreferences.EntityIndexedReferenceSet;
-<#assign ersi_written = "y" >
+<#if er_written = "n" && ENTITYINFO.child??>
+import uk.org.rlinsdale.nbpcglibrary.data.entityreferences.*;
 </#if>
-<#elseif child.sort = "yes" >
-<#if erss_written = "n" >
-import uk.org.rlinsdale.nbpcglibrary.data.entityreferences.EntitySortedReferenceSet;
-<#assign erss_written = "y" >
-</#if>
-<#else>
-<#if ers_written = "n" >
-import uk.org.rlinsdale.nbpcglibrary.data.entityreferences.EntityReferenceFilterSet;
-<#assign ers_written = "y" >
-</#if>
-</#if>
-</#list>
 
 /**
  * The ${ENTITYINFO.name} Entity.
@@ -133,8 +116,13 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.pkeytype},${ENTITYIN
      */
     public enum ${ENTITYINFO.name}Field {
 <#list ENTITYINFO.field![] as field >
+<#if field.type = "idx" >
+        /**
+         * the ${field.name} field
+         */
+        ${field.name?upper_case},
+<#elseif field.type != "rootref" >
 <#if !(field.hidden??) >
-<#if field.type != "rootref" >
         /**
          * the ${field.name} field
          */
@@ -148,6 +136,10 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.pkeytype},${ENTITYIN
          */
         ${child.name?upper_case}S,
 </#list>
+        /**
+         * all fields
+         */
+         ALL
     }
 
     private final Rules entityRules = new Rules();
@@ -155,11 +147,13 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.pkeytype},${ENTITYIN
 <#if field.type == "ref">
     private final EntityReference<${PARENTENTITYINFO.pkeytype},${field.references}, ${PARENTENTITYINFO.parentname}> ${field.name};
 <#elseif field.type == "reference">
-<#assign FIELDENTITY = entityinfo[field.name?cap_first]>
+<#assign FIELDENTITY = entityinfo[field.references]>
     private final EntityReference<${FIELDENTITY.pkeytype},${field.references}, ${FIELDENTITY.parentname}> ${field.name};
 <#elseif field.type == "rootref" >
     private final ${field.references} ${field.name};
 <#elseif field.type == "idx">
+    private ${field.javatype} ${field.name}${field.initialisation};
+    private ${field.javatype} ${field.name}Original; 
 <#else>
     private <#if field.final??>final </#if>${field.javatype} ${field.name}${field.initialisation};
 <#if !field.hidden??>
@@ -178,9 +172,9 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.pkeytype},${ENTITYIN
 <#list ENTITYINFO.child![] as child>
 <#assign CHILDENTITY = entityinfo[child.name?cap_first]>
 <#if child.orderable = "yes">
-    private final EntityIndexedReferenceSet<${CHILDENTITY.pkeytype},${child.references}, ${ENTITYINFO.name}> ${child.name}s;
+    private final EntityIndexedReferenceFilterSet<${CHILDENTITY.pkeytype},${child.references}, ${ENTITYINFO.name}> ${child.name}s;
 <#elseif child.sort = "yes" >
-    private final EntitySortedReferenceSet<${CHILDENTITY.pkeytype},${child.references}, ${ENTITYINFO.name}> ${child.name}s;
+    private final EntitySortedReferenceFilterSet<${CHILDENTITY.pkeytype},${child.references}, ${ENTITYINFO.name}, ${child.references}.${child.references}Field> ${child.name}s;
 <#else>
     private final EntityReferenceFilterSet<${CHILDENTITY.pkeytype},${child.references}, ${ENTITYINFO.name}> ${child.name}s;
 </#if>
@@ -256,12 +250,13 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.pkeytype},${ENTITYIN
 </#list>
 <#list ENTITYINFO.child![] as child>
 <#if child.orderable = "yes" >
-        ${child.name}s = new EntityIndexedReferenceSet<>(instanceDescription()+">${child.references}s", "${child.dbname}", getId(), ${child.references}.EM.class);
+        ${child.name}s = new EntityIndexedReferenceFilterSet<>(instanceDescription()+">${child.references}s", "${child.dbname}", getId(), ${child.references}.EM.class);
 <#elseif child.sort = "yes" >
-        ${child.name}s = new EntitySortedReferenceSet<>(instanceDescription()+">${child.references}s", new ${child.references}Comparator(), "${child.dbname}", getId(), ${child.references}.EM.class);
+        ${child.name}s = new EntitySortedReferenceFilterSet<>(instanceDescription()+">${child.references}s", new ${child.references}Comparator(), "${child.dbname}", getId(), ${child.references}.EM.class);
 <#else>
         ${child.name}s = new EntityReferenceFilterSet<>(instanceDescription()+">${child.references}s", "${child.dbname}", getId(), ${child.references}.EM.class);
 </#if>
+         ${child.name}s.load();
 <#if child.min??>
         addRule(${child.name}s.getMinRule(${child.min}));
 </#if>
@@ -539,6 +534,30 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.pkeytype},${ENTITYIN
         return root;
     }
 <#elseif field.type == "idx" >
+
+    @Override
+    public final int getIdx() {
+        return idx;
+    }
+
+    /**
+     * Get the idx in String format.
+     *
+     * @return the idx
+     */
+    public String getIdxText() {
+        return Integer.toString(idx);
+    }
+
+    @Override
+    public void setIdx(int idx) {
+        if (this.idx != idx) {
+            ensureEditing();
+            this.idx = idx;
+            fireFieldChange(${ENTITYINFO.name}Field.IDX);
+        }
+    }
+
 <#else>
 <#if !(field.hidden??) >
 
@@ -875,12 +894,14 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.pkeytype},${ENTITYIN
     @Override
     protected final void entitySaveState() {
 <#list ENTITYINFO.field![] as field>
-<#if !(field.hidden??) >
-<#if field.type == "ref" || field.type == "reference" >
-            ${field.name}.saveState();
-<#elseif field.type == "idx" || field.type == "rootref" >
+<#if field.type == "idx" >
+        ${field.name}Original = ${field.name};
+<#elseif field.type == "ref" || field.type == "reference" >
+        ${field.name}.saveState();
+<#elseif field.type == "rootref" >
 <#else>
-            ${field.name}Original = ${field.name};
+<#if !(field.hidden??) >
+        ${field.name}Original = ${field.name};
 </#if>
 </#if>
 </#list>
@@ -889,12 +910,14 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.pkeytype},${ENTITYIN
     @Override
     protected final void entityRestoreState() {
 <#list ENTITYINFO.field![] as field>
-<#if !(field.hidden??) >
-<#if field.type == "ref" || field.type == "reference">
+<#if field.type == "idx" >
+        ${field.name} = ${field.name}Original;
+<#elseif field.type == "ref" || field.type == "reference">
         ${field.name}.restoreState();
-<#elseif field.type == "idx"  || field.type == "rootref" >
+<#elseif field.type == "rootref" >
 <#else>
-         ${field.name} = ${field.name}Original;
+<#if !(field.hidden??) >
+        ${field.name} = ${field.name}Original;
 <#if field.type=="int" || field.type=="long" || field.type == "date" || field.type == "datetime" >
         ${field.name}BadFormat=false;
 </#if>      
@@ -909,17 +932,18 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.pkeytype},${ENTITYIN
     @Override
     protected final void entityRemove(){
 <#list ENTITYINFO.referenced![] as referenced>
-        ${referenced.name}.EM em${referenced.name} = ${referenced.name}.getEM();
-        EntityPersistenceProvider<${ENTITYINFO.pkeytype}> epp = em${referenced.name}.getEntityPersistenceProvider();
-        epp.find("${referenced.field}", getPK()).stream().forEach((pk) -> {
+        {
+            ${referenced.name}.EM em = ${referenced.name}.getEM();
+            em.getEntityPersistenceProvider().find("${referenced.field}", getPK()).stream().forEach((pk) -> {
 <#if referenced.optional??>
-            ${referenced.name} ${referenced.name?lower_case} = em${referenced.name}.get(pk);
-            ${referenced.name?lower_case}.set${referenced.field?cap_first}(null);
-            ${referenced.name?lower_case}.save();
+                ${referenced.name} e = em.get(pk);
+                e.set${referenced.field?cap_first}(null);
+                e.save();
 <#else>
-            em${referenced.name}.get(pk).remove();
+                em.get(pk).remove();
 </#if>
-        });
+            });
+        }
 </#list>
 <#list ENTITYINFO.child![] as child>
         get${child.references}s().stream().forEach((${child.name}) -> {
@@ -952,6 +976,7 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.pkeytype},${ENTITYIN
         ${field.name}.set((Integer) data.get("${field.name}"));
 <#elseif field.type == "rootref">
 <#elseif field.type == "idx" >
+        ${field.name} = (Integer) data.get("${field.name}");
 <#elseif field.type == "password" >
         ${field.name} = (String) data.get("${field.name}");
         passwordrule.encodedPasswordLoaded();
@@ -968,6 +993,9 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.pkeytype},${ENTITYIN
     @Override
     protected final void entityCopy(${ENTITYINFO.name} from) {
 <#list ENTITYINFO.field![] as field>
+<#if field.type == "idx" >
+        ${field.name} = from.get${field.name?cap_first}();
+<#else>
 <#if !(field.hidden??) >
 <#if field.javatype == "DateOnly">
         try {
@@ -982,9 +1010,9 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.pkeytype},${ENTITYIN
             throw new LogicException("Copy reported bad Timestamp format - should never happen!!");
         }
 <#elseif field.type == "ref" || field.type == "reference"|| field.type == "rootref" >
-<#elseif field.type == "idx" >
 <#else>
         ${field.name} = from.get${field.name?cap_first}();
+</#if>
 </#if>
 </#if>
 </#list>
@@ -993,6 +1021,11 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.pkeytype},${ENTITYIN
     @Override
     protected final void entityDiffs(EntityFields data) {
 <#list ENTITYINFO.field![] as field>
+<#if field.type == "idx" >
+        if (${field.name} != ${field.name}Original) {
+            data.put("${field.name}", ${field.name});
+        }
+<#else>
 <#if !(field.hidden??) >
 <#if field.javatype == "String" >
         if (!${field.name}.equals(${field.name}Original)) {
@@ -1005,30 +1038,30 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.pkeytype},${ENTITYIN
 <#elseif field.type == "ref" || field.type == "reference" >
         if (${field.name}.isDirty()) {
 <#if field.optional??>
-            int idref${field.references} = ${field.name}.getPK();
-            if (idref${field.references} < 0 ) {
+            int idref${field.name?cap_first} = ${field.name}.getPK();
+            if (idref${field.name?cap_first} < 0 ) {
                 ${field.name}.get().save();
                 data.put("${field.name}", ${field.name}.get().getPK());
-            } else if (idref${field.references} == 0) {
+            } else if (idref${field.name?cap_first} == 0) {
                 data.put("${field.name}", null);
             } else {
-                data.put("${field.name}", idref${field.references});
+                data.put("${field.name}", idref${field.name?cap_first});
             }
 <#else>
-            int idref${field.references} = ${field.name}.getPK();
-            if (idref${field.references} < 0 ) {
+            int idref${field.name?cap_first} = ${field.name}.getPK();
+            if (idref${field.name?cap_first} < 0 ) {
                 ${field.name}.get().save();
-                idref${field.references} = ${field.name}.get().getPK();
+                idref${field.name?cap_first} = ${field.name}.get().getPK();
             }
-            data.put("${field.name}", idref${field.references});
+            data.put("${field.name}", idref${field.name?cap_first});
 </#if>
         }
 <#elseif field.type == "rootref">
-<#elseif field.type == "idx" >
 <#else>
         if (${field.name} != ${field.name}Original) {
             data.put("${field.name}", ${field.name});
         }
+</#if>
 </#if>
 </#if>
 </#list>
@@ -1037,37 +1070,53 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.pkeytype},${ENTITYIN
     @Override
     protected final void entityValues(EntityFields data) {
 <#list ENTITYINFO.field![] as field>
+<#if field.type == "idx" >
+        data.put("${field.name}", ${field.name});
+<#else>
 <#if !(field.hidden??) >
 <#if field.type == "ref" || field.type == "reference" >
 <#if field.optional??>
-        int idref${field.references} = ${field.name}.getPK();
-        if (idref${field.references} < 0 ) {
+        int idref${field.name?cap_first} = ${field.name}.getPK();
+        if (idref${field.name?cap_first} < 0 ) {
             ${field.name}.get().save();
             data.put("${field.name}", ${field.name}.get().getPK());
-        } else if (idref${field.references} == 0) {
+        } else if (idref${field.name?cap_first} == 0) {
             data.put("${field.name}", null);
         } else {
-            data.put("${field.name}", idref${field.references});
+            data.put("${field.name}", idref${field.name?cap_first});
         }
 <#else>
-        int idref${field.references} = ${field.name}.getPK();
-        if (idref${field.references} < 0 ) {
+        int idref${field.name?cap_first} = ${field.name}.getPK();
+        if (idref${field.name?cap_first} < 0 ) {
             ${field.name}.get().save();
-            idref${field.references} = ${field.name}.get().getPK();
+            idref${field.name?cap_first} = ${field.name}.get().getPK();
         }
-        data.put("${field.name}", idref${field.references});
+        data.put("${field.name}", idref${field.name?cap_first});
 </#if>
 <#elseif field.type == "rootref">
-<#elseif field.type == "idx" >
 <#elseif field.type == "datetime" | field.type == "date">
         data.put("${field.name}", ${field.name}.toSQLString());
 <#else>
         data.put("${field.name}", ${field.name});
 </#if>
 </#if>
+</#if>
 </#list>
     }
 
+<#if ENTITYINFO.orderable = "yes">
+    @Override
+    public final boolean save() {
+        EntityState state = getState();
+        if (state == NEW || state == NEWEDITING) {
+            if (getIdx() == Integer.MAX_VALUE) {
+                setIdx(epp.findNextIdx());
+            }
+        }
+        return super.save();
+    }
+
+</#if>
     /**
      * Get the ${ENTITYINFO.name} Entity Manager
      * @return the ${ENTITYINFO.name} Entity Manager
@@ -1109,7 +1158,7 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.pkeytype},${ENTITYIN
 
         @Override
         protected final EntityPersistenceProvider createEntityPersistenceProvider() {
-            return EntityPersistenceProviderManager.getEntityPersistenceProvider("${ENTITYINFO.dbkey}", "${ENTITYINFO.dbtablename}");
+            return EntityPersistenceProviderManager.getEntityPersistenceProvider("${ENTITYINFO.dbkey}", "${ENTITYINFO.dbtablename}"<#if ENTITYINFO.orderable = "yes">, "idx"</#if>);
         }
 
 <#if ENTITYINFO.pkey = "id" >
@@ -1189,15 +1238,15 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.pkeytype},${ENTITYIN
 <#elseif field.type="ref" >
                 return getParent()!=null ? getParent().getDisplayName(): "undefined" ;
 <#elseif field.type="int" >
-            return Integer.toString(get${field.name?cap_first}());
+            return get${field.name?cap_first}Text();
 <#elseif field.type="idx"  >
-            return Integer.toString(getIndex());
+            return getIdxText();
 <#elseif field.type="long" >
-            return Long.toString(e.get${field.name?cap_first}());
+            return e.get${field.name?cap_first}Text();
 <#elseif field.type="boolean" >
             return get${field.name?cap_first}()? "Yes": "No";
 <#elseif field.type="date" || field.type="datetime" >
-            return get${field.name?cap_first}().toString();
+            return get${field.name?cap_first}Text();
 <#elseif field.type="String" ||  field.type="enum" || field.type="password" >
             return get${field.name?cap_first}();
 </#if>
