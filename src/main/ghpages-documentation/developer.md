@@ -12,8 +12,8 @@ Alternatively the project can be forked from [here](https://github.com/Richard-L
 to obtain the whole source tree.  Tag v${project.version} refers to the sources
 relevant to this release.
 
-Online Javadoc for this release can be found [here](http://javadoc.rlinsdale.org.uk/nbpcg/${project.version}/apidocs/index.html)
-whilst a downloadable jar file containing the same Javadoc is available from [here](http://javadoc.rlinsdale.org.uk/nbpcg/${project.version}/NBPCG-${project.version}-javadoc.jar)
+Online Javadoc for this release can be found [here](http://javadoc.rlinsdale.org.uk/nbpcg/v${release}/index.html)
+whilst a downloadable jar file containing the same Javadoc is available from [here](http://javadoc.rlinsdale.org.uk/nbpcg/v${release}/NBPCG-${project.version}-javadoc.jar)
 
 Developers modifying the source code are encouraged to submit their changes
 back to the project using a Pull-Request (for consideration for

@@ -128,7 +128,7 @@ Definition of a database table object.
 | Attribute | pkey | database key type - one of idauto | optional |
 | Attribute | extrafields | additional standard fields to add - one of usertimestamp | optional |
 | Child Element | field | | zero or more|
-| Child Element | insertrecord | | zero or more|
+| Child Element | insertentity | | zero or more|
 
 **The field element**
 
@@ -155,7 +155,7 @@ Definition of a database table field (column) object.
 | Attribute | entryfield | the field name used for a password entry | optional |
 | Attribute | passwordstrength | the require password strength - one of weak, strong, verystrong - default is none | optional |
 
-**The insertrecord element**
+**The insertentity element**
 
 Definition of an data row to be inserted into the database table object.
 

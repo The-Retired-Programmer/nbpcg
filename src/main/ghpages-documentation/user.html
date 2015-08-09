@@ -1,0 +1,863 @@
+<!--
+Copyright (C) 2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<!--
+    Author     : Richard Linsdale (richard.linsdale at blueyonder.co.uk)
+-->
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset='utf-8' />
+        <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+        <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+        <title>NBPCG User Documentation</title>
+    </head>
+    <body>
+        <!-- HEADER -->
+        <div>
+            <header class="inverse_centred">
+                <h1 class="headertext">User Documentation        </h1>
+                <h2 class="taglinetext"></h2>
+            </header>
+        </div>
+        <!-- MENU OF LINKS -->
+        <div class="tab_content">
+            <section class="tab_section">
+                <span class="tabtext"><a href="index.html">NBPCG Home</a></span>
+            </section>
+        </div>
+        <!-- MAIN CONTENT -->
+        <div class="main_content">
+            <section class="main_section_left">
+                <p>The Netbeans Platform Application Code generator is a Netbeans plug-in which creates
+a set of artifacts to speed up creation of a NetBeans Platform Application.  These artifacts can
+include:</p>
+
+<ul>
+  <li>Database creation scripts</li>
+  <li>Other utility scripts</li>
+  <li>Entity classes and their associated Entity Managers</li>
+  <li>Node class for all entities</li>
+  <li>Explorer Views for all entities</li>
+  <li>Editors for all entities</li>
+</ul>
+
+<p>The generation of these artifacts is controlled by a single NBPCG script which describes the necessary
+build details, entities details and also the node relationships.</p>
+
+<p>Best practise would be to create a separate Netbeans module into which the NBPCG script is placed and all
+the artifacts are generated.  However it is possible to incorporate the NBPCG script in an existing module and generate
+the artifacts within the module.  The only restriction in this case is that the generated code must be created within packages 
+in which no other classes have been manually created, as all files in NBPCG referenced packages are deleted prior to code generation.  It is also possible for a script to generate
+it’s code across multiple modules (using the build directive), but in this case all the referenced projects must be opened
+in the Netbeans IDE in order that the script will work.</p>
+
+<h5 id="the-nbpcg-script">The NBPCG script</h5>
+
+<p>The NBPCG script is an XML document.  A template is available - using the New… entry, the template can be selected 
+from the other category with file type NBPCG Definition file</p>
+
+<p><img src="images/newfile.jpg" alt="script template selection" /></p>
+
+<p>The xml consists of a top level element ( <strong>nbpcg</strong> ).  Details of the xml document is outlined in the following section:</p>
+
+<p><strong>The nbpcg element</strong></p>
+
+<p>The top level element of the nbpcg script document.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">Type</th>
+      <th style="text-align: left">Name</th>
+      <th style="text-align: left">Value</th>
+      <th style="text-align: left">Required</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">Attribute</td>
+      <td style="text-align: left">name</td>
+      <td style="text-align: left">the name of the script</td>
+      <td style="text-align: left">yes</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Child Element</td>
+      <td style="text-align: left">build</td>
+      <td style="text-align: left"> </td>
+      <td style="text-align: left">one</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Child Element</td>
+      <td style="text-align: left">node</td>
+      <td style="text-align: left"> </td>
+      <td style="text-align: left">one or more</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Child Element</td>
+      <td style="text-align: left">databases</td>
+      <td style="text-align: left"> </td>
+      <td style="text-align: left">one or more</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>The build element</strong></p>
+
+<p>Defines the build information - artifact selection, projects and packages etc.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">Type</th>
+      <th style="text-align: left">Name</th>
+      <th style="text-align: left">Value</th>
+      <th style="text-align: left">Required</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">Attribute</td>
+      <td style="text-align: left">viewerrole</td>
+      <td style="text-align: left">the viewerroles for this application (comma separated)</td>
+      <td style="text-align: left">yes</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Attribute</td>
+      <td style="text-align: left">copyright</td>
+      <td style="text-align: left">the copyright key information year(s) and name / email - this will be added to every licence header placed in a generated file</td>
+      <td style="text-align: left">yes</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Child Element</td>
+      <td style="text-align: left">project</td>
+      <td style="text-align: left"> </td>
+      <td style="text-align: left">one or more</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>The project element</strong></p>
+
+<p>Defines the project information.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">Type</th>
+      <th style="text-align: left">Name</th>
+      <th style="text-align: left">Value</th>
+      <th style="text-align: left">Required</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">Attribute</td>
+      <td style="text-align: left">name</td>
+      <td style="text-align: left">the project name</td>
+      <td style="text-align: left">yes</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Attribute</td>
+      <td style="text-align: left">log</td>
+      <td style="text-align: left">the log key to be used in generated files</td>
+      <td style="text-align: left">yes</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Attribute</td>
+      <td style="text-align: left">license</td>
+      <td style="text-align: left">the license header to be added to generated files - one of gpl30 or lgpl21 - default is gpl30</td>
+      <td style="text-align: left">optional</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Child Element</td>
+      <td style="text-align: left">generate</td>
+      <td style="text-align: left"> </td>
+      <td style="text-align: left">one or more</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>The generate element</strong></p>
+
+<p>Requests the generation of code or resource files for various types of entities.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">Type</th>
+      <th style="text-align: left">Name</th>
+      <th style="text-align: left">Value</th>
+      <th style="text-align: left">Required</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">Attribute</td>
+      <td style="text-align: left">type</td>
+      <td style="text-align: left">the type of code artifacts to be generated - one of data, node, nodeviewer, nodeeditor, remotedb, mysqldatabase or jsondatabase</td>
+      <td style="text-align: left">yes</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Attribute</td>
+      <td style="text-align: left">package</td>
+      <td style="text-align: left">the package name to be used for all artifacts generated by this request</td>
+      <td style="text-align: left">yes</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>The node element</strong></p>
+
+<p>Defines the nodes required and their interrelationships.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">Type</th>
+      <th style="text-align: left">Name</th>
+      <th style="text-align: left">Value</th>
+      <th style="text-align: left">Required</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">Attribute</td>
+      <td style="text-align: left">name</td>
+      <td style="text-align: left">the node name</td>
+      <td style="text-align: left">yes</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Attribute</td>
+      <td style="text-align: left">view</td>
+      <td style="text-align: left">the types of view required - one of both, icon, tree, none - default is tree</td>
+      <td style="text-align: left">optional</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Attribute</td>
+      <td style="text-align: left">viewers</td>
+      <td style="text-align: left"> </td>
+      <td style="text-align: left">optional</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Attribute</td>
+      <td style="text-align: left">dbname</td>
+      <td style="text-align: left">the database name</td>
+      <td style="text-align: left">optional</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Attribute</td>
+      <td style="text-align: left">rootlabel</td>
+      <td style="text-align: left"> </td>
+      <td style="text-align: left">optional</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Attribute</td>
+      <td style="text-align: left">rooticon</td>
+      <td style="text-align: left">the root node icon name</td>
+      <td style="text-align: left">optional</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Attribute</td>
+      <td style="text-align: left">icon</td>
+      <td style="text-align: left">the node icon name</td>
+      <td style="text-align: left">optional</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Attribute</td>
+      <td style="text-align: left">label</td>
+      <td style="text-align: left"> </td>
+      <td style="text-align: left">optional</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Attribute</td>
+      <td style="text-align: left">orderable</td>
+      <td style="text-align: left">set to yes if nodes are allowed to be orderable (by drag and drop) - default is no</td>
+      <td style="text-align: left">optional</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Attribute</td>
+      <td style="text-align: left">nullallowed</td>
+      <td style="text-align: left">set to yes if null value is allowed</td>
+      <td style="text-align: left">optional</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Attribute</td>
+      <td style="text-align: left">fkey</td>
+      <td style="text-align: left">set to no if foreign key is not utilised - default is yes</td>
+      <td style="text-align: left">optional</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Attribute</td>
+      <td style="text-align: left">displaynameformat</td>
+      <td style="text-align: left">format for the node’s display name</td>
+      <td style="text-align: left">optional</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Attribute</td>
+      <td style="text-align: left">displaytitleformat</td>
+      <td style="text-align: left">format for the node’s display title</td>
+      <td style="text-align: left">optional</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Attribute</td>
+      <td style="text-align: left">sortformat</td>
+      <td style="text-align: left">format for the node’s sort string - also implies sortable</td>
+      <td style="text-align: left">optional</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Attribute</td>
+      <td style="text-align: left">min</td>
+      <td style="text-align: left">minimum number of this node type (as a childnode)</td>
+      <td style="text-align: left">optional</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Attribute</td>
+      <td style="text-align: left">max</td>
+      <td style="text-align: left">maximum number of this node type (as a childnode)</td>
+      <td style="text-align: left">optional</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Child Element</td>
+      <td style="text-align: left">node</td>
+      <td style="text-align: left">child nodes of this node</td>
+      <td style="text-align: left">zero or more</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>The databases element</strong></p>
+
+<p>Collection of all database definitions.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">Type</th>
+      <th style="text-align: left">Name</th>
+      <th style="text-align: left">Value</th>
+      <th style="text-align: left">Required</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">Child Element</td>
+      <td style="text-align: left">database</td>
+      <td style="text-align: left"> </td>
+      <td style="text-align: left">one or more</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>The database element</strong></p>
+
+<p>Definition of a database object.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">Type</th>
+      <th style="text-align: left">Name</th>
+      <th style="text-align: left">Value</th>
+      <th style="text-align: left">Required</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">Attribute</td>
+      <td style="text-align: left">name</td>
+      <td style="text-align: left">the logical name of this database</td>
+      <td style="text-align: left">yes</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Attribute</td>
+      <td style="text-align: left">dbname</td>
+      <td style="text-align: left">the database name of this database - default is attribute name</td>
+      <td style="text-align: left">optional</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Attribute</td>
+      <td style="text-align: left">pkey</td>
+      <td style="text-align: left">database key type - one of idauto</td>
+      <td style="text-align: left">optional</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Attribute</td>
+      <td style="text-align: left">extrafields</td>
+      <td style="text-align: left">additional standard fields to add - one of usertimestamp</td>
+      <td style="text-align: left">optional</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Attribute</td>
+      <td style="text-align: left">usepackage</td>
+      <td style="text-align: left">??</td>
+      <td style="text-align: left">optional</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Child Element</td>
+      <td style="text-align: left">table</td>
+      <td style="text-align: left"> </td>
+      <td style="text-align: left">one or more</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>The table element</strong></p>
+
+<p>Definition of a database table object.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">Type</th>
+      <th style="text-align: left">Name</th>
+      <th style="text-align: left">Value</th>
+      <th style="text-align: left">Required</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">Attribute</td>
+      <td style="text-align: left">name</td>
+      <td style="text-align: left">entity name</td>
+      <td style="text-align: left">yes</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Attribute</td>
+      <td style="text-align: left">dbname</td>
+      <td style="text-align: left">the database name of this table - default is attribute name</td>
+      <td style="text-align: left">optional</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Attribute</td>
+      <td style="text-align: left">pkey</td>
+      <td style="text-align: left">database key type - one of idauto</td>
+      <td style="text-align: left">optional</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Attribute</td>
+      <td style="text-align: left">extrafields</td>
+      <td style="text-align: left">additional standard fields to add - one of usertimestamp</td>
+      <td style="text-align: left">optional</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Child Element</td>
+      <td style="text-align: left">field</td>
+      <td style="text-align: left"> </td>
+      <td style="text-align: left">zero or more</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Child Element</td>
+      <td style="text-align: left">insertentity</td>
+      <td style="text-align: left"> </td>
+      <td style="text-align: left">zero or more</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>The field element</strong></p>
+
+<p>Definition of a database table field (column) object.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">Type</th>
+      <th style="text-align: left">Name</th>
+      <th style="text-align: left">Value</th>
+      <th style="text-align: left">Required</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">Attribute</td>
+      <td style="text-align: left">pkey</td>
+      <td style="text-align: left">yes if this field is the primary key</td>
+      <td style="text-align: left">no</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Attribute</td>
+      <td style="text-align: left">name</td>
+      <td style="text-align: left">field name</td>
+      <td style="text-align: left">yes</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Attribute</td>
+      <td style="text-align: left">dbname</td>
+      <td style="text-align: left">the table column name - defaults to attribute name</td>
+      <td style="text-align: left">optional</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Attribute</td>
+      <td style="text-align: left">index</td>
+      <td style="text-align: left">define the indexing for this field - one of unique or yes - default is no</td>
+      <td style="text-align: left">optional</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Attribute</td>
+      <td style="text-align: left">unique</td>
+      <td style="text-align: left">define the uniqueness of this field - one of yes - default is no</td>
+      <td style="text-align: left">optional</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Attribute</td>
+      <td style="text-align: left">type</td>
+      <td style="text-align: left">data type of the field one of boolean, long, int, date, datetime, enum, password or reference - default is string</td>
+      <td style="text-align: left">optional</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Attribute</td>
+      <td style="text-align: left">nullallowed</td>
+      <td style="text-align: left">are null values allowed? - one of yes - default is no</td>
+      <td style="text-align: left">optional</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Attribute</td>
+      <td style="text-align: left">label</td>
+      <td style="text-align: left"> </td>
+      <td style="text-align: left">optional</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Attribute</td>
+      <td style="text-align: left">references</td>
+      <td style="text-align: left"> </td>
+      <td style="text-align: left">optional</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Attribute</td>
+      <td style="text-align: left">fkey</td>
+      <td style="text-align: left">set to no if foreign key is not utilised - default is yes</td>
+      <td style="text-align: left">optional</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Attribute</td>
+      <td style="text-align: left">values</td>
+      <td style="text-align: left">set of enum values (comma separated)</td>
+      <td style="text-align: left">optional</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Attribute</td>
+      <td style="text-align: left">min</td>
+      <td style="text-align: left">min length of string entered, min value of number entered</td>
+      <td style="text-align: left">optional</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Attribute</td>
+      <td style="text-align: left">max</td>
+      <td style="text-align: left">max length of string entered, max value of number entered</td>
+      <td style="text-align: left">optional</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Attribute</td>
+      <td style="text-align: left">future</td>
+      <td style="text-align: left">set to yes if date or datetime entered must be in future</td>
+      <td style="text-align: left">optional</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Attribute</td>
+      <td style="text-align: left">past</td>
+      <td style="text-align: left">set to yes if date or datetime entered must be in past</td>
+      <td style="text-align: left">optional</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Attribute</td>
+      <td style="text-align: left">passwordsupport</td>
+      <td style="text-align: left">package name containing the helper methods for encoding and password testing</td>
+      <td style="text-align: left">optional</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Attribute</td>
+      <td style="text-align: left">entryfield</td>
+      <td style="text-align: left">the field name used for a password entry</td>
+      <td style="text-align: left">optional</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Attribute</td>
+      <td style="text-align: left">passwordstrength</td>
+      <td style="text-align: left">the require password strength - one of weak, strong, verystrong - default is none</td>
+      <td style="text-align: left">optional</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>The insertentity element</strong></p>
+
+<p>Definition of an data row to be inserted into the database table object.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">Type</th>
+      <th style="text-align: left">Name</th>
+      <th style="text-align: left">Value</th>
+      <th style="text-align: left">Required</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">Child Element</td>
+      <td style="text-align: left">insertfield</td>
+      <td style="text-align: left"> </td>
+      <td style="text-align: left">zero or more</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>The insertfield element</strong></p>
+
+<p>Definition of an field to be inserted into the database table object.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">Type</th>
+      <th style="text-align: left">Name</th>
+      <th style="text-align: left">Value</th>
+      <th style="text-align: left">Required</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">Attribute</td>
+      <td style="text-align: left">name</td>
+      <td style="text-align: left">field name</td>
+      <td style="text-align: left">yes</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Attribute</td>
+      <td style="text-align: left">value</td>
+      <td style="text-align: left">field value</td>
+      <td style="text-align: left">yes</td>
+    </tr>
+  </tbody>
+</table>
+
+<h5 id="setting-up-a-maven-project">Setting up a Maven project</h5>
+
+<ul>
+  <li>In Projects View, Add a folder named <code>nbpcg</code> under <code>Other Sources</code>.</li>
+  <li>Place the nbpcg script file ( <code>script.xml</code>) in the <code>nbpcg</code> node</li>
+</ul>
+
+<p><img src="images/nbpcgfolderandscript.jpg" alt="nbpcg folder and script" /></p>
+
+<h5 id="setting-up-an-ant-project">Setting up an ANT project</h5>
+
+<ul>
+  <li>In Files view, Add a folder name <code>nbpcg-files</code> under the project root.</li>
+  <li>In Project view, Place the nbpcg script file ( <code>script.xml</code>) in the <code>NBPCG File</code> node.</li>
+</ul>
+
+<h5 id="executing-the-nbpcg-script">Executing the NBPCG script</h5>
+
+<p>The NBPCG script can be executed by actions on the popup menu on:</p>
+
+<ol>
+  <li>The Project node</li>
+</ol>
+
+<p><img src="images/projectaction.jpg" alt="project node action" /></p>
+
+<ol>
+  <li>The NBPCG script file</li>
+</ol>
+
+<p><img src="images/scriptaction.jpg" alt="script action" /></p>
+
+<p>Executing the script will open a new tab in the output window. Progress and errors will be reported 
+in that tab.</p>
+
+<p><img src="images/outputtab.jpg" alt="output tab" /></p>
+
+<h5 id="dependency-information-for-nbpcg-generated-modules">Dependency Information for NBPCG generated Modules</h5>
+
+<p>NBPCG does not currently setup dependencies for the generated modules
+(either on NBPCG support libraries or Netbean Platform modules). The
+following documentation details the dependencies that exist and should
+be added to the various generated modules.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left"> </th>
+      <th style="text-align: center">Datamodel</th>
+      <th style="text-align: center">NodeModel</th>
+      <th style="text-align: center">NodeViewer</th>
+      <th style="text-align: center">NodeEditor</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left"><strong>NetBeans Platform</strong></td>
+      <td style="text-align: center"> </td>
+      <td style="text-align: center"> </td>
+      <td style="text-align: center"> </td>
+      <td style="text-align: center"> </td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Explorer &amp; Property Sheet API</td>
+      <td style="text-align: center"> </td>
+      <td style="text-align: center">x</td>
+      <td style="text-align: center">x</td>
+      <td style="text-align: center"> </td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Lookup API</td>
+      <td style="text-align: center">x</td>
+      <td style="text-align: center"> </td>
+      <td style="text-align: center">x</td>
+      <td style="text-align: center">x</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Nodes API</td>
+      <td style="text-align: center"> </td>
+      <td style="text-align: center">x</td>
+      <td style="text-align: center">x</td>
+      <td style="text-align: center">x</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">UI Utilities API</td>
+      <td style="text-align: center"> </td>
+      <td style="text-align: center"> </td>
+      <td style="text-align: center">x</td>
+      <td style="text-align: center">x</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Utilities API</td>
+      <td style="text-align: center"> </td>
+      <td style="text-align: center">x</td>
+      <td style="text-align: center">x</td>
+      <td style="text-align: center">x</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Window System API</td>
+      <td style="text-align: center"> </td>
+      <td style="text-align: center"> </td>
+      <td style="text-align: center">x</td>
+      <td style="text-align: center">x</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><strong>NBPCG-Library</strong></td>
+      <td style="text-align: center"> </td>
+      <td style="text-align: center"> </td>
+      <td style="text-align: center"> </td>
+      <td style="text-align: center"> </td>
+    </tr>
+    <tr>
+      <td style="text-align: left">MySQL</td>
+      <td style="text-align: center">*</td>
+      <td style="text-align: center"> </td>
+      <td style="text-align: center"> </td>
+      <td style="text-align: center"> </td>
+    </tr>
+    <tr>
+      <td style="text-align: left">NBPCG Data Support Lib</td>
+      <td style="text-align: center">x</td>
+      <td style="text-align: center">x</td>
+      <td style="text-align: center">x</td>
+      <td style="text-align: center">x</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">NBPCG Form Support Lib</td>
+      <td style="text-align: center"> </td>
+      <td style="text-align: center"> </td>
+      <td style="text-align: center"> </td>
+      <td style="text-align: center">x</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">NBPCG Node Support Lib</td>
+      <td style="text-align: center"> </td>
+      <td style="text-align: center">x</td>
+      <td style="text-align: center">x</td>
+      <td style="text-align: center">x</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">NBPCG Support Lib</td>
+      <td style="text-align: center">x</td>
+      <td style="text-align: center">x</td>
+      <td style="text-align: center">x</td>
+      <td style="text-align: center">x</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">NBPCG TopComponent Support Lib</td>
+      <td style="text-align: center"> </td>
+      <td style="text-align: center"> </td>
+      <td style="text-align: center">x</td>
+      <td style="text-align: center">x</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><strong>GENERATED MODULES</strong></td>
+      <td style="text-align: center"> </td>
+      <td style="text-align: center"> </td>
+      <td style="text-align: center"> </td>
+      <td style="text-align: center"> </td>
+    </tr>
+    <tr>
+      <td style="text-align: left">XX DataModel</td>
+      <td style="text-align: center"> </td>
+      <td style="text-align: center">x</td>
+      <td style="text-align: center">x</td>
+      <td style="text-align: center">x</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">XX NodeModel</td>
+      <td style="text-align: center"> </td>
+      <td style="text-align: center"> </td>
+      <td style="text-align: center">x</td>
+      <td style="text-align: center">x</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">XX NodeEditor</td>
+      <td style="text-align: center"> </td>
+      <td style="text-align: center">x</td>
+      <td style="text-align: center"> </td>
+      <td style="text-align: center"> </td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><em>If you are using table aliases to access other tables then you will need to add addition dependencies to those modules</em></td>
+      <td style="text-align: center"> </td>
+      <td style="text-align: center"> </td>
+      <td style="text-align: center"> </td>
+      <td style="text-align: center"> </td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><strong>ALIAS MODULES</strong></td>
+      <td style="text-align: center"> </td>
+      <td style="text-align: center"> </td>
+      <td style="text-align: center"> </td>
+      <td style="text-align: center"> </td>
+    </tr>
+    <tr>
+      <td style="text-align: left">XX DataModel</td>
+      <td style="text-align: center">x</td>
+      <td style="text-align: center">x</td>
+      <td style="text-align: center">x</td>
+      <td style="text-align: center">x</td>
+    </tr>
+  </tbody>
+</table>
+
+
+            </section>
+        </div>
+        <!-- FOOTER  -->
+        <div>
+            <footer class="inverse_centred">
+                <span class="footertext">NBPCG created and maintained by <a href="http://www.rlinsdale.org.uk">Richard Linsdale</a> &COPY;</span>
+            </footer>
+        </div>
+    </body>
+</html>
