@@ -1,61 +1,81 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+    
     <parent>
         <groupId>uk.org.rlinsdale.poms</groupId>
-        <artifactId>nb-plugin-module</artifactId>
-        <version>1.0.5</version>
+        <artifactId>nb-plugin</artifactId>
+        <version>2.0.0</version>
     </parent>
     
     <groupId>uk.org.rlinsdale</groupId>
     <artifactId>nbpcg</artifactId>
-    <version>4.0.14</version>
+    <version>4.0.15</version>
     <packaging>nbm</packaging>
     
     <name>Netbeans Platform CodeGenerator</name>
     <description>Code Generator for standard Netbeans platform application</description>
     
+    <properties>
+        <javaSource>1.8</javaSource>
+        <javaTarget>1.8</javaTarget>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <netbeans.version>RELEASE801</netbeans.version>
+        <release>4</release>
+        <brandingToken>nbpcg</brandingToken>
+        <javadocname>nbpcg</javadocname>
+    </properties>
+    
     <dependencies>
         <dependency>
             <groupId>org.netbeans.api</groupId>
             <artifactId>org-netbeans-api-xml</artifactId>
+            <version>${netbeans.version}</version>
         </dependency>
         <dependency>
             <artifactId>org-openide-filesystems</artifactId>
             <groupId>org.netbeans.api</groupId>
+            <version>${netbeans.version}</version>
         </dependency>
         <dependency>
             <artifactId>org-openide-loaders</artifactId>
             <groupId>org.netbeans.api</groupId>
+            <version>${netbeans.version}</version>
         </dependency>
         <dependency>
             <artifactId>org-openide-nodes</artifactId>
             <groupId>org.netbeans.api</groupId>
+            <version>${netbeans.version}</version>
         </dependency>
         <dependency>
             <artifactId>org-openide-util</artifactId>
             <groupId>org.netbeans.api</groupId>
+            <version>${netbeans.version}</version>
         </dependency>
         <dependency>
             <groupId>org.netbeans.api</groupId>
             <artifactId>org-netbeans-modules-projectapi</artifactId>
+            <version>${netbeans.version}</version>
         </dependency>
         <dependency>
             <groupId>org.netbeans.api</groupId>
             <artifactId>org-netbeans-modules-projectuiapi</artifactId>
+            <version>${netbeans.version}</version>
         </dependency>
         <dependency>
             <groupId>org.netbeans.api</groupId>
             <artifactId>org-openide-io</artifactId>
+            <version>${netbeans.version}</version>
         </dependency>
         <dependency>
             <artifactId>org-openide-util-lookup</artifactId>
             <groupId>org.netbeans.api</groupId>
+            <version>${netbeans.version}</version>
         </dependency>
         <dependency>
             <groupId>org.netbeans.api</groupId>
             <artifactId>org-netbeans-modules-autoupdate-services</artifactId>
+            <version>${netbeans.version}</version>
         </dependency>
     </dependencies>
-    
 </project>
