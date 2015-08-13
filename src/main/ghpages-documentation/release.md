@@ -1,3 +1,8 @@
+#####Release 4.0.15
+
+Build Process Update - uses latest(V2) POMs. No user or functional changes.
+
+
 #####Release 4.0.14
 
 Major update/refactoring of NBPCG generated code (and its associated libraries: nbpcg-library 3.1.7 and lindos 3.1.7).
