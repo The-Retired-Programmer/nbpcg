@@ -19,11 +19,12 @@
     <properties>
         <javaSource>1.8</javaSource>
         <javaTarget>1.8</javaTarget>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <netbeans.version>RELEASE801</netbeans.version>
         <release>4</release>
         <brandingToken>nbpcg</brandingToken>
         <javadocname>nbpcg</javadocname>
+        <javadoctitle>NBPCG Plugin</javadoctitle>
+        <ghpagesroot>nbpcg</ghpagesroot>
     </properties>
     
     <dependencies>
