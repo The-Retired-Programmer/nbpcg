@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8"?>
+    <!DOCTYPE nbpcg-build PUBLIC "-//uk/org/rlinsdale/nbpcgbuild/DTD NBPCGBUILD SCHEMA 1.0//EN" "nbres:/uk/org/rlinsdale/nbpcg/nbpcgbuild.dtd">
+<nbpcg-build name="Authentication" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)">
+    <folder project="Lindos LifeCycle" location="resource" package="uk.org.rlinsdale.lindos.lifecycle.mysql" message="generating mysql script files for authentication2" log="lindos.lifecycle" license="lgpl21">
+        <execute template="createsqldatabase" filename="createdb.sql" usepersistencestore="authentication"/>
+        <execute template="backupscript" filename="backupscript.sh" usepersistencestore="authentication"/>
+        <execute template="createsqltables" filename="createtables.sql" usepersistencestore="authentication"/>
+    </folder>
+    <folder project="Lindos LifeCycle" location="resource" package="uk.org.rlinsdale.lindos.lifecycle.json.authentication2" message="generating json persistence files for authentication2" log="lindos.lifecycle" license="lgpl21">
+        <execute template="createjsontable" filename="User" usepersistencestore="authentication" useentity="User"/>
+        <execute template="createjsontable" filename="Application" usepersistencestore="authentication" useentity="Application"/>
+        <execute template="createjsontable" filename="Role" usepersistencestore="authentication" useentity="Role"/>
+        <execute template="createjsontable" filename="Permission" usepersistencestore="authentication" useentity="Permission"/>
+        <execute template="createjsontable" filename="Userrole" usepersistencestore="authentication" useentity="Userrole"/>
+        <execute template="createjsontable" filename="Userpermission" usepersistencestore="authentication" useentity="Userpermission"/>
+    </folder>
+    <folder project="Lindos LifeCycle" location="java" package="uk.org.rlinsdale.lindos.authentication.dataobjects" message="generating entity files" log="lindos.lifecycle" license="lgpl21">
+        <execute template="rootentity" filename="UserRoot.java" useentityinfo="UserRoot"/>
+        <execute template="rootentity" filename="ApplicationRoot.java" useentityinfo="ApplicationRoot"/>
+        <execute template="entity" filename="User.java" useentityinfo="User"/>
+        <execute template="entity" filename="Application.java" useentityinfo="Application"/>
+        <execute template="entity" filename="Role.java" useentityinfo="Role"/>
+        <execute template="entity" filename="Permission.java" useentityinfo="Permission"/>
+        <execute template="entity" filename="Userrole.java" useentityinfo="Userrole"/>
+        <execute template="entity" filename="Userpermission.java" useentityinfo="Userpermission"/>
+    </folder>
+    <folder project="Access Control Manager - generated" location="java" package="uk.org.rlinsdale.accesscontrolmanager.nodes" message="generating node files" log="accesscontrolmanager" license="gpl30" datapackage="uk.org.rlinsdale.lindos.authentication.dataobjects">
+        <execute template="rootnode" type="" filename="UserRootNode.java" useentityinfo="UserRoot"/>
+        <execute template="rootnode" type="" filename="ApplicationRootNode.java" useentityinfo="ApplicationRoot"/>
+        <execute template="node" type="" filename="UserNode.java" useentityinfo="User"/>
+        <execute template="node" type="" filename="ApplicationNode.java" useentityinfo="Application"/>
+        <execute template="node" type="" filename="UserpermissionNode.java" useentityinfo="Userpermission"/>
+        <execute template="node" type="" filename="UserroleNode.java" useentityinfo="Userrole"/>
+        <execute template="node" type="" filename="RoleNode.java" useentityinfo="Role"/>
+        <execute template="node" type="" filename="PermissionNode.java" useentityinfo="Permission"/>
+        <execute template="nodefactory" type="" filename="UserRootNodeChildFactory.java" useentityinfo="UserRoot"/>
+        <execute template="nodefactory" type="" filename="UserNodeChildFactory.java" useentityinfo="User"/>
+        <execute template="nodefactory" type="" filename="ApplicationRootNodeChildFactory.java" useentityinfo="ApplicationRoot"/>
+        <execute template="nodefactory" type="" filename="ApplicationNodeChildFactory.java" useentityinfo="Application"/>
+        <execute template="undonode" filename="UndoUserNode.java" useentityinfo="User"/>
+        <execute template="undonode" filename="UndoUserpermissionNode.java" useentityinfo="Userpermission"/>
+        <execute template="undonode" filename="UndoUserroleNode.java" useentityinfo="Userrole"/>
+        <execute template="undonode" filename="UndoApplicationNode.java" useentityinfo="Application"/>
+        <execute template="undonode" filename="UndoRoleNode.java" useentityinfo="Role"/>
+        <execute template="undonode" filename="UndoPermissionNode.java" useentityinfo="Permission"/>
+        <execute template="addnode" filename="AddUserNode.java" useentityinfo="User"/>
+        <execute template="addnode" filename="AddUserpermissionNode.java" useentityinfo="Userpermission"/>
+        <execute template="addnode" filename="AddUserroleNode.java" useentityinfo="Userrole"/>
+        <execute template="addnode" filename="AddApplicationNode.java" useentityinfo="Application"/>
+        <execute template="addnode" filename="AddRoleNode.java" useentityinfo="Role"/>
+        <execute template="addnode" filename="AddPermissionNode.java" useentityinfo="Permission"/>
+    </folder>
+    <folder project="Access Control Manager - generated" location="java" package="uk.org.rlinsdale.accesscontrolmanager.topcomponents" message="generating node viewer files" log="accesscontrolmanager" license="gpl30" datapackage="uk.org.rlinsdale.lindos.authentication.dataobjects" nodepackage="uk.org.rlinsdale.accesscontrolmanager.nodes">
+        <execute template="rootnodeviewer" type="Tree" filename="UserRootNodeViewer.java" useentityinfo="UserRoot"/>
+        <execute template="rootnodeviewer" type="Tree" filename="ApplicationRootNodeViewer.java" useentityinfo="ApplicationRoot"/>
+    </folder>
+    <folder project="Access Control Manager - generated" location="java" package="uk.org.rlinsdale.accesscontrolmanager.topcomponents" message="generating node editor files" log="accesscontrolmanager" license="gpl30" datapackage="uk.org.rlinsdale.lindos.authentication.dataobjects" nodepackage="uk.org.rlinsdale.accesscontrolmanager.nodes">
+        <execute template="nodeeditor" filename="UserNodeEditor.java" useentityinfo="User"/>
+        <execute template="nodeeditor" filename="ApplicationNodeEditor.java" useentityinfo="Application"/>
+        <execute template="nodeeditor" filename="RoleNodeEditor.java" useentityinfo="Role"/>
+        <execute template="nodeeditor" filename="PermissionNodeEditor.java" useentityinfo="Permission"/>
+        <execute template="nodeeditor" filename="UserroleNodeEditor.java" useentityinfo="Userrole"/>
+        <execute template="nodeeditor" filename="UserpermissionNodeEditor.java" useentityinfo="Userpermission"/>
+        <execute template="editnode" filename="EditUserNode.java" useentityinfo="User"/>
+        <execute template="editnode" filename="EditUserpermissionNode.java" useentityinfo="Userpermission"/>
+        <execute template="editnode" filename="EditUserroleNode.java" useentityinfo="Userrole"/>
+        <execute template="editnode" filename="EditApplicationNode.java" useentityinfo="Application"/>
+        <execute template="editnode" filename="EditRoleNode.java" useentityinfo="Role"/>
+        <execute template="editnode" filename="EditPermissionNode.java" useentityinfo="Permission"/>
+        <execute template="choice" filename="RoleChoiceField.java" useentityinfo="Role"/>
+        <execute template="choice" filename="PermissionChoiceField.java" useentityinfo="Permission"/>
+    </folder>
+    <folder project="Authentication" location="java" package="uk.org.rlinsdale.authentication" message="generating remote files" log="authentication" license="gpl30">
+        <execute template="remotepingservlet" filename="AuthenticationPingServlet.java" usepersistencestore="Authentication"/>
+        <execute template="remoteentity" filename="User.java" usepersistencestore="authentication" useentity="User"/>
+        <execute template="remotecreateejb" filename="UserCreateEJB.java" usepersistencestore="authentication" useentity="User"/>
+        <execute template="remotecreateservlet" filename="UserCreateServlet.java" usepersistencestore="authentication" useentity="User"/>
+        <execute template="remotedeleteejb" filename="UserDeleteEJB.java" usepersistencestore="authentication" useentity="User"/>
+        <execute template="remotedeleteservlet" filename="UserDeleteServlet.java" usepersistencestore="authentication" useentity="User"/>
+        <execute template="remotefindallservlet" filename="UserFindAllServlet.java" usepersistencestore="authentication" useentity="User"/>
+        <execute template="remotefindbyfieldservlet" filename="UserFindByFieldServlet.java" usepersistencestore="authentication" useentity="User"/>
+        <execute template="remotegetallservlet" filename="UserGetAllServlet.java" usepersistencestore="authentication" useentity="User"/>
+        <execute template="remotegetbyfieldservlet" filename="UserGetByFieldServlet.java" usepersistencestore="authentication" useentity="User"/>
+        <execute template="remotegetservlet" filename="UserGetServlet.java" usepersistencestore="authentication" useentity="User"/>
+        <execute template="remoteupdateejb" filename="UserUpdateEJB.java" usepersistencestore="authentication" useentity="User"/>
+        <execute template="remoteupdateservlet" filename="UserUpdateServlet.java" usepersistencestore="authentication" useentity="User"/>
+        <execute template="remoteentity" filename="Application.java" usepersistencestore="authentication" useentity="Application"/>
+        <execute template="remotecreateejb" filename="ApplicationCreateEJB.java" usepersistencestore="authentication" useentity="Application"/>
+        <execute template="remotecreateservlet" filename="ApplicationCreateServlet.java" usepersistencestore="authentication" useentity="Application"/>
+        <execute template="remotedeleteejb" filename="ApplicationDeleteEJB.java" usepersistencestore="authentication" useentity="Application"/>
+        <execute template="remotedeleteservlet" filename="ApplicationDeleteServlet.java" usepersistencestore="authentication" useentity="Application"/>
+        <execute template="remotefindallservlet" filename="ApplicationFindAllServlet.java" usepersistencestore="authentication" useentity="Application"/>
+        <execute template="remotefindbyfieldservlet" filename="ApplicationFindByFieldServlet.java" usepersistencestore="authentication" useentity="Application"/>
+        <execute template="remotegetallservlet" filename="ApplicationGetAllServlet.java" usepersistencestore="authentication" useentity="Application"/>
+        <execute template="remotegetbyfieldservlet" filename="ApplicationGetByFieldServlet.java" usepersistencestore="authentication" useentity="Application"/>
+        <execute template="remotegetservlet" filename="ApplicationGetServlet.java" usepersistencestore="authentication" useentity="Application"/>
+        <execute template="remoteupdateejb" filename="ApplicationUpdateEJB.java" usepersistencestore="authentication" useentity="Application"/>
+        <execute template="remoteupdateservlet" filename="ApplicationUpdateServlet.java" usepersistencestore="authentication" useentity="Application"/>
+        <execute template="remoteentity" filename="Role.java" usepersistencestore="authentication" useentity="Role"/>
+        <execute template="remotecreateejb" filename="RoleCreateEJB.java" usepersistencestore="authentication" useentity="Role"/>
+        <execute template="remotecreateservlet" filename="RoleCreateServlet.java" usepersistencestore="authentication" useentity="Role"/>
+        <execute template="remotedeleteejb" filename="RoleDeleteEJB.java" usepersistencestore="authentication" useentity="Role"/>
+        <execute template="remotedeleteservlet" filename="RoleDeleteServlet.java" usepersistencestore="authentication" useentity="Role"/>
+        <execute template="remotefindallservlet" filename="RoleFindAllServlet.java" usepersistencestore="authentication" useentity="Role"/>
+        <execute template="remotefindbyfieldservlet" filename="RoleFindByFieldServlet.java" usepersistencestore="authentication" useentity="Role"/>
+        <execute template="remotegetallservlet" filename="RoleGetAllServlet.java" usepersistencestore="authentication" useentity="Role"/>
+        <execute template="remotegetbyfieldservlet" filename="RoleGetByFieldServlet.java" usepersistencestore="authentication" useentity="Role"/>
+        <execute template="remotegetservlet" filename="RoleGetServlet.java" usepersistencestore="authentication" useentity="Role"/>
+        <execute template="remoteupdateejb" filename="RoleUpdateEJB.java" usepersistencestore="authentication" useentity="Role"/>
+        <execute template="remoteupdateservlet" filename="RoleUpdateServlet.java" usepersistencestore="authentication" useentity="Role"/>
+        <execute template="remoteentity" filename="Permission.java" usepersistencestore="authentication" useentity="Permission"/>
+        <execute template="remotecreateejb" filename="PermissionCreateEJB.java" usepersistencestore="authentication" useentity="Permission"/>
+        <execute template="remotecreateservlet" filename="PermissionCreateServlet.java" usepersistencestore="authentication" useentity="Permission"/>
+        <execute template="remotedeleteejb" filename="PermissionDeleteEJB.java" usepersistencestore="authentication" useentity="Permission"/>
+        <execute template="remotedeleteservlet" filename="PermissionDeleteServlet.java" usepersistencestore="authentication" useentity="Permission"/>
+        <execute template="remotefindallservlet" filename="PermissionFindAllServlet.java" usepersistencestore="authentication" useentity="Permission"/>
+        <execute template="remotefindbyfieldservlet" filename="PermissionFindByFieldServlet.java" usepersistencestore="authentication" useentity="Permission"/>
+        <execute template="remotegetallservlet" filename="PermissionGetAllServlet.java" usepersistencestore="authentication" useentity="Permission"/>
+        <execute template="remotegetbyfieldservlet" filename="PermissionGetByFieldServlet.java" usepersistencestore="authentication" useentity="Permission"/>
+        <execute template="remotegetservlet" filename="PermissionGetServlet.java" usepersistencestore="authentication" useentity="Permission"/>
+        <execute template="remoteupdateejb" filename="PermissionUpdateEJB.java" usepersistencestore="authentication" useentity="Permission"/>
+        <execute template="remoteupdateservlet" filename="PermissionUpdateServlet.java" usepersistencestore="authentication" useentity="Permission"/>
+        <execute template="remoteentity" filename="Userrole.java" usepersistencestore="authentication" useentity="Userrole"/>
+        <execute template="remotecreateejb" filename="UserroleCreateEJB.java" usepersistencestore="authentication" useentity="Userrole"/>
+        <execute template="remotecreateservlet" filename="UserroleCreateServlet.java" usepersistencestore="authentication" useentity="Userrole"/>
+        <execute template="remotedeleteejb" filename="UserroleDeleteEJB.java" usepersistencestore="authentication" useentity="Userrole"/>
+        <execute template="remotedeleteservlet" filename="UserroleDeleteServlet.java" usepersistencestore="authentication" useentity="Userrole"/>
+        <execute template="remotefindallservlet" filename="UserroleFindAllServlet.java" usepersistencestore="authentication" useentity="Userrole"/>
+        <execute template="remotefindbyfieldservlet" filename="UserroleFindByFieldServlet.java" usepersistencestore="authentication" useentity="Userrole"/>
+        <execute template="remotegetallservlet" filename="UserroleGetAllServlet.java" usepersistencestore="authentication" useentity="Userrole"/>
+        <execute template="remotegetbyfieldservlet" filename="UserroleGetByFieldServlet.java" usepersistencestore="authentication" useentity="Userrole"/>
+        <execute template="remotegetservlet" filename="UserroleGetServlet.java" usepersistencestore="authentication" useentity="Userrole"/>
+        <execute template="remoteupdateejb" filename="UserroleUpdateEJB.java" usepersistencestore="authentication" useentity="Userrole"/>
+        <execute template="remoteupdateservlet" filename="UserroleUpdateServlet.java" usepersistencestore="authentication" useentity="Userrole"/>
+        <execute template="remoteentity" filename="Userpermission.java" usepersistencestore="authentication" useentity="Userpermission"/>
+        <execute template="remotecreateejb" filename="UserpermissionCreateEJB.java" usepersistencestore="authentication" useentity="Userpermission"/>
+        <execute template="remotecreateservlet" filename="UserpermissionCreateServlet.java" usepersistencestore="authentication" useentity="Userpermission"/>
+        <execute template="remotedeleteejb" filename="UserpermissionDeleteEJB.java" usepersistencestore="authentication" useentity="Userpermission"/>
+        <execute template="remotedeleteservlet" filename="UserpermissionDeleteServlet.java" usepersistencestore="authentication" useentity="Userpermission"/>
+        <execute template="remotefindallservlet" filename="UserpermissionFindAllServlet.java" usepersistencestore="authentication" useentity="Userpermission"/>
+        <execute template="remotefindbyfieldservlet" filename="UserpermissionFindByFieldServlet.java" usepersistencestore="authentication" useentity="Userpermission"/>
+        <execute template="remotegetallservlet" filename="UserpermissionGetAllServlet.java" usepersistencestore="authentication" useentity="Userpermission"/>
+        <execute template="remotegetbyfieldservlet" filename="UserpermissionGetByFieldServlet.java" usepersistencestore="authentication" useentity="Userpermission"/>
+        <execute template="remotegetservlet" filename="UserpermissionGetServlet.java" usepersistencestore="authentication" useentity="Userpermission"/>
+        <execute template="remoteupdateejb" filename="UserpermissionUpdateEJB.java" usepersistencestore="authentication" useentity="Userpermission"/>
+        <execute template="remoteupdateservlet" filename="UserpermissionUpdateServlet.java" usepersistencestore="authentication" useentity="Userpermission"/>
+    </folder>
+    <folder project="Authentication" location="resource" package="uk.org.rlinsdale.authentication.mysql" message="generating mysql script files for authentication2" log="authentication" license="gpl30">
+        <execute template="createsqldatabase" filename="createdb.sql" usepersistencestore="authentication"/>
+        <execute template="backupscript" filename="backupscript.sh" usepersistencestore="authentication"/>
+        <execute template="createsqltables" filename="createtables.sql" usepersistencestore="authentication"/>
+    </folder>
+</nbpcg-build>
+    
+        
+        
+    
+    
+        
+        
+    
+    
+        
+            
+                
+                
+                
+                
+                
+                    
+                    
+                    
+                    
+                
+            
+            
+                
+                
+                    
+                
+                
+                    
+                
+                
+                    
+                
+            
+            
+                
+                
+                    
+                    
+                
+                
+                    
+                    
+                
+                
+                    
+                    
+                
+            
+            
+                
+            
+            
+                
+                
+                    
+                    
+                
+                
+                    
+                    
+                
+                
+                    
+                    
+                
+            
+            
+                
+            
+        
+    

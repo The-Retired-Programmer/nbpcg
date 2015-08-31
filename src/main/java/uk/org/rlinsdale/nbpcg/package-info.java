@@ -39,9 +39,19 @@
     @TemplateRegistration(folder = "uk-org-rlinsdale-nbpcg", displayName = "rootnodeviewer", content = "templates/rootnodeviewer.template", scriptEngine = "freemarker"),
     @TemplateRegistration(folder = "uk-org-rlinsdale-nbpcg", displayName = "iconnodeviewer", content = "templates/iconnodeviewer.template", scriptEngine = "freemarker"),
     @TemplateRegistration(folder = "uk-org-rlinsdale-nbpcg", displayName = "iconnodevieweraction", content = "templates/iconnodevieweraction.template", scriptEngine = "freemarker"),
-    @TemplateRegistration(folder = "uk-org-rlinsdale-nbpcg", displayName = "remoteservlet", content = "templates/remoteservlet.template", scriptEngine = "freemarker"),
-    @TemplateRegistration(folder = "uk-org-rlinsdale-nbpcg", displayName = "remotecommandprocessor", content = "templates/remotecommandprocessor.template", scriptEngine = "freemarker"),
-    @TemplateRegistration(folder = "uk-org-rlinsdale-nbpcg", displayName = "remoteentity", content = "templates/remoteentity.template", scriptEngine = "freemarker")
+    @TemplateRegistration(folder = "uk-org-rlinsdale-nbpcg", displayName = "remoteentity", content = "templates/remoteentity.template", scriptEngine = "freemarker"),
+    @TemplateRegistration(folder = "uk-org-rlinsdale-nbpcg", displayName = "remotecreateejb", content = "templates/remotecreateejb.template", scriptEngine = "freemarker"),
+    @TemplateRegistration(folder = "uk-org-rlinsdale-nbpcg", displayName = "remotedeleteejb", content = "templates/remotedeleteejb.template", scriptEngine = "freemarker"),
+    @TemplateRegistration(folder = "uk-org-rlinsdale-nbpcg", displayName = "remoteupdateejb", content = "templates/remoteupdateejb.template", scriptEngine = "freemarker"),
+    @TemplateRegistration(folder = "uk-org-rlinsdale-nbpcg", displayName = "remotepingservlet", content = "templates/remotepingservlet.template", scriptEngine = "freemarker"),
+    @TemplateRegistration(folder = "uk-org-rlinsdale-nbpcg", displayName = "remotecreateservlet", content = "templates/remotecreateservlet.template", scriptEngine = "freemarker"),
+    @TemplateRegistration(folder = "uk-org-rlinsdale-nbpcg", displayName = "remotedeleteservlet", content = "templates/remotedeleteservlet.template", scriptEngine = "freemarker"),
+    @TemplateRegistration(folder = "uk-org-rlinsdale-nbpcg", displayName = "remoteupdateservlet", content = "templates/remoteupdateservlet.template", scriptEngine = "freemarker"),
+    @TemplateRegistration(folder = "uk-org-rlinsdale-nbpcg", displayName = "remotefindallservlet", content = "templates/remotefindallservlet.template", scriptEngine = "freemarker"),
+    @TemplateRegistration(folder = "uk-org-rlinsdale-nbpcg", displayName = "remotefindbyfieldservlet", content = "templates/remotefindbyfieldservlet.template", scriptEngine = "freemarker"),
+    @TemplateRegistration(folder = "uk-org-rlinsdale-nbpcg", displayName = "remotegetallservlet", content = "templates/remotegetallservlet.template", scriptEngine = "freemarker"),
+    @TemplateRegistration(folder = "uk-org-rlinsdale-nbpcg", displayName = "remotegetbyfieldservlet", content = "templates/remotegetbyfieldservlet.template", scriptEngine = "freemarker"),
+    @TemplateRegistration(folder = "uk-org-rlinsdale-nbpcg", displayName = "remotegetservlet", content = "templates/remotegetservlet.template", scriptEngine = "freemarker")
 })
 @TemplateRegistration(folder = "Other", displayName = "NBPCG Template File", content = "TemplateTemplate.template")
 package uk.org.rlinsdale.nbpcg;

@@ -65,9 +65,9 @@
 -- @package generated-scripts
 -- @author ${templateauthor}
 --
-DROP DATABASE IF EXISTS ${PSTORE.name};
-CREATE DATABASE ${PSTORE.name} CHARACTER SET utf8 COLLATE utf8_bin;
-USE ${PSTORE.name};
+DROP DATABASE IF EXISTS ${PSTORE.dbname};
+CREATE DATABASE ${PSTORE.dbname} CHARACTER SET utf8 COLLATE utf8_bin;
+USE ${PSTORE.dbname};
 --
 <#list PSTORE.persistenceentity![] as entity >
 <#assign prefix = "" >

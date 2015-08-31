@@ -81,7 +81,7 @@
                                     </xsl:otherwise>
                                 </xsl:choose>
                             </xsl:variable>
-                            <folder project="{$project}" location="resource" package="{$package}.{$name}" message="generating mysql script files for {$name}" log="{$log}" license="{$license}">
+                            <folder project="{$project}" location="resource" package="{$package}" message="generating mysql script files for {$name}" log="{$log}" license="{$license}">
                                 <xsl:call-template name="createsqldatabase"/>
                                 <xsl:call-template name="backupscript"/>
                                 <xsl:call-template name="createstandardsqltables"/>
@@ -121,9 +121,7 @@
                     </xsl:when>
                     <xsl:when test="@type = 'remotedb' ">
                         <folder project="{$project}" location="java" package="{$package}" message="generating remote files" log="{$log}" license="{$license}">
-                            <xsl:call-template name="remoteentity" />
-                            <xsl:call-template name="remotecp" />
-                            <xsl:call-template name="remoteservlet" />
+                            <xsl:call-template name="remoteobjects" />
                         </folder>
                     </xsl:when>
                 </xsl:choose>
@@ -362,26 +360,28 @@
         </xsl:for-each>
     </xsl:template>
     
-    <xsl:template name="remoteentity">
-        <xsl:for-each select="/nbpcg/databases/database[not(@usepackage)]/table" >
-            <execute template="remoteentity" filename="{@name}.java"  usepersistencestore="{../@name}" useentity="{@name}"/>
-        </xsl:for-each>
-    </xsl:template>
-    
-    <xsl:template name="remotecp">
-        <xsl:for-each select="/nbpcg/databases/database[not(@usepackage)]/table" >
-            <execute template="remotecommandprocessor" filename="{@name}CommandProcessor.java"  usepersistencestore="{../@name}" useentity="{@name}"/>
-        </xsl:for-each>
-    </xsl:template>
-    
-    <xsl:template name="remoteservlet">
+    <xsl:template name="remoteobjects">
         <xsl:for-each select="/nbpcg/databases/database[not(@usepackage)]" >
             <xsl:variable name="nameuc">
                 <xsl:call-template name="firsttouppercase">
                     <xsl:with-param name="string" select="@name" />
                 </xsl:call-template>
             </xsl:variable>
-            <execute template="remoteservlet" filename="{$nameuc}Servlet.java" usepersistencestore="{@name}"/>
+            <execute template="remotepingservlet" filename="{$nameuc}PingServlet.java" usepersistencestore="{$nameuc}"/>
+            <xsl:for-each select="table" >
+                <execute template="remoteentity" filename="{@name}.java"  usepersistencestore="{../@name}" useentity="{@name}"/>
+                <execute template="remotecreateejb" filename="{@name}CreateEJB.java"  usepersistencestore="{../@name}" useentity="{@name}"/>
+                <execute template="remotecreateservlet" filename="{@name}CreateServlet.java"  usepersistencestore="{../@name}" useentity="{@name}"/>
+                <execute template="remotedeleteejb" filename="{@name}DeleteEJB.java"  usepersistencestore="{../@name}" useentity="{@name}"/>
+                <execute template="remotedeleteservlet" filename="{@name}DeleteServlet.java"  usepersistencestore="{../@name}" useentity="{@name}"/>
+                <execute template="remotefindallservlet" filename="{@name}FindAllServlet.java"  usepersistencestore="{../@name}" useentity="{@name}"/>
+                <execute template="remotefindbyfieldservlet" filename="{@name}FindByFieldServlet.java"  usepersistencestore="{../@name}" useentity="{@name}"/>
+                <execute template="remotegetallservlet" filename="{@name}GetAllServlet.java"  usepersistencestore="{../@name}" useentity="{@name}"/>
+                <execute template="remotegetbyfieldservlet" filename="{@name}GetByFieldServlet.java"  usepersistencestore="{../@name}" useentity="{@name}"/>
+                <execute template="remotegetservlet" filename="{@name}GetServlet.java"  usepersistencestore="{../@name}" useentity="{@name}"/>
+                <execute template="remoteupdateejb" filename="{@name}UpdateEJB.java"  usepersistencestore="{../@name}" useentity="{@name}"/>
+                <execute template="remoteupdateservlet" filename="{@name}UpdateServlet.java"  usepersistencestore="{../@name}" useentity="{@name}"/>
+            </xsl:for-each>
         </xsl:for-each>
     </xsl:template>
     

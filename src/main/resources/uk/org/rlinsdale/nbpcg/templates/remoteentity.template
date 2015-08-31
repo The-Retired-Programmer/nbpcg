@@ -60,19 +60,23 @@
 package ${package};
 
 import java.io.Serializable;
+import java.util.List;
 import javax.json.JsonValue;
 import javax.json.stream.JsonGenerator;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityManager;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.Query;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import uk.org.rlinsdale.nbpcglibrary.api.LogicException;
 import uk.org.rlinsdale.nbpcglibrary.remotedb.IdandstampEntity;
 import uk.org.rlinsdale.nbpcglibrary.json.JsonConversionException;
 import uk.org.rlinsdale.nbpcglibrary.json.JsonUtil;
@@ -92,7 +96,7 @@ import uk.org.rlinsdale.nbpcglibrary.json.JsonUtil;
     @NamedQuery(name = "${entity.name}.findBy${field.name?cap_first}", query = "SELECT a FROM ${entity.name} a WHERE a.${field.name} = :${field.name}"),
 </#list>
     })
-public class ${entity.name} implements Serializable, IdandstampEntity<${entity.name}> {
+public class ${entity.name} extends IdandstampEntity<${entity.name}> implements Serializable {
 
     private static final long serialVersionUID = 1L;
 <#list entity.persistencefield![] as field >
@@ -123,13 +127,22 @@ public class ${entity.name} implements Serializable, IdandstampEntity<${entity.n
     private ${field.jsontype} ${field.name};
 </#if>
 </#list>
-    /**
-     * Constructor - ${entity.name}.
-     */
-    public ${entity.name}() {
+
+   public static  List<${entity.name}> queryByName(EntityManager em, String field, Object value) {
+        Query query;
+        switch (field) {
+<#list entity.persistencefield![] as field > 
+            case "${field.name}":
+                query = em.createNamedQuery("${entity.name}.findBy${field.name?cap_first}");
+                query.setParameter("${field.name}", value);
+                return query.getResultList();
+</#list>
+            default:
+                throw new LogicException("Unknown filter field requested (" + field + ")");
+        }
     }
 
-@Override
+    @Override
     public void setField(String key, JsonValue value) throws JsonConversionException {
         switch (key) {
 <#list entity.persistencefield![] as field >
@@ -270,7 +283,6 @@ public class ${entity.name} implements Serializable, IdandstampEntity<${entity.n
 
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
         if (!(object instanceof ${entity.name})) {
             return false;
         }

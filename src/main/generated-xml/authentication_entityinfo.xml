@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE nbpcg-entity-info PUBLIC "-//uk/org/rlinsdale/nbpcgentityinfo/DTD NBPCGENTITYINFO SCHEMA 1.0//EN" "nbres:/uk/org/rlinsdale/nbpcg/nbpcgentityinfo.dtd">
 <nbpcg-entity-info name="Authentication">
-    <entityinfo name="User" dbkey="authentication2" dbtablename="User" pkey="id" pkeytype="Integer" icon="user" orderable="no" nodeorder="1" parentname="UserRoot">
+    <entityinfo name="User" dbkey="authentication" dbtablename="User" pkey="id" pkeytype="Integer" pkeytypefunction="getInt" icon="user" orderable="no" nodeorder="1" parentname="UserRoot">
         <field name="root" pkey="no" references="UserRoot" type="rootref" label="Root" javatype="int" jsontype="Integer" initialisation=""/>
         <field name="username" pkey="no" unique="yes" min="1" max="100" fieldclass="TextField" type="String" label="Username" javatype="String" jsontype="String" initialisation=" = &quot;&quot;"/>
         <field name="encodedpassword" pkey="no" entryfield="password" passwordsupport="uk.org.rlinsdale.lindos.authentication.Authentication" passwordstrength="strong" max="40" min="40" fieldclass="PasswordField" type="password" label="Password" javatype="String" jsontype="String" initialisation=" = &quot;&quot;"/>
@@ -17,7 +17,7 @@
             <display field="Username"/>
         </displaynameformat>
     </entityinfo>
-    <entityinfo name="Application" dbkey="authentication2" dbtablename="Application" pkey="id" pkeytype="Integer" icon="application" orderable="no" nodeorder="1" parentname="ApplicationRoot">
+    <entityinfo name="Application" dbkey="authentication" dbtablename="Application" pkey="id" pkeytype="Integer" pkeytypefunction="getInt" icon="application" orderable="no" nodeorder="1" parentname="ApplicationRoot">
         <field name="root" pkey="no" references="ApplicationRoot" type="rootref" label="Root" javatype="int" jsontype="Integer" initialisation=""/>
         <field name="application" pkey="no" unique="yes" min="1" max="100" fieldclass="TextField" type="String" label="Application" javatype="String" jsontype="String" initialisation=" = &quot;&quot;"/>
         <field name="id" pkey="yes" hidden="yes" type="int" fieldclass="TextField" label="Id" javatype="int" jsontype="Integer" initialisation=" = 0"/>
@@ -31,7 +31,7 @@
             <display field="Application"/>
         </displaynameformat>
     </entityinfo>
-    <entityinfo name="Role" dbkey="authentication2" dbtablename="Role" pkey="id" pkeytype="Integer" icon="key" orderable="no" parentname="Application" nodeorder="1">
+    <entityinfo name="Role" dbkey="authentication" dbtablename="Role" pkey="id" pkeytype="Integer" pkeytypefunction="getInt" icon="key" orderable="no" parentname="Application" nodeorder="1">
         <field name="role" pkey="no" min="1" max="100" fieldclass="TextField" type="String" label="Role" javatype="String" jsontype="String" initialisation=" = &quot;&quot;"/>
         <field name="application" pkey="no" references="Application" fieldclass="ReferenceChoiceField" type="ref" label="Application" javatype="int" jsontype="Integer" initialisation=""/>
         <field name="id" pkey="yes" hidden="yes" type="int" fieldclass="TextField" label="Id" javatype="int" jsontype="Integer" initialisation=" = 0"/>
@@ -48,7 +48,7 @@
             <display field="Role"/>
         </displaynameformat>
     </entityinfo>
-    <entityinfo name="Permission" dbkey="authentication2" dbtablename="Permission" pkey="id" pkeytype="Integer" icon="thumb_up" orderable="no" parentname="Application" nodeorder="2">
+    <entityinfo name="Permission" dbkey="authentication" dbtablename="Permission" pkey="id" pkeytype="Integer" pkeytypefunction="getInt" icon="thumb_up" orderable="no" parentname="Application" nodeorder="2">
         <field name="permission" pkey="no" min="1" max="100" fieldclass="TextField" type="String" label="Permission" javatype="String" jsontype="String" initialisation=" = &quot;&quot;"/>
         <field name="application" pkey="no" references="Application" fieldclass="ReferenceChoiceField" type="ref" label="Application" javatype="int" jsontype="Integer" initialisation=""/>
         <field name="id" pkey="yes" hidden="yes" type="int" fieldclass="TextField" label="Id" javatype="int" jsontype="Integer" initialisation=" = 0"/>
@@ -65,7 +65,7 @@
             <display field="Permission"/>
         </displaynameformat>
     </entityinfo>
-    <entityinfo name="Userrole" dbkey="authentication2" dbtablename="Userrole" pkey="id" pkeytype="Integer" icon="key" orderable="no" parentname="User" nodeorder="2">
+    <entityinfo name="Userrole" dbkey="authentication" dbtablename="Userrole" pkey="id" pkeytype="Integer" pkeytypefunction="getInt" icon="key" orderable="no" parentname="User" nodeorder="2">
         <field name="role" pkey="no" fieldclass="ReferenceChoiceField" references="Role" type="reference" label="Role" javatype="int" jsontype="Integer" initialisation=""/>
         <field name="user" pkey="no" references="User" fieldclass="ReferenceChoiceField" type="ref" label="User" javatype="int" jsontype="Integer" initialisation=""/>
         <field name="id" pkey="yes" hidden="yes" type="int" fieldclass="TextField" label="Id" javatype="int" jsontype="Integer" initialisation=" = 0"/>
@@ -77,7 +77,7 @@
             <display field="Role"/>
         </displaynameformat>
     </entityinfo>
-    <entityinfo name="Userpermission" dbkey="authentication2" dbtablename="Userpermission" pkey="id" pkeytype="Integer" icon="thumb_up" orderable="no" parentname="User" nodeorder="1">
+    <entityinfo name="Userpermission" dbkey="authentication" dbtablename="Userpermission" pkey="id" pkeytype="Integer" pkeytypefunction="getInt" icon="thumb_up" orderable="no" parentname="User" nodeorder="1">
         <field name="permission" pkey="no" fieldclass="ReferenceChoiceField" references="Permission" type="reference" label="Permission" javatype="int" jsontype="Integer" initialisation=""/>
         <field name="user" pkey="no" references="User" fieldclass="ReferenceChoiceField" type="ref" label="User" javatype="int" jsontype="Integer" initialisation=""/>
         <field name="id" pkey="yes" hidden="yes" type="int" fieldclass="TextField" label="Id" javatype="int" jsontype="Integer" initialisation=" = 0"/>
@@ -95,17 +95,17 @@
     <entityinfo name="ApplicationRoot" isroot="" label="Applications" viewers="Manager" icon="folder_table">
         <child name="application" references="Application" orderable="no" sort="no"/>
     </entityinfo>
-    <persistencestore name="authentication2">
+    <persistencestore name="authentication" dbname="authentication2">
         <persistenceentity name="User">
             <persistencefield name="username" primarykey="no" jsontype="String" min="1" max="100" createsql=" VARCHAR(100) UNIQUE NOT NULL"/>
             <persistencefield name="encodedpassword" primarykey="no" jsontype="String" min="40" max="40" createsql=" CHAR(40)  NOT NULL"/>
             <persistencefield name="usercode" primarykey="no" jsontype="String" min="4" max="4" createsql=" CHAR(4) UNIQUE NOT NULL"/>
             <persistencefield name="enabled" primarykey="no" jsontype="Boolean" createsql=" BOOLEAN  NOT NULL"/>
             <persistencefield name="id" sys="yes" jsontype="Integer" primarykey="auto" createsql="MEDIUMINT UNSIGNED AUTO_INCREMENT PRIMARY KEY"/>
-            <persistencefield name="createdby" sys="yes" primarykey="no" jsontype="String" min="4" max="4" createsql="CHAR(4) NOTNULL"/>
-            <persistencefield name="createdon" final="yes" sys="yes" primarykey="no" jsontype="String" min="14" max="14" createsql="CHAR(14) NOTNULL"/>
-            <persistencefield name="updatedby" sys="yes" primarykey="no" jsontype="String" min="4" max="4" createsql="CHAR(4) NOTNULL"/>
-            <persistencefield name="updatedon" final="yes" sys="yes" primarykey="no" jsontype="String" min="14" max="14" createsql="CHAR(14) NOTNULL"/>
+            <persistencefield name="createdby" sys="yes" primarykey="no" jsontype="String" min="4" max="4" createsql="CHAR(4) NOT NULL"/>
+            <persistencefield name="createdon" final="yes" sys="yes" primarykey="no" jsontype="String" min="14" max="14" createsql="CHAR(14) NOT NULL"/>
+            <persistencefield name="updatedby" sys="yes" primarykey="no" jsontype="String" min="4" max="4" createsql="CHAR(4) NOT NULL"/>
+            <persistencefield name="updatedon" final="yes" sys="yes" primarykey="no" jsontype="String" min="14" max="14" createsql="CHAR(14) NOT NULL"/>
             <insertentity>
                 <insertfield name="username" quote="yes" value="richard"/>
                 <insertfield name="encodedpassword" quote="yes" value="ea27671eaac43ca1ecb782b7c9e9344a82b0702d"/>
@@ -121,10 +121,10 @@
         <persistenceentity name="Application">
             <persistencefield name="application" primarykey="no" jsontype="String" min="1" max="100" createsql=" VARCHAR(100) UNIQUE NOT NULL"/>
             <persistencefield name="id" sys="yes" jsontype="Integer" primarykey="auto" createsql="MEDIUMINT UNSIGNED AUTO_INCREMENT PRIMARY KEY"/>
-            <persistencefield name="createdby" sys="yes" primarykey="no" jsontype="String" min="4" max="4" createsql="CHAR(4) NOTNULL"/>
-            <persistencefield name="createdon" final="yes" sys="yes" primarykey="no" jsontype="String" min="14" max="14" createsql="CHAR(14) NOTNULL"/>
-            <persistencefield name="updatedby" sys="yes" primarykey="no" jsontype="String" min="4" max="4" createsql="CHAR(4) NOTNULL"/>
-            <persistencefield name="updatedon" final="yes" sys="yes" primarykey="no" jsontype="String" min="14" max="14" createsql="CHAR(14) NOTNULL"/>
+            <persistencefield name="createdby" sys="yes" primarykey="no" jsontype="String" min="4" max="4" createsql="CHAR(4) NOT NULL"/>
+            <persistencefield name="createdon" final="yes" sys="yes" primarykey="no" jsontype="String" min="14" max="14" createsql="CHAR(14) NOT NULL"/>
+            <persistencefield name="updatedby" sys="yes" primarykey="no" jsontype="String" min="4" max="4" createsql="CHAR(4) NOT NULL"/>
+            <persistencefield name="updatedon" final="yes" sys="yes" primarykey="no" jsontype="String" min="14" max="14" createsql="CHAR(14) NOT NULL"/>
             <insertentity>
                 <insertfield name="application" quote="yes" value="accesscontrolmanager"/>
                 <insertfield name="createdby" quote="yes" var="USERCODE"/>
@@ -154,10 +154,10 @@
             <persistencefield name="role" primarykey="no" jsontype="String" min="1" max="100" createsql=" VARCHAR(100)  NOT NULL"/>
             <persistencefield name="application" primarykey="no" jsontype="Reference" createsql="MEDIUMINT UNSIGNED NOT NULL ,FOREIGN KEY (application) REFERENCES Application(id)"/>
             <persistencefield name="id" sys="yes" jsontype="Integer" primarykey="auto" createsql="MEDIUMINT UNSIGNED AUTO_INCREMENT PRIMARY KEY"/>
-            <persistencefield name="createdby" sys="yes" primarykey="no" jsontype="String" min="4" max="4" createsql="CHAR(4) NOTNULL"/>
-            <persistencefield name="createdon" final="yes" sys="yes" primarykey="no" jsontype="String" min="14" max="14" createsql="CHAR(14) NOTNULL"/>
-            <persistencefield name="updatedby" sys="yes" primarykey="no" jsontype="String" min="4" max="4" createsql="CHAR(4) NOTNULL"/>
-            <persistencefield name="updatedon" final="yes" sys="yes" primarykey="no" jsontype="String" min="14" max="14" createsql="CHAR(14) NOTNULL"/>
+            <persistencefield name="createdby" sys="yes" primarykey="no" jsontype="String" min="4" max="4" createsql="CHAR(4) NOT NULL"/>
+            <persistencefield name="createdon" final="yes" sys="yes" primarykey="no" jsontype="String" min="14" max="14" createsql="CHAR(14) NOT NULL"/>
+            <persistencefield name="updatedby" sys="yes" primarykey="no" jsontype="String" min="4" max="4" createsql="CHAR(4) NOT NULL"/>
+            <persistencefield name="updatedon" final="yes" sys="yes" primarykey="no" jsontype="String" min="14" max="14" createsql="CHAR(14) NOT NULL"/>
             <insertentity>
                 <insertfield name="role" quote="yes" value="Manager"/>
                 <insertfield name="application" quote="no" value="1"/>
@@ -190,19 +190,19 @@
             <persistencefield name="permission" primarykey="no" jsontype="String" min="1" max="100" createsql=" VARCHAR(100)  NOT NULL"/>
             <persistencefield name="application" primarykey="no" jsontype="Reference" createsql="MEDIUMINT UNSIGNED NOT NULL ,FOREIGN KEY (application) REFERENCES Application(id)"/>
             <persistencefield name="id" sys="yes" jsontype="Integer" primarykey="auto" createsql="MEDIUMINT UNSIGNED AUTO_INCREMENT PRIMARY KEY"/>
-            <persistencefield name="createdby" sys="yes" primarykey="no" jsontype="String" min="4" max="4" createsql="CHAR(4) NOTNULL"/>
-            <persistencefield name="createdon" final="yes" sys="yes" primarykey="no" jsontype="String" min="14" max="14" createsql="CHAR(14) NOTNULL"/>
-            <persistencefield name="updatedby" sys="yes" primarykey="no" jsontype="String" min="4" max="4" createsql="CHAR(4) NOTNULL"/>
-            <persistencefield name="updatedon" final="yes" sys="yes" primarykey="no" jsontype="String" min="14" max="14" createsql="CHAR(14) NOTNULL"/>
+            <persistencefield name="createdby" sys="yes" primarykey="no" jsontype="String" min="4" max="4" createsql="CHAR(4) NOT NULL"/>
+            <persistencefield name="createdon" final="yes" sys="yes" primarykey="no" jsontype="String" min="14" max="14" createsql="CHAR(14) NOT NULL"/>
+            <persistencefield name="updatedby" sys="yes" primarykey="no" jsontype="String" min="4" max="4" createsql="CHAR(4) NOT NULL"/>
+            <persistencefield name="updatedon" final="yes" sys="yes" primarykey="no" jsontype="String" min="14" max="14" createsql="CHAR(14) NOT NULL"/>
         </persistenceentity>
         <persistenceentity name="Userrole">
             <persistencefield name="role" primarykey="no" jsontype="Reference" createsql=" MEDIUMINT UNSIGNED  NOT NULL ,FOREIGN KEY (role) REFERENCES Role(id)"/>
             <persistencefield name="user" primarykey="no" jsontype="Reference" createsql="MEDIUMINT UNSIGNED NOT NULL ,FOREIGN KEY (user) REFERENCES User(id)"/>
             <persistencefield name="id" sys="yes" jsontype="Integer" primarykey="auto" createsql="MEDIUMINT UNSIGNED AUTO_INCREMENT PRIMARY KEY"/>
-            <persistencefield name="createdby" sys="yes" primarykey="no" jsontype="String" min="4" max="4" createsql="CHAR(4) NOTNULL"/>
-            <persistencefield name="createdon" final="yes" sys="yes" primarykey="no" jsontype="String" min="14" max="14" createsql="CHAR(14) NOTNULL"/>
-            <persistencefield name="updatedby" sys="yes" primarykey="no" jsontype="String" min="4" max="4" createsql="CHAR(4) NOTNULL"/>
-            <persistencefield name="updatedon" final="yes" sys="yes" primarykey="no" jsontype="String" min="14" max="14" createsql="CHAR(14) NOTNULL"/>
+            <persistencefield name="createdby" sys="yes" primarykey="no" jsontype="String" min="4" max="4" createsql="CHAR(4) NOT NULL"/>
+            <persistencefield name="createdon" final="yes" sys="yes" primarykey="no" jsontype="String" min="14" max="14" createsql="CHAR(14) NOT NULL"/>
+            <persistencefield name="updatedby" sys="yes" primarykey="no" jsontype="String" min="4" max="4" createsql="CHAR(4) NOT NULL"/>
+            <persistencefield name="updatedon" final="yes" sys="yes" primarykey="no" jsontype="String" min="14" max="14" createsql="CHAR(14) NOT NULL"/>
             <insertentity>
                 <insertfield name="role" quote="no" value="1"/>
                 <insertfield name="user" quote="no" value="1"/>
@@ -235,10 +235,10 @@
             <persistencefield name="permission" primarykey="no" jsontype="Reference" createsql=" MEDIUMINT UNSIGNED  NOT NULL ,FOREIGN KEY (permission) REFERENCES Permission(id)"/>
             <persistencefield name="user" primarykey="no" jsontype="Reference" createsql="MEDIUMINT UNSIGNED NOT NULL ,FOREIGN KEY (user) REFERENCES User(id)"/>
             <persistencefield name="id" sys="yes" jsontype="Integer" primarykey="auto" createsql="MEDIUMINT UNSIGNED AUTO_INCREMENT PRIMARY KEY"/>
-            <persistencefield name="createdby" sys="yes" primarykey="no" jsontype="String" min="4" max="4" createsql="CHAR(4) NOTNULL"/>
-            <persistencefield name="createdon" final="yes" sys="yes" primarykey="no" jsontype="String" min="14" max="14" createsql="CHAR(14) NOTNULL"/>
-            <persistencefield name="updatedby" sys="yes" primarykey="no" jsontype="String" min="4" max="4" createsql="CHAR(4) NOTNULL"/>
-            <persistencefield name="updatedon" final="yes" sys="yes" primarykey="no" jsontype="String" min="14" max="14" createsql="CHAR(14) NOTNULL"/>
+            <persistencefield name="createdby" sys="yes" primarykey="no" jsontype="String" min="4" max="4" createsql="CHAR(4) NOT NULL"/>
+            <persistencefield name="createdon" final="yes" sys="yes" primarykey="no" jsontype="String" min="14" max="14" createsql="CHAR(14) NOT NULL"/>
+            <persistencefield name="updatedby" sys="yes" primarykey="no" jsontype="String" min="4" max="4" createsql="CHAR(4) NOT NULL"/>
+            <persistencefield name="updatedon" final="yes" sys="yes" primarykey="no" jsontype="String" min="14" max="14" createsql="CHAR(14) NOT NULL"/>
         </persistenceentity>
     </persistencestore>
 </nbpcg-entity-info>

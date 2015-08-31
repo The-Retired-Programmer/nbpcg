@@ -47,7 +47,7 @@
                     </xsl:otherwise>
                 </xsl:choose>
             </xsl:variable>
-            <persistencestore name="{$database}">
+            <persistencestore name="{@name}" dbname="{$database}">
                 <xsl:for-each select="table">
                     <xsl:variable name="ename" select="@name" />
                     <xsl:variable name="tname">
@@ -807,6 +807,19 @@
                 </xsl:choose>
             </xsl:for-each>
         </xsl:variable>
+        <xsl:variable name="pktf">
+            <xsl:for-each select="/nbpcg/databases/database[not(@usepackage)]/table/field[@pk='yes']">
+                <xsl:choose>
+                    <xsl:when test="@type='int'">getInt</xsl:when>
+                    <xsl:when test="@type='long'">getLong</xsl:when>
+                    <xsl:when test="@type='boolean'">GetBoolean</xsl:when>
+                    <xsl:when test="@type='reference'">getInt</xsl:when> <!-- this might need improvement (lookup reference class) -->
+                    <xsl:when test="@type='datetime'">getTimestamp</xsl:when>
+                    <xsl:when test="@type='date'">getDateOnly</xsl:when>
+                    <xsl:otherwise>getString</xsl:otherwise>
+                </xsl:choose>
+            </xsl:for-each>
+        </xsl:variable>
         <xsl:attribute name="pkey">
             <xsl:choose>
                 <xsl:when test="$pk != '' ">
@@ -828,6 +841,14 @@
                     <xsl:value-of select="$pkt"/>
                 </xsl:when>
                 <xsl:otherwise>Integer</xsl:otherwise>
+            </xsl:choose>
+        </xsl:attribute>
+        <xsl:attribute name="pkeytypefunction">
+            <xsl:choose>
+                <xsl:when test="$pkt != '' ">
+                    <xsl:value-of select="$pktf"/>
+                </xsl:when>
+                <xsl:otherwise>getInt</xsl:otherwise>
             </xsl:choose>
         </xsl:attribute>
     </xsl:template>
