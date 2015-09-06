@@ -17,6 +17,7 @@
     <description>Code Generator for standard Netbeans platform application</description>
     
     <properties>
+        <project_key>nbpcg</project_key>
         <javaSource>1.8</javaSource>
         <javaTarget>1.8</javaTarget>
         <netbeans.version>RELEASE801</netbeans.version>

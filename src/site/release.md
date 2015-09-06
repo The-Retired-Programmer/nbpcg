@@ -1,3 +1,8 @@
+{::comment define doc.title=NBPCG Release Notes /}
+{::comment define doc.header= Release Notes /}
+{::comment define doc.name = NBPCG /}
+{::comment define doc.menu.menu = [NBPCG Home](index.html) /}
+
 #####Release 4.0.15
 
 Build Process Update - uses latest(V2) POMs. No user or functional changes.

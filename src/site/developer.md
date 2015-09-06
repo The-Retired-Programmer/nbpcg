@@ -1,5 +1,9 @@
-This document refers to release v${project.version}
+{::comment define doc.title=NBPCG Developer Documentation /}
+{::comment define doc.header= Developer Documentation /}
+{::comment define doc.name = NBPCG /}
+{::comment define doc.menu.menu = [NBPCG Home](index.html) /}
 
+This document refers to release v${project.version}
 
 As an open source solution, the source code
 is available on GitHub. The project is a Maven project written in Java, and

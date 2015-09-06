@@ -1,3 +1,8 @@
+{::comment define doc.title=NBPCG User Documentation /}
+{::comment define doc.header= User Documentation /}
+{::comment define doc.name = NBPCG /}
+{::comment define doc.menu.menu = [NBPCG Home](index.html) /}
+
 The Netbeans Platform Application Code generator is a Netbeans plug-in which creates
 a set of artifacts to speed up creation of a NetBeans Platform Application.  These artifacts can
 include:
