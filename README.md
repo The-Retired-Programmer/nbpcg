@@ -3,4 +3,4 @@ NBPCG
 
 Netbeans Platform Code Generator
 
-Project documentation can be found [here](http://richard-linsdale.github.io/nbpcg/)
+Project documentation can be found [here](http://www.rlinsdale.org.uk/software/nbpcg/)

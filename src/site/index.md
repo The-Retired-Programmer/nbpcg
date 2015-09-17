@@ -2,7 +2,7 @@
 {::comment define doc.header= NBPCG /}
 {::comment define doc.tagline=NetBeans Platform Code Generator /}
 {::comment define doc.name = NBPCG /}
-{::comment define doc.menu.menu = [Software and Embedded Solutions Home](http://richard-linsdale.github.io/) /}
+{::comment define doc.menu.menu = [Software and Embedded Solutions Home](http://www.rlinsdale.org.uk/software/) /}
 {::comment define status=Bug fixes and refactoring planned during Q1-2015 /}
 
 A Plug-in Module for the Netbeans IDE supporting the
@@ -13,7 +13,7 @@ these entities.
 It is a Netbeans plug-in, and works with Netbeans 8 and the Java
 8 runtime environment
                
-Current release is v${project.version}
+Current release is v${project-version}
                         
 Project Status: ${status}
   

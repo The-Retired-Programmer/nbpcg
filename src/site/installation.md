@@ -3,11 +3,11 @@
 {::comment define doc.name = NBPCG /}
 {::comment define doc.menu.menu = [NBPCG Home](index.html) /}
 
-NBPCG is provided as a nbm file.  The current release is v${project.version}, which can be downloaded from:
+NBPCG is provided as a nbm file.  The current release is v${project-version}, which can be downloaded from:
 
 | Operating System | Software Download |  
 |:-------------------|:--------------|
-| Any | [Download nbm file](http://repository.rlinsdale.org.uk/uk/org/rlinsdale/${project.artifactId}/${project.version}/nbpcg-${project.version}.nbm) |
+| Any | [Download nbm file](http://www.rlinsdale.org.uk/repository/uk/org/rlinsdale/${project-key}/${project-version}/nbpcg-${project-version}.nbm) |
 
 The nbm file can be placed anywhere in the filesystem on your machine.
 
