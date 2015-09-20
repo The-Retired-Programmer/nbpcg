@@ -1,9 +1,9 @@
-{::comment define doc.title=NBPCG /}
-{::comment define doc.header= NBPCG /}
-{::comment define doc.tagline=NetBeans Platform Code Generator /}
-{::comment define doc.name = NBPCG /}
-{::comment define doc.menu.menu = [Software and Embedded Solutions Home](http://www.rlinsdale.org.uk/software/) /}
-{::comment define status=Bug fixes and refactoring planned during Q1-2015 /}
+{::comment} define doc.title=NBPCG {:/comment}
+{::comment} define doc.header= NBPCG {:/comment}
+{::comment} define doc.tagline=NetBeans Platform Code Generator - a NetBeans Plugin {:/comment}
+{::comment} define doc.name = NBPCG {:/comment}
+{::comment} define doc.menu.menu = [Software and Embedded Solutions Home](http://www.rlinsdale.org.uk/software/) {:/comment}
+{::comment} define status=Bug fixes and refactoring planned during Q1-2015 {:/comment}
 
 A Plug-in Module for the Netbeans IDE supporting the
 generation of many Netbeans Platform classes and support files, using an XML based notation
@@ -17,14 +17,14 @@ Current release is v${project-version}
                         
 Project Status: ${status}
   
-#####Documentation
+##Documentation
 
 * [Installation Instructions](installation.html)
 * [Release Notes](release.html)
 * [User Documentation](user.html)
 * [Developer Documentation](developer.html)
 
-#####Support
+##Support
 
 The author would be interested in any feedback on this project
 from users of the plug-in.  Issues (bugs or possible

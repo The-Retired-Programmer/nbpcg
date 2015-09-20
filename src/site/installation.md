@@ -1,7 +1,7 @@
-{::comment define doc.title=NBPCG Installation Instructions /}
-{::comment define doc.header= Installation Instructions /}
-{::comment define doc.name = NBPCG /}
-{::comment define doc.menu.menu = [NBPCG Home](index.html) /}
+{::comment} define doc.title=NBPCG Installation Instructions {:/comment}
+{::comment} define doc.header= Installation Instructions {:/comment}
+{::comment} define doc.name = NBPCG {:/comment}
+{::comment} define doc.menu.menu = [NBPCG Home](index.html) {:/comment}
 
 NBPCG is provided as a nbm file.  The current release is v${project-version}, which can be downloaded from:
 

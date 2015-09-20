@@ -1,7 +1,7 @@
-{::comment define doc.title=NBPCG User Documentation /}
-{::comment define doc.header= User Documentation /}
-{::comment define doc.name = NBPCG /}
-{::comment define doc.menu.menu = [NBPCG Home](index.html) /}
+{::comment} define doc.title=NBPCG User Documentation {:/comment}
+{::comment} define doc.header= User Documentation {:/comment}
+{::comment} define doc.name = NBPCG {:/comment}
+{::comment} define doc.menu.menu = [NBPCG Home](index.html) {:/comment}
 
 The Netbeans Platform Application Code generator is a Netbeans plug-in which creates
 a set of artifacts to speed up creation of a NetBeans Platform Application.  These artifacts can
@@ -24,7 +24,7 @@ in which no other classes have been manually created, as all files in NBPCG refe
 it's code across multiple modules (using the build directive), but in this case all the referenced projects must be opened
 in the Netbeans IDE in order that the script will work.
 
-#####The NBPCG script
+##The NBPCG script
 
 The NBPCG script is an XML document.  A template is available - using the New... entry, the template can be selected 
 from the other category with file type NBPCG Definition file
@@ -177,19 +177,19 @@ Definition of an field to be inserted into the database table object.
 | Attribute | name | field name | yes |
 | Attribute | value | field value | yes |
 
-#####Setting up a Maven project
+##Setting up a Maven project
 
 * In Projects View, Add a folder named `nbpcg` under `Other Sources`.
 * Place the nbpcg script file ( `script.xml`) in the `nbpcg` node
 
 ![nbpcg folder and script](resources/nbpcgfolderandscript.jpg)
 
-#####Setting up an ANT project
+##Setting up an ANT project
 
 * In Files view, Add a folder name `nbpcg-files` under the project root.
 * In Project view, Place the nbpcg script file ( `script.xml`) in the `NBPCG File` node.
 
-#####Executing the NBPCG script
+##Executing the NBPCG script
 
 The NBPCG script can be executed by actions on the popup menu on:
 
@@ -207,7 +207,7 @@ in that tab.
 ![output tab](resources/outputtab.jpg)
 
 
-#####Dependency Information for NBPCG generated Modules
+##Dependency Information for NBPCG generated Modules
 
 NBPCG does not currently setup dependencies for the generated modules
 (either on NBPCG support libraries or Netbean Platform modules). The
