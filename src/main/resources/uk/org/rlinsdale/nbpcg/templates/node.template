@@ -125,7 +125,11 @@ public class ${ENTITYINFO.name}Node extends ${type2}Node<${ENTITYINFO.pkeytype},
 </#if>
 </#list>
                     }
+<#if ENTITYINFO.nomodifiers??>
+                 , 0 );
+<#else>
                  , CAN_COPY | CAN_DELETE | CAN_CUT);
+</#if>
             this.cf = cf;
         }
 <#else>
@@ -137,11 +141,16 @@ public class ${ENTITYINFO.name}Node extends ${type2}Node<${ENTITYINFO.pkeytype},
          */
         public ${ENTITYINFO.name}Node(${ENTITYINFO.name} e) {
             super("${ENTITYINFO.name}Node", e, ${ENTITYINFO.name}.EM.class
+<#if ENTITYINFO.nomodifiers??>
+                    , 0 );
+<#else>
                     , CAN_COPY | CAN_DELETE | CAN_CUT);
+</#if>
         }
 </#if>
 
     @UseCommonNodeActions({
+<#if !(ENTITYINFO.nomodifiers??)>
 <#if ENTITYINFO.orderable = "yes">
             @UseCommonNodeAction(id = "uk.org.rlinsdale.nbpcglibrary.node.actions.NodeReorderAction",
                     node = "${ENTITYINFO.name}Node", position = 810),
@@ -162,6 +171,7 @@ public class ${ENTITYINFO.name}Node extends ${type2}Node<${ENTITYINFO.pkeytype},
                     node = "${ENTITYINFO.name}Node", position = 910),
             @UseCommonNodeAction(id = "uk.org.rlinsdale.nbpcglibrary.node.actions.NodeMoveDownAction",
                     node = "${ENTITYINFO.name}Node", position = 930),
+</#if>
 </#if>
         })
     private static void useCommonNodeActions() {} // a dummy method

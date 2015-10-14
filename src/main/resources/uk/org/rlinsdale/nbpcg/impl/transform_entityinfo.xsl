@@ -113,6 +113,14 @@
                             <xsl:variable  name="uniquesql" >
                                 <xsl:if test="@unique">UNIQUE</xsl:if>
                             </xsl:variable >
+                            <xsl:variable name="indextype">
+                                <xsl:choose>
+                                    <xsl:when test="@index">
+                                        <xsl:value-of select="@index" />
+                                    </xsl:when>
+                                    <xsl:otherwise>no</xsl:otherwise>
+                                </xsl:choose>
+                            </xsl:variable>
                             <xsl:variable  name="sqltype">
                                 <xsl:choose>
                                     <xsl:when test="$type='boolean'">BOOLEAN</xsl:when>
@@ -173,14 +181,6 @@
                                         <xsl:value-of select="@fkey" />
                                     </xsl:when>
                                     <xsl:otherwise>yes</xsl:otherwise>
-                                </xsl:choose>
-                            </xsl:variable>
-                            <xsl:variable name="indextype">
-                                <xsl:choose>
-                                    <xsl:when test="@index">
-                                        <xsl:value-of select="@index" />
-                                    </xsl:when>
-                                    <xsl:otherwise>no</xsl:otherwise>
                                 </xsl:choose>
                             </xsl:variable>
                             <xsl:choose>
@@ -440,6 +440,9 @@
                             <xsl:otherwise>page_red</xsl:otherwise>
                         </xsl:choose>
                     </xsl:attribute>
+                    <xsl:if test="@nomodifiers = 'yes'">
+                        <xsl:attribute name="nomodifiers">yes</xsl:attribute>
+                    </xsl:if>
                     <xsl:attribute name="orderable">
                         <xsl:choose>
                             <xsl:when test="@orderable">
@@ -716,6 +719,9 @@
                         </xsl:otherwise>
                     </xsl:choose>
                 </xsl:attribute>
+                <xsl:if test="@nomodifiers = 'yes'">
+                    <xsl:attribute name="nomodifiers">yes</xsl:attribute>
+                </xsl:if>
                 <xsl:attribute name="viewers">
                     <xsl:choose>
                         <xsl:when test="@viewers">
@@ -903,6 +909,11 @@
         </xsl:attribute>
         <xsl:if test="@nullallowed = 'yes'">
             <xsl:attribute name="optional">yes</xsl:attribute>
+        </xsl:if>
+        <xsl:if test="@choicemethod">
+            <xsl:attribute name="choicemethod">
+                <xsl:value-of select="@choicemethod" />
+            </xsl:attribute>
         </xsl:if>
     </xsl:template>
     

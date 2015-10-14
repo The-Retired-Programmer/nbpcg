@@ -984,6 +984,8 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.pkeytype},${ENTITYIN
         ${field.name} = (Boolean) data.get("${field.name}");
 <#elseif field.type == "int">
         ${field.name} = (Integer) data.get("${field.name}");
+<#elseif field.type == "long">
+        ${field.name} = (Long) data.get("${field.name}");
 <#else>
         ${field.name} = (String) data.get("${field.name}");
 </#if>
@@ -1242,7 +1244,7 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.pkeytype},${ENTITYIN
 <#elseif field.type="idx"  >
             return getIdxText();
 <#elseif field.type="long" >
-            return e.get${field.name?cap_first}Text();
+            return get${field.name?cap_first}Text();
 <#elseif field.type="boolean" >
             return get${field.name?cap_first}()? "Yes": "No";
 <#elseif field.type="date" || field.type="datetime" >

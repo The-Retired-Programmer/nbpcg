@@ -60,7 +60,7 @@ package ${package};
 
 <#assign needListImport = "no" >
 <#list ENTITYINFO.field![] as field>
-<#if field.type="reference" || field.type="reference" || field.type="enum" >
+<#if field.type="reference" || field.type="reference" || field.type="enum"  || (field.choicemethod??) >
 <#assign needListImport = "yes" >
 </#if>
 </#list>
@@ -115,7 +115,11 @@ public final class ${ENTITYINFO.name}NodeEditor extends NodeEditorTopComponent<$
     private ${ENTITYINFO.name}${field.name?cap_first}ChoiceField ${field.name}Field;
 <#else>
 <#if !(field.hidden??) >
+<#if field.choicemethod??>
+    private ChoiceField ${field.name}Field;
+<#else>
     private ${field.fieldclass} ${field.name}Field;
+</#if>
 </#if>
 </#if>
 </#if>
@@ -176,7 +180,11 @@ public final class ${ENTITYINFO.name}NodeEditor extends NodeEditorTopComponent<$
             add(${field.name}Field = new ${ENTITYINFO.name}${field.name?cap_first}ChoiceField(new ${field.name?cap_first}FieldBackingObject(), "${field.label}"));
 <#else>
 <#if !(field.hidden??) >
+<#if field.choicemethod??>
+            add(${field.name}Field =  new ChoiceField(new ${field.name?cap_first}FieldBackingObject(), "${field.label}"));
+<#else>
             add(${field.name}Field =  new ${field.fieldclass}(new ${field.name?cap_first}FieldBackingObject(), "${field.label}"));
+</#if>
 </#if>
 </#if>
 </#if>
@@ -318,8 +326,28 @@ public final class ${ENTITYINFO.name}NodeEditor extends NodeEditorTopComponent<$
     }
 </#if>
 <#else>
-
 <#if !(field.hidden??) >
+<#if field.choicemethod??>
+
+    private class ${field.name?cap_first}FieldBackingObject extends ChoiceFieldBackingObject {
+    
+        @Override
+        public List<String> getChoices() {
+            return ${field.choicemethod}();
+        }
+
+        @Override
+        public void set(String value) {
+            entity.set${field.name?cap_first}(value);
+        }
+
+        @Override
+        public String get() {
+            return entity.get${field.name?cap_first}();
+        }
+    }
+<#else>
+
     private class ${field.name?cap_first}FieldBackingObject implements FieldBackingObject<String> {
     
     @Override
@@ -342,6 +370,7 @@ public final class ${ENTITYINFO.name}NodeEditor extends NodeEditorTopComponent<$
             return entity.get${field.name?cap_first}Rules().getErrorMessages();
         }
     }
+</#if>
 </#if>
 </#if>
 </#list>

@@ -119,6 +119,7 @@ public class ${ENTITYINFO.name}Node extends RootNode<${ENTITYINFO.name}> {
     }
 
     @UseCommonNodeActions({
+<#if !(ENTITYINFO.nomodifiers??)>
 <#list ENTITYINFO.child![] as child>
         @UseCommonNodeAction(id = "uk.org.rlinsdale.nbpcglibrary.node.actions.NodePasteAction",
                 node = "${ENTITYINFO.name}Node", position = 830, separator = 800),
@@ -131,6 +132,7 @@ public class ${ENTITYINFO.name}Node extends RootNode<${ENTITYINFO.name}> {
                 node = "${ENTITYINFO.name}Node", position = 930),
 </#if>
 </#list>
+</#if>
         })
     private static void register${ENTITYINFO.name}NodeAnnotations() {} // a dummy method to allow annotations to be attached
 

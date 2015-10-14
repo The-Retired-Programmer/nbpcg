@@ -197,21 +197,6 @@ public final class NBPCG {
             foldersEmptied.add(path);
             return true;
         }
-        //        private FileObject findInConfigFolder(String project, String folder, Map<String, Project> openProjects) throws IOException {
-        //            Project p = openProjects.get(project);
-        //            if (p == null) {
-        //                throw new IOException("Required project is not open (" + project + ")");
-        //            }
-        //            FileObject pfo = childfolder(p.getProjectDirectory(), mavenProject ? "src/main" : "nbpcg-files");
-        //            pfo = childfolder(pfo, folder);
-        //            // and empty folder of all contents prior to rebuilding code
-        //            for (FileObject fd : pfo.getChildren()) {
-        //                if (fd.isData() ){
-        //                    fd.delete(); // only delete data not other packages - fixes #21
-        //                }
-        //            }
-        //            return pfo;
-        //        }
 
         private FileObject childfolder(FileObject folder, String name) throws IOException {
             if (name.equals("")) {

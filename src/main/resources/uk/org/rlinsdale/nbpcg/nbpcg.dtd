@@ -24,6 +24,7 @@
                 <!ATTLIST generate
                     type (data|node|nodeviewer|nodeeditor|remotedb|mysqldatabase|jsondatabase) #REQUIRED
                     package CDATA #REQUIRED
+                    exclude CDATA #IMPLIED
                     >
     <!ELEMENT node (node*)>
         <!ATTLIST node
@@ -38,6 +39,7 @@
             orderable (yes) #IMPLIED
             nullallowed (yes) #IMPLIED
             fkey (no) #IMPLIED
+            nomodifiers (yes) #IMPLIED
             displaynameformat CDATA #IMPLIED
             displaytitleformat CDATA #IMPLIED
             sortformat CDATA #IMPLIED
@@ -68,6 +70,7 @@
                         index (unique|yes) #IMPLIED
                         unique (yes) #IMPLIED
                         type (boolean|long|int|date|datetime|enum|reference|password) #IMPLIED
+                        choicemethod CDATA #IMPLIED
                         nullallowed (yes) #IMPLIED
                         label CDATA #IMPLIED
                         references CDATA #IMPLIED

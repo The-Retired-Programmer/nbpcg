@@ -181,33 +181,63 @@
     </xsl:template>
     
     <xsl:template name="rootnodeviewer">
+        <xsl:variable name="exclude">
+            <xsl:choose>
+                <xsl:when test="@exclude">
+                    <xsl:value-of select="concat(',',@exclude,',')" />
+                </xsl:when>
+                <xsl:otherwise>,,</xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
         <xsl:for-each select="/nbpcg/node" >
-            <xsl:variable name="view">
-                <xsl:choose>
-                    <xsl:when test="@view">
-                        <xsl:value-of select="@view" />
-                    </xsl:when>
-                    <xsl:otherwise>tree</xsl:otherwise>
-                </xsl:choose>
-            </xsl:variable>
-            <xsl:if test="($view='both') or ($view = 'tree')" >
-                <execute template="rootnodeviewer" type="Tree" filename="{@name}RootNodeViewer.java" useentityinfo="{@name}Root" />
-            </xsl:if>
-            <xsl:if test="($view='both') or ($view = 'icon')" >
-                <execute template="rootnodeviewer" type="Icon" filename="{@name}RootIconNodeViewer.java" useentityinfo="{@name}Root" />
+            <xsl:if test="not(contains($exclude,concat(',',@name,',')))" >
+                <xsl:variable name="view">
+                    <xsl:choose>
+                        <xsl:when test="@view">
+                            <xsl:value-of select="@view" />
+                        </xsl:when>
+                        <xsl:otherwise>tree</xsl:otherwise>
+                    </xsl:choose>
+                </xsl:variable>
+                <xsl:if test="($view='both') or ($view = 'tree')" >
+                    <execute template="rootnodeviewer" type="Tree" filename="{@name}RootNodeViewer.java" useentityinfo="{@name}Root" />
+                </xsl:if>
+                <xsl:if test="($view='both') or ($view = 'icon')" >
+                    <execute template="rootnodeviewer" type="Icon" filename="{@name}RootIconNodeViewer.java" useentityinfo="{@name}Root" />
+                </xsl:if>
             </xsl:if>
         </xsl:for-each>
     </xsl:template>
     
     <xsl:template name="iconviewer">
+        <xsl:variable name="exclude">
+            <xsl:choose>
+                <xsl:when test="@exclude">
+                    <xsl:value-of select="concat(',',@exclude,',')" />
+                </xsl:when>
+                <xsl:otherwise>,,</xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
         <xsl:for-each select="/nbpcg/node/node[@view='icon' or @view='both']" >
-            <execute template="iconnodeviewer" filename="{@name}IconNodeViewer.java" useentityinfo="{@name}" />
+            <xsl:if test="not(contains($exclude,concat(',',@name,',')))" >
+                <execute template="iconnodeviewer" filename="{@name}IconNodeViewer.java" useentityinfo="{@name}" />
+            </xsl:if>
         </xsl:for-each>
     </xsl:template>
     
     <xsl:template name="iconvieweraction">
+        <xsl:variable name="exclude">
+            <xsl:choose>
+                <xsl:when test="@exclude">
+                    <xsl:value-of select="concat(',',@exclude,',')" />
+                </xsl:when>
+                <xsl:otherwise>,,</xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
         <xsl:for-each select="/nbpcg/node/node[@view='icon' or @view='both']" >
-            <execute template="iconnodevieweraction" filename="{@name}IconNodeViewerAction.java" useentityinfo="{@name}" />
+            <xsl:if test="not(contains($exclude,concat(',',@name,',')))" >
+                <execute template="iconnodevieweraction" filename="{@name}IconNodeViewerAction.java" useentityinfo="{@name}" />
+            </xsl:if>
         </xsl:for-each>
     </xsl:template>
     
@@ -275,10 +305,10 @@
                 </xsl:choose>
             </xsl:variable>
             <xsl:if test="($view='both') or ($view = 'tree')" >
-                <execute template="node" type="" filename="{@name}Node.java" useentityinfo="{@name}" />
+                <execute template="node" type="" filename="{@name}Node.java" useentityinfo="{@name}"/>
             </xsl:if>
             <xsl:if test="($view='both') or ($view = 'icon')" >
-                <execute template="node" type="Icon" filename="{@name}IconNode.java" useentityinfo="{@name}" />
+                <execute template="node" type="Icon" filename="{@name}IconNode.java" useentityinfo="{@name}"/>
             </xsl:if>
         </xsl:for-each>
         <xsl:for-each select="//node/node" >
@@ -291,71 +321,111 @@
                 </xsl:choose>
             </xsl:variable>
             <xsl:if test="($view='both') or ($view = 'tree')" >
-                <execute template="node" type="" filename="{@name}Node.java" useentityinfo="{@name}" />
+                <execute template="node" type="" filename="{@name}Node.java" useentityinfo="{@name}"/>
             </xsl:if>
             <xsl:if test="($view='both') or ($view = 'icon')" >
-                <execute template="node" type="Icon" filename="{@name}IconNode.java" useentityinfo="{@name}" />
+                <execute template="node" type="Icon" filename="{@name}IconNode.java" useentityinfo="{@name}"/>
             </xsl:if>
         </xsl:for-each>
     </xsl:template>
     
     <xsl:template name="undonode">
-        <xsl:for-each select="//node">
+        <xsl:variable name="exclude">
             <xsl:choose>
-                <xsl:when test="local-name(..) = 'node'">
-                    <execute template="undonode" filename="Undo{@name}Node.java" useentityinfo="{@name}"/>
+                <xsl:when test="@exclude">
+                    <xsl:value-of select="concat(',',@exclude,',')" />
                 </xsl:when>
-                <xsl:otherwise>
-                    <execute template="undonode" filename="Undo{@name}Node.java" useentityinfo="{@name}"/>
-                </xsl:otherwise>
+                <xsl:otherwise>,,</xsl:otherwise>
             </xsl:choose>
+        </xsl:variable>
+        <xsl:for-each select="//node[not(@nomodifiers)]">
+            <xsl:if test="not(contains($exclude,concat(',',@name,',')))" >
+                <xsl:choose>
+                    <xsl:when test="local-name(..) = 'node'">
+                        <execute template="undonode" filename="Undo{@name}Node.java" useentityinfo="{@name}"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <execute template="undonode" filename="Undo{@name}Node.java" useentityinfo="{@name}"/>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:if>
         </xsl:for-each>
     </xsl:template>
     
     <xsl:template name="addnode">
-        <xsl:for-each select="//node">
-            <xsl:variable name="nname" select="@name" />
+        <xsl:variable name="exclude">
             <xsl:choose>
-                <xsl:when test="local-name(..) = 'node'">
-                    <execute template="addnode" filename="Add{@name}Node.java" useentityinfo="{@name}" />
+                <xsl:when test="@exclude">
+                    <xsl:value-of select="concat(',',@exclude,',')" />
                 </xsl:when>
-                <xsl:otherwise>
-                    <execute template="addnode" filename="Add{@name}Node.java" useentityinfo="{@name}" />
-                </xsl:otherwise>
+                <xsl:otherwise>,,</xsl:otherwise>
             </xsl:choose>
+        </xsl:variable>
+        <xsl:for-each select="//node[not(@nomodifiers)]">
+            <xsl:if test="not(contains($exclude,concat(',',@name,',')))" >
+                <xsl:variable name="nname" select="@name" />
+                <xsl:choose>
+                    <xsl:when test="local-name(..) = 'node'">
+                        <execute template="addnode" filename="Add{@name}Node.java" useentityinfo="{@name}" />
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <execute template="addnode" filename="Add{@name}Node.java" useentityinfo="{@name}" />
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:if>
         </xsl:for-each>
     </xsl:template>
     
     <xsl:template name="nodeeditor">
-        <xsl:for-each select="/nbpcg/databases/database[not(@usepackage)]/table" >
-            <xsl:variable name="ename" select="@name" />
+        <xsl:variable name="exclude">
             <xsl:choose>
-                <xsl:when test="/nbpcg/node[@name=$ename]" >
-                    <execute template="nodeeditor" filename="{@name}NodeEditor.java" useentityinfo="{@name}" />
+                <xsl:when test="@exclude">
+                    <xsl:value-of select="concat(',',@exclude,',')" />
                 </xsl:when>
-                <xsl:otherwise>
-                    <xsl:for-each select="//node[@name=$ename and local-name(..) = 'node'][position() = 1]" >
-                        <xsl:if test="position() = 1" >
-                            <execute template="nodeeditor" filename="{@name}NodeEditor.java" useentityinfo="{@name}" />
-                        </xsl:if>
-                    </xsl:for-each>
-                </xsl:otherwise>
+                <xsl:otherwise>,,</xsl:otherwise>
             </xsl:choose>
+        </xsl:variable>
+        <xsl:for-each select="/nbpcg/databases/database[not(@usepackage)]/table" >
+            <xsl:if test="not(contains($exclude,concat(',',@name,',')))" >
+                <xsl:variable name="ename" select="@name" />
+                <xsl:choose>
+                    <xsl:when test="/nbpcg/node[@name=$ename]" >
+                        <execute template="nodeeditor" filename="{@name}NodeEditor.java" useentityinfo="{@name}" />
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:for-each select="//node[@name=$ename and local-name(..) = 'node'][position() = 1]" >
+                            <xsl:if test="position() = 1" >
+                                <execute template="nodeeditor" filename="{@name}NodeEditor.java" useentityinfo="{@name}" />
+                            </xsl:if>
+                        </xsl:for-each>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:if>
         </xsl:for-each>
     </xsl:template>
     
     <xsl:template name="editnode">
+        <xsl:variable name="exclude">
+            <xsl:choose>
+                <xsl:when test="@exclude">
+                    <xsl:value-of select="concat(',',@exclude,',')" />
+                </xsl:when>
+                <xsl:otherwise>,,</xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
         <xsl:for-each select="//node" >
-            <xsl:variable name="nname" select="@name" />
-            <xsl:if test="/nbpcg/databases/database[not(@usepackage)]/table[@name=$nname]" >
-                <xsl:choose>
-                    <xsl:when test="local-name(..) = 'node'" >
-                        <execute template="editnode" filename="Edit{@name}Node.java" useentityinfo="{@name}" />
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <execute template="editnode" filename="Edit{@name}Node.java" useentityinfo="{@name}" />
-                    </xsl:otherwise>
-                </xsl:choose>
+            <xsl:if test="not(contains($exclude,concat(',',@name,',')))" >
+                <xsl:variable name="nname" select="@name" />
+                <xsl:if test="/nbpcg/databases/database[not(@usepackage)]/table[@name=$nname]" >
+                    <xsl:choose>
+                        <xsl:when test="local-name(..) = 'node'" >
+                            <execute template="editnode" filename="Edit{@name}Node.java" useentityinfo="{@name}" />
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <execute template="editnode" filename="Edit{@name}Node.java" useentityinfo="{@name}" />
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </xsl:if>
             </xsl:if>
         </xsl:for-each>
     </xsl:template>

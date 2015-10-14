@@ -14,8 +14,10 @@
             name CDATA #REQUIRED
             pkey CDATA #IMPLIED
             pkeytype (Integer|String|Boolean) #IMPLIED
+            pkeytypefunction CDATA #IMPLIED
             isroot CDATA #IMPLIED
             nodeorder CDATA #IMPLIED
+            nomodifiers (yes) #IMPLIED
             dbkey CDATA #IMPLIED
             dbtablename CDATA #IMPLIED 
             parentname CDATA #IMPLIED
@@ -38,9 +40,10 @@
                 javatype (int|String|DateOnly|Timestamp|boolean|long) #REQUIRED
                 jsontype (Integer|String|Boolean|Long) #REQUIRED
                 initialisation CDATA #REQUIRED
+                choicemethod CDATA #IMPLIED
                 unique (yes) #IMPLIED
                 optional (yes) #IMPLIED
-                index (yes) #IMPLIED
+                index (unique|yes) #IMPLIED
                 min CDATA #IMPLIED
                 max CDATA #IMPLIED
                 fieldclass (TextField|ReferenceChoiceField|EnumChoiceField|PasswordField|CheckboxField) #IMPLIED
@@ -84,6 +87,7 @@
     <!ELEMENT persistencestore (persistenceentity+) >
         <!ATTLIST persistencestore
             name CDATA #REQUIRED
+            dbname CDATA #REQUIRED
             >
         <!ELEMENT persistenceentity (persistencefield*, insertentity*) >
             <!ATTLIST persistenceentity
