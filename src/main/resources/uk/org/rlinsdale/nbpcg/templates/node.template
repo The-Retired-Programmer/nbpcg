@@ -67,6 +67,9 @@ import java.io.IOException;
 import java.util.List;
 import javax.swing.Action;
 import ${datapackage}.*;
+<#if ENTITYINFO.customchildfactorypackage?? >
+import ${ENTITYINFO.customchildfactorypackage}.${ENTITYINFO.name}NodeChildFactory;
+</#if>
 import uk.org.rlinsdale.nbpcglibrary.annotations.UseCommonNodeAction;
 import uk.org.rlinsdale.nbpcglibrary.annotations.UseCommonNodeActions;
 import uk.org.rlinsdale.nbpcglibrary.data.entity.*;
@@ -101,6 +104,9 @@ public class ${ENTITYINFO.name}Node extends ${type2}Node<${ENTITYINFO.pkeytype},
 <#list ENTITYINFO.child![] as c>
 <#assign haschildren = true >
 </#list>
+<#if ENTITYINFO.customchildfactorypackage?? >
+<#assign haschildren = true >
+</#if>
 <#if haschildren >
 
         private final ${ENTITYINFO.name}NodeChildFactory cf;

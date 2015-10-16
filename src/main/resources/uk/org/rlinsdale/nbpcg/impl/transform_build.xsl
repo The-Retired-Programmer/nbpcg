@@ -265,31 +265,37 @@
             </xsl:variable>
             <xsl:if test="($view='both') or ($view = 'tree')" >
                 <execute template="nodefactory" type="" filename="{@name}RootNodeChildFactory.java" useentityinfo="{@name}Root" />
-                <xsl:if test="count(node) &gt; 0">
-                    <execute template="nodefactory" type="" filename="{@name}NodeChildFactory.java" useentityinfo="{@name}" />
+                <xsl:if test="not(@customchildfactorypackage)">
+                    <xsl:if test="count(node) &gt; 0">
+                        <execute template="nodefactory" type="" filename="{@name}NodeChildFactory.java" useentityinfo="{@name}" />
+                    </xsl:if>
                 </xsl:if>
             </xsl:if>
             <xsl:if test="($view='both') or ($view = 'icon')" >
                 <execute template="nodefactory" type="Icon" filename="{@name}RootIconNodeChildFactory.java" useentityinfo="{@name}Root" />
-                <xsl:if test="count(node) &gt; 0">
-                    <execute template="nodefactory" type="Icon" filename="{@name}IconNodeChildFactory.java" useentityinfo="{@name}" />
+                <xsl:if test="not(@customchildfactorypackage)">
+                    <xsl:if test="count(node) &gt; 0">
+                        <execute template="nodefactory" type="Icon" filename="{@name}IconNodeChildFactory.java" useentityinfo="{@name}" />
+                    </xsl:if>
                 </xsl:if>
             </xsl:if>
         </xsl:for-each>
         <xsl:for-each select="//node/node[count(node) &gt; 0]" >
-            <xsl:variable name="view">
-                <xsl:choose>
-                    <xsl:when test="node/@view">
-                        <xsl:value-of select="node/@view" />
-                    </xsl:when>
-                    <xsl:otherwise>tree</xsl:otherwise>
-                </xsl:choose>
-            </xsl:variable>
-            <xsl:if test="($view='both') or ($view = 'tree')" >
-                <execute template="nodefactory" type="" filename="{@name}NodeChildFactory.java" useentityinfo="{@name}" />
-            </xsl:if>
-            <xsl:if test="($view='both') or ($view = 'icon')" >
-                <execute template="nodefactory" type="Icon" filename="{@name}IconNodeChildFactory.java" useentityinfo="{@name}" />
+            <xsl:if test="not(@customchildfactorypackage)">
+                <xsl:variable name="view">
+                    <xsl:choose>
+                        <xsl:when test="node/@view">
+                            <xsl:value-of select="node/@view" />
+                        </xsl:when>
+                        <xsl:otherwise>tree</xsl:otherwise>
+                    </xsl:choose>
+                </xsl:variable>
+                <xsl:if test="($view='both') or ($view = 'tree')" >
+                    <execute template="nodefactory" type="" filename="{@name}NodeChildFactory.java" useentityinfo="{@name}" />
+                </xsl:if>
+                <xsl:if test="($view='both') or ($view = 'icon')" >
+                    <execute template="nodefactory" type="Icon" filename="{@name}IconNodeChildFactory.java" useentityinfo="{@name}" />
+                </xsl:if>
             </xsl:if>
         </xsl:for-each>
     </xsl:template>

@@ -18,6 +18,8 @@
             isroot CDATA #IMPLIED
             nodeorder CDATA #IMPLIED
             nomodifiers (yes) #IMPLIED
+            customchildfactorypackage CDATA #IMPLIED
+            dynamicicon CDATA #IMPLIED
             dbkey CDATA #IMPLIED
             dbtablename CDATA #IMPLIED 
             parentname CDATA #IMPLIED

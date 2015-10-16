@@ -40,6 +40,8 @@
             nullallowed (yes) #IMPLIED
             fkey (no) #IMPLIED
             nomodifiers (yes) #IMPLIED
+            customchildfactorypackage CDATA #IMPLIED
+            dynamicicon CDATA #IMPLIED
             displaynameformat CDATA #IMPLIED
             displaytitleformat CDATA #IMPLIED
             sortformat CDATA #IMPLIED

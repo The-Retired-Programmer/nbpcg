@@ -443,6 +443,16 @@
                     <xsl:if test="@nomodifiers = 'yes'">
                         <xsl:attribute name="nomodifiers">yes</xsl:attribute>
                     </xsl:if>
+                    <xsl:if test="@customchildfactorypackage">
+                        <xsl:attribute name="customchildfactorypackage" >
+                            <xsl:value-of select="@customchildfactorypackage" />
+                        </xsl:attribute>
+                    </xsl:if>
+                    <xsl:if test="@dynamicicon">
+                        <xsl:attribute name="dynamicicon" >
+                            <xsl:value-of select="@dynamicicon" />
+                        </xsl:attribute>
+                    </xsl:if>
                     <xsl:attribute name="orderable">
                         <xsl:choose>
                             <xsl:when test="@orderable">
