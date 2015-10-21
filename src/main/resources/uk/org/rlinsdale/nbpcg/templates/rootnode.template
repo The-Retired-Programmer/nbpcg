@@ -101,12 +101,7 @@ public class ${ENTITYINFO.name}Node extends RootNode<${ENTITYINFO.name}> {
         super(e, cf, new DataFlavor[] {<#list ENTITYINFO.child![] as child>${child.name?upper_case}NODE_FLAVOR, </#list>});
         this.cf = cf;
     }
-
-    /**
-     * Get the node display name
-     *
-     * @return the display name
-     */
+ 
     @Override
     public String getDisplayName() {
         return ${ENTITYINFO.name}.get().getDisplayName();

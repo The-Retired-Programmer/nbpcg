@@ -1046,14 +1046,19 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.pkeytype},${ENTITYIN
 <#elseif field.type == "ref" || field.type == "reference" >
         if (${field.name}.isDirty()) {
 <#if field.optional??>
-            int idref${field.name?cap_first} = ${field.name}.getPK();
-            if (idref${field.name?cap_first} < 0 ) {
-                ${field.name}.get().save();
-                data.put("${field.name}", ${field.name}.get().getPK());
-            } else if (idref${field.name?cap_first} == 0) {
+            Integer idrefpf = ${field.name}.getPK();
+            if (idrefpf == null) {
                 data.put("${field.name}", null);
             } else {
-                data.put("${field.name}", idref${field.name?cap_first});
+                int idref${field.name?cap_first} = idrefpf;
+                if (idref${field.name?cap_first} < 0 ) {
+                    ${field.name}.get().save();
+                    data.put("${field.name}", ${field.name}.get().getPK());
+                } else if (idref${field.name?cap_first} == 0) {
+                    data.put("${field.name}", null);
+                } else {
+                    data.put("${field.name}", idref${field.name?cap_first});
+                }
             }
 <#else>
             int idref${field.name?cap_first} = ${field.name}.getPK();
