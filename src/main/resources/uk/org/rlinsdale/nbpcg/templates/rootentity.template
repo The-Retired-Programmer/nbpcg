@@ -216,6 +216,8 @@ public class ${ENTITYINFO.name} extends CoreEntity {
      * Reorder the list of ${child.references}s
      *
      * @param perm the reordered index information
+     * @param offsetMin the min offset of the reorder
+     * @param offsetMax the max offset of the reorder
      */
     public void reorder${child.name?cap_first}s(int[] perm, int offsetMin, int offsetMax) {
         ${child.name}s.reorder(perm, offsetMin, offsetMax);
