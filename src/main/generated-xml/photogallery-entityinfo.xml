@@ -1,64 +1,166 @@
-<?xml version="1.0" encoding="UTF-8"?><nbpcg-entity-info name="Photogallery">
-    <entityinfo key="Album" name="Album" dbkey="photogallery" access="rw" dbtablename="Album" withfields="Idandstamp" type="Idkeyauto" ordercolumn="idx">
-        <field name="root" references="AlbumRoot" type="rootref" label="Root" rvid="root" javatype="int" initialisation="" javarsget="getInt"/>
-        <field name="title" nullsql="NOT NULL" uniquesql="" min="1" max="50" fieldclass="TextField" sqltype="VARCHAR(50)" type="String" dbname="title" label="Title" rvid="title" javatype="String" initialisation=" = &quot;&quot;" javarsget="getString"/>
-        <field name="albumpath" nullsql="NOT NULL" uniquesql="" min="1" max="100" fieldclass="TextField" sqltype="VARCHAR(100)" type="String" dbname="albumpath" label="Albumpath" rvid="albumpath" javatype="String" initialisation=" = &quot;&quot;" javarsget="getString"/>
-        <field name="owner" nullsql="NOT NULL" uniquesql="" min="1" max="100" fieldclass="TextField" sqltype="VARCHAR(100)" type="String" dbname="owner" label="Owner" rvid="owner" javatype="String" initialisation=" = &quot;&quot;" javarsget="getString"/>
-        <field name="image" nullsql="NULL" uniquesql="" fkey="no" fieldclass="ReferenceChoiceField" sqltype="MEDIUMINT UNSIGNED" references="Image" referencestable="Image" parentfactory="Album" selectfrom="Image" type="reference" dbname="image" label="Album Image" rvid="imageId" javatype="int" initialisation="" javarsget="getInt" optional="yes"/>
-        <field name="idx" type="idx" nullsql="NOT NULL" uniquesql="" index="yes" fieldclass="TextField" sqltype="MEDIUMINT UNSIGNED" dbname="idx" label="Idx" rvid="idx" javatype="int" initialisation=" = 0" javarsget="getInt"/>
-        <child name="image" dbname="album" references="Image" orderable="yes"/>
-        <child name="albumpermission" dbname="album" references="Albumpermission"/>
-        <child name="albumgrouppermission" dbname="album" references="Albumgrouppermission"/>
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE nbpcg-entity-info PUBLIC "-//uk/org/rlinsdale/nbpcgentityinfo/DTD NBPCGENTITYINFO SCHEMA 1.0//EN" "nbres:/uk/org/rlinsdale/nbpcg/nbpcgentityinfo.dtd">
+<nbpcg-entity-info name="Photogallery">
+    <entityinfo name="Album" dbkey="photogallery" dbtablename="Album" pkey="id" pkeytype="Integer" pkeytypefunction="getInt" icon="photos" orderable="yes" nodeorder="1" parentname="AlbumRoot">
+        <field name="root" pkey="no" references="AlbumRoot" type="rootref" label="Album" javatype="int" jsontype="Integer" initialisation=""/>
+        <field name="title" pkey="no" min="1" max="50" fieldclass="TextField" type="String" label="Title" javatype="String" jsontype="String" initialisation=" = &quot;&quot;"/>
+        <field name="albumpath" pkey="no" min="1" max="100" fieldclass="TextField" type="String" label="Albumpath" javatype="String" jsontype="String" initialisation=" = &quot;&quot;"/>
+        <field name="owner" pkey="no" min="1" max="100" fieldclass="TextField" type="String" label="Owner" javatype="String" jsontype="String" initialisation=" = &quot;&quot;"/>
+        <field name="image" pkey="no" fkey="no" fieldclass="ReferenceChoiceField" references="Image" type="reference" label="Album Image" javatype="int" jsontype="Integer" initialisation="" optional="yes"/>
+        <field name="id" pkey="yes" hidden="yes" type="int" fieldclass="TextField" label="Id" javatype="int" jsontype="Integer" initialisation=" = 0"/>
+        <field name="idx" pkey="no" hidden="yes" type="idx" index="yes" fieldclass="TextField" label="Idx" javatype="int" jsontype="Integer" initialisation=" = Integer.MAX_VALUE"/>
+        <field name="createdby" pkey="no" hidden="yes" type="String" min="4" max="4" fieldclass="TextField" label="Created by" javatype="String" jsontype="String" initialisation=" = &quot;&quot;"/>
+        <field name="createdon" pkey="no" final="yes" hidden="yes" type="datetime" fieldclass="TextField" label="Created on" javatype="Timestamp" jsontype="String" initialisation=" = new Timestamp()"/>
+        <field name="updatedby" pkey="no" hidden="yes" type="String" min="4" max="4" fieldclass="TextField" label="Updated by" javatype="String" jsontype="String" initialisation=" = &quot;&quot;"/>
+        <field name="updatedon" pkey="no" final="yes" hidden="yes" type="datetime" fieldclass="TextField" label="Updated on" javatype="Timestamp" jsontype="String" initialisation=" = new Timestamp()"/>
+        <child name="image" hasiconview="yes" dbname="album" references="Image" orderable="yes" sort="no"/>
+        <child name="albumpermission" hasiconview="no" dbname="album" references="Albumpermission" orderable="no" sort="no"/>
+        <child name="albumgrouppermission" hasiconview="no" dbname="album" references="Albumgrouppermission" orderable="no" sort="no"/>
+        <displaynameformat format="{0}">
+            <display field="Title"/>
+        </displaynameformat>
     </entityinfo>
-    <entityinfo key="Albumpermission" name="Albumpermission" dbkey="photogallery" access="rw" dbtablename="Albumpermission" withfields="Idandstamp" type="Idkeyauto">
-        <field name="permission" nullsql="NOT NULL" uniquesql="" values="'View and Download', 'View', 'Download'" fieldclass="EnumChoiceField" sqltype="ENUM ('View and Download', 'View', 'Download')" type="enum" dbname="permission" label="Permission" rvid="permission" javatype="String" initialisation=" = &quot;&quot;" javarsget="getString"/>
-        <field name="album" references="Album" referencestable="Album" parentfactory="AlbumRoot" pprvu="Root" pcvu="Album" fieldclass="ReferenceChoiceField" sqltype="MEDIUMINT UNSIGNED" nullsql="NOT NULL" uniquesql="" type="ref" dbname="album" label="Album" rvid="albumId" javatype="int" initialisation="" javarsget="getInt"/>
-        <field name="user" references="User" referencestable="User" parentfactory="UserRoot" pprvu="Root" pcvu="User" fieldclass="ReferenceChoiceField" sqltype="MEDIUMINT UNSIGNED" nullsql="NOT NULL" uniquesql="" type="ref" dbname="grantedto" label="User" rvid="userId" javatype="int" initialisation="" javarsget="getInt"/>
+    <entityinfo name="Albumpermission" dbkey="photogallery" dbtablename="Albumpermission" pkey="id" pkeytype="Integer" pkeytypefunction="getInt" icon="tick" orderable="no" parentname="Album" nodeorder="2">
+        <field name="permission" pkey="no" values="'View and Download', 'View', 'Download'" fieldclass="EnumChoiceField" type="enum" label="Permission" javatype="String" jsontype="String" initialisation=" = &quot;&quot;"/>
+        <field name="album" pkey="no" references="Album" fieldclass="ReferenceChoiceField" type="ref" label="Album" javatype="int" jsontype="Integer" initialisation=""/>
+        <field name="id" pkey="yes" hidden="yes" type="int" fieldclass="TextField" label="Id" javatype="int" jsontype="Integer" initialisation=" = 0"/>
+        <field name="createdby" pkey="no" hidden="yes" type="String" min="4" max="4" fieldclass="TextField" label="Created by" javatype="String" jsontype="String" initialisation=" = &quot;&quot;"/>
+        <field name="createdon" pkey="no" final="yes" hidden="yes" type="datetime" fieldclass="TextField" label="Created on" javatype="Timestamp" jsontype="String" initialisation=" = new Timestamp()"/>
+        <field name="updatedby" pkey="no" hidden="yes" type="String" min="4" max="4" fieldclass="TextField" label="Updated by" javatype="String" jsontype="String" initialisation=" = &quot;&quot;"/>
+        <field name="updatedon" pkey="no" final="yes" hidden="yes" type="datetime" fieldclass="TextField" label="Updated on" javatype="Timestamp" jsontype="String" initialisation=" = new Timestamp()"/>
+        <child name="user" hasiconview="no" dbname="albumpermission" references="User" orderable="no" sort="yes"/>
+        <displaynameformat format="{0}">
+            <display field="Permission"/>
+        </displaynameformat>
     </entityinfo>
-    <entityinfo key="Group" name="Group" dbkey="photogallery" access="rw" dbtablename="Group_" withfields="Idandstamp" type="Idkeyauto">
-        <field name="root" references="GroupRoot" type="rootref" label="Root" rvid="root" javatype="int" initialisation="" javarsget="getInt"/>
-        <field name="name" nullsql="NOT NULL" uniquesql="UNIQUE" unique="yes" min="1" max="100" fieldclass="TextField" sqltype="VARCHAR(100)" type="String" dbname="name" label="Name" rvid="name" javatype="String" initialisation=" = &quot;&quot;" javarsget="getString"/>
-        <child name="albumgrouppermission" dbname="grantedto" references="Albumgrouppermission" sort="yes"/>
-        <child name="groupuser" dbname="group_" references="Groupuser" sort="yes" copymovenode="UserRootChildFactory.UserNode" copymoveentity="User" copymovefield="user"/>
+    <entityinfo name="Group" dbkey="photogallery" dbtablename="Group_" pkey="id" pkeytype="Integer" pkeytypefunction="getInt" icon="group" orderable="no" parentname="Albumgrouppermission" nodeorder="1">
+        <field name="name" pkey="no" unique="yes" min="1" max="100" fieldclass="TextField" type="String" label="Name" javatype="String" jsontype="String" initialisation=" = &quot;&quot;"/>
+        <field name="albumgrouppermission" pkey="no" references="Albumgrouppermission" fieldclass="ReferenceChoiceField" type="ref" label="Albumgrouppermission" javatype="int" jsontype="Integer" initialisation=""/>
+        <field name="id" pkey="yes" hidden="yes" type="int" fieldclass="TextField" label="Id" javatype="int" jsontype="Integer" initialisation=" = 0"/>
+        <field name="createdby" pkey="no" hidden="yes" type="String" min="4" max="4" fieldclass="TextField" label="Created by" javatype="String" jsontype="String" initialisation=" = &quot;&quot;"/>
+        <field name="createdon" pkey="no" final="yes" hidden="yes" type="datetime" fieldclass="TextField" label="Created on" javatype="Timestamp" jsontype="String" initialisation=" = new Timestamp()"/>
+        <field name="updatedby" pkey="no" hidden="yes" type="String" min="4" max="4" fieldclass="TextField" label="Updated by" javatype="String" jsontype="String" initialisation=" = &quot;&quot;"/>
+        <field name="updatedon" pkey="no" final="yes" hidden="yes" type="datetime" fieldclass="TextField" label="Updated on" javatype="Timestamp" jsontype="String" initialisation=" = new Timestamp()"/>
+        <displaynameformat format="{0}">
+            <display field="Name"/>
+        </displaynameformat>
     </entityinfo>
-    <entityinfo key="Albumgrouppermission" name="Albumgrouppermission" dbkey="photogallery" access="rw" dbtablename="Albumgrouppermission" withfields="Idandstamp" type="Idkeyauto">
-        <field name="permission" nullsql="NOT NULL" uniquesql="" values="'View and Download', 'View', 'Download'" fieldclass="EnumChoiceField" sqltype="ENUM ('View and Download', 'View', 'Download')" type="enum" dbname="permission" label="Permission" rvid="permission" javatype="String" initialisation=" = &quot;&quot;" javarsget="getString"/>
-        <field name="album" references="Album" referencestable="Album" parentfactory="AlbumRoot" pprvu="Root" pcvu="Album" fieldclass="ReferenceChoiceField" sqltype="MEDIUMINT UNSIGNED" nullsql="NOT NULL" uniquesql="" type="ref" dbname="album" label="Album" rvid="albumId" javatype="int" initialisation="" javarsget="getInt"/>
-        <field name="group" references="Group" referencestable="Group_" parentfactory="GroupRoot" pprvu="Root" pcvu="Group" fieldclass="ReferenceChoiceField" sqltype="MEDIUMINT UNSIGNED" nullsql="NOT NULL" uniquesql="" type="ref" dbname="grantedto" label="Group" rvid="groupId" javatype="int" initialisation="" javarsget="getInt"/>
+    <entityinfo name="Albumgrouppermission" dbkey="photogallery" dbtablename="Albumgrouppermission" pkey="id" pkeytype="Integer" pkeytypefunction="getInt" icon="thumb_up" orderable="no" parentname="Album" nodeorder="3">
+        <field name="permission" pkey="no" values="'View and Download', 'View', 'Download'" fieldclass="EnumChoiceField" type="enum" label="Permission" javatype="String" jsontype="String" initialisation=" = &quot;&quot;"/>
+        <field name="album" pkey="no" references="Album" fieldclass="ReferenceChoiceField" type="ref" label="Album" javatype="int" jsontype="Integer" initialisation=""/>
+        <field name="id" pkey="yes" hidden="yes" type="int" fieldclass="TextField" label="Id" javatype="int" jsontype="Integer" initialisation=" = 0"/>
+        <field name="createdby" pkey="no" hidden="yes" type="String" min="4" max="4" fieldclass="TextField" label="Created by" javatype="String" jsontype="String" initialisation=" = &quot;&quot;"/>
+        <field name="createdon" pkey="no" final="yes" hidden="yes" type="datetime" fieldclass="TextField" label="Created on" javatype="Timestamp" jsontype="String" initialisation=" = new Timestamp()"/>
+        <field name="updatedby" pkey="no" hidden="yes" type="String" min="4" max="4" fieldclass="TextField" label="Updated by" javatype="String" jsontype="String" initialisation=" = &quot;&quot;"/>
+        <field name="updatedon" pkey="no" final="yes" hidden="yes" type="datetime" fieldclass="TextField" label="Updated on" javatype="Timestamp" jsontype="String" initialisation=" = new Timestamp()"/>
+        <child name="group" hasiconview="no" dbname="albumgrouppermission" references="Group" orderable="no" sort="no"/>
+        <displaynameformat format="{0}">
+            <display field="Permission"/>
+        </displaynameformat>
     </entityinfo>
-    <entityinfo key="Groupuser" name="Groupuser" dbkey="photogallery" access="rw" dbtablename="Groupuser" withfields="Idandstamp" type="Idkeyauto">
-        <field name="user" references="User" referencestable="User" parentfactory="UserRoot" pprvu="Root" pcvu="User" fieldclass="ReferenceChoiceField" sqltype="MEDIUMINT UNSIGNED" nullsql="NOT NULL" uniquesql="" type="ref" dbname="user" label="User" rvid="userId" javatype="int" initialisation="" javarsget="getInt"/>
-        <field name="group" references="Group" referencestable="Group_" parentfactory="GroupRoot" pprvu="Root" pcvu="Group" fieldclass="ReferenceChoiceField" sqltype="MEDIUMINT UNSIGNED" nullsql="NOT NULL" uniquesql="" type="ref" dbname="group_" label="Group" rvid="groupId" javatype="int" initialisation="" javarsget="getInt"/>
+    <entityinfo name="Image" dbkey="photogallery" dbtablename="Image" pkey="id" pkeytype="Integer" pkeytypefunction="getInt" icon="photo" orderable="yes" parentname="Album" nodeorder="1">
+        <field name="title" pkey="no" min="1" max="50" fieldclass="TextField" type="String" label="Title" javatype="String" jsontype="String" initialisation=" = &quot;&quot;"/>
+        <field name="filename" pkey="no" min="1" max="100" fieldclass="TextField" type="String" label="Filename" javatype="String" jsontype="String" initialisation=" = &quot;&quot;"/>
+        <field name="displayimage" pkey="no" fieldclass="CheckboxField" type="boolean" label="Displayimage" javatype="boolean" jsontype="Boolean" initialisation=" = false"/>
+        <field name="allowndownload" pkey="no" fieldclass="CheckboxField" type="boolean" label="Allowndownload" javatype="boolean" jsontype="Boolean" initialisation=" = false"/>
+        <field name="album" pkey="no" references="Album" fieldclass="ReferenceChoiceField" type="ref" label="Image" javatype="int" jsontype="Integer" initialisation=""/>
+        <field name="id" pkey="yes" hidden="yes" type="int" fieldclass="TextField" label="Id" javatype="int" jsontype="Integer" initialisation=" = 0"/>
+        <field name="idx" pkey="no" hidden="yes" type="idx" index="yes" fieldclass="TextField" label="Idx" javatype="int" jsontype="Integer" initialisation=" = Integer.MAX_VALUE"/>
+        <field name="createdby" pkey="no" hidden="yes" type="String" min="4" max="4" fieldclass="TextField" label="Created by" javatype="String" jsontype="String" initialisation=" = &quot;&quot;"/>
+        <field name="createdon" pkey="no" final="yes" hidden="yes" type="datetime" fieldclass="TextField" label="Created on" javatype="Timestamp" jsontype="String" initialisation=" = new Timestamp()"/>
+        <field name="updatedby" pkey="no" hidden="yes" type="String" min="4" max="4" fieldclass="TextField" label="Updated by" javatype="String" jsontype="String" initialisation=" = &quot;&quot;"/>
+        <field name="updatedon" pkey="no" final="yes" hidden="yes" type="datetime" fieldclass="TextField" label="Updated on" javatype="Timestamp" jsontype="String" initialisation=" = new Timestamp()"/>
+        <referenced name="Album" field="image" optional="yes"/>
+        <displaynameformat format="{0}">
+            <display field="Title"/>
+        </displaynameformat>
     </entityinfo>
-    <entityinfo key="Image" name="Image" dbkey="photogallery" access="rw" dbtablename="Image" withfields="Idandstamp" type="Idkeyauto" ordercolumn="idx">
-        <field name="title" nullsql="NOT NULL" uniquesql="" min="1" max="50" fieldclass="TextField" sqltype="VARCHAR(50)" type="String" dbname="title" label="Title" rvid="title" javatype="String" initialisation=" = &quot;&quot;" javarsget="getString"/>
-        <field name="filename" nullsql="NOT NULL" uniquesql="" min="1" max="100" fieldclass="TextField" sqltype="VARCHAR(100)" type="String" dbname="filename" label="Filename" rvid="filename" javatype="String" initialisation=" = &quot;&quot;" javarsget="getString"/>
-        <field name="displayimage" nullsql="NOT NULL" uniquesql="" fieldclass="CheckboxField" sqltype="BOOLEAN" type="boolean" dbname="displayimage" label="Displayimage" rvid="displayimage" javatype="boolean" initialisation=" = false" javarsget="getBoolean"/>
-        <field name="allowndownload" nullsql="NOT NULL" uniquesql="" fieldclass="CheckboxField" sqltype="BOOLEAN" type="boolean" dbname="allowndownload" label="Allowndownload" rvid="allowndownload" javatype="boolean" initialisation=" = false" javarsget="getBoolean"/>
-        <field name="album" references="Album" referencestable="Album" parentfactory="AlbumRoot" pprvu="Root" pcvu="Album" fieldclass="ReferenceChoiceField" sqltype="MEDIUMINT UNSIGNED" nullsql="NOT NULL" uniquesql="" type="ref" dbname="album" label="Album" rvid="albumId" javatype="int" initialisation="" javarsget="getInt"/>
-        <field name="idx" type="idx" nullsql="NOT NULL" uniquesql="" index="yes" fieldclass="TextField" sqltype="MEDIUMINT UNSIGNED" dbname="idx" label="Idx" rvid="idx" javatype="int" initialisation=" = 0" javarsget="getInt"/>
+    <entityinfo name="User" dbkey="authentication" dbtablename="User" pkey="id" pkeytype="Integer" pkeytypefunction="getInt" icon="user" orderable="no" parentname="Albumpermission" nodeorder="1">
+        <field name="username" pkey="no" unique="yes" min="1" max="100" fieldclass="TextField" type="String" label="Username" javatype="String" jsontype="String" initialisation=" = &quot;&quot;"/>
+        <field name="encodedpassword" pkey="no" entryfield="password" passwordsupport="uk.org.rlinsdale.lindos.authentication.Authentication" passwordstrength="strong" max="40" min="40" fieldclass="PasswordField" type="password" label="Password" javatype="String" jsontype="String" initialisation=" = &quot;&quot;"/>
+        <field name="usercode" pkey="no" unique="yes" min="4" max="4" fieldclass="TextField" type="String" label="Usercode" javatype="String" jsontype="String" initialisation=" = &quot;&quot;"/>
+        <field name="enabled" pkey="no" fieldclass="CheckboxField" type="boolean" label="Enabled" javatype="boolean" jsontype="Boolean" initialisation=" = false"/>
+        <field name="albumpermission" pkey="no" references="Albumpermission" fieldclass="ReferenceChoiceField" type="ref" label="Albumpermission" javatype="int" jsontype="Integer" initialisation=""/>
+        <field name="id" pkey="yes" hidden="yes" type="int" fieldclass="TextField" label="Id" javatype="int" jsontype="Integer" initialisation=" = 0"/>
+        <field name="createdby" pkey="no" hidden="yes" type="String" min="4" max="4" fieldclass="TextField" label="Created by" javatype="String" jsontype="String" initialisation=" = &quot;&quot;"/>
+        <field name="createdon" pkey="no" final="yes" hidden="yes" type="datetime" fieldclass="TextField" label="Created on" javatype="Timestamp" jsontype="String" initialisation=" = new Timestamp()"/>
+        <field name="updatedby" pkey="no" hidden="yes" type="String" min="4" max="4" fieldclass="TextField" label="Updated by" javatype="String" jsontype="String" initialisation=" = &quot;&quot;"/>
+        <field name="updatedon" pkey="no" final="yes" hidden="yes" type="datetime" fieldclass="TextField" label="Updated on" javatype="Timestamp" jsontype="String" initialisation=" = new Timestamp()"/>
+        <sortformat format="{0}">
+            <display field="Username"/>
+        </sortformat>
+        <displaynameformat format="{0}">
+            <display field="Username"/>
+        </displaynameformat>
     </entityinfo>
-    <entityinfo key="AlbumRoot" name="AlbumRoot">
-        <child name="album" nodekey="AlbumRootChildFactory.AlbumNode" references="Album" isiconchild="" orderable="yes"/>
+    <entityinfo name="AlbumRoot" isroot="" label="Albums" viewers="Manager" icon="folder_picture">
+        <child name="album" references="Album" isiconchild="" hasiconview="yes" orderable="yes" sort="no"/>
     </entityinfo>
-    <entityinfo key="UserRoot" name="UserRoot">
-        <child name="user" nodekey="UserRootChildFactory.UserNode" references="User" sort="yes"/>
-    </entityinfo>
-    <entityinfo key="GroupRoot" name="GroupRoot">
-        <child name="group" nodekey="GroupRootChildFactory.GroupNode" references="Group"/>
-    </entityinfo>
-    <entityinfo key="User" name="User" dbkey="authentication" package="linsdale.authentication.dataobjects" access="ro" dbtablename="User" withfields="Idandstamp" type="Idkeyauto">
-        <field name="root" references="UserRoot" type="rootref" label="Root" rvid="root" javatype="int" initialisation="" javarsget="getInt"/>
-        <field name="username" type="String" dbname="username" label="Username" rvid="username" javatype="String" initialisation=" = &quot;&quot;" javarsget="getString"/>
-        <child name="albumpermission" dbname="grantedto" references="Albumpermission" sort="yes"/>
-        <child name="groupuser" dbname="user" references="Groupuser" sort="yes" copymovenode="GroupRootChildFactory.GroupNode" copymoveentity="Group" copymovefield="group"/>
-    </entityinfo>
-    <dbinfo key="photogallery" name="photogallery" db="MySQL">
-        <table name="Album"/>
-        <table name="Albumpermission"/>
-        <table name="Group"/>
-        <table name="Albumgrouppermission"/>
-        <table name="Groupuser"/>
-        <table name="Image"/>
-    </dbinfo>
+    <persistencestore name="photogallery" dbname="photogallery2">
+        <persistenceentity name="Album">
+            <persistencefield name="title" primarykey="no" jsontype="String" min="1" max="50" createsql=" VARCHAR(50)  NOT NULL"/>
+            <persistencefield name="albumpath" primarykey="no" jsontype="String" min="1" max="100" createsql=" VARCHAR(100)  NOT NULL"/>
+            <persistencefield name="owner" primarykey="no" jsontype="String" min="1" max="100" createsql=" VARCHAR(100)  NOT NULL"/>
+            <persistencefield name="image" primarykey="no" jsontype="Reference" createsql=" MEDIUMINT UNSIGNED  NULL"/>
+            <persistencefield name="id" sys="yes" jsontype="Integer" primarykey="auto" createsql="MEDIUMINT UNSIGNED AUTO_INCREMENT PRIMARY KEY"/>
+            <persistencefield name="idx" jsontype="Integer" primarykey="no" createsql="MEDIUMINT UNSIGNED NOT NULL"/>
+            <persistencefield name="createdby" sys="yes" primarykey="no" jsontype="String" min="4" max="4" createsql="CHAR(4) NOT NULL"/>
+            <persistencefield name="createdon" final="yes" sys="yes" primarykey="no" jsontype="String" min="14" max="14" createsql="CHAR(14) NOT NULL"/>
+            <persistencefield name="updatedby" sys="yes" primarykey="no" jsontype="String" min="4" max="4" createsql="CHAR(4) NOT NULL"/>
+            <persistencefield name="updatedon" final="yes" sys="yes" primarykey="no" jsontype="String" min="14" max="14" createsql="CHAR(14) NOT NULL"/>
+        </persistenceentity>
+        <persistenceentity name="Albumpermission">
+            <persistencefield name="permission" primarykey="no" jsontype="String" min="0" max="255" createsql=" ENUM ('View and Download', 'View', 'Download')  NOT NULL"/>
+            <persistencefield name="album" primarykey="no" jsontype="Reference" createsql="MEDIUMINT UNSIGNED NOT NULL ,FOREIGN KEY (album) REFERENCES Album(id)"/>
+            <persistencefield name="id" sys="yes" jsontype="Integer" primarykey="auto" createsql="MEDIUMINT UNSIGNED AUTO_INCREMENT PRIMARY KEY"/>
+            <persistencefield name="createdby" sys="yes" primarykey="no" jsontype="String" min="4" max="4" createsql="CHAR(4) NOT NULL"/>
+            <persistencefield name="createdon" final="yes" sys="yes" primarykey="no" jsontype="String" min="14" max="14" createsql="CHAR(14) NOT NULL"/>
+            <persistencefield name="updatedby" sys="yes" primarykey="no" jsontype="String" min="4" max="4" createsql="CHAR(4) NOT NULL"/>
+            <persistencefield name="updatedon" final="yes" sys="yes" primarykey="no" jsontype="String" min="14" max="14" createsql="CHAR(14) NOT NULL"/>
+        </persistenceentity>
+        <persistenceentity name="Group_">
+            <persistencefield name="name" primarykey="no" jsontype="String" min="1" max="100" createsql=" VARCHAR(100) UNIQUE NOT NULL"/>
+            <persistencefield name="albumgrouppermission" primarykey="no" jsontype="Reference" createsql="MEDIUMINT UNSIGNED NOT NULL ,FOREIGN KEY (albumgrouppermission) REFERENCES Albumgrouppermission(id)"/>
+            <persistencefield name="id" sys="yes" jsontype="Integer" primarykey="auto" createsql="MEDIUMINT UNSIGNED AUTO_INCREMENT PRIMARY KEY"/>
+            <persistencefield name="createdby" sys="yes" primarykey="no" jsontype="String" min="4" max="4" createsql="CHAR(4) NOT NULL"/>
+            <persistencefield name="createdon" final="yes" sys="yes" primarykey="no" jsontype="String" min="14" max="14" createsql="CHAR(14) NOT NULL"/>
+            <persistencefield name="updatedby" sys="yes" primarykey="no" jsontype="String" min="4" max="4" createsql="CHAR(4) NOT NULL"/>
+            <persistencefield name="updatedon" final="yes" sys="yes" primarykey="no" jsontype="String" min="14" max="14" createsql="CHAR(14) NOT NULL"/>
+        </persistenceentity>
+        <persistenceentity name="Albumgrouppermission">
+            <persistencefield name="permission" primarykey="no" jsontype="String" min="0" max="255" createsql=" ENUM ('View and Download', 'View', 'Download')  NOT NULL"/>
+            <persistencefield name="album" primarykey="no" jsontype="Reference" createsql="MEDIUMINT UNSIGNED NOT NULL ,FOREIGN KEY (album) REFERENCES Album(id)"/>
+            <persistencefield name="id" sys="yes" jsontype="Integer" primarykey="auto" createsql="MEDIUMINT UNSIGNED AUTO_INCREMENT PRIMARY KEY"/>
+            <persistencefield name="createdby" sys="yes" primarykey="no" jsontype="String" min="4" max="4" createsql="CHAR(4) NOT NULL"/>
+            <persistencefield name="createdon" final="yes" sys="yes" primarykey="no" jsontype="String" min="14" max="14" createsql="CHAR(14) NOT NULL"/>
+            <persistencefield name="updatedby" sys="yes" primarykey="no" jsontype="String" min="4" max="4" createsql="CHAR(4) NOT NULL"/>
+            <persistencefield name="updatedon" final="yes" sys="yes" primarykey="no" jsontype="String" min="14" max="14" createsql="CHAR(14) NOT NULL"/>
+        </persistenceentity>
+        <persistenceentity name="Image">
+            <persistencefield name="title" primarykey="no" jsontype="String" min="1" max="50" createsql=" VARCHAR(50)  NOT NULL"/>
+            <persistencefield name="filename" primarykey="no" jsontype="String" min="1" max="100" createsql=" VARCHAR(100)  NOT NULL"/>
+            <persistencefield name="displayimage" primarykey="no" jsontype="Boolean" createsql=" BOOLEAN  NOT NULL"/>
+            <persistencefield name="allowndownload" primarykey="no" jsontype="Boolean" createsql=" BOOLEAN  NOT NULL"/>
+            <persistencefield name="album" primarykey="no" jsontype="Reference" createsql="MEDIUMINT UNSIGNED NOT NULL ,FOREIGN KEY (album) REFERENCES Album(id)"/>
+            <persistencefield name="id" sys="yes" jsontype="Integer" primarykey="auto" createsql="MEDIUMINT UNSIGNED AUTO_INCREMENT PRIMARY KEY"/>
+            <persistencefield name="idx" jsontype="Integer" primarykey="no" createsql="MEDIUMINT UNSIGNED NOT NULL"/>
+            <persistencefield name="createdby" sys="yes" primarykey="no" jsontype="String" min="4" max="4" createsql="CHAR(4) NOT NULL"/>
+            <persistencefield name="createdon" final="yes" sys="yes" primarykey="no" jsontype="String" min="14" max="14" createsql="CHAR(14) NOT NULL"/>
+            <persistencefield name="updatedby" sys="yes" primarykey="no" jsontype="String" min="4" max="4" createsql="CHAR(4) NOT NULL"/>
+            <persistencefield name="updatedon" final="yes" sys="yes" primarykey="no" jsontype="String" min="14" max="14" createsql="CHAR(14) NOT NULL"/>
+        </persistenceentity>
+    </persistencestore>
+    <persistencestore name="authentication" dbname="authentication2">
+        <persistenceentity name="User">
+            <persistencefield name="username" primarykey="no" jsontype="String" min="1" max="100" createsql=" VARCHAR(100) UNIQUE NOT NULL"/>
+            <persistencefield name="encodedpassword" primarykey="no" jsontype="String" min="40" max="40" createsql=" CHAR(40)  NOT NULL"/>
+            <persistencefield name="usercode" primarykey="no" jsontype="String" min="4" max="4" createsql=" CHAR(4) UNIQUE NOT NULL"/>
+            <persistencefield name="enabled" primarykey="no" jsontype="Boolean" createsql=" BOOLEAN  NOT NULL"/>
+            <persistencefield name="albumpermission" primarykey="no" jsontype="Reference" createsql="MEDIUMINT UNSIGNED NOT NULL ,FOREIGN KEY (albumpermission) REFERENCES Albumpermission(id)"/>
+            <persistencefield name="id" sys="yes" jsontype="Integer" primarykey="auto" createsql="MEDIUMINT UNSIGNED AUTO_INCREMENT PRIMARY KEY"/>
+            <persistencefield name="createdby" sys="yes" primarykey="no" jsontype="String" min="4" max="4" createsql="CHAR(4) NOT NULL"/>
+            <persistencefield name="createdon" final="yes" sys="yes" primarykey="no" jsontype="String" min="14" max="14" createsql="CHAR(14) NOT NULL"/>
+            <persistencefield name="updatedby" sys="yes" primarykey="no" jsontype="String" min="4" max="4" createsql="CHAR(4) NOT NULL"/>
+            <persistencefield name="updatedon" final="yes" sys="yes" primarykey="no" jsontype="String" min="14" max="14" createsql="CHAR(14) NOT NULL"/>
+        </persistenceentity>
+    </persistencestore>
 </nbpcg-entity-info>

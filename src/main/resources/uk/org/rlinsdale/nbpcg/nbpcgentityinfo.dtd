@@ -5,7 +5,7 @@
     Author     : Richard Linsdale (richard.linsdale at blueyonder.co.uk)
 -->
 
-<!ELEMENT nbpcg-entity-info (entityinfo+, persistencestore) >
+<!ELEMENT nbpcg-entity-info (entityinfo+, persistencestore+) >
     <!ATTLIST nbpcg-entity-info
         name CDATA #REQUIRED
         >
@@ -33,6 +33,7 @@
             <!ATTLIST field
                 name CDATA #REQUIRED
                 pkey CDATA #REQUIRED
+                fkey (no) #IMPLIED
                 hidden (yes) #IMPLIED
                 final (yes) #IMPLIED
                 type (rootref|ref|String|int|reference|date|enum|idx|datetime|boolean|long|password) #REQUIRED
@@ -62,6 +63,8 @@
                 orderable (yes|no) #REQUIRED
                 copymoveentity CDATA #IMPLIED 
                 copymovefield CDATA #IMPLIED
+                hasiconview (yes|no) #REQUIRED
+                isiconchild CDATA #IMPLIED
                 >
         <!ELEMENT referenced EMPTY  >
             <!ATTLIST referenced

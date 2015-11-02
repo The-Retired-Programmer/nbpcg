@@ -67,6 +67,7 @@ package ${package};
 <#if needListImport = "yes">
 import java.util.List;
 </#if>
+import javax.swing.JComponent;
 import ${datapackage}.*;
 import ${nodepackage}.${ENTITYINFO.name}Node;
 import uk.org.rlinsdale.nbpcglibrary.data.entity.*;
@@ -136,16 +137,20 @@ public final class ${ENTITYINFO.name}NodeEditor extends NodeEditorTopComponent<$
     }
 
     @Override
-    protected Form getForm() {
-        setName("${ENTITYINFO.name}: " + node.getDisplayTitle());
+    protected JComponent getDisplayComponent() {
         form = new Form("${ENTITYINFO.name}Editor",  new EditorFields());
-        entity.addTitleListener(titlechangelistener);
-        entity.addFieldListener(entityfieldchangelistener);
-        return form;                 
+        return form;
     }
 
     @Override
-    protected Form dropForm() {
+    protected void opened() {
+        setName("${ENTITYINFO.name}: " + node.getDisplayTitle());
+        entity.addTitleListener(titlechangelistener);
+        entity.addFieldListener(entityfieldchangelistener);
+    }
+
+    @Override
+    protected void closed() {
 <#list ENTITYINFO.field![] as field>
 <#if field.type="reference">
         ${field.name}Field.closeChoices();
@@ -153,7 +158,6 @@ public final class ${ENTITYINFO.name}NodeEditor extends NodeEditorTopComponent<$
 </#list>
         entity.removeTitleListener(titlechangelistener);
         entity.removeFieldListener(entityfieldchangelistener);
-        return form;
     }
 
     @Override

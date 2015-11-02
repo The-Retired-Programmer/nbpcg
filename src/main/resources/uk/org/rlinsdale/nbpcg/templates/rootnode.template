@@ -70,7 +70,7 @@ import uk.org.rlinsdale.nbpcglibrary.node.properties.StringReadonlyProperty;
 import uk.org.rlinsdale.nbpcglibrary.api.LogicException;
 import org.openide.nodes.*;
 <#list ENTITYINFO.child![] as child>
-import static ${package}.${child.name?cap_first}Node.${child.name?upper_case}NODE_FLAVOR;
+import static ${package}.${child.name?cap_first}${type}Node.${child.name?upper_case}${type?upper_case}NODE_FLAVOR;
 </#list>
 import uk.org.rlinsdale.nbpcglibrary.node.nodes.BasicNode;
 
@@ -82,23 +82,23 @@ import uk.org.rlinsdale.nbpcglibrary.node.nodes.BasicNode;
  *
  * @author ${templateauthor}
  */
-public class ${ENTITYINFO.name}Node extends RootNode<${ENTITYINFO.name}> {
+public class ${ENTITYINFO.name}${type}Node extends RootNode<${ENTITYINFO.name}> {
 
-    private final ${ENTITYINFO.name}NodeChildFactory cf;
+    private final ${ENTITYINFO.name}${type}NodeChildFactory cf;
 
    /**
      * Constructor
      */
-    public ${ENTITYINFO.name}Node() {
+    public ${ENTITYINFO.name}${type}Node() {
         this(${ENTITYINFO.name}.get());
     }
 
-    private ${ENTITYINFO.name}Node(${ENTITYINFO.name} e){
-        this(e, new ${ENTITYINFO.name}NodeChildFactory(e));
+    private ${ENTITYINFO.name}${type}Node(${ENTITYINFO.name} e){
+        this(e, new ${ENTITYINFO.name}${type}NodeChildFactory(e));
     }
 
-    private ${ENTITYINFO.name}Node(${ENTITYINFO.name} e, ${ENTITYINFO.name}NodeChildFactory cf) {
-        super(e, cf, new DataFlavor[] {<#list ENTITYINFO.child![] as child>${child.name?upper_case}NODE_FLAVOR, </#list>});
+    private ${ENTITYINFO.name}${type}Node(${ENTITYINFO.name} e, ${ENTITYINFO.name}${type}NodeChildFactory cf) {
+        super(e, cf, new DataFlavor[] {<#list ENTITYINFO.child![] as child>${child.name?upper_case}${type?upper_case}NODE_FLAVOR, </#list>});
         this.cf = cf;
     }
  
@@ -109,10 +109,11 @@ public class ${ENTITYINFO.name}Node extends RootNode<${ENTITYINFO.name}> {
 
     @Override
     protected List<PropertySupport.ReadOnly<?>> createPropertyItems(List<PropertySupport.ReadOnly<?>> props) {
-        props.add(new StringReadonlyProperty("Node Type", "${ENTITYINFO.name}Node"));
+        props.add(new StringReadonlyProperty("Node Type", "${ENTITYINFO.name}${type}Node"));
         return props;
     }
 
+<#if type != "Icon" >
     @UseCommonNodeActions({
 <#if !(ENTITYINFO.nomodifiers??)>
 <#list ENTITYINFO.child![] as child>
@@ -129,16 +130,17 @@ public class ${ENTITYINFO.name}Node extends RootNode<${ENTITYINFO.name}> {
 </#list>
 </#if>
         })
-    private static void register${ENTITYINFO.name}NodeAnnotations() {} // a dummy method to allow annotations to be attached
+    private static void register${ENTITYINFO.name}${type}NodeAnnotations() {} // a dummy method to allow annotations to be attached
 
+</#if>
     @Override
     public Action getPreferredAction() {
-         return findDefaultAction("${ENTITYINFO.name}Node");
+         return findDefaultAction("${ENTITYINFO.name}${type}Node");
     }
 
     @Override
     public Action[] getActions(boolean context) {
-        return findActions("${ENTITYINFO.name}Node");
+        return findActions("${ENTITYINFO.name}${type}Node");
     }
 
 @Override
@@ -171,7 +173,7 @@ public class ${ENTITYINFO.name}Node extends RootNode<${ENTITYINFO.name}> {
     protected void nodeReorderChildByFlavor(DataFlavor df, int[] perm) {
 <#list ENTITYINFO.child![] as child>
 <#if child.orderable = "yes">
-        if (df == ${ENTITYINFO.name}NodeChildFactory.${child.name?upper_case}NODE_FLAVOR) {
+        if (df == ${child.references}${type}Node.${child.references?upper_case}${type?upper_case}NODE_FLAVOR) {
             getEntity().reorder${child.name?cap_first}s(perm, cf.getOffsetMin${child.name?cap_first}s(), cf.getOffsetMax${child.name?cap_first}s());
             return;
         }

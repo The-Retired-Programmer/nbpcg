@@ -760,6 +760,13 @@
                     <xsl:if test="(@view='both') or (@view='icon')" >
                         <xsl:attribute name="isiconchild" />
                     </xsl:if>
+                    <xsl:attribute name="hasiconview" >
+                        <xsl:choose>
+                            <xsl:when test="@view = 'icon'">yes</xsl:when>
+                            <xsl:when test="@view = 'both'">yes</xsl:when>
+                            <xsl:otherwise>no</xsl:otherwise>
+                        </xsl:choose>
+                    </xsl:attribute>
                     <xsl:attribute name="orderable">
                         <xsl:choose>
                             <xsl:when test="@orderable">
@@ -938,6 +945,13 @@
                 </xsl:call-template>
             </xsl:variable>
             <child name="{$fname}" >
+                <xsl:attribute name="hasiconview" >
+                    <xsl:choose>
+                        <xsl:when test="@view = 'icon'">yes</xsl:when>
+                        <xsl:when test="@view = 'both'">yes</xsl:when>
+                        <xsl:otherwise>no</xsl:otherwise>
+                    </xsl:choose>
+                </xsl:attribute>
                 <xsl:attribute name="dbname" >
                     <xsl:choose>
                         <xsl:when test="@dbname">

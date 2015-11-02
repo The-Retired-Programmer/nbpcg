@@ -63,9 +63,11 @@ import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 <#if type="Tree">
 <#assign view = "BeanTreeView"/>
+<#assign nameext = "" />
 </#if>
 <#if type="Icon">
 <#assign view = "IconView"/>
+<#assign nameext = "Icon" />
 </#if>
 import org.openide.explorer.view.${view};
 import org.openide.nodes.AbstractNode;
@@ -82,28 +84,28 @@ import uk.org.rlinsdale.nbpcglibrary.common.LogBuilder;
  *
  * @author ${templateauthor}
  */
-@TopComponent.Description(preferredID = "${ENTITYINFO.name}NodeViewer", iconBase = "com/famfamfam/www/silkicons/${ENTITYINFO.icon}.png", persistenceType = TopComponent.PERSISTENCE_ALWAYS)
+@TopComponent.Description(preferredID = "${ENTITYINFO.name}${nameext}NodeViewer", iconBase = "com/famfamfam/www/silkicons/${ENTITYINFO.icon}.png", persistenceType = TopComponent.PERSISTENCE_ALWAYS)
 @TopComponent.Registration(mode = "explorer", openAtStartup = true, roles={"${ENTITYINFO.viewers?replace(",","\",\"")}"})
-@ActionID(category = "Window", id = "${package}.${ENTITYINFO.name}NodeViewer")
+@ActionID(category = "Window", id = "${package}.${ENTITYINFO.name}${nameext}NodeViewer")
 @ActionReference(path = "Menu/Window")
-@TopComponent.OpenActionRegistration(displayName = "#CTL_${ENTITYINFO.name}NodeViewer",
-preferredID = "${ENTITYINFO.name}NodeViewer")
+@TopComponent.OpenActionRegistration(displayName = "#CTL_${ENTITYINFO.name}${nameext}NodeViewer",
+preferredID = "${ENTITYINFO.name}${nameext}NodeViewer")
 @Messages({
-    "CTL_${ENTITYINFO.name}NodeViewer=${ENTITYINFO.label}",
-    "HINT_${ENTITYINFO.name}NodeViewer=Viewer for ${ENTITYINFO.label}"
+    "CTL_${ENTITYINFO.name}${nameext}NodeViewer=${ENTITYINFO.label}",
+    "HINT_${ENTITYINFO.name}${nameext}NodeViewer=Viewer for ${ENTITYINFO.label}"
 })
-public final class ${ENTITYINFO.name}NodeViewer extends ExplorerTopComponent {
+public final class ${ENTITYINFO.name}${nameext}NodeViewer extends ExplorerTopComponent {
 
-    public ${ENTITYINFO.name}NodeViewer() {
-        super("${ENTITYINFO.name}NodeViewer",
+    public ${ENTITYINFO.name}${nameext}NodeViewer() {
+        super("${ENTITYINFO.name}${nameext}NodeViewer",
                 new ${view}(),
-                NbBundle.getMessage(${ENTITYINFO.name}NodeViewer.class, "CTL_${ENTITYINFO.name}NodeViewer"),
-                NbBundle.getMessage(${ENTITYINFO.name}NodeViewer.class, "HINT_${ENTITYINFO.name}NodeViewer"));
+                NbBundle.getMessage(${ENTITYINFO.name}${nameext}NodeViewer.class, "CTL_${ENTITYINFO.name}${nameext}NodeViewer"),
+                NbBundle.getMessage(${ENTITYINFO.name}${nameext}NodeViewer.class, "HINT_${ENTITYINFO.name}${nameext}NodeViewer"));
     }
 
     @Override
     public AbstractNode getRootContextNode() {
-        return new ${ENTITYINFO.name}Node();
+        return new ${ENTITYINFO.name}${nameext}Node();
     }
  
     @Override
