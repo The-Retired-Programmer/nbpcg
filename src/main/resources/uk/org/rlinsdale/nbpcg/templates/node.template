@@ -100,6 +100,9 @@ import static uk.org.rlinsdale.nbpcglibrary.data.entity.EntityFieldChangeEventPa
  */
 public class ${ENTITYINFO.name}${type}Node extends ${type2}Node<${ENTITYINFO.pkeytype},${ENTITYINFO.name}, ${ENTITYINFO.parentname},${ENTITYINFO.name}Field> {
 
+    /**
+    * Data F;avor for Nodes of type ${ENTITYINFO.name}${type}Node
+    */
     public static final DataFlavor ${ENTITYINFO.name?upper_case}${type?upper_case}NODE_FLAVOR = new DataFlavor(${ENTITYINFO.name}${type}Node.class, "${ENTITYINFO.name}${type}Node");
 
 <#assign haschildren = false>

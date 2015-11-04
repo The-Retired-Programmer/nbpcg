@@ -90,6 +90,11 @@ public class ${ENTITYINFO.name}${type}NodeChildFactory extends BasicChildFactory
 </#list>
     private final Listener<SetChangeEventParams> setListener;
 
+    /**
+    * Constructor
+    *
+    * @param parent the parent entity for the children to be constructed by the factory
+    */
 <#if ENTITYINFO.isroot??>
     public   ${ENTITYINFO.name}${type}NodeChildFactory(${ENTITYINFO.name} parent) {
         super(parent);
@@ -156,10 +161,18 @@ public class ${ENTITYINFO.name}${type}NodeChildFactory extends BasicChildFactory
     }
 <#list ENTITYINFO.child![] as child>
 
+    /**
+    * Get the minimum offset of the set of ${child.name?cap_first} Nodes
+    * @return the offset
+    */
     public final int getOffsetMin${child.name?cap_first}s() {
         return offsetMin${child.name?cap_first}s;
     }
     
+    /**
+    * Get the maximum offset of the set of ${child.name?cap_first} Nodes
+    * @return the offset
+    */
     public final int getOffsetMax${child.name?cap_first}s() {
         return offsetMax${child.name?cap_first}s;
     }

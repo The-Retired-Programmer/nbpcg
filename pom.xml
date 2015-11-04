@@ -5,12 +5,12 @@
     <parent>
         <groupId>uk.org.rlinsdale.poms</groupId>
         <artifactId>netbeans-plugin</artifactId>
-        <version>2.0.0</version>
+        <version>2.0.1</version>
     </parent>
     
     <groupId>uk.org.rlinsdale</groupId>
     <artifactId>nbpcg</artifactId>
-    <version>4.0.17</version>
+    <version>4.0.18</version>
     <packaging>nbm</packaging>
     
     <name>Netbeans Platform CodeGenerator</name>
