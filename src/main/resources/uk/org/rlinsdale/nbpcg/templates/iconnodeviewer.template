@@ -57,15 +57,20 @@
 <#assign ENTITYINFO = entityinfo[useentityinfo] >
 package ${package};
 
-import uk.org.rlinsdale.nbpcglibrary.common.Listener;
+import java.util.Collection;
+import org.openide.awt.ActionID;
+import org.openide.awt.ActionReference;
 import uk.org.rlinsdale.nbpcglibrary.topcomponent.ExplorerTopComponent;
 import uk.org.rlinsdale.nbpcglibrary.common.LogBuilder;
-import uk.org.rlinsdale.nbpcglibrary.common.SimpleEventParams;
 import ${nodepackage}.${ENTITYINFO.parentname}IconNode;
 import org.openide.explorer.view.IconView;
-import org.openide.nodes.AbstractNode;
+import org.openide.nodes.Node;
+import org.openide.util.Lookup;
+import org.openide.util.LookupEvent;
+import org.openide.util.LookupListener;
 import org.openide.util.NbBundle;
 import org.openide.util.NbBundle.Messages;
+import org.openide.util.Utilities;
 import org.openide.windows.TopComponent;
 
 /**
@@ -76,23 +81,25 @@ import org.openide.windows.TopComponent;
  *
  * @author ${templateauthor}
  */
-@TopComponent.Description(preferredID = "${ENTITYINFO.name}IconNodeViewer", iconBase = "com/famfamfam/www/silkicons/${ENTITYINFO.icon}.png", persistenceType = TopComponent.PERSISTENCE_NEVER)
-@TopComponent.Registration(mode = "editor", openAtStartup = false)
+@TopComponent.Description(preferredID = "${ENTITYINFO.name}IconNodeViewer", iconBase = "com/famfamfam/www/silkicons/${ENTITYINFO.icon}.png", persistenceType = TopComponent.PERSISTENCE_ALWAYS)
+@TopComponent.Registration(mode = "editor", openAtStartup = true)
+@ActionID(category = "Window", id = "uk.org.rlinsdale.photogallery.topcomponents.${ENTITYINFO.name}IconNodeViewer")
+@ActionReference(path = "Menu/Window")
+@TopComponent.OpenActionRegistration(displayName = "#CTL_${ENTITYINFO.name}IconNodeViewer",
+        preferredID = "${ENTITYINFO.name}IconNodeViewer")
 @Messages({
-    "CTL_${ENTITYINFO.name}IconNodeViewer=${ENTITYINFO.name}",
-    "HINT_${ENTITYINFO.name}IconNodeViewer=Viewer for ${ENTITYINFO.name}"
+    "CTL_${ENTITYINFO.name}IconNodeViewer=${ENTITYINFO.parentname} ${ENTITYINFO.name}s",
+    "HINT_${ENTITYINFO.name}IconNodeViewer=Viewer for ${ENTITYINFO.parentname} ${ENTITYINFO.name}s"
 })
 public final class ${ENTITYINFO.name}IconNodeViewer extends ExplorerTopComponent {
 
-    private final ${ENTITYINFO.parentname}IconNode node;
-    private final TitleChangeListener titlechangelistener = new TitleChangeListener("${ENTITYINFO.name}IconNodeViewer/Title");
+    private ${ENTITYINFO.parentname}IconNodeChange change = null;
 
-    public ${ENTITYINFO.name}IconNodeViewer(${ENTITYINFO.parentname}IconNode n) {
+    public ${ENTITYINFO.name}IconNodeViewer() {
         super("${ENTITYINFO.name}IconNode Viewer",
                 new IconView(),
                 NbBundle.getMessage(${ENTITYINFO.name}IconNodeViewer.class, "CTL_${ENTITYINFO.name}IconNodeViewer"),
                 NbBundle.getMessage(${ENTITYINFO.name}IconNodeViewer.class, "HINT_${ENTITYINFO.name}IconNodeViewer"));
-        node = n;
     }
 
  @Override
@@ -101,26 +108,41 @@ public final class ${ENTITYINFO.name}IconNodeViewer extends ExplorerTopComponent
     }
     
     @Override
-    public AbstractNode getRootContextNode() {
-        setName("${ENTITYINFO.parentname}: " + node.getDisplayTitle());
-        node.getEntity().addTitleListener(titlechangelistener);
-        return node;
+    public Node getRootContextNode() {
+        setName("${ENTITYINFO.parentname}: no selection");
+        change = new ${ENTITYINFO.parentname}IconNodeChange();
+        return Node.EMPTY;
     }
     
     @Override
     public void dropRootContextNode() {
-        node.getEntity().removeTitleListener(titlechangelistener);
+       change.terminate();
+        change = null;
     }
-    
-    private class TitleChangeListener extends Listener<SimpleEventParams> {
-        
-        public TitleChangeListener(String name) {
-            super(name);
+
+    private class ${ENTITYINFO.parentname}IconNodeChange implements LookupListener {
+
+        private final Lookup.Result<${ENTITYINFO.parentname}IconNode> result;
+
+        @SuppressWarnings("LeakingThisInConstructor")
+        public ${ENTITYINFO.parentname}IconNodeChange() {
+            result = Utilities.actionsGlobalContext().lookupResult(${ENTITYINFO.parentname}IconNode.class);
+            result.addLookupListener(this);
+            result.allItems();
         }
-        
+
+        public void terminate() {
+            result.removeLookupListener(this);
+        }
+
         @Override
-        public void action(SimpleEventParams p) {
-            setName("${ENTITYINFO.parentname}: " + node.getDisplayTitle());
+        public void resultChanged(LookupEvent lookupEvent) {
+            Collection<? extends ${ENTITYINFO.parentname}IconNode> allEvents = result.allInstances();
+            if (!allEvents.isEmpty()) {
+                ${ENTITYINFO.parentname}IconNode node = allEvents.iterator().next();
+                setName("Album: " + node.getDisplayTitle());
+                ${ENTITYINFO.name}IconNodeViewer.this.resetRootContextNode(node);
+            }
         }
     }
 }

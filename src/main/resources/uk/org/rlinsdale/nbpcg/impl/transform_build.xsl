@@ -116,7 +116,6 @@
                         <folder project="{$project}" location="java" package="{$package}" message="generating node viewer files" log="{$log}" license="{$license}"  datapackage="{$datapackage}" nodepackage="{$nodepackage}">
                             <xsl:call-template name="rootnodeviewer" />
                             <xsl:call-template name="iconviewer" />
-                            <xsl:call-template name="iconvieweraction" />
                         </folder>
                     </xsl:when>
                     <xsl:when test="@type = 'remotedb' ">
@@ -221,22 +220,6 @@
         <xsl:for-each select="/nbpcg/node/node[@view='icon' or @view='both']" >
             <xsl:if test="not(contains($exclude,concat(',',@name,',')))" >
                 <execute template="iconnodeviewer" filename="{@name}IconNodeViewer.java" useentityinfo="{@name}" />
-            </xsl:if>
-        </xsl:for-each>
-    </xsl:template>
-    
-    <xsl:template name="iconvieweraction">
-        <xsl:variable name="exclude">
-            <xsl:choose>
-                <xsl:when test="@exclude">
-                    <xsl:value-of select="concat(',',@exclude,',')" />
-                </xsl:when>
-                <xsl:otherwise>,,</xsl:otherwise>
-            </xsl:choose>
-        </xsl:variable>
-        <xsl:for-each select="/nbpcg/node/node[@view='icon' or @view='both']" >
-            <xsl:if test="not(contains($exclude,concat(',',@name,',')))" >
-                <execute template="iconnodevieweraction" filename="{@name}IconNodeViewerAction.java" useentityinfo="{@name}" />
             </xsl:if>
         </xsl:for-each>
     </xsl:template>

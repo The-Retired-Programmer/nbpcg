@@ -2,7 +2,7 @@
     
     <!DOCTYPE nbpcg-build PUBLIC "-//uk/org/rlinsdale/nbpcgbuild/DTD NBPCGBUILD SCHEMA 1.0//EN" "nbres:/uk/org/rlinsdale/nbpcg/nbpcgbuild.dtd">
 <nbpcg-build name="Photogallery" copyright="2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)">
-    <folder project="Photo Gallery - generated" location="resource" package="uk.org.rlinsdale.photogallery.mysql" message="generating mysql script files for photogallery" log="linsdale.photogallery" license="gpl30">
+    <folder project="Photo Gallery - generated" location="resource" package="uk.org.rlinsdale.photogallery.mysql" message="generating mysql script files for photogallery2" log="linsdale.photogallery" license="gpl30">
         <execute template="createsqldatabase" filename="createdb.sql" usepersistencestore="photogallery"/>
         <execute template="createsqldatabase" filename="createdb.sql" usepersistencestore="authentication"/>
         <execute template="backupscript" filename="backupscript.sh" usepersistencestore="photogallery"/>
@@ -61,7 +61,6 @@
         <execute template="rootnodeviewer" type="Tree" filename="AlbumRootNodeViewer.java" useentityinfo="AlbumRoot"/>
         <execute template="rootnodeviewer" type="Icon" filename="AlbumRootIconNodeViewer.java" useentityinfo="AlbumRoot"/>
         <execute template="iconnodeviewer" filename="ImageIconNodeViewer.java" useentityinfo="Image"/>
-        <execute template="iconnodevieweraction" filename="ImageIconNodeViewerAction.java" useentityinfo="Image"/>
     </folder>
     <folder project="Photo Gallery - generated" location="java" package="uk.org.rlinsdale.photogallery.topcomponents" message="generating node editor files" log="linsdale.photogallery" license="gpl30" datapackage="uk.org.rlinsdale.photogallery.dataobjects" nodepackage="uk.org.rlinsdale.photogallery.nodes">
         <execute template="nodeeditor" filename="AlbumNodeEditor.java" useentityinfo="Album"/>
