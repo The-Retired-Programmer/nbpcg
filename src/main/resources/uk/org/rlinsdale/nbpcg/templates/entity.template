@@ -853,7 +853,7 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.pkeytype},${ENTITYIN
      */
     public static void add${child.references}sSetChangeListeners (Listener<SetChangeEventParams> listener) {
        ${ENTITYINFO.name}.getAll${ENTITYINFO.name}s().stream().forEach((${ENTITYINFO.name?lower_case}) -> {
-            ${ENTITYINFO.name?lower_case}.${child.name}s.addSetListener(listener);
+            ((${ENTITYINFO.name})${ENTITYINFO.name?lower_case}).add${child.name?cap_first}SetChangeListener(listener);
         });
         ${ENTITYINFO.parentname}.add${ENTITYINFO.name}sSetChangeListeners(listener);
     }
@@ -865,7 +865,7 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.pkeytype},${ENTITYIN
      */
     public static void remove${child.references}sSetChangeListeners(Listener<SetChangeEventParams> listener) {
         ${ENTITYINFO.name}.getAll${ENTITYINFO.name}s().stream().forEach((${ENTITYINFO.name?lower_case}) -> {
-            ${ENTITYINFO.name?lower_case}.${child.name}s.removeSetListener(listener);
+            ((${ENTITYINFO.name})${ENTITYINFO.name?lower_case}).remove${child.name?cap_first}SetChangeListener(listener);
         });
         ${ENTITYINFO.parentname}.remove${ENTITYINFO.name}sSetChangeListeners(listener);
     }
@@ -1204,11 +1204,11 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.pkeytype},${ENTITYIN
      * 
      * @return the set of all ${ENTITYINFO.name}s
      */
-    public static List<${ENTITYINFO.name}> getAll${ENTITYINFO.name}s() {
-        List<${ENTITYINFO.name}> list = new ArrayList<>();
+    public static List<Entity> getAll${ENTITYINFO.name}s() {
+        List<Entity> list = new ArrayList<>();
 <#if PARENTENTITYINFO.parentname?? >
         ${ENTITYINFO.parentname}.getAll${ENTITYINFO.parentname}s().stream().forEach((parent) -> {
-            list.addAll(parent.get${ENTITYINFO.name}s());
+            list.addAll(((${ENTITYINFO.parentname})parent).get${ENTITYINFO.name}s());
         });
 <#else>
         list.addAll(${ENTITYINFO.parentname}.get().get${ENTITYINFO.name}s());
@@ -1271,6 +1271,7 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.pkeytype},${ENTITYIN
             return get${field.name?cap_first}();
 </#if>
     }
+
 </#if>
 </#list>
 <#list ENTITYINFO.field![] as field>

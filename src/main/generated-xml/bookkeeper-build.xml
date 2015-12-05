@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8"?>
+    
+    <!DOCTYPE nbpcg-build PUBLIC "-//uk/org/rlinsdale/nbpcgbuild/DTD NBPCGBUILD SCHEMA 1.0//EN" "nbres:/uk/org/rlinsdale/nbpcg/nbpcgbuild.dtd">
+<nbpcg-build name="Book-Keeper" copyright="2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)">
+    <folder project="Book-Keeper - generated" location="resource" package="uk.org.rlinsdale.bookkeeper.mysql" message="generating mysql script files for bookkeeper" log="linsdale.bookkeeper" license="gpl30">
+        <execute template="createsqldatabase" filename="createdb.sql" usepersistencestore="bookkeeper"/>
+        <execute template="backupscript" filename="backupscript.sh" usepersistencestore="bookkeeper"/>
+        <execute template="createsqltables" filename="createtables.sql" usepersistencestore="bookkeeper"/>
+    </folder>
+    <folder project="Book-Keeper - generated" location="java" package="uk.org.rlinsdale.bookkeeper.dataobjects" message="generating entity files" log="linsdale.bookkeeper" license="gpl30">
+        <execute template="rootentity" filename="AssetCentreRoot.java" useentityinfo="AssetCentreRoot"/>
+        <execute template="rootentity" filename="SupplierRoot.java" useentityinfo="SupplierRoot"/>
+        <execute template="rootentity" filename="CustomerRoot.java" useentityinfo="CustomerRoot"/>
+        <execute template="rootentity" filename="JournalRoot.java" useentityinfo="JournalRoot"/>
+        <execute template="entity" filename="AssetCentre.java" useentityinfo="AssetCentre"/>
+        <execute template="entity" filename="ProfitCentre.java" useentityinfo="ProfitCentre"/>
+        <execute template="entity" filename="CostCentre.java" useentityinfo="CostCentre"/>
+        <execute template="entity" filename="Supplier.java" useentityinfo="Supplier"/>
+        <execute template="entity" filename="Customer.java" useentityinfo="Customer"/>
+        <execute template="entity" filename="AssetAccount.java" useentityinfo="AssetAccount"/>
+        <execute template="entity" filename="LiabilityAccount.java" useentityinfo="LiabilityAccount"/>
+        <execute template="entity" filename="RevenueAccount.java" useentityinfo="RevenueAccount"/>
+        <execute template="entity" filename="CostAccount.java" useentityinfo="CostAccount"/>
+        <execute template="entity" filename="Journal.java" useentityinfo="Journal"/>
+        <execute template="entity" filename="RevenueJournalEntry.java" useentityinfo="RevenueJournalEntry"/>
+        <execute template="entity" filename="CostJournalEntry.java" useentityinfo="CostJournalEntry"/>
+        <execute template="entity" filename="AssetJournalEntry.java" useentityinfo="AssetJournalEntry"/>
+        <execute template="entity" filename="LiabilityJournalEntry.java" useentityinfo="LiabilityJournalEntry"/>
+    </folder>
+    <folder project="Book-Keeper - generated" location="java" package="uk.org.rlinsdale.bookkeeper.nodes" message="generating node files" log="linsdale.bookkeeper" license="gpl30" datapackage="uk.org.rlinsdale.bookkeeper.dataobjects">
+        <execute template="rootnode" type="" filename="AssetCentreRootNode.java" useentityinfo="AssetCentreRoot"/>
+        <execute template="rootnode" type="" filename="SupplierRootNode.java" useentityinfo="SupplierRoot"/>
+        <execute template="rootnode" type="" filename="CustomerRootNode.java" useentityinfo="CustomerRoot"/>
+        <execute template="rootnode" type="" filename="JournalRootNode.java" useentityinfo="JournalRoot"/>
+        <execute template="node" type="" filename="AssetCentreNode.java" useentityinfo="AssetCentre"/>
+        <execute template="node" type="" filename="SupplierNode.java" useentityinfo="Supplier"/>
+        <execute template="node" type="" filename="CustomerNode.java" useentityinfo="Customer"/>
+        <execute template="node" type="" filename="JournalNode.java" useentityinfo="Journal"/>
+        <execute template="node" type="" filename="ProfitCentreNode.java" useentityinfo="ProfitCentre"/>
+        <execute template="node" type="" filename="CostCentreNode.java" useentityinfo="CostCentre"/>
+        <execute template="node" type="" filename="AssetAccountNode.java" useentityinfo="AssetAccount"/>
+        <execute template="node" type="" filename="LiabilityAccountNode.java" useentityinfo="LiabilityAccount"/>
+        <execute template="node" type="" filename="RevenueAccountNode.java" useentityinfo="RevenueAccount"/>
+        <execute template="node" type="" filename="CostAccountNode.java" useentityinfo="CostAccount"/>
+        <execute template="node" type="" filename="RevenueJournalEntryNode.java" useentityinfo="RevenueJournalEntry"/>
+        <execute template="node" type="" filename="CostJournalEntryNode.java" useentityinfo="CostJournalEntry"/>
+        <execute template="node" type="" filename="AssetJournalEntryNode.java" useentityinfo="AssetJournalEntry"/>
+        <execute template="node" type="" filename="LiablityJournalEntryNode.java" useentityinfo="LiablityJournalEntry"/>
+        <execute template="nodefactory" type="" filename="AssetCentreRootNodeChildFactory.java" useentityinfo="AssetCentreRoot"/>
+        <execute template="nodefactory" type="" filename="AssetCentreNodeChildFactory.java" useentityinfo="AssetCentre"/>
+        <execute template="nodefactory" type="" filename="SupplierRootNodeChildFactory.java" useentityinfo="SupplierRoot"/>
+        <execute template="nodefactory" type="" filename="CustomerRootNodeChildFactory.java" useentityinfo="CustomerRoot"/>
+        <execute template="nodefactory" type="" filename="JournalRootNodeChildFactory.java" useentityinfo="JournalRoot"/>
+        <execute template="nodefactory" type="" filename="JournalNodeChildFactory.java" useentityinfo="Journal"/>
+        <execute template="nodefactory" type="" filename="ProfitCentreNodeChildFactory.java" useentityinfo="ProfitCentre"/>
+        <execute template="undonode" filename="UndoAssetCentreNode.java" useentityinfo="AssetCentre"/>
+        <execute template="undonode" filename="UndoProfitCentreNode.java" useentityinfo="ProfitCentre"/>
+        <execute template="undonode" filename="UndoCostCentreNode.java" useentityinfo="CostCentre"/>
+        <execute template="undonode" filename="UndoAssetAccountNode.java" useentityinfo="AssetAccount"/>
+        <execute template="undonode" filename="UndoLiabilityAccountNode.java" useentityinfo="LiabilityAccount"/>
+        <execute template="undonode" filename="UndoRevenueAccountNode.java" useentityinfo="RevenueAccount"/>
+        <execute template="undonode" filename="UndoCostAccountNode.java" useentityinfo="CostAccount"/>
+        <execute template="undonode" filename="UndoSupplierNode.java" useentityinfo="Supplier"/>
+        <execute template="undonode" filename="UndoCustomerNode.java" useentityinfo="Customer"/>
+        <execute template="undonode" filename="UndoJournalNode.java" useentityinfo="Journal"/>
+        <execute template="undonode" filename="UndoRevenueJournalEntryNode.java" useentityinfo="RevenueJournalEntry"/>
+        <execute template="undonode" filename="UndoCostJournalEntryNode.java" useentityinfo="CostJournalEntry"/>
+        <execute template="undonode" filename="UndoAssetJournalEntryNode.java" useentityinfo="AssetJournalEntry"/>
+        <execute template="undonode" filename="UndoLiablityJournalEntryNode.java" useentityinfo="LiablityJournalEntry"/>
+        <execute template="addnode" filename="AddAssetCentreNode.java" useentityinfo="AssetCentre"/>
+        <execute template="addnode" filename="AddProfitCentreNode.java" useentityinfo="ProfitCentre"/>
+        <execute template="addnode" filename="AddCostCentreNode.java" useentityinfo="CostCentre"/>
+        <execute template="addnode" filename="AddAssetAccountNode.java" useentityinfo="AssetAccount"/>
+        <execute template="addnode" filename="AddLiabilityAccountNode.java" useentityinfo="LiabilityAccount"/>
+        <execute template="addnode" filename="AddRevenueAccountNode.java" useentityinfo="RevenueAccount"/>
+        <execute template="addnode" filename="AddCostAccountNode.java" useentityinfo="CostAccount"/>
+        <execute template="addnode" filename="AddSupplierNode.java" useentityinfo="Supplier"/>
+        <execute template="addnode" filename="AddCustomerNode.java" useentityinfo="Customer"/>
+        <execute template="addnode" filename="AddJournalNode.java" useentityinfo="Journal"/>
+        <execute template="addnode" filename="AddRevenueJournalEntryNode.java" useentityinfo="RevenueJournalEntry"/>
+        <execute template="addnode" filename="AddCostJournalEntryNode.java" useentityinfo="CostJournalEntry"/>
+        <execute template="addnode" filename="AddAssetJournalEntryNode.java" useentityinfo="AssetJournalEntry"/>
+        <execute template="addnode" filename="AddLiablityJournalEntryNode.java" useentityinfo="LiablityJournalEntry"/>
+    </folder>
+    <folder project="Book-Keeper - generated" location="java" package="uk.org.rlinsdale.bookkeeper.topcomponents" message="generating node viewer files" log="linsdale.bookkeeper" license="gpl30" datapackage="uk.org.rlinsdale.bookkeeper.dataobjects" nodepackage="uk.org.rlinsdale.bookkeeper.nodes">
+        <execute template="rootnodeviewer" type="Tree" filename="AssetCentreRootNodeViewer.java" useentityinfo="AssetCentreRoot"/>
+        <execute template="rootnodeviewer" type="Tree" filename="SupplierRootNodeViewer.java" useentityinfo="SupplierRoot"/>
+        <execute template="rootnodeviewer" type="Tree" filename="CustomerRootNodeViewer.java" useentityinfo="CustomerRoot"/>
+        <execute template="rootnodeviewer" type="Tree" filename="JournalRootNodeViewer.java" useentityinfo="JournalRoot"/>
+    </folder>
+    <folder project="Book-Keeper - generated" location="java" package="uk.org.rlinsdale.bookkeeper.topcomponents" message="generating node editor files" log="linsdale.bookkeeper" license="gpl30" datapackage="uk.org.rlinsdale.bookkeeper.dataobjects" nodepackage="uk.org.rlinsdale.bookkeeper.nodes">
+        <execute template="nodeeditor" filename="AssetCentreNodeEditor.java" useentityinfo="AssetCentre"/>
+        <execute template="nodeeditor" filename="ProfitCentreNodeEditor.java" useentityinfo="ProfitCentre"/>
+        <execute template="nodeeditor" filename="CostCentreNodeEditor.java" useentityinfo="CostCentre"/>
+        <execute template="nodeeditor" filename="SupplierNodeEditor.java" useentityinfo="Supplier"/>
+        <execute template="nodeeditor" filename="CustomerNodeEditor.java" useentityinfo="Customer"/>
+        <execute template="nodeeditor" filename="AssetAccountNodeEditor.java" useentityinfo="AssetAccount"/>
+        <execute template="nodeeditor" filename="LiabilityAccountNodeEditor.java" useentityinfo="LiabilityAccount"/>
+        <execute template="nodeeditor" filename="RevenueAccountNodeEditor.java" useentityinfo="RevenueAccount"/>
+        <execute template="nodeeditor" filename="CostAccountNodeEditor.java" useentityinfo="CostAccount"/>
+        <execute template="nodeeditor" filename="JournalNodeEditor.java" useentityinfo="Journal"/>
+        <execute template="nodeeditor" filename="RevenueJournalEntryNodeEditor.java" useentityinfo="RevenueJournalEntry"/>
+        <execute template="nodeeditor" filename="CostJournalEntryNodeEditor.java" useentityinfo="CostJournalEntry"/>
+        <execute template="nodeeditor" filename="AssetJournalEntryNodeEditor.java" useentityinfo="AssetJournalEntry"/>
+        <execute template="editnode" filename="EditAssetCentreNode.java" useentityinfo="AssetCentre"/>
+        <execute template="editnode" filename="EditProfitCentreNode.java" useentityinfo="ProfitCentre"/>
+        <execute template="editnode" filename="EditCostCentreNode.java" useentityinfo="CostCentre"/>
+        <execute template="editnode" filename="EditAssetAccountNode.java" useentityinfo="AssetAccount"/>
+        <execute template="editnode" filename="EditLiabilityAccountNode.java" useentityinfo="LiabilityAccount"/>
+        <execute template="editnode" filename="EditRevenueAccountNode.java" useentityinfo="RevenueAccount"/>
+        <execute template="editnode" filename="EditCostAccountNode.java" useentityinfo="CostAccount"/>
+        <execute template="editnode" filename="EditSupplierNode.java" useentityinfo="Supplier"/>
+        <execute template="editnode" filename="EditCustomerNode.java" useentityinfo="Customer"/>
+        <execute template="editnode" filename="EditJournalNode.java" useentityinfo="Journal"/>
+        <execute template="editnode" filename="EditRevenueJournalEntryNode.java" useentityinfo="RevenueJournalEntry"/>
+        <execute template="editnode" filename="EditCostJournalEntryNode.java" useentityinfo="CostJournalEntry"/>
+        <execute template="editnode" filename="EditAssetJournalEntryNode.java" useentityinfo="AssetJournalEntry"/>
+        <execute template="choice" filename="AssetCentreChoiceField.java" useentityinfo="AssetCentre"/>
+        <execute template="choice" filename="SupplierChoiceField.java" useentityinfo="Supplier"/>
+        <execute template="choice" filename="CustomerChoiceField.java" useentityinfo="Customer"/>
+        <execute template="choice" filename="RevenueAccountChoiceField.java" useentityinfo="RevenueAccount"/>
+        <execute template="choice" filename="CostAccountChoiceField.java" useentityinfo="CostAccount"/>
+        <execute template="enumchoice" filename="AssetAccountUsageChoiceField.java" useentityinfo="AssetAccount" usefield="usage"/>
+        <execute template="enumchoice" filename="LiabilityAccountUsageChoiceField.java" useentityinfo="LiabilityAccount" usefield="usage"/>
+        <execute template="enumchoice" filename="RevenueAccountUsageChoiceField.java" useentityinfo="RevenueAccount" usefield="usage"/>
+        <execute template="enumchoice" filename="CostAccountUsageChoiceField.java" useentityinfo="CostAccount" usefield="usage"/>
+        <execute template="enumchoice" filename="RevenueJournalEntryTypeChoiceField.java" useentityinfo="RevenueJournalEntry" usefield="type"/>
+        <execute template="enumchoice" filename="CostJournalEntryTypeChoiceField.java" useentityinfo="CostJournalEntry" usefield="type"/>
+        <execute template="enumchoice" filename="AssetJournalEntryTypeChoiceField.java" useentityinfo="AssetJournalEntry" usefield="type"/>
+        <execute template="enumchoice" filename="LiabilityJournalEntryTypeChoiceField.java" useentityinfo="LiabilityJournalEntry" usefield="type"/>
+    </folder>
+</nbpcg-build>
+    
+    
+        
+            
+        
+        
+        
+        
+        
+    
+    
+    
+    
+    
+    
+        
+        
+        
+        
+    
+    
+    
+        
+            
+            
+            
+            
+            
+                
+            
+            
+                
+                
+                
+            
+            
+                
+                
+                
+            
+            
+                
+                
+                
+            
+            
+                
+                
+                
+            
+            
+                
+                
+                
+            
+            
+                
+                
+                
+            
+            
+                
+                
+                
+            
+            
+                
+                
+                
+                
+                
+            
+            
+                
+                
+                
+                
+                
+            
+            
+                
+                
+                
+                
+            
+            
+                
+                
+                
+                
+            
+        
+    

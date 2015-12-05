@@ -67,8 +67,6 @@
         <execute template="editnode" filename="EditApplicationNode.java" useentityinfo="Application"/>
         <execute template="editnode" filename="EditRoleNode.java" useentityinfo="Role"/>
         <execute template="editnode" filename="EditPermissionNode.java" useentityinfo="Permission"/>
-        <execute template="choice" filename="RoleChoiceField.java" useentityinfo="Role"/>
-        <execute template="choice" filename="PermissionChoiceField.java" useentityinfo="Permission"/>
     </folder>
     <folder project="Authentication" location="java" package="uk.org.rlinsdale.authentication" message="generating remote files" log="authentication" license="gpl30">
         <execute template="remotepingservlet" filename="AuthenticationPingServlet.java" usepersistencestore="Authentication"/>

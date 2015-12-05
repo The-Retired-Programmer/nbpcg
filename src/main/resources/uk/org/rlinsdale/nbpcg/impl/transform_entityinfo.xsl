@@ -563,9 +563,13 @@
                         <xsl:attribute name="fieldclass">
                             <xsl:choose>
                                 <xsl:when test="$type='boolean'">CheckboxField</xsl:when>
-                                <xsl:when test="($type='long') or ($type='int') or ($type='date') or ($type='datetime') or ($type='String')">TextField</xsl:when>
-                                <xsl:when test="($type='reference') or ($type='ref') or ($type='rootref')">ReferenceChoiceField</xsl:when>
-                                <xsl:when test="$type='enum'">EnumChoiceField</xsl:when>
+                                <xsl:when test="$type='long'">LongField</xsl:when>
+                                <xsl:when test="$type='int'">IntegerField</xsl:when>
+                                <xsl:when test="$type='date'">DateField</xsl:when>
+                                <xsl:when test="$type='datetime'">DatetimeField</xsl:when>
+                                <xsl:when test="$type='String'">TextField</xsl:when>
+                                <xsl:when test="($type='reference') or ($type='ref') or ($type='rootref')">EntityChoiceField</xsl:when>
+                                <xsl:when test="$type='enum'">ChoiceField</xsl:when>
                                 <xsl:when test="$type='password'">PasswordField</xsl:when>
                             </xsl:choose>
                         </xsl:attribute>
@@ -576,15 +580,6 @@
                                 <xsl:copy-of select="@selectfrom" />
                             </xsl:if>
                         </xsl:if>
-                        <xsl:attribute name="fieldclass">
-                            <xsl:choose>
-                                <xsl:when test="$type='boolean'">CheckboxField</xsl:when>
-                                <xsl:when test="($type='long') or ($type='int') or ($type='date') or ($type='datetime') or ($type='String')">TextField</xsl:when>
-                                <xsl:when test="($type='reference') or ($type='ref') or ($type='rootref')">ReferenceChoiceField</xsl:when>
-                                <xsl:when test="$type='enum'">EnumChoiceField</xsl:when>
-                                <xsl:when test="$type='password'">PasswordField</xsl:when>
-                            </xsl:choose>
-                        </xsl:attribute>
                         <xsl:call-template name="commonfieldattributes" >
                             <xsl:with-param name="type" select="$type" />
                         </xsl:call-template>
@@ -603,7 +598,7 @@
                         <xsl:if test="@selectfrom">
                             <xsl:copy-of select="@selectfrom" />
                         </xsl:if>
-                        <xsl:attribute name="fieldclass">ReferenceChoiceField</xsl:attribute>
+                        <xsl:attribute name="fieldclass">EntityChoiceField</xsl:attribute>
                         <xsl:copy-of select="@fkey" />
                         <xsl:call-template name="commonfieldattributes" >
                             <xsl:with-param name="type">ref</xsl:with-param>
@@ -632,16 +627,16 @@
                     </xsl:choose>
                 </xsl:variable>
                 <xsl:if test="$pkey = 'idauto' ">
-                    <field name="id" pkey="yes" hidden="yes" type="int" fieldclass="TextField" label="Id" javatype="int" jsontype="Integer" initialisation=" = 0"/>
+                    <field name="id" pkey="yes" hidden="yes" type="int" fieldclass="IntegerField" label="Id" javatype="int" jsontype="Integer" initialisation=" = 0"/>
                 </xsl:if>
                 <xsl:if test="//node[@name=$ename and @orderable='yes']">
-                    <field name="idx" pkey="no" hidden="yes" type="idx" index="yes" fieldclass="TextField" label="Idx" javatype="int" jsontype="Integer" initialisation=" = Integer.MAX_VALUE"/>
+                    <field name="idx" pkey="no" hidden="yes" type="idx" index="yes" fieldclass="IntegerField" label="Idx" javatype="int" jsontype="Integer" initialisation=" = Integer.MAX_VALUE"/>
                 </xsl:if>
                 <xsl:if test="$extrafields = 'usertimestamp' ">
                     <field name="createdby" pkey="no" hidden="yes" type="String" min="4" max="4" fieldclass="TextField" label="Created by" javatype="String" jsontype="String" initialisation=" = &quot;&quot;"/>
-                    <field name="createdon" pkey="no" final="yes" hidden="yes" type="datetime" fieldclass="TextField" label="Created on" javatype="Timestamp" jsontype="String" initialisation=" = new Timestamp()"/>
+                    <field name="createdon" pkey="no" final="yes" hidden="yes" type="datetime" fieldclass="DatetimeField" label="Created on" javatype="Timestamp" jsontype="String" initialisation=" = new Timestamp()"/>
                     <field name="updatedby" pkey="no" hidden="yes" type="String" min="4" max="4" fieldclass="TextField" label="Updated by" javatype="String" jsontype="String" initialisation=" = &quot;&quot;"/>
-                    <field name="updatedon" pkey="no" final="yes" hidden="yes" type="datetime" fieldclass="TextField" label="Updated on" javatype="Timestamp" jsontype="String" initialisation=" = new Timestamp()"/>
+                    <field name="updatedon" pkey="no" final="yes" hidden="yes" type="datetime" fieldclass="DatetimeField" label="Updated on" javatype="Timestamp" jsontype="String" initialisation=" = new Timestamp()"/>
                 </xsl:if>
                 <xsl:call-template name="children" >
                     <xsl:with-param name="entityname" select="$ename"/>

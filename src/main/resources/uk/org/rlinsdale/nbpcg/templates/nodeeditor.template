@@ -59,11 +59,28 @@
 package ${package};
 
 <#assign needListImport = "no" >
+<#assign needArraysImport = "no" >
+<#assign needDateOnlyImport = "no" >
+<#assign needTimestampImport = "no" >
 <#list ENTITYINFO.field![] as field>
+<#if !(field.hidden??) >
 <#if field.type="reference" || field.type="reference" || field.type="enum"  || (field.choicemethod??) >
 <#assign needListImport = "yes" >
 </#if>
+<#if field.type="enum"  >
+<#assign needArraysImport = "yes" >
+</#if>
+<#if field.type="date"  >
+<#assign needDateOnlyImport = "yes" >
+</#if>
+<#if field.type="datetime"  >
+<#assign needTimestampImport = "yes" >
+</#if>
+</#if>
 </#list>
+<#if needArraysImport = "yes">
+import java.util.Arrays;
+</#if>
 <#if needListImport = "yes">
 import java.util.List;
 </#if>
@@ -79,6 +96,12 @@ import org.openide.util.NbBundle.Messages;
 import org.openide.windows.TopComponent;
 import ${datapackage}.${ENTITYINFO.name}.${ENTITYINFO.name}Field;
 import static ${datapackage}.${ENTITYINFO.name}.${ENTITYINFO.name}Field.*;
+<#if needDateOnlyImport = "yes">
+import uk.org.rlinsdale.nbpcglibrary.api.DateOnly;
+</#if>
+<#if needTimestampImport = "yes">
+import uk.org.rlinsdale.nbpcglibrary.api.Timestamp;
+</#if>
 import static uk.org.rlinsdale.nbpcglibrary.data.entity.EntityFieldChangeEventParams.CommonEntityField.ALL;
 import uk.org.rlinsdale.nbpcglibrary.data.entity.EntityFieldChangeEventParams.CommonEntityField;
 import static uk.org.rlinsdale.nbpcglibrary.form.Form.FormSaveResult.SAVESUCCESS;
@@ -110,10 +133,10 @@ public final class ${ENTITYINFO.name}NodeEditor extends NodeEditorTopComponent<$
 <#if field.entryfield??>
     private PasswordField ${field.entryfield}Field;
 <#elseif field.type=="reference" >
-    private ${field.references}ChoiceField ${field.name}Field;
+    private EntityChoiceField ${field.name}Field;
 <#elseif field.type=="ref" || field.type=="rootref">
 <#elseif field.type=="enum">
-    private ${ENTITYINFO.name}${field.name?cap_first}ChoiceField ${field.name}Field;
+    private ChoiceField ${field.name}Field;
 <#else>
 <#if !(field.hidden??) >
 <#if field.choicemethod??>
@@ -168,26 +191,47 @@ public final class ${ENTITYINFO.name}NodeEditor extends NodeEditorTopComponent<$
     private class EditorFields extends FieldsDef {
         
         public EditorFields() {
-            super(new EditorFieldsBackingObject());
+            super(new EditorFieldsDefRules());
 <#list ENTITYINFO.field![] as field>
 <#if field.type!="idx" >
 <#if field.entryfield??>
-            add(${field.entryfield}Field = new PasswordField(new ${field.name?cap_first}FieldBackingObject(), "${field.label}"));
+            add(${field.entryfield}Field = FieldBuilder.stringType().label("${field.label}").
+                    fieldsource(new ${field.name?cap_first}FieldSource()).passwordField());
 <#elseif field.type=="reference" >
 <#if field.optional??>
-            add(${field.name}Field = new ${field.references}ChoiceField(new ${field.name?cap_first}FieldBackingObject(), "${field.label}", true));
+            add(${field.name}Field = FieldBuilder.entityType().label("${field.label}").
+                    fieldsource(new ${field.name?cap_first}FieldSource()).nullselectionallowed().entityChoiceField());
 <#else>
-            add(${field.name}Field = new ${field.references}ChoiceField(new ${field.name?cap_first}FieldBackingObject(), "${field.label}", false));
+            add(${field.name}Field = FieldBuilder.entityType().label("${field.label}").
+                    fieldsource(new ${field.name?cap_first}FieldSource()).entityChoiceField());
 </#if>
 <#elseif field.type=="ref" || field.type = "rootref" >
 <#elseif field.type == "enum" >
-            add(${field.name}Field = new ${ENTITYINFO.name}${field.name?cap_first}ChoiceField(new ${field.name?cap_first}FieldBackingObject(), "${field.label}"));
+            add(${field.name}Field = FieldBuilder.stringType().label("${field.label}").
+                    fieldsource(new ${field.name?cap_first}FieldSource()).choiceField());
 <#else>
 <#if !(field.hidden??) >
 <#if field.choicemethod??>
-            add(${field.name}Field =  new ChoiceField(new ${field.name?cap_first}FieldBackingObject(), "${field.label}"));
+            add(${field.name}Field = FieldBuilder.entityType().label("${field.label}").
+                    fieldsource(new ${field.name?cap_first}FieldSource()).entityChoiceField());
+<#elseif field.type == "int">
+            add(${field.name}Field =  FieldBuilder.integerType().label("${field.label}").
+                    fieldsource(new ${field.name?cap_first}FieldSource()).integerField());
+<#elseif field.type == "long">
+            add(${field.name}Field =  FieldBuilder.longType().label("${field.label}").
+                    fieldsource(new ${field.name?cap_first}FieldSource()).longField());
+<#elseif field.type == "date">
+            add(${field.name}Field =  FieldBuilder.dateType().label("${field.label}").
+                    fieldsource(new ${field.name?cap_first}FieldSource()).dateField());
+<#elseif field.type == "datetime">
+            add(${field.name}Field =  FieldBuilder.datetimeType().label("${field.label}").
+                    fieldsource(new ${field.name?cap_first}FieldSource()).datetimeField());
+<#elseif field.type == "boolean">
+            add(${field.name}Field =  FieldBuilder.booleanType().label("${field.label}").
+                    fieldsource(new ${field.name?cap_first}FieldSource()).checkboxField());
 <#else>
-            add(${field.name}Field =  new ${field.fieldclass}(new ${field.name?cap_first}FieldBackingObject(), "${field.label}"));
+            add(${field.name}Field =  FieldBuilder.stringType().label("${field.label}").
+                    fieldsource(new ${field.name?cap_first}FieldSource()).textField());
 </#if>
 </#if>
 </#if>
@@ -201,7 +245,7 @@ public final class ${ENTITYINFO.name}NodeEditor extends NodeEditorTopComponent<$
         }
     }
 
-    private class EditorFieldsBackingObject implements FieldsDefBackingObject {
+    private class EditorFieldsDefRules implements FieldsDefRules {
 
         @Override
         public boolean checkRules() {
@@ -217,31 +261,31 @@ public final class ${ENTITYINFO.name}NodeEditor extends NodeEditorTopComponent<$
 <#list ENTITYINFO.field![] as field>
 <#if field.type="reference">
 
-    private class ${field.name?cap_first}FieldBackingObject extends ChoiceFieldBackingObject {
+    private class ${field.name?cap_first}FieldSource extends FieldSource<Entity> {
     
         @Override
-        public List<String> getChoices() {
-            return null;
+        public List<Entity> getChoices() {
+            return ${field.references}.getAll${field.references}s();
         }
 
         @Override
-        public void set(String value) {
-            entity.set${field.name?cap_first}(${field.name}Field.convertTexttoEntity(value));
+        public void set(Entity value) {
+            entity.set${field.name?cap_first}((${field.references})value);
         }
 
         @Override
-        public String get() {
-            return entity.get${field.name?cap_first}() != null ? entity.get${field.name?cap_first}().getDisplayTitle() : "";
+        public ${field.references} get() {
+            return entity.get${field.name?cap_first}();
         }
+
     }
 <#elseif field.type="ref"  >
 <#elseif field.type="enum" >
 
-    private class ${field.name?cap_first}FieldBackingObject extends ChoiceFieldBackingObject {
+    private class ${field.name?cap_first}FieldSource extends FieldSource<String> {
     
-        @Override
         public List<String> getChoices() {
-            return null;
+            return Arrays.asList(${field.values?replace("'","\"")});
         }
 
         @Override
@@ -257,7 +301,7 @@ public final class ${ENTITYINFO.name}NodeEditor extends NodeEditorTopComponent<$
 <#elseif field.type == "rootref" || field.type="idx" >
 <#elseif field.type == "boolean" >
 
-    private class ${field.name?cap_first}FieldBackingObject implements CheckboxFieldBackingObject {
+    private class ${field.name?cap_first}FieldSource extends FieldSource<Boolean> {
     
     @Override
         public void set(Boolean value) {
@@ -268,20 +312,10 @@ public final class ${ENTITYINFO.name}NodeEditor extends NodeEditorTopComponent<$
         public Boolean get() {
             return entity.get${field.name?cap_first}();
         }
-
-        @Override
-        public boolean checkRules() {
-            return true;
-        }
-
-        @Override
-        public String getErrorMessages() {
-            return "";
-        }
     }
 <#elseif field.type = "password" >
 
-    private class ${field.name?cap_first}FieldBackingObject implements FieldBackingObject<String> {
+    private class ${field.name?cap_first}FieldSource extends FieldSource<String> {
     
         @Override
         public void set(String value) {
@@ -294,38 +328,91 @@ public final class ${ENTITYINFO.name}NodeEditor extends NodeEditorTopComponent<$
         }
 
         @Override
-        public boolean checkRules() {
-            return entity.get${field.name?cap_first}Rules().checkRules();
-        }
-
-        @Override
-        public String getErrorMessages() {
-            return entity.get${field.name?cap_first}Rules().getErrorMessages();
+        public Rules getRules() {
+            return entity.get${field.name?cap_first}Rules();
         }
     }
-<#elseif field.type=="int" || field.type=="long" || field.type == "date" || field.type == "datetime" >
+<#elseif field.type=="int" >
 <#if !(field.hidden??) >
 
-    private class ${field.name?cap_first}FieldBackingObject implements FieldBackingObject<String> {
+    private class ${field.name?cap_first}FieldSource extends FieldSource<Integer> {
     
     @Override
-        public void set(String value) {
+        public void set(Integer value) {
             entity.set${field.name?cap_first}(value);
         }
 
         @Override
-        public String get() {
-            return entity.get${field.name?cap_first}Text();
+        public Integer get() {
+            return entity.get${field.name?cap_first}();
         }
 
         @Override
-        public boolean checkRules() {
-            return entity.get${field.name?cap_first}Rules().checkRules();
+        public Rules getRules() {
+            return entity.get${field.name?cap_first}Rules();
+        }
+    }
+</#if>
+<#elseif field.type=="long" >
+<#if !(field.hidden??) >
+
+    private class ${field.name?cap_first}FieldSource extends FieldSource<Long> {
+    
+    @Override
+        public void set(Long value) {
+            entity.set${field.name?cap_first}(value);
         }
 
         @Override
-        public String getErrorMessages() {
-            return entity.get${field.name?cap_first}Rules().getErrorMessages();
+        public Long get() {
+            return entity.get${field.name?cap_first}();
+        }
+
+        @Override
+        public Rules getRules() {
+            return entity.get${field.name?cap_first}Rules();
+        }
+    }
+</#if>
+<#elseif field.type == "date">
+<#if !(field.hidden??) >
+
+    private class ${field.name?cap_first}FieldSource extends FieldSource<DateOnly> {
+    
+    @Override
+        public void set(DateOnly value) {
+            entity.set${field.name?cap_first}(value);
+        }
+
+        @Override
+        public DateOnly get() {
+            return entity.get${field.name?cap_first}();
+        }
+
+        @Override
+        public Rules getRules() {
+            return entity.get${field.name?cap_first}Rules();
+        }
+    }
+</#if>
+<#elseif field.type == "datetime" >
+<#if !(field.hidden??) >
+
+    private class ${field.name?cap_first}FieldSource extends FieldSource<Timestamp> {
+    
+    @Override
+        public void set(Timestamp value) {
+            entity.set${field.name?cap_first}(value);
+        }
+
+        @Override
+        public Timestamp get() {
+            return entity.get${field.name?cap_first}();
+        }
+
+        @Override
+        public Rules getRules() {
+            return entity.get${field.name?cap_first}Rules();
         }
     }
 </#if>
@@ -333,7 +420,7 @@ public final class ${ENTITYINFO.name}NodeEditor extends NodeEditorTopComponent<$
 <#if !(field.hidden??) >
 <#if field.choicemethod??>
 
-    private class ${field.name?cap_first}FieldBackingObject extends ChoiceFieldBackingObject {
+    private class ${field.name?cap_first}FieldBackingObject extends FieldSource<String> {
     
         @Override
         public List<String> getChoices() {
@@ -352,7 +439,7 @@ public final class ${ENTITYINFO.name}NodeEditor extends NodeEditorTopComponent<$
     }
 <#else>
 
-    private class ${field.name?cap_first}FieldBackingObject implements FieldBackingObject<String> {
+    private class ${field.name?cap_first}FieldSource extends FieldSource<String> {
     
     @Override
         public void set(String value) {
@@ -365,13 +452,8 @@ public final class ${ENTITYINFO.name}NodeEditor extends NodeEditorTopComponent<$
         }
 
         @Override
-        public boolean checkRules() {
-            return entity.get${field.name?cap_first}Rules().checkRules();
-        }
-
-        @Override
-        public String getErrorMessages() {
-            return entity.get${field.name?cap_first}Rules().getErrorMessages();
+        public Rules getRules() {
+            return entity.get${field.name?cap_first}Rules();
         }
     }
 </#if>
@@ -391,7 +473,7 @@ public final class ${ENTITYINFO.name}NodeEditor extends NodeEditorTopComponent<$
             if (c!= null ) {
                 switch(c) {
                     case ALL:
-                        form.updateAllFieldsFromBackingObject();
+                        form.updateAllFieldsFromSource();
                         break;
                 }
             }
@@ -404,18 +486,10 @@ public final class ${ENTITYINFO.name}NodeEditor extends NodeEditorTopComponent<$
 <#if field.type!="rootref" >
                     case ${field.name?upper_case}:
 <#if field.type="password" >
-                        ${field.entryfield}Field.updateFieldFromBackingObject();
-<#elseif field.type="reference"  >
-                        ${field.name}Field.updateFieldFromBackingObject();
+                        ${field.entryfield}Field.updateFieldFromSource(false);
 <#elseif field.type="ref" >
-<#elseif field.type=="int" || field.type=="long" ||field.type=="date" || field.type=="datetime">
-                        if (p.isFormatOK()) {
-                            ${field.name}Field.updateFieldFromBackingObject();
-                        } else {
-                            ${field.name}Field.checkRules();
-                        }
 <#else>
-                        ${field.name}Field.updateFieldFromBackingObject();
+                        ${field.name}Field.updateFieldFromSource(false);
 </#if>
                         break;
 </#if>

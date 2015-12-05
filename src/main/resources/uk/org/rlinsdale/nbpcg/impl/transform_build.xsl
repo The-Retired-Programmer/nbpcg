@@ -108,8 +108,6 @@
                         <folder project="{$project}" location="java" package="{$package}" message="generating node editor files" log="{$log}" license="{$license}" datapackage="{$datapackage}" nodepackage="{$nodepackage}">
                             <xsl:call-template name="nodeeditor" />
                             <xsl:call-template name="editnode" />
-                            <xsl:call-template name="choice" />
-                            <xsl:call-template name="enumchoice" />
                         </folder>
                     </xsl:when>
                     <xsl:when test="@type = 'nodeviewer' ">
@@ -134,32 +132,6 @@
         </xsl:for-each>
     </xsl:template>
     
-    <xsl:template name="choice">
-        <xsl:for-each select="/nbpcg/databases/database/table" >
-            <xsl:variable name="ename">
-                <xsl:value-of select="@name" />
-            </xsl:variable>
-            <xsl:variable name="references" >
-                <xsl:value-of select="count(/nbpcg/databases/database/table/field[@type = 'reference'][@references = $ename])" />
-            </xsl:variable>
-            <xsl:if test="$references > 0" >
-                <execute template="choice" filename="{$ename}ChoiceField.java" useentityinfo="{$ename}" />
-            </xsl:if>
-        </xsl:for-each>
-    </xsl:template>
-    
-    <xsl:template name="enumchoice">
-        <xsl:for-each select="/nbpcg/databases/database/table/field[@type='enum']" >
-            <xsl:variable name="ename" select="../@name" />
-            <xsl:variable name="fname" >
-                <xsl:call-template name="firsttouppercase" >
-                    <xsl:with-param name="string" select="@name" />
-                </xsl:call-template>
-            </xsl:variable>
-            <execute template="enumchoice" filename="{$ename}{$fname}ChoiceField.java" useentityinfo="{$ename}" usefield="{@name}" />
-        </xsl:for-each>
-    </xsl:template>
-
     <xsl:template name="rootnode">
         <xsl:for-each select="/nbpcg/node" >
             <xsl:variable name="view">
