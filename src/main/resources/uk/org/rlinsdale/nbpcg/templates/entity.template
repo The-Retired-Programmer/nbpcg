@@ -162,10 +162,6 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.pkeytype},${ENTITYIN
 </#if>
 <#if field.type == "password" >
     private final PasswordRule passwordrule;
-<#elseif field.type=="int" || field.type=="long" || field.type == "date" || field.type == "datetime" >
-<#if !(field.hidden??) >
-    private boolean ${field.name}BadFormat=false;
-</#if>
 </#if>
 </#if>
 </#list>
@@ -234,7 +230,6 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.pkeytype},${ENTITYIN
 <#if field.max??>
         addRule(${field.name}Rules, new ${field.name?cap_first}MaxRule());
 </#if>
-        addRule(${field.name}Rules, new ${field.name?cap_first}BadFormatRule());
 <#elseif field.type = "date" || field.type = "datetime" >
 <#if field.future??>
         addRule(${field.name}Rules, new ${field.name?cap_first}FutureRule()); 
@@ -242,7 +237,6 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.pkeytype},${ENTITYIN
 <#if field.past??>
         addRule(${field.name}Rules, new ${field.name?cap_first}PastRule());
 </#if>
-        addRule(${field.name}Rules, new ${field.name?cap_first}BadFormatRule());
 <#elseif field.type = "password" >
         addRule(${field.name}Rules, passwordrule = new PasswordRule());
 </#if>
@@ -543,15 +537,6 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.pkeytype},${ENTITYIN
         return idx;
     }
 
-    /**
-     * Get the idx in String format.
-     *
-     * @return the idx
-     */
-    public String getIdxText() {
-        return Integer.toString(idx);
-    }
-
     @Override
     public void setIdx(int idx) {
         if (this.idx != idx) {
@@ -582,47 +567,6 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.pkeytype},${ENTITYIN
     public final ${field.javatype} get${field.name?cap_first}() {
         return ${field.name};
     }
-<#if field.type == "int" >
-
-    /**
-     * Get the ${field.name} in String format.
-     *
-     * @return the ${field.name}
-     */
-    public String get${field.name?cap_first}Text() {
-        return Integer.toString(${field.name});
-    }
-<#elseif field.type == "long" >
-
-    /**
-     * Get the ${field.name} in String format.
-     *
-     * @return the ${field.name}
-     */
-    public String get${field.name?cap_first}Text() {
-        return Long.toString(${field.name});
-    }
-<#elseif field.type == "date" >
-
-    /**
-     * Get the ${field.name} in String format.
-     *
-     * @return the ${field.name}
-     */
-    public String get${field.name?cap_first}Text() {
-        return ${field.name}.toString();
-    }
-<#elseif field.type == "datetime" >
-
-    /**
-     * Get the ${field.name} in String format.
-     *
-     * @return the ${field.name}
-     */
-    public String get${field.name?cap_first}Text() {
-        return ${field.name}.toString();
-    }
-</#if>
 <#if field.type = "password" >
 
     /**
@@ -650,129 +594,17 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.pkeytype},${ENTITYIN
      * @param ${field.name} the ${field.name}
      */
     public void set${field.name?cap_first}(${field.javatype} ${field.name}) {
-<#if field.type == "String" | field.type == "enum" >
+<#if field.type == "String" || field.type == "enum" || field.type == "date" || field.type == "datetime">
         if (!this.${field.name}.equals(${field.name})) {
-<#elseif field.type == "date" || field.type == "datetime" >
-        if (!this.${field.name}.toString().equals(${field.name}.toString())) {
 <#else>
         if (this.${field.name} != ${field.name}) {
 </#if>
             ensureEditing();
             this.${field.name} = ${field.name};
-<#if field.type=="int" || field.type=="long" || field.type == "date" || field.type == "datetime" >
-            ${field.name}BadFormat = false;
-</#if>
             fireFieldChange(${ENTITYINFO.name}Field.${field.name?upper_case});
             fireNameAndOrTitleChangeOn${field.name?cap_first}();
         }
     }
-</#if>
-</#if>
-<#if field.type=="int" || field.type=="long" || field.type == "date" || field.type == "datetime" >
-<#if !(field.hidden??) >
-    
-    private class ${field.name?cap_first}BadFormatRule extends Rule {
-        
-        public ${field.name?cap_first}BadFormatRule() {
-<#if field.type = "int" || field.type=="long" >
-            super("${field.name?cap_first} is not in Number format");
-<#elseif field.type == "date" >
-            super("${field.name?cap_first} is not in Date format");
-<#else>
-            super("${field.name?cap_first} is not in Date Time format");
-</#if>
-        }
-        
-        @Override
-        public boolean ruleCheck() {
-            return !${field.name}BadFormat;
-        }
-    }
-<#if field.type == "int" >
-
-    /**
-     * Define the ${field.name?cap_first}.
-     *
-     * @param ${field.name}Text the ${field.name}
-     */
-    public void set${field.name?cap_first}(String ${field.name}Text) {
-        int new${field.name};
-        try {
-            new${field.name}=Integer.parseInt(${field.name}Text);
-        } catch (NumberFormatException ex) {
-            ${field.name}BadFormat = true;
-            fireFieldChange(${ENTITYINFO.name}Field.${field.name?upper_case}, false);
-            return;
-        } 
-        set${field.name?cap_first}(new${field.name});
-        ${field.name}BadFormat = false;
-        fireFieldChange(${ENTITYINFO.name}Field.${field.name?upper_case});
-        fireNameAndOrTitleChangeOn${field.name?cap_first}();
-    }
-<#elseif field.type == "long" >
-
-    /**
-     * Define the ${field.name?cap_first}.
-     *
-     * @param ${field.name}Text the ${field.name}
-     */
-    public void set${field.name?cap_first}(String ${field.name}Text) {
-        long new${field.name};
-        try {
-            new${field.name}=Long.parseLong(${field.name}Text);
-        } catch (NumberFormatException ex) {
-            ${field.name}BadFormat = true;
-            fireFieldChange(${ENTITYINFO.name}Field.${field.name?upper_case}, false);
-            return;
-        } 
-        set${field.name?cap_first}(new${field.name});
-        ${field.name}BadFormat = false;
-        fireFieldChange(${ENTITYINFO.name}Field.${field.name?upper_case});
-        fireNameAndOrTitleChangeOn${field.name?cap_first}();
-    }
-<#elseif field.type == "date" >
-
-    /**
-     * Define the ${field.name?cap_first}.
-     *
-     * @param ${field.name}Text the ${field.name}
-     */
-    public void set${field.name?cap_first}(String ${field.name}Text) {
-        DateOnly new${field.name};
-        try {
-            new${field.name}=new DateOnly(${field.name}Text);
-        } catch (BadFormatException ex) {
-            ${field.name}BadFormat = true;
-            fireFieldChange(${ENTITYINFO.name}Field.${field.name?upper_case}, false);
-            return;
-        } 
-        set${field.name?cap_first}(new${field.name});
-        ${field.name}BadFormat = false;
-        fireFieldChange(${ENTITYINFO.name}Field.${field.name?upper_case});
-        fireNameAndOrTitleChangeOn${field.name?cap_first}();
-    }
-<#elseif field.type == "datetime" >
-
-    /**
-     * Define the ${field.name?cap_first}.
-     *
-     * @param ${field.name}Text the ${field.name}
-     */
-    public void set${field.name?cap_first}(String ${field.name}Text) {
-        Timestamp new${field.name};
-        try {
-            new${field.name}=new Timestamp(${field.name}Text);
-        } catch (BadFormatException ex) {
-            ${field.name}BadFormat = true;
-            fireFieldChange(${ENTITYINFO.name}Field.${field.name?upper_case}, false);
-            return;
-        } 
-        set${field.name?cap_first}(new${field.name});
-        ${field.name}BadFormat = false;
-        fireFieldChange(${ENTITYINFO.name}Field.${field.name?upper_case});
-        fireNameAndOrTitleChangeOn${field.name?cap_first}();
-    }
-</#if>
 </#if>
 </#if>
 </#if>
@@ -921,9 +753,6 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.pkeytype},${ENTITYIN
 <#else>
 <#if !(field.hidden??) >
         ${field.name} = ${field.name}Original;
-<#if field.type=="int" || field.type=="long" || field.type == "date" || field.type == "datetime" >
-        ${field.name}BadFormat=false;
-</#if>      
 </#if>
 </#if>
 </#list>
@@ -1258,15 +1087,15 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.pkeytype},${ENTITYIN
 <#elseif field.type="ref" >
                 return getParent()!=null ? getParent().getDisplayName(): "undefined" ;
 <#elseif field.type="int" >
-            return get${field.name?cap_first}Text();
+            return Integer.toString(get${field.name?cap_first}());
 <#elseif field.type="idx"  >
-            return getIdxText();
+            return Integer.toString(getIdx());
 <#elseif field.type="long" >
-            return get${field.name?cap_first}Text();
+            return Long.toString(get${field.name?cap_first}());
 <#elseif field.type="boolean" >
             return get${field.name?cap_first}()? "Yes": "No";
 <#elseif field.type="date" || field.type="datetime" >
-            return get${field.name?cap_first}Text();
+            return get${field.name?cap_first}().toString();
 <#elseif field.type="String" ||  field.type="enum" || field.type="password" >
             return get${field.name?cap_first}();
 </#if>
