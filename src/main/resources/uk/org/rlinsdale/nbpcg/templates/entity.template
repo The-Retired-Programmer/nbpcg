@@ -136,10 +136,6 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.pkeytype},${ENTITYIN
          */
         ${child.name?upper_case}S,
 </#list>
-        /**
-         * all fields
-         */
-         ALL
     }
 
     private final Rules entityRules = new Rules();

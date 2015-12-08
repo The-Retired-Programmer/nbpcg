@@ -102,8 +102,6 @@ import uk.org.rlinsdale.nbpcglibrary.api.DateOnly;
 <#if needTimestampImport = "yes">
 import uk.org.rlinsdale.nbpcglibrary.api.Timestamp;
 </#if>
-import static uk.org.rlinsdale.nbpcglibrary.data.entity.EntityFieldChangeEventParams.CommonEntityField.ALL;
-import uk.org.rlinsdale.nbpcglibrary.data.entity.EntityFieldChangeEventParams.CommonEntityField;
 import static uk.org.rlinsdale.nbpcglibrary.form.Form.FormSaveResult.SAVESUCCESS;
 
 /**
@@ -469,16 +467,10 @@ public final class ${ENTITYINFO.name}NodeEditor extends NodeEditorTopComponent<$
 
         @Override
         public void action(EntityFieldChangeEventParams<${ENTITYINFO.name}Field> p) {
-            CommonEntityField c = p.getCommon();
-            if (c!= null ) {
-                switch(c) {
-                    case ALL:
-                        form.updateAllFieldsFromSource();
-                        break;
-                }
-            }
             ${ENTITYINFO.name}Field f = p.get();
-            if (f!= null) {
+            if (f== null) {
+                form.updateAllFieldsFromSource();
+            } else {
                 switch (f) {
 <#list ENTITYINFO.field![] as field>
 <#if !(field.hidden??) >

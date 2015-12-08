@@ -87,8 +87,6 @@ import static ${package}.${COPYMOVEENTITYINFO.name}${type}Node.${COPYMOVEENTITYI
 </#if>
 </#if>
 </#list>
-import uk.org.rlinsdale.nbpcglibrary.data.entity.EntityFieldChangeEventParams.CommonEntityField;
-import static uk.org.rlinsdale.nbpcglibrary.data.entity.EntityFieldChangeEventParams.CommonEntityField.*;
 
 /**
  * Node for ${ENTITYINFO.name}${type}Node.
@@ -101,7 +99,7 @@ import static uk.org.rlinsdale.nbpcglibrary.data.entity.EntityFieldChangeEventPa
 public class ${ENTITYINFO.name}${type}Node extends ${type2}Node<${ENTITYINFO.pkeytype},${ENTITYINFO.name}, ${ENTITYINFO.parentname},${ENTITYINFO.name}Field> {
 
     /**
-    * Data F;avor for Nodes of type ${ENTITYINFO.name}${type}Node
+    * Data Flavor for Nodes of type ${ENTITYINFO.name}${type}Node
     */
     public static final DataFlavor ${ENTITYINFO.name?upper_case}${type?upper_case}NODE_FLAVOR = new DataFlavor(${ENTITYINFO.name}${type}Node.class, "${ENTITYINFO.name}${type}Node");
 
@@ -234,48 +232,42 @@ public class ${ENTITYINFO.name}${type}Node extends ${type2}Node<${ENTITYINFO.pke
             }
             return props;
         }
-
-        @Override
-        protected void nodeProcessCommonFieldChange(CommonEntityField field) {
-            ${ENTITYINFO.name} e =  getEntity();
-            switch (field) {
-                case ALL:
-                    if (e != null && idproperty != null) {
-<#list ENTITYINFO.field![] as field>
-<#if field.type != "rootref" >
-                        ${field.name}property.update(e.format${field.name?cap_first}());
-</#if>
-</#list>
-                        propertyChange();
-                    }
-                    break;
-            }
-        }
         
         @Override
         protected void nodeProcessFieldChange(${ENTITYINFO.name}Field field) {
             ${ENTITYINFO.name} e =  getEntity();
-            switch (field) {
+            if (field == null) {
+                if (e != null && idproperty != null) {
+<#list ENTITYINFO.field![] as field>
+<#if field.type != "rootref" >
+                    ${field.name}property.update(e.format${field.name?cap_first}());
+</#if>
+</#list>
+                    propertyChange();
+                }
+            } else {
+                switch (field) {
 <#list ENTITYINFO.field![] as field>
 <#if !(field.hidden??) >
 <#if field.type = "rootref" >
 <#elseif field.type = "idx" >
-                case ${field.name?upper_case}:
-                    if (e != null && ${field.name}property != null) {
-                        ${field.name}property.update(e.format${field.name?cap_first}());
-                        propertyChange("${field.label}");
-                    }
-                    break;
+                    case ${field.name?upper_case}:
+                        if (e != null && ${field.name}property != null) {
+                            ${field.name}property.update(e.format${field.name?cap_first}());
+                            propertyChange("${field.label}");
+                        }
+                        break;
 <#else>
-                case ${field.name?upper_case}:
-                    if (e != null && ${field.name}property != null) {
-                        ${field.name}property.update(e.format${field.name?cap_first}());
-                        propertyChange("${field.label}");
-                    }
-                    break;
+                    case ${field.name?upper_case}:
+                        if (e != null && ${field.name}property != null) {
+                            ${field.name}property.update(e.format${field.name?cap_first}());
+                            propertyChange("${field.label}");
+                        }
+                        break;
 </#if>
 </#if>
 </#list>
+                }
             }
         }
         
