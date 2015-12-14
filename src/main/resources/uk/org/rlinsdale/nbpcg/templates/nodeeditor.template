@@ -129,18 +129,18 @@ public final class ${ENTITYINFO.name}NodeEditor extends NodeEditorTopComponent<$
 <#list ENTITYINFO.field![] as field>
 <#if field.type!="idx"  >
 <#if field.entryfield??>
-    private PasswordField ${field.entryfield}Field;
+    private EditableField ${field.entryfield}Field;
 <#elseif field.type=="reference" >
-    private EntityChoiceField ${field.name}Field;
+    private EditableField ${field.name}Field;
 <#elseif field.type=="ref" || field.type=="rootref">
 <#elseif field.type=="enum">
-    private ChoiceField ${field.name}Field;
+    private  EditableField ${field.name}Field;
 <#else>
 <#if !(field.hidden??) >
 <#if field.choicemethod??>
-    private ChoiceField ${field.name}Field;
+    private  EditableField ${field.name}Field;
 <#else>
-    private ${field.fieldclass} ${field.name}Field;
+    private EditableField ${field.name}Field;
 </#if>
 </#if>
 </#if>
