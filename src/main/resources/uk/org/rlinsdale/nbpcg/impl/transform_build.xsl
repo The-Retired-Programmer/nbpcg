@@ -108,6 +108,7 @@
                         <folder project="{$project}" location="java" package="{$package}" message="generating node editor files" log="{$log}" license="{$license}" datapackage="{$datapackage}" nodepackage="{$nodepackage}">
                             <xsl:call-template name="nodeeditor" />
                             <xsl:call-template name="editnode" />
+                            <xsl:call-template name="entitysource" />
                         </folder>
                     </xsl:when>
                     <xsl:when test="@type = 'nodeviewer' ">
@@ -357,6 +358,34 @@
                         <xsl:for-each select="//node[@name=$ename and local-name(..) = 'node'][position() = 1]" >
                             <xsl:if test="position() = 1" >
                                 <execute template="nodeeditor" filename="{@name}NodeEditor.java" useentityinfo="{@name}" />
+                            </xsl:if>
+                        </xsl:for-each>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:if>
+        </xsl:for-each>
+    </xsl:template>
+    
+    <xsl:template name="entitysource">
+        <xsl:variable name="exclude">
+            <xsl:choose>
+                <xsl:when test="@exclude">
+                    <xsl:value-of select="concat(',',@exclude,',')" />
+                </xsl:when>
+                <xsl:otherwise>,,</xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+        <xsl:for-each select="/nbpcg/databases/database[not(@usepackage)]/table" >
+            <xsl:if test="not(contains($exclude,concat(',',@name,',')))" >
+                <xsl:variable name="ename" select="@name" />
+                <xsl:choose>
+                    <xsl:when test="/nbpcg/node[@name=$ename]" >
+                        <execute template="entitysource" filename="{@name}Source.java" useentityinfo="{@name}" />
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:for-each select="//node[@name=$ename and local-name(..) = 'node'][position() = 1]" >
+                            <xsl:if test="position() = 1" >
+                                <execute template="entitysource" filename="{@name}Source.java" useentityinfo="{@name}" />
                             </xsl:if>
                         </xsl:for-each>
                     </xsl:otherwise>
