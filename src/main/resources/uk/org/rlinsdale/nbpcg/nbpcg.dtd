@@ -45,6 +45,7 @@
             displaynameformat CDATA #IMPLIED
             displaytitleformat CDATA #IMPLIED
             sortformat CDATA #IMPLIED
+            childnodesineditor CDATA #IMPLIED
             min CDATA #IMPLIED
             max CDATA #IMPLIED
             >

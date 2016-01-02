@@ -1,5 +1,5 @@
 <#--
- * Copyright (C) 2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)
+ * Copyright (C) 2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -52,7 +52,7 @@
  * MA 02110-1301  USA
  */
 </#if>
-<#-- Freemarker Template for any Table Entity Source class -->
+<#-- Freemarker Template for any Entity Source class -->
 <#assign templateauthor = "Richard Linsdale (richard.linsdale at blueyonder.co.uk)" />
 <#-- ============================================== -->
 <#assign ENTITYINFO = entityinfo[useentityinfo] >
@@ -105,7 +105,7 @@ import uk.org.rlinsdale.nbpcglibrary.api.Timestamp;
  *
  * @author ${templateauthor}
  */
-public final class ${ENTITYINFO.name}Source {
+public final class ${ENTITYINFO.name}Source implements EntitySource<${ENTITYINFO.name}> {
     
     private final ${ENTITYINFO.name} entity;
     private final FieldChangeListener entityfieldchangelistener;
@@ -137,12 +137,13 @@ public final class ${ENTITYINFO.name}Source {
         entityfieldchangelistener = new FieldChangeListener(entity.instanceDescription());
     }
 
-
+    @Override
     public void opened() {
         entity.addFieldListener(entityfieldchangelistener);
     }
 
-    public void closed() {
+    @Override
+public void closed() {
 <#list ENTITYINFO.field![] as field>
 <#if field.type="reference">
         ${field.name}Field.closeChoices();
@@ -151,12 +152,18 @@ public final class ${ENTITYINFO.name}Source {
         entity.removeFieldListener(entityfieldchangelistener);
     }
 
-    public FieldsDef getFieldsDef() {
+    @Override
+    public ${ENTITYINFO.name} getEntity() {
+        return entity;
+    }
+
+    @Override
+    public FormFields getFormFields() {
         return new Fields(fieldsdefrules);
     }
 
     
-    private class Fields extends FieldsDef {
+    private class Fields extends FormFields {
         
         public Fields(FieldsDefRules fieldsdefrules) {
             super(fieldsdefrules);
@@ -213,13 +220,14 @@ public final class ${ENTITYINFO.name}Source {
         }
     }
 
-    public RowFieldsDef getRowFieldsDef() {
-        return new RowFields(fieldsdefrules);
+    @Override
+    public RowFields getRowFields() {
+        return new Row(fieldsdefrules);
     }
 
-private class RowFields extends RowFieldsDef {
+    private class Row extends RowFields {
         
-        public RowFields(FieldsDefRules fieldsdefrules) {
+        public Row(FieldsDefRules fieldsdefrules) {
             super(fieldsdefrules);
 <#list ENTITYINFO.field![] as field>
 <#if field.type!="idx" >
@@ -279,7 +287,7 @@ private class RowFields extends RowFieldsDef {
 <#list ENTITYINFO.field![] as field>
 <#if field.type="reference">
 
-    private class ${field.name?cap_first}FieldSource extends FieldSource<Entity> {
+    private class ${field.name?cap_first}FieldSource extends ChoiceFieldSource<Entity> {
     
         @Override
         public List<Entity> getChoices() {
@@ -300,8 +308,9 @@ private class RowFields extends RowFieldsDef {
 <#elseif field.type="ref"  >
 <#elseif field.type="enum" >
 
-    private class ${field.name?cap_first}FieldSource extends FieldSource<String> {
+    private class ${field.name?cap_first}FieldSource extends ChoiceFieldSource<String> {
     
+        @Override
         public List<String> getChoices() {
             return Arrays.asList(${field.values?replace("'","\"")});
         }

@@ -20,6 +20,7 @@
             nomodifiers (yes) #IMPLIED
             customchildfactorypackage CDATA #IMPLIED
             dynamicicon CDATA #IMPLIED
+            childnodesineditor CDATA #IMPLIED
             dbkey CDATA #IMPLIED
             dbtablename CDATA #IMPLIED 
             parentname CDATA #IMPLIED

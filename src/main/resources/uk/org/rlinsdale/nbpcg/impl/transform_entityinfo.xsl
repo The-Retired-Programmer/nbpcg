@@ -461,6 +461,11 @@
                             <xsl:otherwise>no</xsl:otherwise>
                         </xsl:choose>
                     </xsl:attribute>
+                    <xsl:if test="@childnodesineditor">
+                        <xsl:attribute name="childnodesineditor">
+                            <xsl:value-of select="@childnodesineditor" />
+                        </xsl:attribute>
+                    </xsl:if>
                 </xsl:for-each>
                 <xsl:for-each select="//node/node[@name=$ename]" >
                     <xsl:attribute name="parentname">

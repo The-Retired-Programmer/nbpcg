@@ -58,6 +58,10 @@
 <#assign ENTITYINFO = entityinfo[useentityinfo] >
 package ${package};
 
+<#if ENTITYINFO.childnodesineditor??>
+import java.util.ArrayList;
+import java.util.List;
+</#if>
 import javax.swing.JComponent;
 import ${datapackage}.*;
 import ${nodepackage}.${ENTITYINFO.name}Node;
@@ -91,6 +95,9 @@ public final class ${ENTITYINFO.name}NodeEditor extends NodeEditorTopComponent<$
     private final TitleChangeListener titlechangelistener;
     private final ${ENTITYINFO.name}Source source;
     private Form form;
+<#if ENTITYINFO.childnodesineditor??>
+private final List<Table> tables = new ArrayList<>();
+</#if>
   
     public ${ENTITYINFO.name}NodeEditor(${ENTITYINFO.name}Node node) {
         super(node,
@@ -99,16 +106,32 @@ public final class ${ENTITYINFO.name}NodeEditor extends NodeEditorTopComponent<$
         ${ENTITYINFO.name} e = node.getEntity();
         source = new ${ENTITYINFO.name}Source(e);
         titlechangelistener = new TitleChangeListener("Editor:" + e.instanceDescription());
+<#if ENTITYINFO.childnodesineditor??>
+<#list ENTITYINFO.childnodesineditor?split(",") as childnode>
+       tables.add(new ${childnode}Table(e));
+</#list>
+</#if>
     }
 
     @Override
     protected JComponent getDisplayComponent() {
-        return form = new Form("${ENTITYINFO.name}Editor", source.getFieldsDef());
+        form = new Form("${ENTITYINFO.name}Editor", source.getFormFields());
+<#if ENTITYINFO.childnodesineditor??>
+        tables.stream().forEach((t) -> {
+            form.addTable(t);
+        });
+</#if>
+        return form;
     }
 
     @Override
     protected void opened() {
         source.opened();
+<#if ENTITYINFO.childnodesineditor??>
+        tables.stream().forEach((t) -> {
+            t.opened();
+        });
+</#if>
         setName("${ENTITYINFO.name}: " + node.getDisplayTitle());
         entity.addTitleListener(titlechangelistener);
     }
@@ -116,6 +139,11 @@ public final class ${ENTITYINFO.name}NodeEditor extends NodeEditorTopComponent<$
     @Override
     protected void closed() {
         entity.removeTitleListener(titlechangelistener);
+<#if ENTITYINFO.childnodesineditor??>
+        tables.stream().forEach((t) -> {
+            t.closed();
+        });
+</#if>
         source.closed();
     }
 

@@ -149,6 +149,7 @@
         <execute template="entitysource" filename="CostJournalEntrySource.java" useentityinfo="CostJournalEntry"/>
         <execute template="entitysource" filename="AssetJournalEntrySource.java" useentityinfo="AssetJournalEntry"/>
         <execute template="entitysource" filename="LiabilityJournalEntrySource.java" useentityinfo="LiabilityJournalEntry"/>
+        <execute template="entitytable" filename="ProfitCentreTable.java" useentityinfo="ProfitCentre"/>
     </folder>
 </nbpcg-build>
     

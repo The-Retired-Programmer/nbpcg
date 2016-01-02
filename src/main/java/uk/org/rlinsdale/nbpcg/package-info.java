@@ -26,6 +26,7 @@
     @TemplateRegistration(folder = "uk-org-rlinsdale-nbpcg", displayName = "createjsontable", content = "templates/createjsontable.template", scriptEngine = "freemarker"),
     @TemplateRegistration(folder = "uk-org-rlinsdale-nbpcg", displayName = "entity", content = "templates/entity.template", scriptEngine = "freemarker"),
     @TemplateRegistration(folder = "uk-org-rlinsdale-nbpcg", displayName = "entitysource", content = "templates/entitysource.template", scriptEngine = "freemarker"),
+    @TemplateRegistration(folder = "uk-org-rlinsdale-nbpcg", displayName = "entitytable", content = "templates/entitytable.template", scriptEngine = "freemarker"),
     @TemplateRegistration(folder = "uk-org-rlinsdale-nbpcg", displayName = "nodeeditor", content = "templates/nodeeditor.template", scriptEngine = "freemarker"),
     @TemplateRegistration(folder = "uk-org-rlinsdale-nbpcg", displayName = "editnode", content = "templates/editnode.template", scriptEngine = "freemarker"),
     @TemplateRegistration(folder = "uk-org-rlinsdale-nbpcg", displayName = "node", content = "templates/node.template", scriptEngine = "freemarker"),

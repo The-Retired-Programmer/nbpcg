@@ -85,7 +85,7 @@
             <display field="Description"/>
         </displaynameformat>
     </entityinfo>
-    <entityinfo name="AssetCentre" dbkey="bookkeeper" dbtablename="AssetCentre" pkey="id" pkeytype="Integer" pkeytypefunction="getInt" icon="money" orderable="no" nodeorder="1" parentname="AssetCentreRoot">
+    <entityinfo name="AssetCentre" dbkey="bookkeeper" dbtablename="AssetCentre" pkey="id" pkeytype="Integer" pkeytypefunction="getInt" icon="money" orderable="no" childnodesineditor="ProfitCentre" nodeorder="1" parentname="AssetCentreRoot">
         <field name="root" pkey="no" references="AssetCentreRoot" type="rootref" label="Root" javatype="int" jsontype="Integer" initialisation=""/>
         <field name="description" pkey="no" min="1" max="255" fieldclass="TextField" type="String" label="Description" javatype="String" jsontype="String" initialisation=" = &quot;&quot;"/>
         <field name="chartofaccounts" pkey="no" fieldclass="EntityChoiceField" references="COA" type="reference" label="Chartofaccounts" javatype="int" jsontype="Integer" initialisation=""/>

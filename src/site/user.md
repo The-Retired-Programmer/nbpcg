@@ -96,6 +96,7 @@ Defines the project information.
 | Attribute | fkey | set to no if foreign key is not utilised - default is yes | optional |
 | Attribute | nomodifiers | set to yes if nodeviewers are to be created without the default copy/cut/paste/delete functionality | optional |
 | Attribute | customchildfactorypackage | set if user provides the child factory implementation for this node.  The value is the package in which the custom code exists | optional |
+| Attribute | childnodesineditor | a comma separated list of child nodes which are to be displayed in this node's editor as editable tables | optional |
 | Attribute | dynamicicon | the method use to obtain the icon for this node, if dynamic icon selection is required | optional |
 | Attribute | displaynameformat | format for the node's display name | optional |
 | Attribute | displaytitleformat | format for the node's display title | optional |

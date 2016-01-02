@@ -109,6 +109,7 @@
                             <xsl:call-template name="nodeeditor" />
                             <xsl:call-template name="editnode" />
                             <xsl:call-template name="entitysource" />
+                            <xsl:call-template name="entitytable" />
                         </folder>
                     </xsl:when>
                     <xsl:when test="@type = 'nodeviewer' ">
@@ -392,6 +393,42 @@
                 </xsl:choose>
             </xsl:if>
         </xsl:for-each>
+    </xsl:template>
+    
+    <xsl:template name="entitytable">
+        <xsl:variable name="exclude">
+            <xsl:choose>
+                <xsl:when test="@exclude">
+                    <xsl:value-of select="concat(',',@exclude,',')" />
+                </xsl:when>
+                <xsl:otherwise>,,</xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+        <xsl:for-each select="//node" >
+            <xsl:if test="not(contains($exclude,concat(',',@name,',')))" >
+                <xsl:if test="@childnodesineditor" >
+                    <xsl:call-template name="etable">
+                        <xsl:with-param name="names" select="@childnodesineditor" />
+                    </xsl:call-template>
+                </xsl:if>
+            </xsl:if>
+        </xsl:for-each>
+    </xsl:template>
+    
+    <xsl:template name="etable" >
+        <xsl:param name="names" />
+        <xsl:choose>
+            <xsl:when test="contains($names,',')" >
+                <xsl:variable name="name" select="substring-before($names,',')"/>
+                <execute template="entitytable" filename="{$name}Table.java" useentityinfo="{$name}" />
+                <xsl:call-template name="etable">
+                    <xsl:with-param name="names" select="substring-after($names,',')" />
+                </xsl:call-template>
+            </xsl:when>
+            <xsl:otherwise>
+                <execute template="entitytable" filename="{$names}Table.java" useentityinfo="{$names}" />
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:template>
     
     <xsl:template name="editnode">
