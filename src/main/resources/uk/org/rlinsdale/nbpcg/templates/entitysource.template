@@ -109,7 +109,7 @@ public final class ${ENTITYINFO.name}Source implements EntitySource<${ENTITYINFO
     
     private final ${ENTITYINFO.name} entity;
     private final FieldChangeListener entityfieldchangelistener;
-    private final ${ENTITYINFO.name}FieldsDefRules fieldsdefrules = new ${ENTITYINFO.name}FieldsDefRules();
+    private final ${ENTITYINFO.name}EntityRules entityrules = new ${ENTITYINFO.name}EntityRules();
     //
 <#list ENTITYINFO.field![] as field>
 <#if field.type!="idx"  >
@@ -159,14 +159,14 @@ public void closed() {
 
     @Override
     public FormFields getFormFields() {
-        return new Fields(fieldsdefrules);
+        return new Fields(entityrules);
     }
 
     
     private class Fields extends FormFields {
         
-        public Fields(FieldsDefRules fieldsdefrules) {
-            super(fieldsdefrules);
+        public Fields(FormRules formrules) {
+            super(formrules);
 <#list ENTITYINFO.field![] as field>
 <#if field.type!="idx" >
 <#if field.entryfield??>
@@ -222,13 +222,13 @@ public void closed() {
 
     @Override
     public RowFields getRowFields() {
-        return new Row(fieldsdefrules);
+        return new Row(entityrules);
     }
 
     private class Row extends RowFields {
         
-        public Row(FieldsDefRules fieldsdefrules) {
-            super(fieldsdefrules);
+        public Row(FormRules rowrules) {
+            super(rowrules);
 <#list ENTITYINFO.field![] as field>
 <#if field.type!="idx" >
 <#if field.entryfield??>
@@ -271,7 +271,7 @@ public void closed() {
         }
     }
 
-    private class ${ENTITYINFO.name}FieldsDefRules implements FieldsDefRules {
+    private class ${ENTITYINFO.name}EntityRules implements FormRules {
 
         @Override
         public boolean checkRules() {
