@@ -1,5 +1,5 @@
 <#--
- * Copyright (C) 22015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)
+ * Copyright (C) 2015-2016 Richard Linsdale (richard.linsdale at blueyonder.co.uk)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -80,7 +80,15 @@ public final class ${ENTITYINFO.name}Table extends Table<${ENTITYINFO.name}, ${E
 <#list ENTITYINFO.field![] as field>
 <#if !(field.hidden??) >
 <#if !(field.type="ref" | field.type="rootref") >
+<#if field.useentryfield?? >
+<#list ENTITYINFO.entryfield![] as entryfield>
+<#if entryfield.name == field.useentryfield>
+<#assign columnnames = "${columnnames} \"${entryfield.label}\"," >
+</#if>
+</#list>
+<#else>
 <#assign columnnames = "${columnnames} \"${field.label}\"," >
+</#if>
 <#assign count = count + 1 >
 </#if>
 </#if>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--
-    Copyright (C) 2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)
+    Copyright (C) 2014-2016 Richard Linsdale (richard.linsdale at blueyonder.co.uk)
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -495,6 +495,7 @@
                     </field>
                 </xsl:for-each>
                 <xsl:for-each select="field" >
+                    <xsl:variable name="fname" select="@name" />
                     <field name="{@name}">
                         <xsl:variable name="type">
                             <xsl:choose>
@@ -533,33 +534,6 @@
                                     </xsl:choose>
                                 </xsl:attribute>
                             </xsl:when>
-                            <xsl:when test="$type='password'" >
-                                <xsl:copy-of select="@passwordsupport|@entryfield" />
-                                <xsl:attribute name="passwordstrength">
-                                    <xsl:choose>
-                                        <xsl:when test="@passwordstrength">
-                                            <xsl:value-of select="@passwordstrength" />
-                                        </xsl:when>
-                                        <xsl:otherwise>none</xsl:otherwise>
-                                    </xsl:choose>
-                                </xsl:attribute>
-                                <xsl:attribute name="max">
-                                    <xsl:choose>
-                                        <xsl:when test="@max">
-                                            <xsl:value-of select="@max" />
-                                        </xsl:when>
-                                        <xsl:otherwise>40</xsl:otherwise>
-                                    </xsl:choose>
-                                </xsl:attribute>
-                                <xsl:attribute name="min">
-                                    <xsl:choose>
-                                        <xsl:when test="@max">
-                                            <xsl:value-of select="@max" />
-                                        </xsl:when>
-                                        <xsl:otherwise>40</xsl:otherwise>
-                                    </xsl:choose>
-                                </xsl:attribute>
-                            </xsl:when>
                             <xsl:otherwise>
                                 <xsl:copy-of select="@min|@max|@future|@past|@values" />
                             </xsl:otherwise>
@@ -588,6 +562,13 @@
                         <xsl:call-template name="commonfieldattributes" >
                             <xsl:with-param name="type" select="$type" />
                         </xsl:call-template>
+                        <xsl:for-each select="//node[@name=$ename]/entryfield">
+                            <xsl:if test="@mapsto=$fname" >
+                                <xsl:attribute name="useentryfield">
+                                    <xsl:value-of select="@name" />
+                                </xsl:attribute>
+                            </xsl:if>
+                        </xsl:for-each>
                     </field>
                 </xsl:for-each>
                 <xsl:for-each select="//node/node[@name=$ename]" >
@@ -643,6 +624,34 @@
                     <field name="updatedby" pkey="no" hidden="yes" type="String" min="4" max="4" fieldclass="TextField" label="Updated by" javatype="String" jsontype="String" initialisation=" = &quot;&quot;"/>
                     <field name="updatedon" pkey="no" final="yes" hidden="yes" type="datetime" fieldclass="DatetimeField" label="Updated on" javatype="Timestamp" jsontype="String" initialisation=" = new Timestamp()"/>
                 </xsl:if>
+                <xsl:for-each select="//node[@name=$ename]/entryfield" >
+                    <entryfield>
+                        <xsl:copy-of select="@name | @type "/>
+                        <xsl:attribute name="label" >
+                            <xsl:choose>
+                                <xsl:when test="@label">
+                                    <xsl:value-of select="@label"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:call-template name="firsttouppercase" >
+                                        <xsl:with-param name="string" select="@name" />
+                                    </xsl:call-template>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </xsl:attribute>
+                        <xsl:copy-of select="@mapsto | @mapping" />
+                        <xsl:if test="@rule">
+                            <xsl:attribute name="rule">
+                                <xsl:value-of select="@rule" />
+                            </xsl:attribute>
+                        </xsl:if>
+                        <xsl:if test="@errormessage">
+                            <xsl:attribute name="errormessage">
+                                <xsl:value-of select="@errormessage" />
+                            </xsl:attribute>
+                        </xsl:if>
+                    </entryfield>
+                </xsl:for-each>
                 <xsl:call-template name="children" >
                     <xsl:with-param name="entityname" select="$ename"/>
                 </xsl:call-template>

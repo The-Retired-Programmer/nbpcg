@@ -26,7 +26,7 @@
                     package CDATA #REQUIRED
                     exclude CDATA #IMPLIED
                     >
-    <!ELEMENT node (node*)>
+    <!ELEMENT node (entryfield*, node*)>
         <!ATTLIST node
             name CDATA #REQUIRED
             view (both|icon|tree|none) #IMPLIED
@@ -48,6 +48,16 @@
             childnodesineditor CDATA #IMPLIED
             min CDATA #IMPLIED
             max CDATA #IMPLIED
+            >
+    <!ELEMENT entryfield EMPTY>
+        <!ATTLIST entryfield
+            name CDATA #REQUIRED
+            label CDATA #IMPLIED
+            type (password) #REQUIRED
+            mapsto CDATA #REQUIRED
+            mapping CDATA #REQUIRED
+            rule CDATA #IMPLIED
+            errormessage CDATA #IMPLIED
             >
     <!ELEMENT databases (database+)>
         <!ELEMENT database (table+)>
@@ -83,9 +93,6 @@
                         max CDATA #IMPLIED
                         future (yes) #IMPLIED
                         past (yes) #IMPLIED
-                        passwordsupport CDATA #IMPLIED
-                        entryfield CDATA #IMPLIED
-                        passwordstrength (weak|strong|verystrong) #IMPLIED
                         >
                 <!ELEMENT insertentity (insertfield*)>
                     <!ELEMENT insertfield EMPTY>

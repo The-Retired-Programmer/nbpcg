@@ -1,5 +1,5 @@
 <#--
- * Copyright (C) 2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)
+ * Copyright (C) 2015-2016 Richard Linsdale (richard.linsdale at blueyonder.co.uk)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -112,23 +112,11 @@ public final class ${ENTITYINFO.name}Source implements EntitySource<${ENTITYINFO
     private final ${ENTITYINFO.name}EntityRules entityrules = new ${ENTITYINFO.name}EntityRules();
     //
 <#list ENTITYINFO.field![] as field>
-<#if field.type!="idx"  >
-<#if field.entryfield??>
+<#if field.useentryfield??>
+    private EditableField ${field.useentryfield}Field;
+<#elseif field.type=="idx" || field.type=="ref" || field.type=="rootref" >
+<#elseif !(field.hidden??) >
     private EditableField ${field.name}Field;
-<#elseif field.type=="reference" >
-    private EditableField ${field.name}Field;
-<#elseif field.type=="ref" || field.type=="rootref">
-<#elseif field.type=="enum">
-    private  EditableField ${field.name}Field;
-<#else>
-<#if !(field.hidden??) >
-<#if field.choicemethod??>
-    private  EditableField ${field.name}Field;
-<#else>
-    private EditableField ${field.name}Field;
-</#if>
-</#if>
-</#if>
 </#if>
 </#list>
   
@@ -168,8 +156,18 @@ public void closed() {
         public Fields(FormRules formrules) {
             super(formrules);
 <#list ENTITYINFO.field![] as field>
-<#if field.type!="idx" >
-<#if field.entryfield??>
+<#if field.useentryfield??>
+<#list ENTITYINFO.entryfield![] as entryfield>
+<#if entryfield.name == field.useentryfield>
+<#if entryfield.type=="password">
+            add(${entryfield.name}Field = FieldBuilder.stringType().label("${entryfield.label}").
+                    fieldsource(new ${entryfield.name?cap_first}FieldSource()).passwordField());
+</#if>
+</#if>
+</#list>
+<#else>
+<#if field.type=="idx" >
+<#elseif field.type=="password">
             add(${field.name}Field = FieldBuilder.stringType().label("${field.label}").
                     fieldsource(new ${field.name?cap_first}FieldSource()).passwordField());
 <#elseif field.type=="reference" >
@@ -230,9 +228,18 @@ public void closed() {
         public Row(FormRules rowrules) {
             super(rowrules);
 <#list ENTITYINFO.field![] as field>
-<#if field.type!="idx" >
-<#if field.entryfield??>
-            add(${field.entryfield}Field = FieldBuilder.stringType().fieldsource(new ${field.name?cap_first}FieldSource()).passwordField());
+<#if field.useentryfield??>
+<#list ENTITYINFO.entryfield![] as entryfield>
+<#if entryfield.name == field.useentryfield>
+<#if entryfield.type=="password">
+            add(${entryfield.name}Field = FieldBuilder.stringType().fieldsource(new ${entryfield.name?cap_first}FieldSource()).passwordField());
+</#if>
+</#if>
+</#list>
+<#else>
+<#if field.type=="idx" >
+<#elseif field.type == "password">
+            add(${field.name}Field = FieldBuilder.stringType().fieldsource(new ${field.name?cap_first}FieldSource()).passwordField());
 <#elseif field.type=="reference" >
 <#if field.optional??>
             add(${field.name}Field = FieldBuilder.entityType().fieldsource(new ${field.name?cap_first}FieldSource()).nullselectionallowed().entityChoiceField());
@@ -285,6 +292,55 @@ public void closed() {
     }
 
 <#list ENTITYINFO.field![] as field>
+<#if field.useentryfield??>
+<#list ENTITYINFO.entryfield![] as entryfield>
+<#if entryfield.name == field.useentryfield>
+<#if entryfield.type = "password" >
+
+    private class ${entryfield.name?cap_first}FieldSource extends FieldSource<String> {
+    
+        private final Rules rules;
+        private String val = "";
+        
+        public ${entryfield.name?cap_first}FieldSource() {
+            rules = new Rules();
+            rules.addRules(entity.get${field.name?cap_first}Rules());
+            rules.addRule(new LocalRule());
+        }
+        
+        @Override
+        public void set(String value) {
+            val = value;
+            entity.set${field.name?cap_first}(${entryfield.mapping}(value));
+        }
+        
+        @Override
+        public String get() {
+            return val;
+        }
+        
+        @Override
+        public Rules getRules() {
+            return rules;
+        }
+        
+        private class LocalRule extends Rule {
+            
+            public LocalRule() {
+            super("${entryfield.errormessage}");
+        }
+
+            @Override
+            protected boolean ruleCheck() {
+                return ${entryfield.rule}(val);
+            }
+            
+        }
+    }
+</#if>
+</#if>
+</#list>
+<#else>
 <#if field.type="reference">
 
     private class ${field.name?cap_first}FieldSource extends ChoiceFieldSource<Entity> {
@@ -346,12 +402,12 @@ public void closed() {
     
         @Override
         public void set(String value) {
-                entity.set${field.entryfield?cap_first}(value);
+                entity.set${field.name?cap_first}(value);
         }
 
         @Override
         public String get() {
-            return "";
+            return entity.get${field.name?cap_first}();
         }
 
         @Override
@@ -486,6 +542,7 @@ public void closed() {
 </#if>
 </#if>
 </#if>
+</#if>
 </#list>
 
     private class FieldChangeListener extends Listener<EntityFieldChangeEventParams<${ENTITYINFO.name}Field>> {
@@ -499,17 +556,27 @@ public void closed() {
             ${ENTITYINFO.name}Field f = p.get();
             if (f== null) {
 <#list ENTITYINFO.field![] as field>
+<#if field.useentryfield??>
+                ${field.useentryfield}Field.updateFieldFromSource(false);
+<#else>
 <#if !(field.hidden?? || field.type=="idx" || field.type=="rootref" || field.type=="ref")>
                 ${field.name}Field.updateFieldFromSource(false);
+</#if>
 </#if>
 </#list>
             } else {
                 switch (f) {
 <#list ENTITYINFO.field![] as field>
+<#if field.useentryfield??>
+                    case ${field.name?upper_case}:
+                        ${field.useentryfield}Field.updateFieldFromSource(false);
+                        break;                  
+<#else>
 <#if !(field.hidden?? || field.type=="idx" || field.type=="rootref" || field.type=="ref")>
                     case ${field.name?upper_case}:
                         ${field.name}Field.updateFieldFromSource(false);
                         break;
+</#if>
 </#if>
 </#list>
                 }

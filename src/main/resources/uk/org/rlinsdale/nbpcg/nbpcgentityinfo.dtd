@@ -9,7 +9,7 @@
     <!ATTLIST nbpcg-entity-info
         name CDATA #REQUIRED
         >
-    <!ELEMENT entityinfo (field*, child*, referenced*, sortformat*, displaytitleformat*, displaynameformat*)  >
+    <!ELEMENT entityinfo (field*, entryfield*, child*, referenced*, sortformat*, displaytitleformat*, displaynameformat*)  >
         <!ATTLIST entityinfo
             name CDATA #REQUIRED
             pkey CDATA #IMPLIED
@@ -50,10 +50,18 @@
                 index (unique|yes) #IMPLIED
                 min CDATA #IMPLIED
                 max CDATA #IMPLIED
-                fieldclass (TextField|ReferenceChoiceField|EnumChoiceField|PasswordField|CheckboxField) #IMPLIED
-                entryfield CDATA #IMPLIED
-                passwordsupport CDATA #IMPLIED
-                passwordstrength (none|weak|strong|verystrong) #IMPLIED
+                fieldclass (TextField|IntegerField|LongField|DatetimeField|DateField|EntityChoiceField|EnumChoiceField|PasswordField|CheckboxField) #IMPLIED
+                useentryfield CDATA #IMPLIED
+                >
+        <!ELEMENT entryfield EMPTY>
+            <!ATTLIST entryfield
+                name CDATA #REQUIRED
+                label CDATA #IMPLIED
+                type (password) #REQUIRED
+                mapsto CDATA #REQUIRED
+                mapping CDATA #REQUIRED
+                rule CDATA #IMPLIED
+                errormessage CDATA #IMPLIED
                 >
         <!ELEMENT child EMPTY  >
             <!ATTLIST child
