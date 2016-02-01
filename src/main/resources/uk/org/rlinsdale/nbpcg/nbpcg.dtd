@@ -82,7 +82,8 @@
                         dbname  CDATA #IMPLIED
                         index (unique|yes) #IMPLIED
                         unique (yes) #IMPLIED
-                        type (boolean|long|int|date|datetime|enum|reference|password) #IMPLIED
+                        type (boolean|long|int|currency|decimal|date|datetime|enum|reference|password) #IMPLIED
+                        decimalsize CDATA #IMPLIED
                         choicemethod CDATA #IMPLIED
                         nullallowed (yes) #IMPLIED
                         label CDATA #IMPLIED

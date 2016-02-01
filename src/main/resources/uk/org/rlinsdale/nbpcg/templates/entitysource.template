@@ -56,6 +56,12 @@
 <#assign templateauthor = "Richard Linsdale (richard.linsdale at blueyonder.co.uk)" />
 <#-- ============================================== -->
 <#assign ENTITYINFO = entityinfo[useentityinfo] >
+<#assign hasbigdecimal = false >
+<#list ENTITYINFO.field![] as field>
+<#if field.type = "currency" | field.type = "decimal" >
+<#assign hasbigdecimal = true >
+</#if>
+</#list>
 package ${package};
 
 <#assign needListImport = "no" >
@@ -78,6 +84,9 @@ package ${package};
 </#if>
 </#if>
 </#list>
+<#if hasbigdecimal>
+import java.math.BigDecimal;
+</#if>
 <#if needArraysImport = "yes">
 import java.util.Arrays;
 </#if>
@@ -199,6 +208,9 @@ public void closed() {
 <#elseif field.type == "datetime">
             add(${field.name}Field =  FieldBuilder.datetimeType().label("${field.label}").
                     fieldsource(new ${field.name?cap_first}FieldSource()).datetimeField());
+<#elseif field.type == "currency" || field.type = "decimal" >
+            add(${field.name}Field =  FieldBuilder.decimalType().label("${field.label}").
+                    fieldsource(new ${field.name?cap_first}FieldSource()).decimalField());
 <#elseif field.type == "boolean">
             add(${field.name}Field =  FieldBuilder.booleanType().label("${field.label}").
                     fieldsource(new ${field.name?cap_first}FieldSource()).checkboxField());
@@ -261,6 +273,8 @@ public void closed() {
             add(${field.name}Field =  FieldBuilder.dateType().fieldsource(new ${field.name?cap_first}FieldSource()).dateField());
 <#elseif field.type == "datetime">
             add(${field.name}Field =  FieldBuilder.datetimeType().fieldsource(new ${field.name?cap_first}FieldSource()).datetimeField());
+<#elseif field.type == "currency" || field.type = "decimal" >
+            add(${field.name}Field =  FieldBuilder.decimalType().fieldsource(new ${field.name?cap_first}FieldSource()).decimalField());
 <#elseif field.type == "boolean">
             add(${field.name}Field =  FieldBuilder.booleanType().fieldsource(new ${field.name?cap_first}FieldSource()).checkboxField());
 <#else>
@@ -490,6 +504,27 @@ public void closed() {
 
         @Override
         public Timestamp get() {
+            return entity.get${field.name?cap_first}();
+        }
+
+        @Override
+        public Rules getRules() {
+            return entity.get${field.name?cap_first}Rules();
+        }
+    }
+</#if>
+<#elseif field.type == "currency" || field.type = "decimal" >
+<#if !(field.hidden??) >
+
+    private class ${field.name?cap_first}FieldSource extends FieldSource<BigDecimal> {
+    
+    @Override
+        public void set(BigDecimal value) {
+            entity.set${field.name?cap_first}(value);
+        }
+
+        @Override
+        public BigDecimal get() {
             return entity.get${field.name?cap_first}();
         }
 

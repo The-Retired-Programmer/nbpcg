@@ -219,7 +219,7 @@
         <field name="source" pkey="no" fieldclass="EntityChoiceField" references="RevenueProvider" type="reference" label="Source" javatype="int" jsontype="Integer" initialisation=""/>
         <field name="account" pkey="no" fieldclass="EntityChoiceField" references="RevenueAccount" type="reference" label="Account" javatype="int" jsontype="Integer" initialisation=""/>
         <field name="description" pkey="no" min="0" max="255" fieldclass="TextField" type="String" label="Description" javatype="String" jsontype="String" initialisation=" = &quot;&quot;"/>
-        <field name="amount" pkey="no" fieldclass="IntegerField" type="int" label="Amount" javatype="int" jsontype="Integer" initialisation=" = 0"/>
+        <field name="amount" pkey="no" fieldclass="DecimalField" type="currency" label="Amount" javatype="BigDecimal" jsontype="BigDecimal" initialisation=" = null"/>
         <field name="type" pkey="no" values="'Cr.', 'Dr.'" fieldclass="ChoiceField" type="enum" label="Type" javatype="String" jsontype="String" initialisation=" = &quot;&quot;"/>
         <field name="journal" pkey="no" references="Journal" fieldclass="EntityChoiceField" type="ref" label="Journal" javatype="int" jsontype="Integer" initialisation=""/>
         <field name="id" pkey="yes" hidden="yes" type="int" fieldclass="IntegerField" label="Id" javatype="int" jsontype="Integer" initialisation=" = 0"/>
@@ -236,7 +236,7 @@
         <field name="source" pkey="no" fieldclass="EntityChoiceField" references="CostProvider" type="reference" label="Source" javatype="int" jsontype="Integer" initialisation=""/>
         <field name="account" pkey="no" fieldclass="EntityChoiceField" references="CostAccount" type="reference" label="Account" javatype="int" jsontype="Integer" initialisation=""/>
         <field name="description" pkey="no" min="0" max="255" fieldclass="TextField" type="String" label="Description" javatype="String" jsontype="String" initialisation=" = &quot;&quot;"/>
-        <field name="amount" pkey="no" fieldclass="IntegerField" type="int" label="Amount" javatype="int" jsontype="Integer" initialisation=" = 0"/>
+        <field name="amount" pkey="no" fieldclass="DecimalField" type="currency" label="Amount" javatype="BigDecimal" jsontype="BigDecimal" initialisation=" = null"/>
         <field name="type" pkey="no" values="'Cr.', 'Dr.'" fieldclass="ChoiceField" type="enum" label="Type" javatype="String" jsontype="String" initialisation=" = &quot;&quot;"/>
         <field name="journal" pkey="no" references="Journal" fieldclass="EntityChoiceField" type="ref" label="Journal" javatype="int" jsontype="Integer" initialisation=""/>
         <field name="id" pkey="yes" hidden="yes" type="int" fieldclass="IntegerField" label="Id" javatype="int" jsontype="Integer" initialisation=" = 0"/>
@@ -253,7 +253,7 @@
         <field name="source" pkey="no" fieldclass="EntityChoiceField" references="AssetProvider" type="reference" label="Source" javatype="int" jsontype="Integer" initialisation=""/>
         <field name="account" pkey="no" fieldclass="EntityChoiceField" references="AssetAccount" type="reference" label="Account" javatype="int" jsontype="Integer" initialisation=""/>
         <field name="description" pkey="no" min="0" max="255" fieldclass="TextField" type="String" label="Description" javatype="String" jsontype="String" initialisation=" = &quot;&quot;"/>
-        <field name="amount" pkey="no" fieldclass="IntegerField" type="int" label="Amount" javatype="int" jsontype="Integer" initialisation=" = 0"/>
+        <field name="amount" pkey="no" fieldclass="DecimalField" type="currency" label="Amount" javatype="BigDecimal" jsontype="BigDecimal" initialisation=" = null"/>
         <field name="type" pkey="no" values="'Cr.', 'Dr.'" fieldclass="ChoiceField" type="enum" label="Type" javatype="String" jsontype="String" initialisation=" = &quot;&quot;"/>
         <field name="journal" pkey="no" references="Journal" fieldclass="EntityChoiceField" type="ref" label="Journal" javatype="int" jsontype="Integer" initialisation=""/>
         <field name="id" pkey="yes" hidden="yes" type="int" fieldclass="IntegerField" label="Id" javatype="int" jsontype="Integer" initialisation=" = 0"/>
@@ -270,7 +270,7 @@
         <field name="source" pkey="no" fieldclass="EntityChoiceField" references="LiabilityProvider" type="reference" label="Source" javatype="int" jsontype="Integer" initialisation=""/>
         <field name="account" pkey="no" fieldclass="EntityChoiceField" references="LiabilityAccount" type="reference" label="Account" javatype="int" jsontype="Integer" initialisation=""/>
         <field name="description" pkey="no" min="0" max="255" fieldclass="TextField" type="String" label="Description" javatype="String" jsontype="String" initialisation=" = &quot;&quot;"/>
-        <field name="amount" pkey="no" fieldclass="IntegerField" type="int" label="Amount" javatype="int" jsontype="Integer" initialisation=" = 0"/>
+        <field name="amount" pkey="no" max="234.99" min="-9.00" fieldclass="DecimalField" type="currency" label="Amount" javatype="BigDecimal" jsontype="BigDecimal" initialisation=" = null"/>
         <field name="type" pkey="no" values="'Cr.', 'Dr.'" fieldclass="ChoiceField" type="enum" label="Type" javatype="String" jsontype="String" initialisation=" = &quot;&quot;"/>
         <field name="journal" pkey="no" references="Journal" fieldclass="EntityChoiceField" type="ref" label="Journal" javatype="int" jsontype="Integer" initialisation=""/>
         <field name="id" pkey="yes" hidden="yes" type="int" fieldclass="IntegerField" label="Id" javatype="int" jsontype="Integer" initialisation=" = 0"/>
@@ -430,7 +430,7 @@
             <persistencefield name="source" primarykey="no" jsontype="Reference" createsql=" MEDIUMINT UNSIGNED  NOT NULL ,FOREIGN KEY (source) REFERENCES RevenueProvider(id)"/>
             <persistencefield name="account" primarykey="no" jsontype="Reference" createsql=" MEDIUMINT UNSIGNED  NOT NULL ,FOREIGN KEY (account) REFERENCES RevenueAccount(id)"/>
             <persistencefield name="description" primarykey="no" jsontype="String" min="0" max="255" createsql=" VARCHAR(255)  NOT NULL"/>
-            <persistencefield name="amount" primarykey="no" jsontype="Integer" createsql=" MEDIUMINT  NOT NULL"/>
+            <persistencefield name="amount" primarykey="no" jsontype="Decimal" createsql=" DECIMAL(15,2)  NOT NULL"/>
             <persistencefield name="type" primarykey="no" jsontype="String" min="0" max="255" createsql=" ENUM ('Cr.', 'Dr.')  NOT NULL"/>
             <persistencefield name="journal" primarykey="no" jsontype="Reference" createsql="MEDIUMINT UNSIGNED NOT NULL ,FOREIGN KEY (journal) REFERENCES Journal(id)"/>
             <persistencefield name="id" sys="yes" jsontype="Integer" primarykey="auto" createsql="MEDIUMINT UNSIGNED AUTO_INCREMENT PRIMARY KEY"/>
@@ -443,7 +443,7 @@
             <persistencefield name="source" primarykey="no" jsontype="Reference" createsql=" MEDIUMINT UNSIGNED  NOT NULL ,FOREIGN KEY (source) REFERENCES CostProvider(id)"/>
             <persistencefield name="account" primarykey="no" jsontype="Reference" createsql=" MEDIUMINT UNSIGNED  NOT NULL ,FOREIGN KEY (account) REFERENCES CostAccount(id)"/>
             <persistencefield name="description" primarykey="no" jsontype="String" min="0" max="255" createsql=" VARCHAR(255)  NOT NULL"/>
-            <persistencefield name="amount" primarykey="no" jsontype="Integer" createsql=" MEDIUMINT  NOT NULL"/>
+            <persistencefield name="amount" primarykey="no" jsontype="Decimal" createsql=" DECIMAL(15,2)  NOT NULL"/>
             <persistencefield name="type" primarykey="no" jsontype="String" min="0" max="255" createsql=" ENUM ('Cr.', 'Dr.')  NOT NULL"/>
             <persistencefield name="journal" primarykey="no" jsontype="Reference" createsql="MEDIUMINT UNSIGNED NOT NULL ,FOREIGN KEY (journal) REFERENCES Journal(id)"/>
             <persistencefield name="id" sys="yes" jsontype="Integer" primarykey="auto" createsql="MEDIUMINT UNSIGNED AUTO_INCREMENT PRIMARY KEY"/>
@@ -456,7 +456,7 @@
             <persistencefield name="source" primarykey="no" jsontype="Reference" createsql=" MEDIUMINT UNSIGNED  NOT NULL ,FOREIGN KEY (source) REFERENCES AssetProvider(id)"/>
             <persistencefield name="account" primarykey="no" jsontype="Reference" createsql=" MEDIUMINT UNSIGNED  NOT NULL ,FOREIGN KEY (account) REFERENCES AssetAccount(id)"/>
             <persistencefield name="description" primarykey="no" jsontype="String" min="0" max="255" createsql=" VARCHAR(255)  NOT NULL"/>
-            <persistencefield name="amount" primarykey="no" jsontype="Integer" createsql=" MEDIUMINT  NOT NULL"/>
+            <persistencefield name="amount" primarykey="no" jsontype="Decimal" createsql=" DECIMAL(15,2)  NOT NULL"/>
             <persistencefield name="type" primarykey="no" jsontype="String" min="0" max="255" createsql=" ENUM ('Cr.', 'Dr.')  NOT NULL"/>
             <persistencefield name="journal" primarykey="no" jsontype="Reference" createsql="MEDIUMINT UNSIGNED NOT NULL ,FOREIGN KEY (journal) REFERENCES Journal(id)"/>
             <persistencefield name="id" sys="yes" jsontype="Integer" primarykey="auto" createsql="MEDIUMINT UNSIGNED AUTO_INCREMENT PRIMARY KEY"/>
@@ -469,7 +469,7 @@
             <persistencefield name="source" primarykey="no" jsontype="Reference" createsql=" MEDIUMINT UNSIGNED  NOT NULL ,FOREIGN KEY (source) REFERENCES LiabilityProvider(id)"/>
             <persistencefield name="account" primarykey="no" jsontype="Reference" createsql=" MEDIUMINT UNSIGNED  NOT NULL ,FOREIGN KEY (account) REFERENCES LiabilityAccount(id)"/>
             <persistencefield name="description" primarykey="no" jsontype="String" min="0" max="255" createsql=" VARCHAR(255)  NOT NULL"/>
-            <persistencefield name="amount" primarykey="no" jsontype="Integer" createsql=" MEDIUMINT  NOT NULL"/>
+            <persistencefield name="amount" primarykey="no" jsontype="Decimal" createsql=" DECIMAL(15,2)  NOT NULL"/>
             <persistencefield name="type" primarykey="no" jsontype="String" min="0" max="255" createsql=" ENUM ('Cr.', 'Dr.')  NOT NULL"/>
             <persistencefield name="journal" primarykey="no" jsontype="Reference" createsql="MEDIUMINT UNSIGNED NOT NULL ,FOREIGN KEY (journal) REFERENCES Journal(id)"/>
             <persistencefield name="id" sys="yes" jsontype="Integer" primarykey="auto" createsql="MEDIUMINT UNSIGNED AUTO_INCREMENT PRIMARY KEY"/>

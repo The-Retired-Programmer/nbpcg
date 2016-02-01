@@ -87,9 +87,22 @@
                             <xsl:variable name="type">
                                 <xsl:choose>
                                     <xsl:when test="@type">
-                                        <xsl:value-of select="@type" />
+                                        <xsl:choose>
+                                            <xsl:when test="@type='currency'">decimal</xsl:when>
+                                            <xsl:otherwise>
+                                                <xsl:value-of select="@type" />
+                                            </xsl:otherwise>
+                                        </xsl:choose>
                                     </xsl:when>
                                     <xsl:otherwise>String</xsl:otherwise>
+                                </xsl:choose>
+                            </xsl:variable>
+                            <xsl:variable name="decimalsize">
+                                <xsl:choose>
+                                    <xsl:when test="@decimalsize">
+                                        <xsl:value-of select="@decimalsize" />
+                                    </xsl:when>
+                                    <xsl:otherwise>15,2</xsl:otherwise>
                                 </xsl:choose>
                             </xsl:variable>
                             <xsl:variable name="pk" >
@@ -128,6 +141,9 @@
                                     <xsl:when test="$type='int'">MEDIUMINT</xsl:when>
                                     <xsl:when test="$type='date'">CHAR(8)</xsl:when>
                                     <xsl:when test="$type='datetime'">CHAR(14)</xsl:when>
+                                    <xsl:when test="$type='decimal'">
+                                        <xsl:value-of select="concat('DECIMAL(',$decimalsize,')')" />
+                                    </xsl:when>
                                     <xsl:when test="$type='password'">
                                         <xsl:choose>
                                             <xsl:when test="@max">
@@ -172,6 +188,7 @@
                                     <xsl:when test="$type='String' or $type='date' or $type='datetime' or $type='password' or $type='enum'">String</xsl:when>
                                     <xsl:when test="$type='boolean'">Boolean</xsl:when>
                                     <xsl:when test="$type='reference'">Reference</xsl:when>
+                                    <xsl:when test="$type='decimal'">Decimal</xsl:when>
                                     <xsl:otherwise>Integer</xsl:otherwise>
                                 </xsl:choose>
                             </xsl:variable>
@@ -547,6 +564,7 @@
                                 <xsl:when test="$type='date'">DateField</xsl:when>
                                 <xsl:when test="$type='datetime'">DatetimeField</xsl:when>
                                 <xsl:when test="$type='String'">TextField</xsl:when>
+                                <xsl:when test="@type='currency' or @type='decimal'">DecimalField</xsl:when>
                                 <xsl:when test="($type='reference') or ($type='ref') or ($type='rootref')">EntityChoiceField</xsl:when>
                                 <xsl:when test="$type='enum'">ChoiceField</xsl:when>
                                 <xsl:when test="$type='password'">PasswordField</xsl:when>
@@ -835,6 +853,7 @@
                     <xsl:when test="@type='reference'">Integer</xsl:when> <!-- this might need improvement (lookup reference class) -->
                     <xsl:when test="@type='datetime'">Timestamp</xsl:when>
                     <xsl:when test="@type='date'">DateOnly</xsl:when>
+                    <xsl:when test="@type='currency' or @type='decimal'">BigDecimal</xsl:when>
                     <xsl:otherwise>String</xsl:otherwise>
                 </xsl:choose>
             </xsl:for-each>
@@ -848,6 +867,7 @@
                     <xsl:when test="@type='reference'">getInt</xsl:when> <!-- this might need improvement (lookup reference class) -->
                     <xsl:when test="@type='datetime'">getTimestamp</xsl:when>
                     <xsl:when test="@type='date'">getDateOnly</xsl:when>
+                    <xsl:when test="@type='currency' or @type='decimal'">getBigDecimal</xsl:when>
                     <xsl:otherwise>getString</xsl:otherwise>
                 </xsl:choose>
             </xsl:for-each>
@@ -910,6 +930,7 @@
                 <xsl:when test="($type='int') or ($type='reference') or ($type='ref') or ($type='rootref')">int</xsl:when>
                 <xsl:when test="$type='date' ">DateOnly</xsl:when>
                 <xsl:when test="$type='datetime' ">Timestamp</xsl:when>
+                <xsl:when test="@type='currency' or @type='decimal'">BigDecimal</xsl:when>
                 <xsl:when test="($type='enum') or ($type='String')  or ($type='password') ">String</xsl:when>
             </xsl:choose>
         </xsl:attribute>
@@ -920,6 +941,7 @@
                 <xsl:when test="($type='int') or ($type='reference') or ($type='ref') or ($type='rootref')">Integer</xsl:when>
                 <xsl:when test="$type='date' ">String</xsl:when>
                 <xsl:when test="$type='datetime' ">String</xsl:when>
+                <xsl:when test="@type='currency' or @type='decimal'">BigDecimal</xsl:when>
                 <xsl:when test="($type='enum') or ($type='String')  or ($type='password') ">String</xsl:when>
             </xsl:choose>
         </xsl:attribute>
@@ -930,6 +952,7 @@
                 <xsl:when test="$type='date' "> = new DateOnly()</xsl:when>
                 <xsl:when test="$type='datetime' "> = new Timestamp()</xsl:when>
                 <xsl:when test="($type='reference') or ($type='ref') or ($type='rootref') "/>
+                <xsl:when test="@type='currency' or @type='decimal'"> = BigDecimal.ZERO</xsl:when>
                 <xsl:when test="($type='enum') or ($type='String') or ($type='password') "> = ""</xsl:when>
             </xsl:choose>
         </xsl:attribute>
