@@ -193,10 +193,7 @@ public void closed() {
                     fieldsource(new ${field.name?cap_first}FieldSource()).choiceField());
 <#else>
 <#if !(field.hidden??) >
-<#if field.choicemethod??>
-            add(${field.name}Field = FieldBuilder.entityType().label("${field.label}").
-                    fieldsource(new ${field.name?cap_first}FieldSource()).entityChoiceField());
-<#elseif field.type == "int">
+<#if field.type == "int">
             add(${field.name}Field =  FieldBuilder.integerType().label("${field.label}").
                     fieldsource(new ${field.name?cap_first}FieldSource()).integerField());
 <#elseif field.type == "long">
@@ -215,8 +212,13 @@ public void closed() {
             add(${field.name}Field =  FieldBuilder.booleanType().label("${field.label}").
                     fieldsource(new ${field.name?cap_first}FieldSource()).checkboxField());
 <#else>
+<#if field.choicemethod?? >
+            add(${field.name}Field =  FieldBuilder.stringType().label("${field.label}").
+                    fieldsource(new ${field.name?cap_first}FieldSource()).choiceField());
+<#else>
             add(${field.name}Field =  FieldBuilder.stringType().label("${field.label}").
                     fieldsource(new ${field.name?cap_first}FieldSource()).textField());
+</#if>
 </#if>
 </#if>
 </#if>
@@ -263,9 +265,7 @@ public void closed() {
             add(${field.name}Field = FieldBuilder.stringType().fieldsource(new ${field.name?cap_first}FieldSource()).choiceField());
 <#else>
 <#if !(field.hidden??) >
-<#if field.choicemethod??>
-            add(${field.name}Field = FieldBuilder.entityType().fieldsource(new ${field.name?cap_first}FieldSource()).entityChoiceField());
-<#elseif field.type == "int">
+<#if field.type == "int">
             add(${field.name}Field =  FieldBuilder.integerType().fieldsource(new ${field.name?cap_first}FieldSource()).integerField());
 <#elseif field.type == "long">
             add(${field.name}Field =  FieldBuilder.longType().fieldsource(new ${field.name?cap_first}FieldSource()).longField());
@@ -278,7 +278,11 @@ public void closed() {
 <#elseif field.type == "boolean">
             add(${field.name}Field =  FieldBuilder.booleanType().fieldsource(new ${field.name?cap_first}FieldSource()).checkboxField());
 <#else>
+<#if field.choicemethod?? >
+            add(${field.name}Field =  FieldBuilder.stringType().fieldsource(new ${field.name?cap_first}FieldSource()).choiceField());
+<#else>
             add(${field.name}Field =  FieldBuilder.stringType().fieldsource(new ${field.name?cap_first}FieldSource()).textField());
+</#if>
 </#if>
 </#if>
 </#if>
@@ -538,7 +542,7 @@ public void closed() {
 <#if !(field.hidden??) >
 <#if field.choicemethod??>
 
-    private class ${field.name?cap_first}FieldSource extends FieldSource<String> {
+    private class ${field.name?cap_first}FieldSource extends ChoiceFieldSource<String> {
     
         @Override
         public List<String> getChoices() {

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
     
     <!DOCTYPE nbpcg-build PUBLIC "-//uk/org/rlinsdale/nbpcgbuild/DTD NBPCGBUILD SCHEMA 1.0//EN" "nbres:/uk/org/rlinsdale/nbpcg/nbpcgbuild.dtd">
-<nbpcg-build name="CD Archive" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)">
+<nbpcg-build name="CD Archive" copyright="2014-2016 Richard Linsdale (richard.linsdale at blueyonder.co.uk)">
     <folder project="CD Archive - generated" location="resource" package="uk.org.rlinsdale.cdarchive.mysql" message="generating mysql script files for cdarchive" log="linsdale.cdarchive" license="gpl30">
         <execute template="createsqldatabase" filename="createdb.sql" usepersistencestore="cdarchive"/>
         <execute template="backupscript" filename="backupscript.sh" usepersistencestore="cdarchive"/>
@@ -10,19 +10,19 @@
     <folder project="CD Archive - generated" location="java" package="uk.org.rlinsdale.cdarchive.dataobjects" message="generating entity files" log="linsdale.cdarchive" license="gpl30">
         <execute template="rootentity" filename="CdRoot.java" useentityinfo="CdRoot"/>
         <execute template="rootentity" filename="ExtensiongroupRoot.java" useentityinfo="ExtensiongroupRoot"/>
+        <execute template="entity" filename="Extensiongroup.java" useentityinfo="Extensiongroup"/>
+        <execute template="entity" filename="Extension.java" useentityinfo="Extension"/>
         <execute template="entity" filename="Cd.java" useentityinfo="Cd"/>
         <execute template="entity" filename="Folder.java" useentityinfo="Folder"/>
         <execute template="entity" filename="File.java" useentityinfo="File"/>
-        <execute template="entity" filename="Extensiongroup.java" useentityinfo="Extensiongroup"/>
-        <execute template="entity" filename="Extension.java" useentityinfo="Extension"/>
     </folder>
     <folder project="CD Archive - generated" location="java" package="uk.org.rlinsdale.cdarchive.nodes" message="generating node files" log="linsdale.cdarchive" license="gpl30" datapackage="uk.org.rlinsdale.cdarchive.dataobjects">
         <execute template="rootnode" type="" filename="CdRootNode.java" useentityinfo="CdRoot"/>
         <execute template="rootnode" type="" filename="ExtensiongroupRootNode.java" useentityinfo="ExtensiongroupRoot"/>
         <execute template="node" type="" filename="CdNode.java" useentityinfo="Cd"/>
         <execute template="node" type="" filename="ExtensiongroupNode.java" useentityinfo="Extensiongroup"/>
-        <execute template="node" type="" filename="FolderNode.java" useentityinfo="Folder"/>
         <execute template="node" type="" filename="FileNode.java" useentityinfo="File"/>
+        <execute template="node" type="" filename="FolderNode.java" useentityinfo="Folder"/>
         <execute template="node" type="" filename="ExtensionNode.java" useentityinfo="Extension"/>
         <execute template="nodefactory" type="" filename="CdRootNodeChildFactory.java" useentityinfo="CdRoot"/>
         <execute template="nodefactory" type="" filename="ExtensiongroupRootNodeChildFactory.java" useentityinfo="ExtensiongroupRoot"/>
@@ -39,7 +39,7 @@
     <folder project="CD Archive - generated" location="java" package="uk.org.rlinsdale.cdarchive.topcomponents" message="generating node editor files" log="linsdale.cdarchive" license="gpl30" datapackage="uk.org.rlinsdale.cdarchive.dataobjects" nodepackage="uk.org.rlinsdale.cdarchive.nodes">
         <execute template="nodeeditor" filename="ExtensiongroupNodeEditor.java" useentityinfo="Extensiongroup"/>
         <execute template="editnode" filename="EditExtensiongroupNode.java" useentityinfo="Extensiongroup"/>
-        <execute template="choice" filename="FolderChoiceField.java" useentityinfo="Folder"/>
+        <execute template="entitysource" filename="ExtensiongroupSource.java" useentityinfo="Extensiongroup"/>
     </folder>
 </nbpcg-build>
     
@@ -56,6 +56,14 @@
         
             
                 
+                
+            
+            
+                
+            
+            
+                
+                
                  
                 
             
@@ -64,20 +72,16 @@
                 
                 
                 
-            
-            
+                 
                 
+                
+            
+            
                 
                 
                 
                  
                 
-            
-            
-                
-                
-            
-            
                 
             
         
