@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)
+ * Copyright (C) 2014-2016 Richard Linsdale (richard.linsdale at blueyonder.co.uk)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -51,7 +51,6 @@
     @TemplateRegistration(folder = "uk-org-rlinsdale-nbpcg", displayName = "remotegetbyfieldservlet", content = "templates/remotegetbyfieldservlet.template", scriptEngine = "freemarker"),
     @TemplateRegistration(folder = "uk-org-rlinsdale-nbpcg", displayName = "remotegetservlet", content = "templates/remotegetservlet.template", scriptEngine = "freemarker")
 })
-@TemplateRegistration(folder = "Other", displayName = "NBPCG Template File", content = "TemplateTemplate.template")
 package uk.org.rlinsdale.nbpcg;
 
 import org.netbeans.api.templates.TemplateRegistration;
