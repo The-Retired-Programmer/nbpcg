@@ -1,5 +1,5 @@
 <#--
- * Copyright (C) 2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)
+ * Copyright (C) 2014-2016 Richard Linsdale (richard.linsdale at blueyonder.co.uk)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -59,6 +59,7 @@
 <#if entity.name = useentity >
 package ${package};
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
 import javax.json.JsonValue;
@@ -76,10 +77,8 @@ import javax.persistence.Query;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import uk.org.rlinsdale.nbpcglibrary.api.LogicException;
-import uk.org.rlinsdale.nbpcglibrary.remotedb.IdandstampEntity;
-import uk.org.rlinsdale.nbpcglibrary.json.JsonConversionException;
-import uk.org.rlinsdale.nbpcglibrary.json.JsonUtil;
+import uk.org.rlinsdale.jeelibrary.IdandstampEntity;
+import uk.org.rlinsdale.jeelibrary.JsonUtil;
 /**
  * The ${entity.name} Remote Entity.
  *
@@ -128,7 +127,7 @@ public class ${entity.name} extends IdandstampEntity<${entity.name}> implements 
 </#if>
 </#list>
 
-   public static  List<${entity.name}> queryByName(EntityManager em, String field, Object value) {
+   public static  List<${entity.name}> queryByName(EntityManager em, String field, Object value) throws IOException {
         Query query;
         switch (field) {
 <#list entity.persistencefield![] as field > 
@@ -138,12 +137,12 @@ public class ${entity.name} extends IdandstampEntity<${entity.name}> implements 
                 return query.getResultList();
 </#list>
             default:
-                throw new LogicException("Unknown filter field requested (" + field + ")");
+                throw new IOException("Unknown filter field requested (" + field + ")");
         }
     }
 
     @Override
-    public void setField(String key, JsonValue value) throws JsonConversionException {
+    public void setField(String key, JsonValue value) throws ClassCastException {
         switch (key) {
 <#list entity.persistencefield![] as field >
             case "${field.name}":
@@ -151,31 +150,31 @@ public class ${entity.name} extends IdandstampEntity<${entity.name}> implements 
                 return;
 </#list>
             default:
-                throw new JsonConversionException();
+                throw new ClassCastException();
         }
     }
 
     @Override
-    public void writeField(JsonGenerator generator, String key) throws JsonConversionException {
+    public void writeField(JsonGenerator generator, String key) throws ClassCastException {
         switch (key) {
 <#list entity.persistencefield![] as field >
             case "${field.name}":
-                JsonUtil.write${field.jsontype}Value(generator, "${field.name}", ${field.name});
+                generator.write("${field.name}", ${field.name});
                 return;
 </#list>
             default:
-                throw new JsonConversionException();
+                throw new ClassCastException();
         }
     }
     
     @Override
     public void writePK(JsonGenerator generator) {
-        JsonUtil.writeIntegerValue(generator, id);
+        generator.write(id);
     }
     
     @Override
     public void writePKwithkey(JsonGenerator generator) {
-        JsonUtil.writeIntegerValue(generator, "pkey", id);
+        generator.write("pkey", id);
     }
 
     @Override
@@ -186,11 +185,10 @@ public class ${entity.name} extends IdandstampEntity<${entity.name}> implements 
             generator.writeStartObject(label);
         }
 <#list entity.persistencefield![] as field >
-        JsonUtil.write${field.jsontype}Value(generator, "${field.name}", ${field.name});
+        generator.write("${field.name}", ${field.name});
 </#list>
         generator.writeEnd();
     }
-
 
 <#list entity.persistencefield![] as field >
 <#if field.jsontype = "Reference" | field.jsontype = "Integer" >
