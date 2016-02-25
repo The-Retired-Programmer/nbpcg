@@ -10,7 +10,7 @@
     
     <groupId>uk.org.rlinsdale</groupId>
     <artifactId>nbpcg</artifactId>
-    <version>4.0.24</version>
+    <version>4.0.25</version>
     <packaging>nbm</packaging>
     
     <name>Netbeans Platform CodeGenerator</name>

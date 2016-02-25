@@ -474,7 +474,7 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.pkeytype},${ENTITYIN
      */
     protected void linkToParent(${field.references} e) {
         ensureEditing();
-        if (${field.name}.set(e.getPK()) ) {
+        if (${field.name}.set(e) ) {
             fireFieldChange(${ENTITYINFO.name}Field.${field.name?upper_case});
             fireNameAndOrTitleChangeOn${field.name?cap_first}();
         }
