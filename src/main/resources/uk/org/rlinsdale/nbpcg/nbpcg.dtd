@@ -74,6 +74,7 @@
                     dbname CDATA #IMPLIED
                     pkey (idauto) #IMPLIED
                     extrafields (usertimestamp) #IMPLIED
+                    rule CDATA #IMPLIED
                     >
                 <!ELEMENT field EMPTY>
                     <!ATTLIST field

@@ -118,7 +118,6 @@ public final class ${ENTITYINFO.name}Source implements EntitySource<${ENTITYINFO
     
     private final ${ENTITYINFO.name} entity;
     private final FieldChangeListener entityfieldchangelistener;
-    private final ${ENTITYINFO.name}EntityRules entityrules = new ${ENTITYINFO.name}EntityRules();
     //
 <#list ENTITYINFO.field![] as field>
 <#if field.useentryfield??>
@@ -156,13 +155,13 @@ public void closed() {
 
     @Override
     public FormFields getFormFields() {
-        return new Fields(entityrules);
+        return new Fields(entity.getEntityRules());
     }
 
     
     private class Fields extends FormFields {
         
-        public Fields(FormRules formrules) {
+        public Fields(Rules formrules) {
             super(formrules);
 <#list ENTITYINFO.field![] as field>
 <#if field.useentryfield??>
@@ -234,12 +233,12 @@ public void closed() {
 
     @Override
     public RowFields getRowFields() {
-        return new Row(entityrules);
+        return new Row(entity.getEntityRules());
     }
 
     private class Row extends RowFields {
         
-        public Row(FormRules rowrules) {
+        public Row(Rules rowrules) {
             super(rowrules);
 <#list ENTITYINFO.field![] as field>
 <#if field.useentryfield??>
@@ -293,19 +292,6 @@ public void closed() {
         @Override
         public boolean save() {
             return entity.save();
-        }
-    }
-
-    private class ${ENTITYINFO.name}EntityRules implements FormRules {
-
-        @Override
-        public boolean checkRules() {
-            return entity.getEntityRules().checkRules();
-        }
-
-        @Override
-        public String getErrorMessages() {
-            return entity.getEntityRules().getErrorMessages();
         }
     }
 

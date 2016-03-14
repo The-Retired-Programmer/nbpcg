@@ -93,7 +93,7 @@ public final class ${ENTITYINFO.name}Table extends Table<${ENTITYINFO.name}, ${E
 </#if>
 </#if>
 </#list>
-        super("${ENTITYINFO.name}s", new String[] {${columnnames}}, null,  ${count}*2);
+        super("${ENTITYINFO.name}s", new String[] {${columnnames}}, null);
         this.parent = parent;
     }
 

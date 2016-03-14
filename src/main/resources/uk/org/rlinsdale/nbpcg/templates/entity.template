@@ -261,6 +261,9 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.pkeytype},${ENTITYIN
         addRule(${child.name}s.getMaxRule(${child.max}));
 </#if>
 </#list>
+<#if ENTITYINFO.rule??>
+        addRule(entityRules, new ${ENTITYINFO.rule}(this));
+</#if>
         checkRulesAtLoad();
     }
 
@@ -849,7 +852,7 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.pkeytype},${ENTITYIN
     }
 
     @Override
-    protected final void entityDiffs(EntityFields data) {
+    protected final boolean entityDiffs(EntityFields data) {
 <#list ENTITYINFO.field![] as field>
 <#if field.type == "idx" >
         if (${field.name} != ${field.name}Original) {
@@ -879,7 +882,11 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.pkeytype},${ENTITYIN
                 int idref${field.name?cap_first} = idrefpf;
                 if (idref${field.name?cap_first} < 0 ) {
                     ${field.name}.get().save();
-                    data.put("${field.name}", ${field.name}.get().getPK());
+                    idref${field.name?cap_first} = ${field.name}.get().getPK();
+                    if (idref${field.name?cap_first} < 0 ) {
+                        return false;
+                    }
+                    data.put("${field.name}", idref${field.name?cap_first});
                 } else if (idref${field.name?cap_first} == 0) {
                     data.put("${field.name}", null);
                 } else {
@@ -891,6 +898,9 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.pkeytype},${ENTITYIN
             if (idref${field.name?cap_first} < 0 ) {
                 ${field.name}.get().save();
                 idref${field.name?cap_first} = ${field.name}.get().getPK();
+                if (idref${field.name?cap_first} < 0 ) {
+                    return false;
+                }
             }
             data.put("${field.name}", idref${field.name?cap_first});
 </#if>
@@ -904,10 +914,11 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.pkeytype},${ENTITYIN
 </#if>
 </#if>
 </#list>
+        return true;
     }
 
     @Override
-    protected final void entityValues(EntityFields data) {
+    protected final boolean entityValues(EntityFields data) {
 <#list ENTITYINFO.field![] as field>
 <#if field.type == "idx" >
         data.put("${field.name}", ${field.name});
@@ -923,7 +934,11 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.pkeytype},${ENTITYIN
                 int idref${field.name?cap_first} = idrefpf;
                 if (idref${field.name?cap_first} < 0 ) {
                     ${field.name}.get().save();
-                    data.put("${field.name}", ${field.name}.get().getPK());
+                    idref${field.name?cap_first} = ${field.name}.get().getPK();
+                    if (idref${field.name?cap_first} < 0 ) {
+                        return false;
+                    }
+                    data.put("${field.name}", idref${field.name?cap_first});
                 } else if (idref${field.name?cap_first} == 0) {
                     data.put("${field.name}", null);
                 } else {
@@ -936,6 +951,9 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.pkeytype},${ENTITYIN
         if (idref${field.name?cap_first} < 0 ) {
             ${field.name}.get().save();
             idref${field.name?cap_first} = ${field.name}.get().getPK();
+            if (idref${field.name?cap_first} < 0 ) {
+                return false;
+            }
         }
         data.put("${field.name}", idref${field.name?cap_first});
 </#if>
@@ -948,6 +966,7 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.pkeytype},${ENTITYIN
 </#if>
 </#if>
 </#list>
+        return true;
     }
 
 <#if ENTITYINFO.orderable = "yes">

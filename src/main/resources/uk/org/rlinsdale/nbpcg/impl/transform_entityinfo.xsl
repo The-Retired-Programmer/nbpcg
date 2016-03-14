@@ -829,6 +829,11 @@
                 <xsl:value-of select="../@usepackage" />
             </xsl:attribute>
         </xsl:if>
+        <xsl:if test="@rule">
+            <xsl:attribute name="rule">
+                <xsl:value-of select="@rule" />
+            </xsl:attribute>
+        </xsl:if>
         <xsl:attribute name="dbtablename" >
             <xsl:choose>
                 <xsl:when test="@dbname">
