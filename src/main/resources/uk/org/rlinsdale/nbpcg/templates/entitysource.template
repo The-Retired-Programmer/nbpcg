@@ -233,66 +233,55 @@ public void closed() {
 
     @Override
     public RowFields getRowFields() {
-        return new Row(entity.getEntityRules());
-    }
-
-    private class Row extends RowFields {
-        
-        public Row(Rules rowrules) {
-            super(rowrules);
-<#list ENTITYINFO.field![] as field>
+        RowFields rf = new RowFields(entity.getEntityRules());
+ <#list ENTITYINFO.field![] as field>
 <#if field.useentryfield??>
 <#list ENTITYINFO.entryfield![] as entryfield>
 <#if entryfield.name == field.useentryfield>
 <#if entryfield.type=="password">
-            add(${entryfield.name}Field = FieldBuilder.stringType().fieldsource(new ${entryfield.name?cap_first}FieldSource()).passwordField());
+        rf.add(${entryfield.name}Field = FieldBuilder.stringType().fieldsource(new ${entryfield.name?cap_first}FieldSource()).passwordField());
 </#if>
 </#if>
 </#list>
 <#else>
 <#if field.type=="idx" >
 <#elseif field.type == "password">
-            add(${field.name}Field = FieldBuilder.stringType().fieldsource(new ${field.name?cap_first}FieldSource()).passwordField());
+        rf.add(${field.name}Field = FieldBuilder.stringType().fieldsource(new ${field.name?cap_first}FieldSource()).passwordField());
 <#elseif field.type=="reference" >
 <#if field.optional??>
-            add(${field.name}Field = FieldBuilder.entityType().fieldsource(new ${field.name?cap_first}FieldSource()).nullselectionallowed().entityChoiceField());
+        rf.add(${field.name}Field = FieldBuilder.entityType().fieldsource(new ${field.name?cap_first}FieldSource()).nullselectionallowed().entityChoiceField());
 <#else>
-            add(${field.name}Field = FieldBuilder.entityType().fieldsource(new ${field.name?cap_first}FieldSource()).entityChoiceField());
+        rf.add(${field.name}Field = FieldBuilder.entityType().fieldsource(new ${field.name?cap_first}FieldSource()).entityChoiceField());
 </#if>
 <#elseif field.type=="ref" || field.type = "rootref" >
 <#elseif field.type == "enum" >
-            add(${field.name}Field = FieldBuilder.stringType().fieldsource(new ${field.name?cap_first}FieldSource()).choiceField());
+        rf.add(${field.name}Field = FieldBuilder.stringType().fieldsource(new ${field.name?cap_first}FieldSource()).choiceField());
 <#else>
 <#if !(field.hidden??) >
 <#if field.type == "int">
-            add(${field.name}Field =  FieldBuilder.integerType().fieldsource(new ${field.name?cap_first}FieldSource()).integerField());
+        rf.add(${field.name}Field =  FieldBuilder.integerType().fieldsource(new ${field.name?cap_first}FieldSource()).integerField());
 <#elseif field.type == "long">
-            add(${field.name}Field =  FieldBuilder.longType().fieldsource(new ${field.name?cap_first}FieldSource()).longField());
+        rf.add(${field.name}Field =  FieldBuilder.longType().fieldsource(new ${field.name?cap_first}FieldSource()).longField());
 <#elseif field.type == "date">
-            add(${field.name}Field =  FieldBuilder.dateType().fieldsource(new ${field.name?cap_first}FieldSource()).dateField());
+        rf.add(${field.name}Field =  FieldBuilder.dateType().fieldsource(new ${field.name?cap_first}FieldSource()).dateField());
 <#elseif field.type == "datetime">
-            add(${field.name}Field =  FieldBuilder.datetimeType().fieldsource(new ${field.name?cap_first}FieldSource()).datetimeField());
+        rf.add(${field.name}Field =  FieldBuilder.datetimeType().fieldsource(new ${field.name?cap_first}FieldSource()).datetimeField());
 <#elseif field.type == "currency" || field.type = "decimal" >
-            add(${field.name}Field =  FieldBuilder.decimalType().fieldsource(new ${field.name?cap_first}FieldSource()).decimalField());
+        rf.add(${field.name}Field =  FieldBuilder.decimalType().fieldsource(new ${field.name?cap_first}FieldSource()).decimalField());
 <#elseif field.type == "boolean">
-            add(${field.name}Field =  FieldBuilder.booleanType().fieldsource(new ${field.name?cap_first}FieldSource()).checkboxField());
+        rf.add(${field.name}Field =  FieldBuilder.booleanType().fieldsource(new ${field.name?cap_first}FieldSource()).checkboxField());
 <#else>
 <#if field.choicemethod?? >
-            add(${field.name}Field =  FieldBuilder.stringType().fieldsource(new ${field.name?cap_first}FieldSource()).choiceField());
+        rf.add(${field.name}Field =  FieldBuilder.stringType().fieldsource(new ${field.name?cap_first}FieldSource()).choiceField());
 <#else>
-            add(${field.name}Field =  FieldBuilder.stringType().fieldsource(new ${field.name?cap_first}FieldSource()).textField());
+        rf.add(${field.name}Field =  FieldBuilder.stringType().fieldsource(new ${field.name?cap_first}FieldSource()).textField());
 </#if>
 </#if>
 </#if>
 </#if>
 </#if>
 </#list>
-        }
-
-        @Override
-        public boolean save() {
-            return entity.save();
-        }
+        return rf;
     }
 
 <#list ENTITYINFO.field![] as field>
