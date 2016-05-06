@@ -108,8 +108,8 @@
                         <folder project="{$project}" location="java" package="{$package}" message="generating node editor files" log="{$log}" license="{$license}" datapackage="{$datapackage}" nodepackage="{$nodepackage}">
                             <xsl:call-template name="nodeeditor" />
                             <xsl:call-template name="editnode" />
-                            <xsl:call-template name="entitysource" />
-                            <xsl:call-template name="entitytable" />
+                            <xsl:call-template name="presenter" />
+                            <xsl:call-template name="tablepresenter" />
                         </folder>
                     </xsl:when>
                     <xsl:when test="@type = 'nodeviewer' ">
@@ -367,7 +367,7 @@
         </xsl:for-each>
     </xsl:template>
     
-    <xsl:template name="entitysource">
+    <xsl:template name="presenter">
         <xsl:variable name="exclude">
             <xsl:choose>
                 <xsl:when test="@exclude">
@@ -381,12 +381,12 @@
                 <xsl:variable name="ename" select="@name" />
                 <xsl:choose>
                     <xsl:when test="/nbpcg/node[@name=$ename]" >
-                        <execute template="entitysource" filename="{@name}Source.java" useentityinfo="{@name}" />
+                        <execute template="presenter" filename="{@name}Presenter.java" useentityinfo="{@name}" />
                     </xsl:when>
                     <xsl:otherwise>
                         <xsl:for-each select="//node[@name=$ename and local-name(..) = 'node'][position() = 1]" >
                             <xsl:if test="position() = 1" >
-                                <execute template="entitysource" filename="{@name}Source.java" useentityinfo="{@name}" />
+                                <execute template="presenter" filename="{@name}Presenter.java" useentityinfo="{@name}" />
                             </xsl:if>
                         </xsl:for-each>
                     </xsl:otherwise>
@@ -395,7 +395,7 @@
         </xsl:for-each>
     </xsl:template>
     
-    <xsl:template name="entitytable">
+    <xsl:template name="tablepresenter">
         <xsl:variable name="exclude">
             <xsl:choose>
                 <xsl:when test="@exclude">
@@ -420,13 +420,13 @@
         <xsl:choose>
             <xsl:when test="contains($names,',')" >
                 <xsl:variable name="name" select="substring-before($names,',')"/>
-                <execute template="entitytable" filename="{$name}Table.java" useentityinfo="{$name}" />
+                <execute template="tablepresenter" filename="{$name}TablePresenter.java" useentityinfo="{$name}" />
                 <xsl:call-template name="etable">
                     <xsl:with-param name="names" select="substring-after($names,',')" />
                 </xsl:call-template>
             </xsl:when>
             <xsl:otherwise>
-                <execute template="entitytable" filename="{$names}Table.java" useentityinfo="{$names}" />
+                <execute template="tablepresenter" filename="{$names}TablePresenter.java" useentityinfo="{$names}" />
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>

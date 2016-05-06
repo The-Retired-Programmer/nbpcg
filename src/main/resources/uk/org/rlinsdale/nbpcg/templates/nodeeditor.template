@@ -1,5 +1,5 @@
 <#--
- * Copyright (C) 2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)
+ * Copyright (C) 2014-2016 Richard Linsdale (richard.linsdale at blueyonder.co.uk)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -58,10 +58,6 @@
 <#assign ENTITYINFO = entityinfo[useentityinfo] >
 package ${package};
 
-<#if ENTITYINFO.childnodesineditor??>
-import java.util.ArrayList;
-import java.util.List;
-</#if>
 import javax.swing.JComponent;
 import ${datapackage}.*;
 import ${nodepackage}.${ENTITYINFO.name}Node;
@@ -72,7 +68,6 @@ import org.openide.util.NbBundle;
 import org.openide.util.NbBundle.Messages;
 import org.openide.windows.TopComponent;
 import ${datapackage}.${ENTITYINFO.name}.${ENTITYINFO.name}Field;
-import static uk.org.rlinsdale.nbpcglibrary.form.Form.FormSaveResult.SAVESUCCESS;
 
 /**
  * NodeEditor for ${ENTITYINFO.name}Node.
@@ -93,45 +88,34 @@ persistenceType = TopComponent.PERSISTENCE_NEVER)
 public final class ${ENTITYINFO.name}NodeEditor extends NodeEditorTopComponent<${ENTITYINFO.pkeytype}, ${ENTITYINFO.name}, ${ENTITYINFO.parentname}, ${ENTITYINFO.name}Field> {
     
     private final TitleChangeListener titlechangelistener;
-    private final ${ENTITYINFO.name}Source source;
-    private Form form;
-<#if ENTITYINFO.childnodesineditor??>
-private final List<Table> tables = new ArrayList<>();
-</#if>
+    private final CompositePresenter presenter;
   
     public ${ENTITYINFO.name}NodeEditor(${ENTITYINFO.name}Node node) {
         super(node,
                 NbBundle.getMessage(${ENTITYINFO.name}NodeEditor.class, "CTL_${ENTITYINFO.name}NodeEditor"),
                 NbBundle.getMessage(${ENTITYINFO.name}NodeEditor.class, "HINT_${ENTITYINFO.name}NodeEditor"));
         ${ENTITYINFO.name} e = node.getEntity();
-        source = new ${ENTITYINFO.name}Source(e);
-        titlechangelistener = new TitleChangeListener("Editor:" + e.instanceDescription());
+        presenter = new CompositePresenter();
+        presenter.setChildPresenters(
+                        new ${ENTITYINFO.name}Presenter(e)
 <#if ENTITYINFO.childnodesineditor??>
 <#list ENTITYINFO.childnodesineditor?split(",") as childnode>
-       tables.add(new ${childnode}Table(e));
+                        ,
+                        new ${childnode}TablePresenter(e)
 </#list>
 </#if>
+                );
+        titlechangelistener = new TitleChangeListener("Editor:" + e.instanceDescription());
     }
 
     @Override
     protected JComponent getDisplayComponent() {
-        form = new Form("${ENTITYINFO.name}Editor", source.getFormFields());
-<#if ENTITYINFO.childnodesineditor??>
-        tables.stream().forEach((t) -> {
-            form.addTable(t);
-        });
-</#if>
-        return form;
+        return presenter.getView();
     }
 
     @Override
     protected void opened() {
-        source.opened();
-<#if ENTITYINFO.childnodesineditor??>
-        tables.stream().forEach((t) -> {
-            t.opened();
-        });
-</#if>
+        presenter.enableView();
         setName("${ENTITYINFO.name}: " + node.getDisplayTitle());
         entity.addTitleListener(titlechangelistener);
     }
@@ -139,17 +123,11 @@ private final List<Table> tables = new ArrayList<>();
     @Override
     protected void closed() {
         entity.removeTitleListener(titlechangelistener);
-<#if ENTITYINFO.childnodesineditor??>
-        tables.stream().forEach((t) -> {
-            t.closed();
-        });
-</#if>
-        source.closed();
     }
 
     @Override
     protected boolean canCloseForm() {
-         return form.save() == SAVESUCCESS;
+         return presenter.test(new StringBuilder()) && presenter.save(new StringBuilder());
     }
 
     private class TitleChangeListener extends Listener<SimpleEventParams> {

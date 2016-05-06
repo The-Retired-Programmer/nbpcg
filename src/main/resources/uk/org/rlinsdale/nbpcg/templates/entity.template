@@ -264,7 +264,7 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.pkeytype},${ENTITYIN
 <#if ENTITYINFO.rule??>
         addRule(entityRules, new ${ENTITYINFO.rule}(this));
 </#if>
-        checkRulesAtLoad();
+        checkRulesAtLoad(new StringBuilder());
     }
 
     @Override
@@ -881,7 +881,7 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.pkeytype},${ENTITYIN
             } else {
                 int idref${field.name?cap_first} = idrefpf;
                 if (idref${field.name?cap_first} < 0 ) {
-                    ${field.name}.get().save();
+                    ${field.name}.get().save(new StringBuilder());
                     idref${field.name?cap_first} = ${field.name}.get().getPK();
                     if (idref${field.name?cap_first} < 0 ) {
                         return false;
@@ -896,7 +896,7 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.pkeytype},${ENTITYIN
 <#else>
             int idref${field.name?cap_first} = ${field.name}.getPK();
             if (idref${field.name?cap_first} < 0 ) {
-                ${field.name}.get().save();
+                ${field.name}.get().save(new StringBuilder());
                 idref${field.name?cap_first} = ${field.name}.get().getPK();
                 if (idref${field.name?cap_first} < 0 ) {
                     return false;
@@ -933,7 +933,7 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.pkeytype},${ENTITYIN
             } else {
                 int idref${field.name?cap_first} = idrefpf;
                 if (idref${field.name?cap_first} < 0 ) {
-                    ${field.name}.get().save();
+                    ${field.name}.get().save(new StringBuilder());
                     idref${field.name?cap_first} = ${field.name}.get().getPK();
                     if (idref${field.name?cap_first} < 0 ) {
                         return false;
@@ -949,7 +949,7 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.pkeytype},${ENTITYIN
 <#else>
         int idref${field.name?cap_first} = ${field.name}.getPK();
         if (idref${field.name?cap_first} < 0 ) {
-            ${field.name}.get().save();
+            ${field.name}.get().save(new StringBuilder());
             idref${field.name?cap_first} = ${field.name}.get().getPK();
             if (idref${field.name?cap_first} < 0 ) {
                 return false;
@@ -1049,12 +1049,11 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.pkeytype},${ENTITYIN
      * 
      * @return the set of all ${ENTITYINFO.name}s
      */
-    public static List<Entity> getAll${ENTITYINFO.name}s() {
-        List<Entity> list = new ArrayList<>();
+    public static List<${ENTITYINFO.name}> getAll${ENTITYINFO.name}s() {
+        List<${ENTITYINFO.name}> list = new ArrayList<>();
 <#if PARENTENTITYINFO.parentname?? >
-        ${ENTITYINFO.parentname}.getAll${ENTITYINFO.parentname}s().stream().forEach((parent) -> {
-            list.addAll(((${ENTITYINFO.parentname})parent).get${ENTITYINFO.name}s());
-        });
+        ${ENTITYINFO.parentname}.getAll${ENTITYINFO.parentname}s().stream()
+            .forEach(parent -> list.addAll(parent.get${ENTITYINFO.name}s()));
 <#else>
         list.addAll(${ENTITYINFO.parentname}.get().get${ENTITYINFO.name}s());
 </#if>
