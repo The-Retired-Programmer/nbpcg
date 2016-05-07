@@ -70,12 +70,6 @@ package ${package};
 <#assign needTimestampImport = "no" >
 <#list ENTITYINFO.field![] as field>
 <#if !(field.hidden??) >
-<#if field.type="reference" || field.type="reference" || field.type="enum"  || (field.choicemethod??) >
-<#assign needListImport = "yes" >
-</#if>
-<#if field.type="enum"  >
-<#assign needArraysImport = "yes" >
-</#if>
 <#if field.type="date"  >
 <#assign needDateOnlyImport = "yes" >
 </#if>
@@ -87,12 +81,8 @@ package ${package};
 <#if hasbigdecimal>
 import java.math.BigDecimal;
 </#if>
-<#if needArraysImport = "yes">
 import java.util.Arrays;
-</#if>
-<#if needListImport = "yes">
 import java.util.List;
-</#if>
 import ${datapackage}.*;
 import uk.org.rlinsdale.nbpcglibrary.data.entity.*;
 import uk.org.rlinsdale.nbpcglibrary.form.*;
@@ -121,7 +111,13 @@ public final class ${ENTITYINFO.name}Presenter extends FormPresenter {
     public ${ENTITYINFO.name}Presenter(${ENTITYINFO.name} entity) {
         this.entity = entity;
         setSaveFunction(sb -> this.entity.save(sb));
-        setChildPresenters(
+        setGetChildPresentersFunction(() -> getFieldPresenters());
+        entityfieldchangelistener = new FieldChangeListener(entity.instanceDescription());
+        entity.addFieldListener(entityfieldchangelistener);
+    }
+
+    private List<FieldPresenter> getFieldPresenters() {
+        return Arrays.asList(
 <#assign prefix= "">
 <#list ENTITYINFO.field![] as field>
 <#if field.useentryfield??>
@@ -213,8 +209,6 @@ public final class ${ENTITYINFO.name}Presenter extends FormPresenter {
                 new ErrorMarkerDecorator(new NullField(2)),
                 new ${ENTITYINFO.name}Model())
         );
-        entityfieldchangelistener = new FieldChangeListener(entity.instanceDescription());
-        entity.addFieldListener(entityfieldchangelistener);
     }
 
     private class ${ENTITYINFO.name}Model extends NullFieldModel {
