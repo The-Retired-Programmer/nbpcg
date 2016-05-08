@@ -81,7 +81,7 @@ public final class NBPCG {
         public final void run() {
             boolean success = true;
             long start = currentTimeMillis();
-            InputOutput io = IOProvider.getDefault().getIO("NBPCG - " + tabtext, false);
+            InputOutput io = IOProvider.getDefault().getIO("NBPCG (" + tabtext + ")", false);
             io.select();
             try (OutputWriter msg = io.getOut(); OutputWriter err = io.getErr()) {
                 try {
