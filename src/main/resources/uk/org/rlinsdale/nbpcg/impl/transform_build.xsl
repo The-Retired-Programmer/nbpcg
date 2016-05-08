@@ -33,6 +33,9 @@
             <xsl:variable name="nodepackage">
                 <xsl:value-of select="project/generate[@type='node']/@package"/>
             </xsl:variable>
+            <xsl:variable name="nodeeditorpackage">
+                <xsl:value-of select="project/generate[@type='nodeeditor']/@package"/>
+            </xsl:variable>
             <xsl:for-each select="project/generate">
                 <xsl:variable name="package">
                     <xsl:value-of select="@package"/>
@@ -96,7 +99,7 @@
                         </folder>
                     </xsl:when>
                     <xsl:when test="@type = 'node' ">
-                        <folder project="{$project}" location="java" package="{$package}"  message="generating node files" log="{$log}" license="{$license}" datapackage="{$datapackage}">
+                        <folder project="{$project}" location="java" package="{$package}"  message="generating node files" log="{$log}" license="{$license}" datapackage="{$datapackage}" nodeeditorpackage="{$nodeeditorpackage}">
                             <xsl:call-template name="rootnode" />
                             <xsl:call-template name="node" />
                             <xsl:call-template name="nodefactory" />

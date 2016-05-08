@@ -20,7 +20,7 @@
         <execute template="entity" filename="Journal.java" useentityinfo="Journal"/>
         <execute template="entity" filename="JournalEntry.java" useentityinfo="JournalEntry"/>
     </folder>
-    <folder project="Book-Keeper - generated" location="java" package="uk.org.rlinsdale.bookkeeper.nodes" message="generating node files" log="linsdale.bookkeeper" license="gpl30" datapackage="uk.org.rlinsdale.bookkeeper.dataobjects">
+    <folder project="Book-Keeper - generated" location="java" package="uk.org.rlinsdale.bookkeeper.nodes" message="generating node files" log="linsdale.bookkeeper" license="gpl30" datapackage="uk.org.rlinsdale.bookkeeper.dataobjects" nodeeditorpackage="uk.org.rlinsdale.bookkeeper.topcomponents">
         <execute template="rootnode" type="" filename="AccountRootNode.java" useentityinfo="AccountRoot"/>
         <execute template="rootnode" type="" filename="ProviderRootNode.java" useentityinfo="ProviderRoot"/>
         <execute template="rootnode" type="" filename="AssetCentreRootNode.java" useentityinfo="AssetCentreRoot"/>
