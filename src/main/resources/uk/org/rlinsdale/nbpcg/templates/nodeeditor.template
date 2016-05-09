@@ -115,12 +115,18 @@ public final class ${ENTITYINFO.name}NodeEditor extends NodeEditorTopComponent<$
     }
 
     @Override
+    protected JPanelPresenter getPresenter() {
+        return presenter;
+    }
+    
+    @Override
     protected JComponent getDisplayComponent() {
         return presenter.getView();
     }
 
     @Override
     protected void opened() {
+        super.opened();
         presenter.enableView();
         setName("${ENTITYINFO.name}: " + node.getDisplayTitle());
         entity.addTitleListener(titlechangelistener);
@@ -129,6 +135,7 @@ public final class ${ENTITYINFO.name}NodeEditor extends NodeEditorTopComponent<$
     @Override
     protected void closed() {
         entity.removeTitleListener(titlechangelistener);
+        super.closed();
     }
 
     @Override
