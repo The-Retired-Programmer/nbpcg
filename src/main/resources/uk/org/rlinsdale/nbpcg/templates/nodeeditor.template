@@ -138,11 +138,6 @@ public final class ${ENTITYINFO.name}NodeEditor extends NodeEditorTopComponent<$
         super.closed();
     }
 
-    @Override
-    protected boolean canCloseForm() {
-         return presenter.test(new StringBuilder()) && presenter.save(new StringBuilder());
-    }
-
     private class TitleChangeListener extends Listener<SimpleEventParams> {
 
         public TitleChangeListener(String name) {
