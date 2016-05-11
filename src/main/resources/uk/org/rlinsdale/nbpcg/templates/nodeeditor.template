@@ -98,11 +98,11 @@ public final class ${ENTITYINFO.name}NodeEditor extends NodeEditorTopComponent<$
                 NbBundle.getMessage(${ENTITYINFO.name}NodeEditor.class, "HINT_${ENTITYINFO.name}NodeEditor"));
         ${ENTITYINFO.name} e = node.getEntity();
         presenter = new CompositePresenter();
-        presenter.setGetChildPresentersFunction(() -> getJPanelPresenters());
+        presenter.setGetChildPresentersFunction(() -> getPanePresenters());
         titlechangelistener = new TitleChangeListener("Editor:" + e.instanceDescription());
     }
 
-    private List<JPanelPresenter> getJPanelPresenters() {
+    private List<PanePresenter> getPanePresenters() {
         return Arrays.asList(
                          new ${ENTITYINFO.name}Presenter(node.getEntity())
 <#if ENTITYINFO.childnodesineditor??>
@@ -115,7 +115,7 @@ public final class ${ENTITYINFO.name}NodeEditor extends NodeEditorTopComponent<$
     }
 
     @Override
-    protected JPanelPresenter getPresenter() {
+    protected PanePresenter getPresenter() {
         return presenter;
     }
     
