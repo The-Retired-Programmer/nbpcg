@@ -22,7 +22,7 @@
                 >
             <!ELEMENT generate EMPTY>
                 <!ATTLIST generate
-                    type (data|node|nodeviewer|nodeeditor|remotedb|mysqldatabase|jsondatabase) #REQUIRED
+                    type (data|node|nodeviewer|editor|remotedb|mysqldatabase|jsondatabase) #REQUIRED
                     package CDATA #REQUIRED
                     exclude CDATA #IMPLIED
                     >

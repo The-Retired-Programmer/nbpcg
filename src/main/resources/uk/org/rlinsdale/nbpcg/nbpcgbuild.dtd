@@ -20,6 +20,7 @@
             log CDATA #REQUIRED
             datapackage CDATA #IMPLIED
             nodepackage CDATA #IMPLIED
+            editorpackage CDATA #IMPLIED
             >
     <!ELEMENT execute EMPTY >
         <!ATTLIST execute

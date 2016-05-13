@@ -20,7 +20,7 @@
         <execute template="entity" filename="Journal.java" useentityinfo="Journal"/>
         <execute template="entity" filename="JournalEntry.java" useentityinfo="JournalEntry"/>
     </folder>
-    <folder project="Book-Keeper - generated" location="java" package="uk.org.rlinsdale.bookkeeper.nodes" message="generating node files" log="linsdale.bookkeeper" license="gpl30" datapackage="uk.org.rlinsdale.bookkeeper.dataobjects" nodeeditorpackage="uk.org.rlinsdale.bookkeeper.topcomponents">
+    <folder project="Book-Keeper - generated" location="java" package="uk.org.rlinsdale.bookkeeper.nodes" message="generating node files" log="linsdale.bookkeeper" license="gpl30" datapackage="uk.org.rlinsdale.bookkeeper.dataobjects" editorpackage="uk.org.rlinsdale.bookkeeper.topcomponents">
         <execute template="rootnode" type="" filename="AccountRootNode.java" useentityinfo="AccountRoot"/>
         <execute template="rootnode" type="" filename="ProviderRootNode.java" useentityinfo="ProviderRoot"/>
         <execute template="rootnode" type="" filename="AssetCentreRootNode.java" useentityinfo="AssetCentreRoot"/>
@@ -39,45 +39,45 @@
         <execute template="nodefactory" type="" filename="AssetCentreNodeChildFactory.java" useentityinfo="AssetCentre"/>
         <execute template="nodefactory" type="" filename="ProfitCentreNodeChildFactory.java" useentityinfo="ProfitCentre"/>
         <execute template="nodefactory" type="" filename="JournalNodeChildFactory.java" useentityinfo="Journal"/>
-        <execute template="undonode" filename="UndoAccountNode.java" useentityinfo="Account"/>
-        <execute template="undonode" filename="UndoProviderNode.java" useentityinfo="Provider"/>
-        <execute template="undonode" filename="UndoProviderAccountNode.java" useentityinfo="ProviderAccount"/>
-        <execute template="undonode" filename="UndoAssetCentreNode.java" useentityinfo="AssetCentre"/>
-        <execute template="undonode" filename="UndoProfitCentreNode.java" useentityinfo="ProfitCentre"/>
-        <execute template="undonode" filename="UndoCostCentreNode.java" useentityinfo="CostCentre"/>
-        <execute template="undonode" filename="UndoJournalNode.java" useentityinfo="Journal"/>
-        <execute template="undonode" filename="UndoJournalEntryNode.java" useentityinfo="JournalEntry"/>
-        <execute template="addnode" filename="AddAccountNode.java" useentityinfo="Account"/>
-        <execute template="addnode" filename="AddProviderNode.java" useentityinfo="Provider"/>
-        <execute template="addnode" filename="AddProviderAccountNode.java" useentityinfo="ProviderAccount"/>
-        <execute template="addnode" filename="AddAssetCentreNode.java" useentityinfo="AssetCentre"/>
-        <execute template="addnode" filename="AddProfitCentreNode.java" useentityinfo="ProfitCentre"/>
-        <execute template="addnode" filename="AddCostCentreNode.java" useentityinfo="CostCentre"/>
-        <execute template="addnode" filename="AddJournalNode.java" useentityinfo="Journal"/>
-        <execute template="addnode" filename="AddJournalEntryNode.java" useentityinfo="JournalEntry"/>
+        <execute template="undoaction" filename="UndoAccount.java" useentityinfo="Account"/>
+        <execute template="undoaction" filename="UndoProvider.java" useentityinfo="Provider"/>
+        <execute template="undoaction" filename="UndoProviderAccount.java" useentityinfo="ProviderAccount"/>
+        <execute template="undoaction" filename="UndoAssetCentre.java" useentityinfo="AssetCentre"/>
+        <execute template="undoaction" filename="UndoProfitCentre.java" useentityinfo="ProfitCentre"/>
+        <execute template="undoaction" filename="UndoCostCentre.java" useentityinfo="CostCentre"/>
+        <execute template="undoaction" filename="UndoJournal.java" useentityinfo="Journal"/>
+        <execute template="undoaction" filename="UndoJournalEntry.java" useentityinfo="JournalEntry"/>
+        <execute template="addaction" filename="AddAccount.java" useentityinfo="Account"/>
+        <execute template="addaction" filename="AddProvider.java" useentityinfo="Provider"/>
+        <execute template="addaction" filename="AddProviderAccount.java" useentityinfo="ProviderAccount"/>
+        <execute template="addaction" filename="AddAssetCentre.java" useentityinfo="AssetCentre"/>
+        <execute template="addaction" filename="AddProfitCentre.java" useentityinfo="ProfitCentre"/>
+        <execute template="addaction" filename="AddCostCentre.java" useentityinfo="CostCentre"/>
+        <execute template="addaction" filename="AddJournal.java" useentityinfo="Journal"/>
+        <execute template="addaction" filename="AddJournalEntry.java" useentityinfo="JournalEntry"/>
     </folder>
     <folder project="Book-Keeper - generated" location="java" package="uk.org.rlinsdale.bookkeeper.topcomponents" message="generating node viewer files" log="linsdale.bookkeeper" license="gpl30" datapackage="uk.org.rlinsdale.bookkeeper.dataobjects" nodepackage="uk.org.rlinsdale.bookkeeper.nodes">
         <execute template="rootnodeviewer" type="Tree" filename="AccountRootNodeViewer.java" useentityinfo="AccountRoot"/>
         <execute template="rootnodeviewer" type="Tree" filename="ProviderRootNodeViewer.java" useentityinfo="ProviderRoot"/>
         <execute template="rootnodeviewer" type="Tree" filename="AssetCentreRootNodeViewer.java" useentityinfo="AssetCentreRoot"/>
     </folder>
-    <folder project="Book-Keeper - generated" location="java" package="uk.org.rlinsdale.bookkeeper.topcomponents" message="generating node editor files" log="linsdale.bookkeeper" license="gpl30" datapackage="uk.org.rlinsdale.bookkeeper.dataobjects" nodepackage="uk.org.rlinsdale.bookkeeper.nodes">
-        <execute template="nodeeditor" filename="AccountNodeEditor.java" useentityinfo="Account"/>
-        <execute template="nodeeditor" filename="ProviderNodeEditor.java" useentityinfo="Provider"/>
-        <execute template="nodeeditor" filename="ProviderAccountNodeEditor.java" useentityinfo="ProviderAccount"/>
-        <execute template="nodeeditor" filename="AssetCentreNodeEditor.java" useentityinfo="AssetCentre"/>
-        <execute template="nodeeditor" filename="ProfitCentreNodeEditor.java" useentityinfo="ProfitCentre"/>
-        <execute template="nodeeditor" filename="CostCentreNodeEditor.java" useentityinfo="CostCentre"/>
-        <execute template="nodeeditor" filename="JournalNodeEditor.java" useentityinfo="Journal"/>
-        <execute template="nodeeditor" filename="JournalEntryNodeEditor.java" useentityinfo="JournalEntry"/>
-        <execute template="editnode" filename="EditAccountNode.java" useentityinfo="Account"/>
-        <execute template="editnode" filename="EditProviderNode.java" useentityinfo="Provider"/>
-        <execute template="editnode" filename="EditProviderAccountNode.java" useentityinfo="ProviderAccount"/>
-        <execute template="editnode" filename="EditAssetCentreNode.java" useentityinfo="AssetCentre"/>
-        <execute template="editnode" filename="EditProfitCentreNode.java" useentityinfo="ProfitCentre"/>
-        <execute template="editnode" filename="EditCostCentreNode.java" useentityinfo="CostCentre"/>
-        <execute template="editnode" filename="EditJournalNode.java" useentityinfo="Journal"/>
-        <execute template="editnode" filename="EditJournalEntryNode.java" useentityinfo="JournalEntry"/>
+    <folder project="Book-Keeper - generated" location="java" package="uk.org.rlinsdale.bookkeeper.topcomponents" message="generating editor files" log="linsdale.bookkeeper" license="gpl30" datapackage="uk.org.rlinsdale.bookkeeper.dataobjects" nodepackage="uk.org.rlinsdale.bookkeeper.nodes">
+        <execute template="editor" filename="AccountEditor.java" useentityinfo="Account"/>
+        <execute template="editor" filename="ProviderEditor.java" useentityinfo="Provider"/>
+        <execute template="editor" filename="ProviderAccountEditor.java" useentityinfo="ProviderAccount"/>
+        <execute template="editor" filename="AssetCentreEditor.java" useentityinfo="AssetCentre"/>
+        <execute template="editor" filename="ProfitCentreEditor.java" useentityinfo="ProfitCentre"/>
+        <execute template="editor" filename="CostCentreEditor.java" useentityinfo="CostCentre"/>
+        <execute template="editor" filename="JournalEditor.java" useentityinfo="Journal"/>
+        <execute template="editor" filename="JournalEntryEditor.java" useentityinfo="JournalEntry"/>
+        <execute template="editaction" filename="EditAccount.java" useentityinfo="Account"/>
+        <execute template="editaction" filename="EditProvider.java" useentityinfo="Provider"/>
+        <execute template="editaction" filename="EditProviderAccount.java" useentityinfo="ProviderAccount"/>
+        <execute template="editaction" filename="EditAssetCentre.java" useentityinfo="AssetCentre"/>
+        <execute template="editaction" filename="EditProfitCentre.java" useentityinfo="ProfitCentre"/>
+        <execute template="editaction" filename="EditCostCentre.java" useentityinfo="CostCentre"/>
+        <execute template="editaction" filename="EditJournal.java" useentityinfo="Journal"/>
+        <execute template="editaction" filename="EditJournalEntry.java" useentityinfo="JournalEntry"/>
         <execute template="presenter" filename="AccountPresenter.java" useentityinfo="Account"/>
         <execute template="presenter" filename="ProviderPresenter.java" useentityinfo="Provider"/>
         <execute template="presenter" filename="ProviderAccountPresenter.java" useentityinfo="ProviderAccount"/>

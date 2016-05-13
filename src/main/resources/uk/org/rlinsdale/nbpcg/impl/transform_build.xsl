@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--
-    Copyright (C) 2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)
+    Copyright (C) 2014-2016 Richard Linsdale (richard.linsdale at blueyonder.co.uk)
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -33,8 +33,8 @@
             <xsl:variable name="nodepackage">
                 <xsl:value-of select="project/generate[@type='node']/@package"/>
             </xsl:variable>
-            <xsl:variable name="nodeeditorpackage">
-                <xsl:value-of select="project/generate[@type='nodeeditor']/@package"/>
+            <xsl:variable name="editorpackage">
+                <xsl:value-of select="project/generate[@type='editor']/@package"/>
             </xsl:variable>
             <xsl:for-each select="project/generate">
                 <xsl:variable name="package">
@@ -99,18 +99,18 @@
                         </folder>
                     </xsl:when>
                     <xsl:when test="@type = 'node' ">
-                        <folder project="{$project}" location="java" package="{$package}"  message="generating node files" log="{$log}" license="{$license}" datapackage="{$datapackage}" nodeeditorpackage="{$nodeeditorpackage}">
+                        <folder project="{$project}" location="java" package="{$package}"  message="generating node files" log="{$log}" license="{$license}" datapackage="{$datapackage}" editorpackage="{$editorpackage}">
                             <xsl:call-template name="rootnode" />
                             <xsl:call-template name="node" />
                             <xsl:call-template name="nodefactory" />
-                            <xsl:call-template name="undonode" />
-                            <xsl:call-template name="addnode" />
+                            <xsl:call-template name="undoaction" />
+                            <xsl:call-template name="addaction" />
                         </folder>
                     </xsl:when>
-                    <xsl:when test="@type = 'nodeeditor' ">
-                        <folder project="{$project}" location="java" package="{$package}" message="generating node editor files" log="{$log}" license="{$license}" datapackage="{$datapackage}" nodepackage="{$nodepackage}">
-                            <xsl:call-template name="nodeeditor" />
-                            <xsl:call-template name="editnode" />
+                    <xsl:when test="@type = 'editor' ">
+                        <folder project="{$project}" location="java" package="{$package}" message="generating editor files" log="{$log}" license="{$license}" datapackage="{$datapackage}" nodepackage="{$nodepackage}">
+                            <xsl:call-template name="editor" />
+                            <xsl:call-template name="editaction" />
                             <xsl:call-template name="presenter" />
                             <xsl:call-template name="tablepresenter" />
                         </folder>
@@ -295,7 +295,7 @@
         </xsl:for-each>
     </xsl:template>
     
-    <xsl:template name="undonode">
+    <xsl:template name="undoaction">
         <xsl:variable name="exclude">
             <xsl:choose>
                 <xsl:when test="@exclude">
@@ -306,19 +306,12 @@
         </xsl:variable>
         <xsl:for-each select="//node[not(@nomodifiers)]">
             <xsl:if test="not(contains($exclude,concat(',',@name,',')))" >
-                <xsl:choose>
-                    <xsl:when test="local-name(..) = 'node'">
-                        <execute template="undonode" filename="Undo{@name}Node.java" useentityinfo="{@name}"/>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <execute template="undonode" filename="Undo{@name}Node.java" useentityinfo="{@name}"/>
-                    </xsl:otherwise>
-                </xsl:choose>
+                <execute template="undoaction" filename="Undo{@name}.java" useentityinfo="{@name}"/>
             </xsl:if>
         </xsl:for-each>
     </xsl:template>
     
-    <xsl:template name="addnode">
+    <xsl:template name="addaction">
         <xsl:variable name="exclude">
             <xsl:choose>
                 <xsl:when test="@exclude">
@@ -329,20 +322,12 @@
         </xsl:variable>
         <xsl:for-each select="//node[not(@nomodifiers)]">
             <xsl:if test="not(contains($exclude,concat(',',@name,',')))" >
-                <xsl:variable name="nname" select="@name" />
-                <xsl:choose>
-                    <xsl:when test="local-name(..) = 'node'">
-                        <execute template="addnode" filename="Add{@name}Node.java" useentityinfo="{@name}" />
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <execute template="addnode" filename="Add{@name}Node.java" useentityinfo="{@name}" />
-                    </xsl:otherwise>
-                </xsl:choose>
+                <execute template="addaction" filename="Add{@name}.java" useentityinfo="{@name}" />
             </xsl:if>
         </xsl:for-each>
     </xsl:template>
     
-    <xsl:template name="nodeeditor">
+    <xsl:template name="editor">
         <xsl:variable name="exclude">
             <xsl:choose>
                 <xsl:when test="@exclude">
@@ -356,12 +341,12 @@
                 <xsl:variable name="ename" select="@name" />
                 <xsl:choose>
                     <xsl:when test="/nbpcg/node[@name=$ename]" >
-                        <execute template="nodeeditor" filename="{@name}NodeEditor.java" useentityinfo="{@name}" />
+                        <execute template="editor" filename="{@name}Editor.java" useentityinfo="{@name}" />
                     </xsl:when>
                     <xsl:otherwise>
                         <xsl:for-each select="//node[@name=$ename and local-name(..) = 'node'][position() = 1]" >
                             <xsl:if test="position() = 1" >
-                                <execute template="nodeeditor" filename="{@name}NodeEditor.java" useentityinfo="{@name}" />
+                                <execute template="editor" filename="{@name}Editor.java" useentityinfo="{@name}" />
                             </xsl:if>
                         </xsl:for-each>
                     </xsl:otherwise>
@@ -434,7 +419,7 @@
         </xsl:choose>
     </xsl:template>
     
-    <xsl:template name="editnode">
+    <xsl:template name="editaction">
         <xsl:variable name="exclude">
             <xsl:choose>
                 <xsl:when test="@exclude">
@@ -447,14 +432,7 @@
             <xsl:if test="not(contains($exclude,concat(',',@name,',')))" >
                 <xsl:variable name="nname" select="@name" />
                 <xsl:if test="/nbpcg/databases/database[not(@usepackage)]/table[@name=$nname]" >
-                    <xsl:choose>
-                        <xsl:when test="local-name(..) = 'node'" >
-                            <execute template="editnode" filename="Edit{@name}Node.java" useentityinfo="{@name}" />
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <execute template="editnode" filename="Edit{@name}Node.java" useentityinfo="{@name}" />
-                        </xsl:otherwise>
-                    </xsl:choose>
+                    <execute template="editaction" filename="Edit{@name}.java" useentityinfo="{@name}" />
                 </xsl:if>
             </xsl:if>
         </xsl:for-each>
