@@ -319,6 +319,11 @@ public final class ${ENTITYINFO.name}TablePresenter extends TablePresenter {
                 return true;
             }
 </#if>
+
+            @Override
+            public boolean test(StringBuilder sb) {
+                return entity.get${field.name?cap_first}Rules().checkRules(sb);
+            }
         }
 <#elseif field.type="ref"  >
 <#elseif field.type="enum" >
@@ -338,6 +343,11 @@ public final class ${ENTITYINFO.name}TablePresenter extends TablePresenter {
             @Override
             public String get() {
                 return entity.get${field.name?cap_first}();
+            }
+
+            @Override
+            public boolean test(StringBuilder sb) {
+                return entity.get${field.name?cap_first}Rules().checkRules(sb);
             }
         }
 <#elseif field.type == "rootref" || field.type="idx" >
@@ -511,6 +521,11 @@ public final class ${ENTITYINFO.name}TablePresenter extends TablePresenter {
                 return true;
             }
 </#if>
+
+            @Override
+            public boolean test(StringBuilder sb) {
+                return entity.get${field.name?cap_first}Rules().checkRules(sb);
+            }
         }
 <#else>
 

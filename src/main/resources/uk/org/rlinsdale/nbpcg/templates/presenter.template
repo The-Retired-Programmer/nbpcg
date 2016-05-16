@@ -285,6 +285,12 @@ public final class ${ENTITYINFO.name}Presenter extends FormPresenter {
         public ${field.references} get() {
             return entity.get${field.name?cap_first}();
         }
+
+
+        @Override
+        public boolean test(StringBuilder sb) {
+            return entity.get${field.name?cap_first}Rules().checkRules(sb);
+        }
 <#if field.optional??>
 
         @Override
@@ -311,6 +317,11 @@ public final class ${ENTITYINFO.name}Presenter extends FormPresenter {
         @Override
         public String get() {
             return entity.get${field.name?cap_first}();
+        }
+
+        @Override
+        public boolean test(StringBuilder sb) {
+            return entity.get${field.name?cap_first}Rules().checkRules(sb);
         }
     }
 <#elseif field.type == "rootref" || field.type="idx" >

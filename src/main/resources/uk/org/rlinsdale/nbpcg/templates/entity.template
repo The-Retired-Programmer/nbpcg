@@ -146,9 +146,11 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.pkeytype},${ENTITYIN
 <#list ENTITYINFO.field![] as field>
 <#if field.type == "ref">
     private final EntityReference<${PARENTENTITYINFO.pkeytype},${field.references}, ${PARENTENTITYINFO.parentname}> ${field.name};
+    private final Rules ${field.name}Rules = new Rules();
 <#elseif field.type == "reference">
 <#assign FIELDENTITY = entityinfo[field.references]>
     private final EntityReference<${FIELDENTITY.pkeytype},${field.references}, ${FIELDENTITY.parentname}> ${field.name};
+    private final Rules ${field.name}Rules = new Rules();
 <#elseif field.type == "rootref" >
     private final ${field.references} ${field.name};
 <#elseif field.type == "idx">
@@ -214,7 +216,7 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.pkeytype},${ENTITYIN
         ${field.name} = new EntityReference<>("${ENTITYINFO.name}>${field.name?cap_first}", ${field.references}.getEM());
 </#if>
 <#if !field.optional??>
-        addRule(${field.name}.getDefinedRule());
+        addRule(${field.name}Rules, ${field.name}.getDefinedRule());
 </#if>
 <#elseif field.type == "rootref">
         root = ${field.references}.get();
@@ -242,6 +244,8 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.pkeytype},${ENTITYIN
 <#if field.past??>
         addRule(${field.name}Rules, new ${field.name?cap_first}PastRule());
 </#if>
+<#elseif field.type = "enum" >
+        addRule(${field.name}Rules, new ${field.name?cap_first}EnumRule());
 </#if>
 </#if>
 </#list>
@@ -454,11 +458,33 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.pkeytype},${ENTITYIN
         }
 
     </#if>
+<#elseif field.type = "enum" >
+        private class ${field.name?cap_first}EnumRule extends Rule {
+        
+            public ${field.name?cap_first}EnumRule() {
+                super("Not defined");
+            }
+
+            @Override
+            public boolean ruleCheck() {
+                return ${field.name}!= null && !${field.name}.equals("");
+            }
+        }
+
 </#if>
 </#if>
 </#list>
 <#list ENTITYINFO.field![] as field>
 <#if field.type = "ref" >
+
+        /**
+         * Get the ${field.name} field rules.
+         *
+         * @return the rules
+         */
+        public Rules get${field.name?cap_first}Rules() {
+            return ${field.name}Rules;
+        }
 
     /**
      * Get the parent Entity associated with this entity.
@@ -498,6 +524,15 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.pkeytype},${ENTITYIN
         }
     }
 <#elseif field.type = "reference" >
+
+        /**
+         * Get the ${field.name} field rules.
+         *
+         * @return the rules
+         */
+        public Rules get${field.name?cap_first}Rules() {
+            return ${field.name}Rules;
+        }
 
     /**
      * Get the ${field.name?cap_first} Entity associated with this entity.
@@ -564,7 +599,7 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.pkeytype},${ENTITYIN
         /**
          * Get the ${field.name} field rules.
          *
-         * @return the ${field.name}
+         * @return the rules
          */
         public Rules get${field.name?cap_first}Rules() {
             return ${field.name}Rules;
@@ -587,18 +622,36 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.pkeytype},${ENTITYIN
          * @param ${field.name} the ${field.name}
          */
         public void set${field.name?cap_first}(${field.javatype} ${field.name}) {
-        <#if field.type == "String" || field.type == "enum" || field.type == "date" || field.type == "datetime">
-                if (!this.${field.name}.equals(${field.name})) {
-        <#elseif field.type == "decimal" || field.type == "currency" >
-                if (this.${field.name}.compareTo(${field.name}) != 0) {
+        <#if field.type == "enum" >
+            if (${field.name} == null) {
+                if (this.${field.name} != null) {
+                    ensureEditing();
+                    this.${field.name} = null;
+                    fireFieldChange(${ENTITYINFO.name}Field.${field.name?upper_case});
+                    fireNameAndOrTitleChangeOn${field.name?cap_first}();
+                }
+            } else {
+                if (!${field.name}.equals(this.${field.name})) {
+                    ensureEditing();
+                    this.${field.name} = ${field.name};
+                    fireFieldChange(${ENTITYINFO.name}Field.${field.name?upper_case});
+                    fireNameAndOrTitleChangeOn${field.name?cap_first}();
+                }
+            }
         <#else>
+            <#if field.type == "String" || field.type == "date" || field.type == "datetime">
+                if (!this.${field.name}.equals(${field.name})) {
+            <#elseif field.type == "decimal" || field.type == "currency" >
+                if (this.${field.name}.compareTo(${field.name}) != 0) {
+            <#else>
                 if (this.${field.name} != ${field.name}) {
-        </#if>
+            </#if>
                 ensureEditing();
                 this.${field.name} = ${field.name};
                 fireFieldChange(${ENTITYINFO.name}Field.${field.name?upper_case});
                 fireNameAndOrTitleChangeOn${field.name?cap_first}();
             }
+        </#if>
         }
     </#if>
 </#if>
