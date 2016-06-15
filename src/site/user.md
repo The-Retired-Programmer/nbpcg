@@ -101,10 +101,27 @@ Defines the project information.
 | Attribute | displaynameformat | format for the node's display name | optional |
 | Attribute | displaytitleformat | format for the node's display title | optional |
 | Attribute | sortformat | format for the node's sort string - also implies sortable | optional |
+| Attribute | childnodesineditor | the list of child nodes in this editor | optional |
 | Attribute | min | minimum number of this node type (as a childnode)  | optional |
 | Attribute | max | maximum number of this node type (as a childnode) | optional |
+| Child Element | entryfields | entry fields | zero or more |
 | Child Element | node | child nodes of this node | zero or more|
             
+
+**The entryfield element**
+
+ Defines an entry fields and its configuration and mapping to an entity field.
+
+| Type | Name |  Value | Required |
+|:-------------------|:--------------|:-------------|:------|
+| Attribute | name | the name of the field | yes |
+| Attribute | label |  | optional |
+| Attribute | type | the entry field type (must be password) | yes |
+| Attribute | mapsto | the entity field to which this field is mapped | yes |
+| Attribute | mapping | the method used to converted the entry field value to the entity field value | yes |
+| Attribute | rule | the method to be applied to this entry field to test it correctness | optional |
+| Attribute | errormessage | The error message to be generated if the rule fails  | optional |
+
 
 **The databases element**
 
@@ -137,6 +154,7 @@ Definition of a database table object.
 | Attribute | dbname | the database name of this table - default is attribute name  | optional |
 | Attribute | pkey | database key type - one of idauto | optional |
 | Attribute | extrafields | additional standard fields to add - one of usertimestamp | optional |
+| Attribute | rule | the table level rule to be applied | optional |
 | Child Element | field | | zero or more|
 | Child Element | insertentity | | zero or more|
 
@@ -152,19 +170,17 @@ Definition of a database table field (column) object.
 | Attribute | index | define the indexing for this field - one of unique or yes - default is no | optional |
 | Attribute | unique | define the uniqueness of this field - one of yes - default is no | optional |
 | Attribute | type | data type of the field one of boolean, long, int, date, datetime, enum, password or reference - default is string | optional |
+| Attribute | decimalsize | the size of the  decimal number | optional |
 | Attribute | choicemethod | the method to be used to obtain set of possible choices for this field | optional |
 | Attribute | nullallowed | are null values allowed? - one of yes - default is no | optional |
-| Attribute | label |  | optional |
-| Attribute | references |  | optional |
+| Attribute | label | the field label | optional |
+| Attribute | references | the target entity for this reference | optional |
 | Attribute | fkey |  set to no if foreign key is not utilised - default is yes  | optional |
 | Attribute | values | set of enum values (comma separated) | optional |
 | Attribute | min | min length of string entered, min value of number entered | optional |
 | Attribute | max | max length of string entered, max value of number entered | optional |
 | Attribute | future | set to yes if date or datetime entered must be in future | optional |
 | Attribute | past | set to yes if date or datetime entered must be in past | optional |
-| Attribute | passwordsupport | package name containing the helper methods for encoding and password testing | optional |
-| Attribute | entryfield | the field name used for a password entry | optional |
-| Attribute | passwordstrength | the require password strength - one of weak, strong, verystrong - default is none | optional |
 
 **The insertentity element**
 
