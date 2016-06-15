@@ -3,6 +3,10 @@
 {::comment} define doc.name = NBPCG {:/comment}
 {::comment} define doc.menu.menu = [NBPCG Home](index.html) {:/comment}
 
+##Release 4.0.26
+
+Updated to work with NetBeans 8.1; Revisions to internal implementation of forms.
+
 ##Release 4.0.20
 
 Added creation of seperate entity source classes and any required table classes (for use with node editors).
