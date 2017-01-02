@@ -1,8 +1,3 @@
-{::comment} define doc.title=NBPCG Installation Instructions {:/comment}
-{::comment} define doc.header= Installation Instructions {:/comment}
-{::comment} define doc.name = NBPCG {:/comment}
-{::comment} define doc.menu.menu = [NBPCG Home](index.html) {:/comment}
-
 NBPCG is provided as a nbm file.  The current release is v${project-version}, which can be downloaded from:
 
 | Operating System | Software Download |  
@@ -16,4 +11,4 @@ are installed.
                 
 To load the plug-in into Netbeans the following instructions should be followed:
       
-STILL TO BE WRITTEN.
+**STILL TO BE WRITTEN**
