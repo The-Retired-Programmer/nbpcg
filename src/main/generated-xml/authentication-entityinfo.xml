@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE nbpcg-entity-info PUBLIC "-//uk/org/rlinsdale/nbpcgentityinfo/DTD NBPCGENTITYINFO SCHEMA 1.0//EN" "nbres:/uk/org/rlinsdale/nbpcg/nbpcgentityinfo.dtd">
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE nbpcg-entity-info PUBLIC "-//uk/theretiredprogrammer/nbpcgentityinfo/DTD NBPCGENTITYINFO SCHEMA 1.0//EN" "nbres:/uk/theretiredprogrammer/nbpcg/nbpcgentityinfo.dtd">
 <nbpcg-entity-info name="Authentication">
     <entityinfo name="User" dbkey="authentication" dbtablename="User" pkey="id" pkeytype="Integer" pkeytypefunction="getInt" icon="user" orderable="no" nodeorder="1" parentname="UserRoot">
         <field name="root" pkey="no" references="UserRoot" type="rootref" label="Root" javatype="int" jsontype="Integer" initialisation=""/>
@@ -11,7 +11,7 @@
         <field name="createdon" pkey="no" final="yes" hidden="yes" type="datetime" fieldclass="DatetimeField" label="Created on" javatype="Timestamp" jsontype="String" initialisation=" = new Timestamp()"/>
         <field name="updatedby" pkey="no" hidden="yes" type="String" min="4" max="4" fieldclass="TextField" label="Updated by" javatype="String" jsontype="String" initialisation=" = &quot;&quot;"/>
         <field name="updatedon" pkey="no" final="yes" hidden="yes" type="datetime" fieldclass="DatetimeField" label="Updated on" javatype="Timestamp" jsontype="String" initialisation=" = new Timestamp()"/>
-        <entryfield name="password" type="password" label="Password" mapsto="encodedpassword" mapping="uk.org.rlinsdale.lindos.authentication.Authentication.encodePassword" rule="uk.org.rlinsdale.lindos.authentication.Authentication.strongPasswordCheck" errormessage="Bad Password - Strong Password required"/>
+        <entryfield name="password" type="password" label="Password" mapsto="encodedpassword" mapping="uk.theretiredprogrammer.lindos.authentication.Authentication.encodePassword" rule="uk.theretiredprogrammer.lindos.authentication.Authentication.strongPasswordCheck" errormessage="Bad Password - Strong Password required"/>
         <child name="userpermission" hasiconview="no" dbname="user" references="Userpermission" orderable="no" sort="no" copymoveentity="Permission" copymovefield="permission"/>
         <child name="userrole" hasiconview="no" dbname="user" references="Userrole" orderable="no" sort="no" copymoveentity="Role" copymovefield="role"/>
         <displaynameformat format="{0}">

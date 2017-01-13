@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-    <!DOCTYPE nbpcg-build PUBLIC "-//uk/org/rlinsdale/nbpcgbuild/DTD NBPCGBUILD SCHEMA 1.0//EN" "nbres:/uk/org/rlinsdale/nbpcg/nbpcgbuild.dtd">
-<nbpcg-build name="Authentication" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)">
-    <folder project="Lindos LifeCycle" location="resource" package="uk.org.rlinsdale.lindos.lifecycle.mysql" message="generating mysql script files for authentication2" log="lindos.lifecycle" license="lgpl21">
+    <!DOCTYPE nbpcg-build PUBLIC "-//uk/theretiredprogrammer/nbpcgbuild/DTD NBPCGBUILD SCHEMA 1.0//EN" "nbres:/uk/theretiredprogrammer/nbpcg/nbpcgbuild.dtd">
+<nbpcg-build name="Authentication" copyright="2014-2015 Richard Linsdale (richard at theretiredprogrammer.uk)">
+    <folder project="Lindos LifeCycle" location="resource" package="uk.theretiredprogrammer.lindos.lifecycle.mysql" message="generating mysql script files for authentication2" log="lindos.lifecycle" license="lgpl21">
         <execute template="createsqldatabase" filename="createdb.sql" usepersistencestore="authentication"/>
         <execute template="backupscript" filename="backupscript.sh" usepersistencestore="authentication"/>
         <execute template="createsqltables" filename="createtables.sql" usepersistencestore="authentication"/>
     </folder>
-    <folder project="Lindos LifeCycle" location="resource" package="uk.org.rlinsdale.lindos.lifecycle.json.authentication2" message="generating json persistence files for authentication2" log="lindos.lifecycle" license="lgpl21">
+    <folder project="Lindos LifeCycle" location="resource" package="uk.theretiredprogrammer.lindos.lifecycle.json.authentication2" message="generating json persistence files for authentication2" log="lindos.lifecycle" license="lgpl21">
         <execute template="createjsontable" filename="User" usepersistencestore="authentication" useentity="User"/>
         <execute template="createjsontable" filename="Application" usepersistencestore="authentication" useentity="Application"/>
         <execute template="createjsontable" filename="Role" usepersistencestore="authentication" useentity="Role"/>
@@ -14,7 +14,7 @@
         <execute template="createjsontable" filename="Userrole" usepersistencestore="authentication" useentity="Userrole"/>
         <execute template="createjsontable" filename="Userpermission" usepersistencestore="authentication" useentity="Userpermission"/>
     </folder>
-    <folder project="Lindos LifeCycle" location="java" package="uk.org.rlinsdale.lindos.authentication.dataobjects" message="generating entity files" log="lindos.lifecycle" license="lgpl21">
+    <folder project="Lindos LifeCycle" location="java" package="uk.theretiredprogrammer.lindos.authentication.dataobjects" message="generating entity files" log="lindos.lifecycle" license="lgpl21">
         <execute template="rootentity" filename="UserRoot.java" useentityinfo="UserRoot"/>
         <execute template="rootentity" filename="ApplicationRoot.java" useentityinfo="ApplicationRoot"/>
         <execute template="entity" filename="User.java" useentityinfo="User"/>
@@ -24,7 +24,7 @@
         <execute template="entity" filename="Userrole.java" useentityinfo="Userrole"/>
         <execute template="entity" filename="Userpermission.java" useentityinfo="Userpermission"/>
     </folder>
-    <folder project="Access Control Manager - generated" location="java" package="uk.org.rlinsdale.accesscontrolmanager.nodes" message="generating node files" log="accesscontrolmanager" license="gpl30" datapackage="uk.org.rlinsdale.lindos.authentication.dataobjects">
+    <folder project="Access Control Manager - generated" location="java" package="uk.theretiredprogrammer.accesscontrolmanager.nodes" message="generating node files" log="accesscontrolmanager" license="gpl30" datapackage="uk.theretiredprogrammer.lindos.authentication.dataobjects">
         <execute template="rootnode" type="" filename="UserRootNode.java" useentityinfo="UserRoot"/>
         <execute template="rootnode" type="" filename="ApplicationRootNode.java" useentityinfo="ApplicationRoot"/>
         <execute template="node" type="" filename="UserNode.java" useentityinfo="User"/>
@@ -50,11 +50,11 @@
         <execute template="addnode" filename="AddRoleNode.java" useentityinfo="Role"/>
         <execute template="addnode" filename="AddPermissionNode.java" useentityinfo="Permission"/>
     </folder>
-    <folder project="Access Control Manager - generated" location="java" package="uk.org.rlinsdale.accesscontrolmanager.topcomponents" message="generating node viewer files" log="accesscontrolmanager" license="gpl30" datapackage="uk.org.rlinsdale.lindos.authentication.dataobjects" nodepackage="uk.org.rlinsdale.accesscontrolmanager.nodes">
+    <folder project="Access Control Manager - generated" location="java" package="uk.theretiredprogrammer.accesscontrolmanager.topcomponents" message="generating node viewer files" log="accesscontrolmanager" license="gpl30" datapackage="uk.theretiredprogrammer.lindos.authentication.dataobjects" nodepackage="uk.theretiredprogrammer.accesscontrolmanager.nodes">
         <execute template="rootnodeviewer" type="Tree" filename="UserRootNodeViewer.java" useentityinfo="UserRoot"/>
         <execute template="rootnodeviewer" type="Tree" filename="ApplicationRootNodeViewer.java" useentityinfo="ApplicationRoot"/>
     </folder>
-    <folder project="Access Control Manager - generated" location="java" package="uk.org.rlinsdale.accesscontrolmanager.topcomponents" message="generating node editor files" log="accesscontrolmanager" license="gpl30" datapackage="uk.org.rlinsdale.lindos.authentication.dataobjects" nodepackage="uk.org.rlinsdale.accesscontrolmanager.nodes">
+    <folder project="Access Control Manager - generated" location="java" package="uk.theretiredprogrammer.accesscontrolmanager.topcomponents" message="generating node editor files" log="accesscontrolmanager" license="gpl30" datapackage="uk.theretiredprogrammer.lindos.authentication.dataobjects" nodepackage="uk.theretiredprogrammer.accesscontrolmanager.nodes">
         <execute template="nodeeditor" filename="UserNodeEditor.java" useentityinfo="User"/>
         <execute template="nodeeditor" filename="ApplicationNodeEditor.java" useentityinfo="Application"/>
         <execute template="nodeeditor" filename="RoleNodeEditor.java" useentityinfo="Role"/>
@@ -68,7 +68,7 @@
         <execute template="editnode" filename="EditRoleNode.java" useentityinfo="Role"/>
         <execute template="editnode" filename="EditPermissionNode.java" useentityinfo="Permission"/>
     </folder>
-    <folder project="Authentication" location="java" package="uk.org.rlinsdale.authentication" message="generating remote files" log="authentication" license="gpl30">
+    <folder project="Authentication" location="java" package="uk.theretiredprogrammer.authentication" message="generating remote files" log="authentication" license="gpl30">
         <execute template="remotepingservlet" filename="AuthenticationPingServlet.java" usepersistencestore="Authentication"/>
         <execute template="remoteentity" filename="User.java" usepersistencestore="authentication" useentity="User"/>
         <execute template="remotecreateejb" filename="UserCreateEJB.java" usepersistencestore="authentication" useentity="User"/>
@@ -143,7 +143,7 @@
         <execute template="remoteupdateejb" filename="UserpermissionUpdateEJB.java" usepersistencestore="authentication" useentity="Userpermission"/>
         <execute template="remoteupdateservlet" filename="UserpermissionUpdateServlet.java" usepersistencestore="authentication" useentity="Userpermission"/>
     </folder>
-    <folder project="Authentication" location="resource" package="uk.org.rlinsdale.authentication.mysql" message="generating mysql script files for authentication2" log="authentication" license="gpl30">
+    <folder project="Authentication" location="resource" package="uk.theretiredprogrammer.authentication.mysql" message="generating mysql script files for authentication2" log="authentication" license="gpl30">
         <execute template="createsqldatabase" filename="createdb.sql" usepersistencestore="authentication"/>
         <execute template="backupscript" filename="backupscript.sh" usepersistencestore="authentication"/>
         <execute template="createsqltables" filename="createtables.sql" usepersistencestore="authentication"/>

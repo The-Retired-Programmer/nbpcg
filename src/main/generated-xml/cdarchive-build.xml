@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
     
-    <!DOCTYPE nbpcg-build PUBLIC "-//uk/org/rlinsdale/nbpcgbuild/DTD NBPCGBUILD SCHEMA 1.0//EN" "nbres:/uk/org/rlinsdale/nbpcg/nbpcgbuild.dtd">
-<nbpcg-build name="CD Archive" copyright="2014-2016 Richard Linsdale (richard.linsdale at blueyonder.co.uk)">
-    <folder project="CD Archive - generated" location="resource" package="uk.org.rlinsdale.cdarchive.mysql" message="generating mysql script files for cdarchive" log="linsdale.cdarchive" license="gpl30">
+    <!DOCTYPE nbpcg-build PUBLIC "-//uk/theretiredprogrammer/nbpcgbuild/DTD NBPCGBUILD SCHEMA 1.0//EN" "nbres:/uk/theretiredprogrammer/nbpcg/nbpcgbuild.dtd">
+<nbpcg-build name="CD Archive" copyright="2014-2016 Richard Linsdale (richard at theretiredprogrammer.uk)">
+    <folder project="CD Archive - generated" location="resource" package="uk.theretiredprogrammer.cdarchive.mysql" message="generating mysql script files for cdarchive" log="linsdale.cdarchive" license="gpl30">
         <execute template="createsqldatabase" filename="createdb.sql" usepersistencestore="cdarchive"/>
         <execute template="backupscript" filename="backupscript.sh" usepersistencestore="cdarchive"/>
         <execute template="createsqltables" filename="createtables.sql" usepersistencestore="cdarchive"/>
     </folder>
-    <folder project="CD Archive - generated" location="java" package="uk.org.rlinsdale.cdarchive.dataobjects" message="generating entity files" log="linsdale.cdarchive" license="gpl30">
+    <folder project="CD Archive - generated" location="java" package="uk.theretiredprogrammer.cdarchive.dataobjects" message="generating entity files" log="linsdale.cdarchive" license="gpl30">
         <execute template="rootentity" filename="CdRoot.java" useentityinfo="CdRoot"/>
         <execute template="rootentity" filename="ExtensiongroupRoot.java" useentityinfo="ExtensiongroupRoot"/>
         <execute template="entity" filename="Extensiongroup.java" useentityinfo="Extensiongroup"/>
@@ -16,7 +16,7 @@
         <execute template="entity" filename="Folder.java" useentityinfo="Folder"/>
         <execute template="entity" filename="File.java" useentityinfo="File"/>
     </folder>
-    <folder project="CD Archive - generated" location="java" package="uk.org.rlinsdale.cdarchive.nodes" message="generating node files" log="linsdale.cdarchive" license="gpl30" datapackage="uk.org.rlinsdale.cdarchive.dataobjects">
+    <folder project="CD Archive - generated" location="java" package="uk.theretiredprogrammer.cdarchive.nodes" message="generating node files" log="linsdale.cdarchive" license="gpl30" datapackage="uk.theretiredprogrammer.cdarchive.dataobjects">
         <execute template="rootnode" type="" filename="CdRootNode.java" useentityinfo="CdRoot"/>
         <execute template="rootnode" type="" filename="ExtensiongroupRootNode.java" useentityinfo="ExtensiongroupRoot"/>
         <execute template="node" type="" filename="CdNode.java" useentityinfo="Cd"/>
@@ -32,11 +32,11 @@
         <execute template="addnode" filename="AddExtensiongroupNode.java" useentityinfo="Extensiongroup"/>
         <execute template="addnode" filename="AddExtensionNode.java" useentityinfo="Extension"/>
     </folder>
-    <folder project="CD Archive - generated" location="java" package="uk.org.rlinsdale.cdarchive.topcomponents" message="generating node viewer files" log="linsdale.cdarchive" license="gpl30" datapackage="uk.org.rlinsdale.cdarchive.dataobjects" nodepackage="uk.org.rlinsdale.cdarchive.nodes">
+    <folder project="CD Archive - generated" location="java" package="uk.theretiredprogrammer.cdarchive.topcomponents" message="generating node viewer files" log="linsdale.cdarchive" license="gpl30" datapackage="uk.theretiredprogrammer.cdarchive.dataobjects" nodepackage="uk.theretiredprogrammer.cdarchive.nodes">
         <execute template="rootnodeviewer" type="Tree" filename="CdRootNodeViewer.java" useentityinfo="CdRoot"/>
         <execute template="rootnodeviewer" type="Tree" filename="ExtensiongroupRootNodeViewer.java" useentityinfo="ExtensiongroupRoot"/>
     </folder>
-    <folder project="CD Archive - generated" location="java" package="uk.org.rlinsdale.cdarchive.topcomponents" message="generating node editor files" log="linsdale.cdarchive" license="gpl30" datapackage="uk.org.rlinsdale.cdarchive.dataobjects" nodepackage="uk.org.rlinsdale.cdarchive.nodes">
+    <folder project="CD Archive - generated" location="java" package="uk.theretiredprogrammer.cdarchive.topcomponents" message="generating node editor files" log="linsdale.cdarchive" license="gpl30" datapackage="uk.theretiredprogrammer.cdarchive.dataobjects" nodepackage="uk.theretiredprogrammer.cdarchive.nodes">
         <execute template="nodeeditor" filename="ExtensiongroupNodeEditor.java" useentityinfo="Extensiongroup"/>
         <execute template="editnode" filename="EditExtensiongroupNode.java" useentityinfo="Extensiongroup"/>
         <execute template="entitysource" filename="ExtensiongroupSource.java" useentityinfo="Extensiongroup"/>

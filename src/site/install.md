@@ -2,7 +2,7 @@ NBPCG is provided as a nbm file.  The current release is v${project-version}, wh
 
 | Operating System | Software Download |  
 |:-------------------|:--------------|
-| Any | [Download nbm file](http://www.rlinsdale.org.uk/repository/uk/org/rlinsdale/${project-key}/${project-version}/nbpcg-${project-version}.nbm) |
+| Any | [Download nbm file](http://www.rlinsdale.org.uk/repository/uk/theretiredprogrammer/${project-key}/${project-version}/nbpcg-${project-version}.nbm) |
 
 The nbm file can be placed anywhere in the filesystem on your machine.
 

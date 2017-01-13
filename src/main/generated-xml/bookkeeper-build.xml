@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
     
-    <!DOCTYPE nbpcg-build PUBLIC "-//uk/org/rlinsdale/nbpcgbuild/DTD NBPCGBUILD SCHEMA 1.0//EN" "nbres:/uk/org/rlinsdale/nbpcg/nbpcgbuild.dtd">
-<nbpcg-build name="Book-Keeper" copyright="2015-2016 Richard Linsdale (richard.linsdale at blueyonder.co.uk)">
-    <folder project="Book-Keeper - generated" location="resource" package="uk.org.rlinsdale.bookkeeper.mysql" message="generating mysql script files for bookkeeper" log="linsdale.bookkeeper" license="gpl30">
+    <!DOCTYPE nbpcg-build PUBLIC "-//uk/theretiredprogrammer/nbpcgbuild/DTD NBPCGBUILD SCHEMA 1.0//EN" "nbres:/uk/theretiredprogrammer/nbpcg/nbpcgbuild.dtd">
+<nbpcg-build name="Book-Keeper" copyright="2015-2016 Richard Linsdale (richard at theretiredprogrammer.uk)">
+    <folder project="Book-Keeper - generated" location="resource" package="uk.theretiredprogrammer.bookkeeper.mysql" message="generating mysql script files for bookkeeper" log="linsdale.bookkeeper" license="gpl30">
         <execute template="createsqldatabase" filename="createdb.sql" usepersistencestore="bookkeeper"/>
         <execute template="backupscript" filename="backupscript.sh" usepersistencestore="bookkeeper"/>
         <execute template="createsqltables" filename="createtables.sql" usepersistencestore="bookkeeper"/>
     </folder>
-    <folder project="Book-Keeper - generated" location="java" package="uk.org.rlinsdale.bookkeeper.dataobjects" message="generating entity files" log="linsdale.bookkeeper" license="gpl30">
+    <folder project="Book-Keeper - generated" location="java" package="uk.theretiredprogrammer.bookkeeper.dataobjects" message="generating entity files" log="linsdale.bookkeeper" license="gpl30">
         <execute template="rootentity" filename="AccountRoot.java" useentityinfo="AccountRoot"/>
         <execute template="rootentity" filename="ProviderRoot.java" useentityinfo="ProviderRoot"/>
         <execute template="rootentity" filename="AssetCentreRoot.java" useentityinfo="AssetCentreRoot"/>
@@ -20,7 +20,7 @@
         <execute template="entity" filename="Journal.java" useentityinfo="Journal"/>
         <execute template="entity" filename="JournalEntry.java" useentityinfo="JournalEntry"/>
     </folder>
-    <folder project="Book-Keeper - generated" location="java" package="uk.org.rlinsdale.bookkeeper.nodes" message="generating node files" log="linsdale.bookkeeper" license="gpl30" datapackage="uk.org.rlinsdale.bookkeeper.dataobjects" editorpackage="uk.org.rlinsdale.bookkeeper.topcomponents">
+    <folder project="Book-Keeper - generated" location="java" package="uk.theretiredprogrammer.bookkeeper.nodes" message="generating node files" log="linsdale.bookkeeper" license="gpl30" datapackage="uk.theretiredprogrammer.bookkeeper.dataobjects" editorpackage="uk.theretiredprogrammer.bookkeeper.topcomponents">
         <execute template="rootnode" type="" filename="AccountRootNode.java" useentityinfo="AccountRoot"/>
         <execute template="rootnode" type="" filename="ProviderRootNode.java" useentityinfo="ProviderRoot"/>
         <execute template="rootnode" type="" filename="AssetCentreRootNode.java" useentityinfo="AssetCentreRoot"/>
@@ -56,12 +56,12 @@
         <execute template="addaction" filename="AddJournal.java" useentityinfo="Journal"/>
         <execute template="addaction" filename="AddJournalEntry.java" useentityinfo="JournalEntry"/>
     </folder>
-    <folder project="Book-Keeper - generated" location="java" package="uk.org.rlinsdale.bookkeeper.topcomponents" message="generating node viewer files" log="linsdale.bookkeeper" license="gpl30" datapackage="uk.org.rlinsdale.bookkeeper.dataobjects" nodepackage="uk.org.rlinsdale.bookkeeper.nodes">
+    <folder project="Book-Keeper - generated" location="java" package="uk.theretiredprogrammer.bookkeeper.topcomponents" message="generating node viewer files" log="linsdale.bookkeeper" license="gpl30" datapackage="uk.theretiredprogrammer.bookkeeper.dataobjects" nodepackage="uk.theretiredprogrammer.bookkeeper.nodes">
         <execute template="rootnodeviewer" type="Tree" filename="AccountRootNodeViewer.java" useentityinfo="AccountRoot"/>
         <execute template="rootnodeviewer" type="Tree" filename="ProviderRootNodeViewer.java" useentityinfo="ProviderRoot"/>
         <execute template="rootnodeviewer" type="Tree" filename="AssetCentreRootNodeViewer.java" useentityinfo="AssetCentreRoot"/>
     </folder>
-    <folder project="Book-Keeper - generated" location="java" package="uk.org.rlinsdale.bookkeeper.topcomponents" message="generating editor files" log="linsdale.bookkeeper" license="gpl30" datapackage="uk.org.rlinsdale.bookkeeper.dataobjects" nodepackage="uk.org.rlinsdale.bookkeeper.nodes">
+    <folder project="Book-Keeper - generated" location="java" package="uk.theretiredprogrammer.bookkeeper.topcomponents" message="generating editor files" log="linsdale.bookkeeper" license="gpl30" datapackage="uk.theretiredprogrammer.bookkeeper.dataobjects" nodepackage="uk.theretiredprogrammer.bookkeeper.nodes">
         <execute template="editor" filename="AccountEditor.java" useentityinfo="Account"/>
         <execute template="editor" filename="ProviderEditor.java" useentityinfo="Provider"/>
         <execute template="editor" filename="ProviderAccountEditor.java" useentityinfo="ProviderAccount"/>

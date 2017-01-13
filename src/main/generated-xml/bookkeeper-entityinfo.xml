@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE nbpcg-entity-info PUBLIC "-//uk/org/rlinsdale/nbpcgentityinfo/DTD NBPCGENTITYINFO SCHEMA 1.0//EN" "nbres:/uk/org/rlinsdale/nbpcg/nbpcgentityinfo.dtd">
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE nbpcg-entity-info PUBLIC "-//uk/theretiredprogrammer/nbpcgentityinfo/DTD NBPCGENTITYINFO SCHEMA 1.0//EN" "nbres:/uk/theretiredprogrammer/nbpcg/nbpcgentityinfo.dtd">
 <nbpcg-entity-info name="Book-Keeper">
     <entityinfo name="Account" dbkey="bookkeeper" dbtablename="Account" pkey="id" pkeytype="Integer" pkeytypefunction="getInt" icon="money" orderable="no" nodeorder="1" parentname="AccountRoot">
         <field name="root" pkey="no" references="AccountRoot" type="rootref" label="Root" javatype="int" jsontype="Integer" initialisation=""/>
@@ -125,7 +125,7 @@
             <display field="Description"/>
         </displaynameformat>
     </entityinfo>
-    <entityinfo name="JournalEntry" dbkey="bookkeeper" rule="uk.org.rlinsdale.bookkeeper.code.JournalEntryEntityRule" dbtablename="JournalEntry" pkey="id" pkeytype="Integer" pkeytypefunction="getInt" icon="pencil" orderable="no" parentname="Journal" nodeorder="1">
+    <entityinfo name="JournalEntry" dbkey="bookkeeper" rule="uk.theretiredprogrammer.bookkeeper.code.JournalEntryEntityRule" dbtablename="JournalEntry" pkey="id" pkeytype="Integer" pkeytypefunction="getInt" icon="pencil" orderable="no" parentname="Journal" nodeorder="1">
         <field name="source" pkey="no" fieldclass="EntityChoiceField" references="ProviderAccount" type="reference" label="Source" javatype="int" jsontype="Integer" initialisation=""/>
         <field name="account" pkey="no" fieldclass="EntityChoiceField" references="Account" type="reference" label="Account" javatype="int" jsontype="Integer" initialisation=""/>
         <field name="description" pkey="no" min="0" max="255" fieldclass="TextField" type="String" label="Description" javatype="String" jsontype="String" initialisation=" = &quot;&quot;"/>

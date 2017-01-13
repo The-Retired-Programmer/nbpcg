@@ -16,7 +16,7 @@ relevant to this release.
 Online Javadoc for this release can be found
 [here](javadoc/index.html),
 whilst a downloadable jar file containing the same Javadoc is available from
-[here](http://www.rlinsdale.org.uk/repository/uk/org/rlinsdale/nbpcg/${project-version}/nbpcg-${project-version}-javadoc.jar)
+[here](http://www.rlinsdale.org.uk/repository/uk/theretiredprogrammer/nbpcg/${project-version}/nbpcg-${project-version}-javadoc.jar)
 
 Developers modifying the source code are encouraged to submit their changes
 back to the project using a Pull-Request (for consideration for

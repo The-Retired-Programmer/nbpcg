@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    SYSTEM ID  : nbres:/uk/theretiredprogrammer/nbpcg/nbpcgentityinfo.dtd
+
+    Author     : Richard Linsdale (richard at theretiredprogrammer.uk)
+-->
+
+<!ELEMENT nbpcg-entity-info (entityinfo+, persistencestore+) >
+    <!ATTLIST nbpcg-entity-info
+        name CDATA #REQUIRED
+        >
+    <!ELEMENT entityinfo (field*, entryfield*, child*, referenced*, sortformat*, displaytitleformat*, displaynameformat*)  >
+        <!ATTLIST entityinfo
+            name CDATA #REQUIRED
+            pkey CDATA #IMPLIED
+            pkeytype (Integer|String|Boolean) #IMPLIED
+            pkeytypefunction CDATA #IMPLIED
+            isroot CDATA #IMPLIED
+            nodeorder CDATA #IMPLIED
+            nomodifiers (yes) #IMPLIED
+            customchildfactorypackage CDATA #IMPLIED
+            dynamicicon CDATA #IMPLIED
+            childnodesineditor CDATA #IMPLIED
+            dbkey CDATA #IMPLIED
+            dbtablename CDATA #IMPLIED 
+            parentname CDATA #IMPLIED
+            ordercolumn CDATA #IMPLIED
+            orderable (yes|no) #IMPLIED
+            label CDATA #IMPLIED
+            viewers CDATA #IMPLIED
+            icon CDATA #REQUIRED 
+            >
+        <!ELEMENT field EMPTY  >
+            <!ATTLIST field
+                name CDATA #REQUIRED
+                pkey CDATA #REQUIRED
+                fkey (no) #IMPLIED
+                hidden (yes) #IMPLIED
+                final (yes) #IMPLIED
+                type (rootref|ref|String|int|decimal|reference|date|enum|idx|datetime|boolean|long|password) #REQUIRED
+                decimalsize CDATA #IMPLIED
+                references CDATA #IMPLIED
+                label CDATA #REQUIRED
+                values CDATA #IMPLIED
+                javatype (int|String|DateOnly|Timestamp|boolean|long) #REQUIRED
+                jsontype (Integer|String|Boolean|Long) #REQUIRED
+                initialisation CDATA #REQUIRED
+                choicemethod CDATA #IMPLIED
+                unique (yes) #IMPLIED
+                optional (yes) #IMPLIED
+                index (unique|yes) #IMPLIED
+                min CDATA #IMPLIED
+                max CDATA #IMPLIED
+                fieldclass (TextField|IntegerField|LongField|DatetimeField|DateField|EntityChoiceField|EnumChoiceField|PasswordField|CheckboxField) #IMPLIED
+                useentryfield CDATA #IMPLIED
+                >
+        <!ELEMENT entryfield EMPTY>
+            <!ATTLIST entryfield
+                name CDATA #REQUIRED
+                label CDATA #IMPLIED
+                type (password) #REQUIRED
+                mapsto CDATA #REQUIRED
+                mapping CDATA #REQUIRED
+                rule CDATA #IMPLIED
+                errormessage CDATA #IMPLIED
+                >
+        <!ELEMENT child EMPTY  >
+            <!ATTLIST child
+                name CDATA #REQUIRED
+                dbname CDATA #IMPLIED 
+                references CDATA #REQUIRED
+                sort (yes|no) #REQUIRED
+                orderable (yes|no) #REQUIRED
+                copymoveentity CDATA #IMPLIED 
+                copymovefield CDATA #IMPLIED
+                hasiconview (yes|no) #REQUIRED
+                isiconchild CDATA #IMPLIED
+                >
+        <!ELEMENT referenced EMPTY  >
+            <!ATTLIST referenced
+                name CDATA #REQUIRED
+                field CDATA #REQUIRED
+                optional CDATA #IMPLIED
+                >
+        <!ELEMENT sortformat (display*)  >
+            <!ATTLIST sortformat
+                format CDATA #REQUIRED
+                >
+        <!ELEMENT displaynameformat  (display*)  >
+            <!ATTLIST displaynameformat
+                format CDATA #REQUIRED
+                >
+        <!ELEMENT displaytitleformat  (display*)  >
+            <!ATTLIST displaytitleformat
+                format CDATA #REQUIRED
+                >
+            <!ELEMENT display EMPTY >
+                <!ATTLIST display 
+                    field CDATA #REQUIRED
+                    length CDATA #IMPLIED
+                    >
+    <!ELEMENT persistencestore (persistenceentity+) >
+        <!ATTLIST persistencestore
+            name CDATA #REQUIRED
+            dbname CDATA #REQUIRED
+            >
+        <!ELEMENT persistenceentity (persistencefield*, insertentity*) >
+            <!ATTLIST persistenceentity
+                name CDATA #REQUIRED
+                >
+            <!ELEMENT persistencefield EMPTY>
+                    <!ATTLIST persistencefield
+                        name CDATA #REQUIRED
+                        final (yes) #IMPLIED
+                        sys (yes) #IMPLIED
+                        jsontype (String|Integer|Reference|Boolean) #REQUIRED
+                        primarykey CDATA #REQUIRED
+                        createsql CDATA #REQUIRED
+                        min CDATA #IMPLIED
+                        max CDATA #IMPLIED
+                        nullallowed CDATA #IMPLIED
+                        >
+            <!ELEMENT insertentity (insertfield*, insertautopkfield*, insertorderablefield*)>
+                <!ELEMENT insertfield EMPTY>
+                    <!ATTLIST insertfield
+                        name CDATA #REQUIRED
+                        quote CDATA #IMPLIED
+                        value CDATA #IMPLIED
+                        var CDATA #IMPLIED
+                        >
+                <!ELEMENT insertautopkfield EMPTY>
+                    <!ATTLIST insertautopkfield
+                        name CDATA #REQUIRED
+                        >
+                <!ELEMENT insertorderablefield EMPTY>
+                    <!ATTLIST insertorderablefield
+                        name CDATA #REQUIRED
+                        >

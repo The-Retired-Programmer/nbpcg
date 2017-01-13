@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE nbpcg-entity-info PUBLIC "-//uk/org/rlinsdale/nbpcgentityinfo/DTD NBPCGENTITYINFO SCHEMA 1.0//EN" "nbres:/uk/org/rlinsdale/nbpcg/nbpcgentityinfo.dtd">
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE nbpcg-entity-info PUBLIC "-//uk/theretiredprogrammer/nbpcgentityinfo/DTD NBPCGENTITYINFO SCHEMA 1.0//EN" "nbres:/uk/theretiredprogrammer/nbpcg/nbpcgentityinfo.dtd">
 <nbpcg-entity-info name="Photogallery">
     <entityinfo name="Album" dbkey="photogallery" dbtablename="Album" pkey="id" pkeytype="Integer" pkeytypefunction="getInt" icon="photos" orderable="yes" nodeorder="1" parentname="AlbumRoot">
         <field name="root" pkey="no" references="AlbumRoot" type="rootref" label="Album" javatype="int" jsontype="Integer" initialisation=""/>
@@ -76,7 +76,7 @@
     </entityinfo>
     <entityinfo name="User" dbkey="authentication" dbtablename="User" pkey="id" pkeytype="Integer" pkeytypefunction="getInt" icon="user" orderable="no" parentname="Albumpermission" nodeorder="1">
         <field name="username" pkey="no" unique="yes" min="1" max="100" fieldclass="TextField" type="String" label="Username" javatype="String" jsontype="String" initialisation=" = &quot;&quot;"/>
-        <field name="encodedpassword" pkey="no" entryfield="password" passwordsupport="uk.org.rlinsdale.lindos.authentication.Authentication" passwordstrength="strong" max="40" min="40" fieldclass="PasswordField" type="password" label="Password" javatype="String" jsontype="String" initialisation=" = &quot;&quot;"/>
+        <field name="encodedpassword" pkey="no" entryfield="password" passwordsupport="uk.theretiredprogrammer.lindos.authentication.Authentication" passwordstrength="strong" max="40" min="40" fieldclass="PasswordField" type="password" label="Password" javatype="String" jsontype="String" initialisation=" = &quot;&quot;"/>
         <field name="usercode" pkey="no" unique="yes" min="4" max="4" fieldclass="TextField" type="String" label="Usercode" javatype="String" jsontype="String" initialisation=" = &quot;&quot;"/>
         <field name="enabled" pkey="no" fieldclass="CheckboxField" type="boolean" label="Enabled" javatype="boolean" jsontype="Boolean" initialisation=" = false"/>
         <field name="albumpermission" pkey="no" references="Albumpermission" fieldclass="ReferenceChoiceField" type="ref" label="Albumpermission" javatype="int" jsontype="Integer" initialisation=""/>

@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-    <!DOCTYPE nbpcg-build PUBLIC "-//uk/org/rlinsdale/nbpcgbuild/DTD NBPCGBUILD SCHEMA 1.0//EN" "nbres:/uk/org/rlinsdale/nbpcg/nbpcgbuild.dtd">
-<nbpcg-build name="Mark Timings" copyright="2014-2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)">
-    <folder project="Mark Timings Recorder - generated code" location="resource" package="uk.org.rlinsdale.marktimingsrecorder.mysql.coaching" message="generating mysql script files for coaching" log="marktimingsrecorder" license="gpl30">
+    <!DOCTYPE nbpcg-build PUBLIC "-//uk/theretiredprogrammer/nbpcgbuild/DTD NBPCGBUILD SCHEMA 1.0//EN" "nbres:/uk/theretiredprogrammer/nbpcg/nbpcgbuild.dtd">
+<nbpcg-build name="Mark Timings" copyright="2014-2015 Richard Linsdale (richard at theretiredprogrammer.uk)">
+    <folder project="Mark Timings Recorder - generated code" location="resource" package="uk.theretiredprogrammer.marktimingsrecorder.mysql.coaching" message="generating mysql script files for coaching" log="marktimingsrecorder" license="gpl30">
         <execute template="createsqldatabase" filename="createdb.sql" usepersistencestore="coaching"/>
         <execute template="backupscript" filename="backupscript.sh" usepersistencestore="coaching"/>
         <execute template="createsqltables" filename="createtables.sql" usepersistencestore="coaching"/>
     </folder>
-    <folder project="Mark Timings Recorder - generated code" location="java" package="uk.org.rlinsdale.marktimingsrecorder.dataobjects" message="generating entity files" log="marktimingsrecorder" license="gpl30">
+    <folder project="Mark Timings Recorder - generated code" location="java" package="uk.theretiredprogrammer.marktimingsrecorder.dataobjects" message="generating entity files" log="marktimingsrecorder" license="gpl30">
         <execute template="rootentity" filename="DinghyclassRoot.java" useentityinfo="DinghyclassRoot"/>
         <execute template="rootentity" filename="CompetitorRoot.java" useentityinfo="CompetitorRoot"/>
         <execute template="rootentity" filename="MarkRoot.java" useentityinfo="MarkRoot"/>
@@ -23,7 +23,7 @@
         <execute template="entity" filename="Coursemark.java" useentityinfo="Coursemark"/>
         <execute template="entity" filename="Timing.java" useentityinfo="Timing"/>
     </folder>
-    <folder project="Mark Timings Recorder - generated code" location="java" package="uk.org.rlinsdale.marktimingsrecorder.nodes" message="generating node files" log="marktimingsrecorder" license="gpl30" datapackage="uk.org.rlinsdale.marktimingsrecorder.dataobjects">
+    <folder project="Mark Timings Recorder - generated code" location="java" package="uk.theretiredprogrammer.marktimingsrecorder.nodes" message="generating node files" log="marktimingsrecorder" license="gpl30" datapackage="uk.theretiredprogrammer.marktimingsrecorder.dataobjects">
         <execute template="rootnode" type="" filename="DinghyclassRootNode.java" useentityinfo="DinghyclassRoot"/>
         <execute template="rootnode" type="" filename="CompetitorRootNode.java" useentityinfo="CompetitorRoot"/>
         <execute template="rootnode" type="" filename="MarkRootNode.java" useentityinfo="MarkRoot"/>
@@ -68,13 +68,13 @@
         <execute template="addnode" filename="AddTimingNode.java" useentityinfo="Timing"/>
         <execute template="addnode" filename="AddRaceentryNode.java" useentityinfo="Raceentry"/>
     </folder>
-    <folder project="Mark Timings Recorder - generated code" location="java" package="uk.org.rlinsdale.marktimingsrecorder.topcomponents" message="generating node viewer files" log="marktimingsrecorder" license="gpl30" datapackage="uk.org.rlinsdale.marktimingsrecorder.dataobjects" nodepackage="uk.org.rlinsdale.marktimingsrecorder.nodes">
+    <folder project="Mark Timings Recorder - generated code" location="java" package="uk.theretiredprogrammer.marktimingsrecorder.topcomponents" message="generating node viewer files" log="marktimingsrecorder" license="gpl30" datapackage="uk.theretiredprogrammer.marktimingsrecorder.dataobjects" nodepackage="uk.theretiredprogrammer.marktimingsrecorder.nodes">
         <execute template="rootnodeviewer" type="Tree" filename="DinghyclassRootNodeViewer.java" useentityinfo="DinghyclassRoot"/>
         <execute template="rootnodeviewer" type="Tree" filename="CompetitorRootNodeViewer.java" useentityinfo="CompetitorRoot"/>
         <execute template="rootnodeviewer" type="Tree" filename="MarkRootNodeViewer.java" useentityinfo="MarkRoot"/>
         <execute template="rootnodeviewer" type="Tree" filename="RaceseriesRootNodeViewer.java" useentityinfo="RaceseriesRoot"/>
     </folder>
-    <folder project="Mark Timings Recorder - generated code" location="java" package="uk.org.rlinsdale.marktimingsrecorder.topcomponents" message="generating node editor files" log="marktimingsrecorder" license="gpl30" datapackage="uk.org.rlinsdale.marktimingsrecorder.dataobjects" nodepackage="uk.org.rlinsdale.marktimingsrecorder.nodes">
+    <folder project="Mark Timings Recorder - generated code" location="java" package="uk.theretiredprogrammer.marktimingsrecorder.topcomponents" message="generating node editor files" log="marktimingsrecorder" license="gpl30" datapackage="uk.theretiredprogrammer.marktimingsrecorder.dataobjects" nodepackage="uk.theretiredprogrammer.marktimingsrecorder.nodes">
         <execute template="nodeeditor" filename="MarkNodeEditor.java" useentityinfo="Mark"/>
         <execute template="nodeeditor" filename="CompetitorNodeEditor.java" useentityinfo="Competitor"/>
         <execute template="nodeeditor" filename="DinghyclassNodeEditor.java" useentityinfo="Dinghyclass"/>

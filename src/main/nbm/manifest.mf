@@ -1,4 +1,4 @@
 Manifest-Version: 1.0
-OpenIDE-Module-Layer: uk/org/rlinsdale/nbpcg/layer.xml
-OpenIDE-Module-Localizing-Bundle: uk/org/rlinsdale/nbpcg/Bundle.properties
-OpenIDE-Module-Display-Category: Tools - RLinsdale
+OpenIDE-Module-Layer: uk/theretiredprogrammer/nbpcg/layer.xml
+OpenIDE-Module-Localizing-Bundle: uk/theretiredprogrammer/nbpcg/Bundle.properties
+OpenIDE-Module-Display-Category: Tools - TheRetiredProgrammer

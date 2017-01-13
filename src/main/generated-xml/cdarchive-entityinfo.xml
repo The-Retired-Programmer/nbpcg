@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE nbpcg-entity-info PUBLIC "-//uk/org/rlinsdale/nbpcgentityinfo/DTD NBPCGENTITYINFO SCHEMA 1.0//EN" "nbres:/uk/org/rlinsdale/nbpcg/nbpcgentityinfo.dtd">
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE nbpcg-entity-info PUBLIC "-//uk/theretiredprogrammer/nbpcgentityinfo/DTD NBPCGENTITYINFO SCHEMA 1.0//EN" "nbres:/uk/theretiredprogrammer/nbpcg/nbpcgentityinfo.dtd">
 <nbpcg-entity-info name="CD Archive">
     <entityinfo name="Extensiongroup" dbkey="cdarchive" dbtablename="Extensiongroup" pkey="id" pkeytype="Integer" pkeytypefunction="getInt" icon="page_red" dynamicicon="getIconname()" orderable="no" nodeorder="1" parentname="ExtensiongroupRoot">
         <field name="root" pkey="no" references="ExtensiongroupRoot" type="rootref" label="Extension Group" javatype="int" jsontype="Integer" initialisation=""/>
@@ -28,7 +28,7 @@
             <display field="Ext"/>
         </displaynameformat>
     </entityinfo>
-    <entityinfo name="Cd" dbkey="cdarchive" dbtablename="Cd" pkey="id" pkeytype="Integer" pkeytypefunction="getInt" icon="cd" nomodifiers="yes" customchildfactorypackage="uk.org.rlinsdale.cdarchive.extensions" orderable="no" nodeorder="1" parentname="CdRoot">
+    <entityinfo name="Cd" dbkey="cdarchive" dbtablename="Cd" pkey="id" pkeytype="Integer" pkeytypefunction="getInt" icon="cd" nomodifiers="yes" customchildfactorypackage="uk.theretiredprogrammer.cdarchive.extensions" orderable="no" nodeorder="1" parentname="CdRoot">
         <field name="root" pkey="no" references="CdRoot" type="rootref" label="CD" javatype="int" jsontype="Integer" initialisation=""/>
         <field name="cdnumber" pkey="no" fieldclass="IntegerField" type="int" label="Cdnumber" javatype="int" jsontype="Integer" initialisation=" = 0"/>
         <field name="volumelabel" pkey="no" index="yes" min="1" max="100" fieldclass="TextField" type="String" label="Volumelabel" javatype="String" jsontype="String" initialisation=" = &quot;&quot;"/>
@@ -46,7 +46,7 @@
             <display field="Volumelabel"/>
         </displaynameformat>
     </entityinfo>
-    <entityinfo name="Folder" dbkey="cdarchive" dbtablename="Folder" pkey="id" pkeytype="Integer" pkeytypefunction="getInt" icon="folder" nomodifiers="yes" customchildfactorypackage="uk.org.rlinsdale.cdarchive.extensions" dynamicicon="getExtension()==null ? &quot;folder&quot; : getExtension().getParent().getIconname()" orderable="no" parentname="Cd" nodeorder="2">
+    <entityinfo name="Folder" dbkey="cdarchive" dbtablename="Folder" pkey="id" pkeytype="Integer" pkeytypefunction="getInt" icon="folder" nomodifiers="yes" customchildfactorypackage="uk.theretiredprogrammer.cdarchive.extensions" dynamicicon="getExtension()==null ? &quot;folder&quot; : getExtension().getParent().getIconname()" orderable="no" parentname="Cd" nodeorder="2">
         <field name="name" pkey="no" index="yes" min="1" max="255" fieldclass="TextField" type="String" label="Name" javatype="String" jsontype="String" initialisation=" = &quot;&quot;"/>
         <field name="isarchive" pkey="no" index="yes" fieldclass="CheckboxField" type="boolean" label="Isarchive" javatype="boolean" jsontype="Boolean" initialisation=" = false"/>
         <field name="inarchive" pkey="no" index="yes" fieldclass="CheckboxField" type="boolean" label="Inarchive" javatype="boolean" jsontype="Boolean" initialisation=" = false"/>

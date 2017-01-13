@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE nbpcg-entity-info PUBLIC "-//uk/org/rlinsdale/nbpcgentityinfo/DTD NBPCGENTITYINFO SCHEMA 1.0//EN" "nbres:/uk/org/rlinsdale/nbpcg/nbpcgentityinfo.dtd">
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE nbpcg-entity-info PUBLIC "-//uk/theretiredprogrammer/nbpcgentityinfo/DTD NBPCGENTITYINFO SCHEMA 1.0//EN" "nbres:/uk/theretiredprogrammer/nbpcg/nbpcgentityinfo.dtd">
 <nbpcg-entity-info name="Mark Timings">
     <entityinfo name="Mark" dbkey="coaching" dbtablename="Mark" pkey="id" pkeytype="Integer" icon="flag_blue" orderable="no" nodeorder="1" parentname="MarkRoot">
         <field name="root" pkey="no" references="MarkRoot" type="rootref" label="Root" javatype="int" jsontype="Integer" initialisation=""/>

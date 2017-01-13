@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
     
-    <!DOCTYPE nbpcg-build PUBLIC "-//uk/org/rlinsdale/nbpcgbuild/DTD NBPCGBUILD SCHEMA 1.0//EN" "nbres:/uk/org/rlinsdale/nbpcg/nbpcgbuild.dtd">
-<nbpcg-build name="Photogallery" copyright="2015 Richard Linsdale (richard.linsdale at blueyonder.co.uk)">
-    <folder project="Photo Gallery - generated" location="resource" package="uk.org.rlinsdale.photogallery.mysql" message="generating mysql script files for photogallery2" log="linsdale.photogallery" license="gpl30">
+    <!DOCTYPE nbpcg-build PUBLIC "-//uk/theretiredprogrammer/nbpcgbuild/DTD NBPCGBUILD SCHEMA 1.0//EN" "nbres:/uk/theretiredprogrammer/nbpcg/nbpcgbuild.dtd">
+<nbpcg-build name="Photogallery" copyright="2015 Richard Linsdale (richard at theretiredprogrammer.uk)">
+    <folder project="Photo Gallery - generated" location="resource" package="uk.theretiredprogrammer.photogallery.mysql" message="generating mysql script files for photogallery2" log="linsdale.photogallery" license="gpl30">
         <execute template="createsqldatabase" filename="createdb.sql" usepersistencestore="photogallery"/>
         <execute template="createsqldatabase" filename="createdb.sql" usepersistencestore="authentication"/>
         <execute template="backupscript" filename="backupscript.sh" usepersistencestore="photogallery"/>
@@ -10,7 +10,7 @@
         <execute template="createsqltables" filename="createtables.sql" usepersistencestore="photogallery"/>
         <execute template="createsqltables" filename="createtables.sql" usepersistencestore="authentication"/>
     </folder>
-    <folder project="Photo Gallery - generated" location="resource" package="uk.org.rlinsdale.photogallery.mysql" message="generating mysql script files for authentication2" log="linsdale.photogallery" license="gpl30">
+    <folder project="Photo Gallery - generated" location="resource" package="uk.theretiredprogrammer.photogallery.mysql" message="generating mysql script files for authentication2" log="linsdale.photogallery" license="gpl30">
         <execute template="createsqldatabase" filename="createdb.sql" usepersistencestore="photogallery"/>
         <execute template="createsqldatabase" filename="createdb.sql" usepersistencestore="authentication"/>
         <execute template="backupscript" filename="backupscript.sh" usepersistencestore="photogallery"/>
@@ -18,7 +18,7 @@
         <execute template="createsqltables" filename="createtables.sql" usepersistencestore="photogallery"/>
         <execute template="createsqltables" filename="createtables.sql" usepersistencestore="authentication"/>
     </folder>
-    <folder project="Photo Gallery - generated" location="java" package="uk.org.rlinsdale.photogallery.dataobjects" message="generating entity files" log="linsdale.photogallery" license="gpl30">
+    <folder project="Photo Gallery - generated" location="java" package="uk.theretiredprogrammer.photogallery.dataobjects" message="generating entity files" log="linsdale.photogallery" license="gpl30">
         <execute template="rootentity" filename="AlbumRoot.java" useentityinfo="AlbumRoot"/>
         <execute template="entity" filename="Album.java" useentityinfo="Album"/>
         <execute template="entity" filename="Albumpermission.java" useentityinfo="Albumpermission"/>
@@ -27,7 +27,7 @@
         <execute template="entity" filename="Image.java" useentityinfo="Image"/>
         <execute template="entity" filename="User.java" useentityinfo="User"/>
     </folder>
-    <folder project="Photo Gallery - generated" location="java" package="uk.org.rlinsdale.photogallery.nodes" message="generating node files" log="linsdale.photogallery" license="gpl30" datapackage="uk.org.rlinsdale.photogallery.dataobjects">
+    <folder project="Photo Gallery - generated" location="java" package="uk.theretiredprogrammer.photogallery.nodes" message="generating node files" log="linsdale.photogallery" license="gpl30" datapackage="uk.theretiredprogrammer.photogallery.dataobjects">
         <execute template="rootnode" type="" filename="AlbumRootNode.java" useentityinfo="AlbumRoot"/>
         <execute template="rootnode" type="Icon" filename="AlbumRootIconNode.java" useentityinfo="AlbumRoot"/>
         <execute template="node" type="" filename="AlbumNode.java" useentityinfo="Album"/>
@@ -57,12 +57,12 @@
         <execute template="addnode" filename="AddAlbumgrouppermissionNode.java" useentityinfo="Albumgrouppermission"/>
         <execute template="addnode" filename="AddGroupNode.java" useentityinfo="Group"/>
     </folder>
-    <folder project="Photo Gallery - generated" location="java" package="uk.org.rlinsdale.photogallery.topcomponents" message="generating node viewer files" log="linsdale.photogallery" license="gpl30" datapackage="uk.org.rlinsdale.photogallery.dataobjects" nodepackage="uk.org.rlinsdale.photogallery.nodes">
+    <folder project="Photo Gallery - generated" location="java" package="uk.theretiredprogrammer.photogallery.topcomponents" message="generating node viewer files" log="linsdale.photogallery" license="gpl30" datapackage="uk.theretiredprogrammer.photogallery.dataobjects" nodepackage="uk.theretiredprogrammer.photogallery.nodes">
         <execute template="rootnodeviewer" type="Tree" filename="AlbumRootNodeViewer.java" useentityinfo="AlbumRoot"/>
         <execute template="rootnodeviewer" type="Icon" filename="AlbumRootIconNodeViewer.java" useentityinfo="AlbumRoot"/>
         <execute template="iconnodeviewer" filename="ImageIconNodeViewer.java" useentityinfo="Image"/>
     </folder>
-    <folder project="Photo Gallery - generated" location="java" package="uk.org.rlinsdale.photogallery.topcomponents" message="generating node editor files" log="linsdale.photogallery" license="gpl30" datapackage="uk.org.rlinsdale.photogallery.dataobjects" nodepackage="uk.org.rlinsdale.photogallery.nodes">
+    <folder project="Photo Gallery - generated" location="java" package="uk.theretiredprogrammer.photogallery.topcomponents" message="generating node editor files" log="linsdale.photogallery" license="gpl30" datapackage="uk.theretiredprogrammer.photogallery.dataobjects" nodepackage="uk.theretiredprogrammer.photogallery.nodes">
         <execute template="nodeeditor" filename="AlbumNodeEditor.java" useentityinfo="Album"/>
         <execute template="nodeeditor" filename="AlbumpermissionNodeEditor.java" useentityinfo="Albumpermission"/>
         <execute template="nodeeditor" filename="GroupNodeEditor.java" useentityinfo="Group"/>
