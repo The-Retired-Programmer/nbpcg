@@ -59,7 +59,7 @@ Defines the project information.
 |:-------------------|:--------------|:-------------|:------|
 | Attribute | name | the project name | yes |
 | Attribute | log | the log key to be used in generated files | yes |
-| Attribute | license | the license header to be added to generated files - one of gpl30 or lgpl21 - default is gpl30 | optional |
+| Attribute | license | the license header to be added to generated files - one of apache20, gpl30 or lgpl21 - default is apache20 | optional |
 | Child Element | generate | | one or more|
 
 \\
