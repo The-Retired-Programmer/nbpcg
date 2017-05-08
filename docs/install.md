@@ -4,11 +4,11 @@
 [**Developer Documentation**](developer.html)&nbsp;&nbsp;
 [**Release Notes**](release.html)
 
-NBPCG is provided as a nbm file.  The current release is v${project.version}, which can be downloaded from:
+NBPCG is provided as a nbm file.  The current release is v5.0.0-SNAPSHOT, which can be downloaded from:
 
 | Operating System | Software Download |  
 |:-------------------|:--------------|
-| Any | [Download nbm file](http://www.rlinsdale.org.uk/repository/uk/theretiredprogrammer/${project.artifactId}/${project.version}/nbpcg-${project.version}.nbm) |
+| Any | [Download nbm file](http://www.rlinsdale.org.uk/repository/uk/theretiredprogrammer/nbpcg/5.0.0-SNAPSHOT/nbpcg-5.0.0-SNAPSHOT.nbm) |
 
 The nbm file can be placed anywhere in the filesystem on your machine.
 

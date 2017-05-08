@@ -17,6 +17,11 @@
         <developerConnection>scm:git:ssh://github.com:The-Retired-Programmer/nbpcg.git</developerConnection>
         <url>http://github.com/The-Retired-Programmer/nbpcg/tree/master</url>
     </scm>
+    
+    <issueManagement>
+        <system>Github</system>
+        <url>https://github.com/The-Retired-Programmer/nbpcg/issues</url>
+    </issueManagement>
 
     <developers>
         <developer>
@@ -213,6 +218,26 @@
             <build>
                 <plugins>
                     <plugin>
+                        <artifactId>maven-clean-plugin</artifactId>
+                        <version>3.0.0</version>
+                        <configuration>
+                            <filesets>
+                                <fileset>
+                                    <directory>docs</directory>
+                                    <includes>
+                                        <include>*.md</include>
+                                    </includes>
+                                </fileset>
+                                <fileset>
+                                    <directory>docs/resources</directory>
+                                    <includes>
+                                        <include>*.*</include>
+                                    </includes>
+                                </fileset>
+                            </filesets>
+                        </configuration>
+                    </plugin>
+                    <plugin>
                         <groupId>org.codehaus.mojo</groupId>
                         <artifactId>nbm-maven-plugin</artifactId>
                         <version>3.14.1</version>
@@ -281,22 +306,6 @@
                         <version>3.0.2</version>
                         <executions>
                             <execution>
-                                <id>stage online javadoc</id>
-                                <phase>deploy</phase>
-                                <goals>
-                                    <goal>copy-resources</goal>
-                                </goals>
-                                <configuration>
-                                    <outputDirectory>${web_staging.dir}/javadoc/nbpcg/</outputDirectory>
-                                    <resources>
-                                        <resource>
-                                            <directory>target/apidocs</directory>
-                                            <filtering>false</filtering>
-                                        </resource>
-                                    </resources>
-                                </configuration>
-                            </execution>
-                            <execution>
                                 <id>stage auto update</id>
                                 <phase>deploy</phase>
                                 <goals>
@@ -312,6 +321,22 @@
                                     </resources>
                                 </configuration>
                             </execution>
+                            <execution>
+                                <id>release documentation</id>
+                                <phase>deploy</phase>
+                                <goals>
+                                    <goal>copy-resources</goal>
+                                </goals>
+                                <configuration>
+                                    <outputDirectory>docs</outputDirectory>
+                                    <resources>
+                                        <resource>
+                                            <directory>src/site</directory>
+                                            <filtering>true</filtering>
+                                        </resource>
+                                    </resources>
+                                </configuration>
+                            </execution>
                         </executions>
                     </plugin>
                 </plugins>
@@ -319,25 +344,46 @@
         </profile>
         
         <profile>
-            <id>documentation-release</id>
+            <id>doc-release</id>
             <build>
                 <plugins>
+                    <plugin>
+                        <artifactId>maven-clean-plugin</artifactId>
+                        <version>3.0.0</version>
+                        <configuration>
+                            <filesets>
+                                <fileset>
+                                    <directory>docs</directory>
+                                    <includes>
+                                        <include>*.md</include>
+                                    </includes>
+                                </fileset>
+                                <fileset>
+                                    <directory>resources</directory>
+                                    <includes>
+                                        <include>*.*</include>
+                                    </includes>
+                                </fileset>
+                            </filesets>
+                        </configuration>
+                    </plugin>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-resources-plugin</artifactId>
                         <version>3.0.2</version>
                         <executions>
                             <execution>
-                                <id>default-cli</id>
+                                <id>release documentation</id>
+                                <phase>install</phase>
                                 <goals>
                                     <goal>copy-resources</goal>
                                 </goals>
                                 <configuration>
-                                    <outputDirectory>${web_staging.dir}/documentation/nbpcg/</outputDirectory>
+                                    <outputDirectory>docs</outputDirectory>
                                     <resources>
                                         <resource>
-                                            <directory>target/site</directory>
-                                            <filtering>false</filtering>
+                                            <directory>src/site</directory>
+                                            <filtering>true</filtering>
                                         </resource>
                                     </resources>
                                 </configuration>
