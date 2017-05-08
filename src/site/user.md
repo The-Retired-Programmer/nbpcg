@@ -30,7 +30,7 @@ in the Netbeans IDE in order that the script will work.
 The NBPCG script is an XML document.  A template is available - using the New... entry, the template can be selected 
 from the other category with file type NBPCG Definition file
 
-![script template selection](js/views/nbpcg/resources/newfile.jpg)
+![script template selection](resources/newfile.jpg)
 
 The xml consists of a top level element ( **nbpcg** ).  Details of the xml document is outlined in the following section:
 
@@ -212,7 +212,7 @@ Definition of an field to be inserted into the database table object.
 * In Projects View, Add a folder named `nbpcg` under `Other Sources`.
 * Place the nbpcg script file ( `script.xml`) in the `nbpcg` node
 
-![nbpcg folder and script](js/views/nbpcg/resources/nbpcgfolderandscript.jpg)
+![nbpcg folder and script](resources/nbpcgfolderandscript.jpg)
 
 ###Setting up an ANT project
 
@@ -225,16 +225,16 @@ The NBPCG script can be executed by actions on the popup menu on:
 
 1. The Project node
 
-![project node action](js/views/nbpcg/resources/projectaction.jpg)
+![project node action](resources/projectaction.jpg)
 
 1. The NBPCG script file
 
-![script action](js/views/nbpcg/resources/scriptaction.jpg)
+![script action](resources/scriptaction.jpg)
 
 Executing the script will open a new tab in the output window. Progress and errors will be reported 
 in that tab.
 
-![output tab](js/views/nbpcg/resources/outputtab.jpg)
+![output tab](resources/outputtab.jpg)
 
 
 ###Dependency Information for NBPCG generated Modules
