@@ -236,7 +236,7 @@
                                             </includes>
                                         </fileset>
                                         <fileset>
-                                            <directory>resources</directory>
+                                            <directory>docs/resources</directory>
                                             <includes>
                                                 <include>*.*</include>
                                             </includes>
@@ -354,7 +354,7 @@
                                             </includes>
                                         </fileset>
                                         <fileset>
-                                            <directory>resources</directory>
+                                            <directory>docs/resources</directory>
                                             <includes>
                                                 <include>*.*</include>
                                             </includes>
