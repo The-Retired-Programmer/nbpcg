@@ -9,7 +9,7 @@
     <name>Netbeans Platform CodeGenerator</name>
     <description>Code Generator for standard Netbeans platform application</description>
     
-    <url>https://www.theretiredprogrammer.uk/nbpcg</url>
+    <url>http://www.theretiredprogrammer.uk/nbpcg</url>
     
     <scm>
         <connection>scm:git:git://github.com/The-Retired-Programmer/nbpcg.git</connection>
@@ -27,7 +27,7 @@
             <name>Richard Linsdale</name>
             <email>richard@theretiredprogrammer.uk</email>
             <organization>The-Retired-Programmer</organization>
-            <organizationUrl>https://www.theretiredprogrammer.uk</organizationUrl>
+            <organizationUrl>http://www.theretiredprogrammer.uk</organizationUrl>
         </developer>
     </developers>
   
