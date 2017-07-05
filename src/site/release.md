@@ -4,8 +4,11 @@
 [**Developer Documentation**](developer.html)&nbsp;&nbsp;
 [Release Notes](release.html)
 
+### Release 5.0.1 ####
 
-###Release 5.0.0
+Updated build process relating to auto update.
+
+### Release 5.0.0 ###
 
 Updated to work with Netbeans 8.2;
 Major update to the release process to use Maven Central for delivery;
@@ -17,7 +20,7 @@ Updated to work with NetBeans 8.1; Revisions to internal implementation of forms
 
 ###Release 4.0.20
 
-Added creation of seperate entity source classes and any required table classes (for use with node editors).
+Added creation of separate entity source classes and any required table classes (for use with node editors).
 
 ###Release 4.0.15
 

@@ -256,6 +256,9 @@
                                 <goals>
                                     <goal>autoupdate</goal>
                                 </goals>
+                                <configuration>
+                                    <distBase>http://repo.maven.apache.org/maven2/uk/theretiredprogrammer/nbpcg/${project.version}</distBase>
+                                </configuration>
                             </execution>
                         </executions>
                     </plugin>
@@ -297,22 +300,6 @@
                     <plugin>
                         <artifactId>maven-resources-plugin</artifactId>
                         <executions>
-                            <execution>
-                                <id>stage auto update</id>
-                                <phase>deploy</phase>
-                                <goals>
-                                    <goal>copy-resources</goal>
-                                </goals>
-                                <configuration>
-                                    <outputDirectory>${web_staging.dir}/autoupdate/nbpcg/</outputDirectory>
-                                    <resources>
-                                        <resource>
-                                            <directory>target/netbeans_site</directory>
-                                            <filtering>false</filtering>
-                                        </resource>
-                                    </resources>
-                                </configuration>
-                            </execution>
                             <execution>
                                 <id>copy documentation</id>
                                 <phase>deploy</phase>
