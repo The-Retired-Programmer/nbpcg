@@ -13,10 +13,10 @@ any development environment which can work with a Maven project can be used.
 
 **Source Code**
 
-Sources for this release can be found [here](https://github.com/The-Retired-Programmer/nbpcg/releases/tag/v5.0.0).
+Sources for this release can be found [here](https://github.com/The-Retired-Programmer/nbpcg/releases/tag/v5.0.1-SNAPSHOT).
 
 Alternatively the project can be forked from [here](https://github.com/The-Retired-Programmer/nbpcg)
-to obtain the whole source tree.  Tag v5.0.0 refers to the sources
+to obtain the whole source tree.  Tag v5.0.1-SNAPSHOT refers to the sources
 relevant to this release.
 
 Online Javadoc for this release can be found
