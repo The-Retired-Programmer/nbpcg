@@ -42,8 +42,8 @@ the box labelled "Show detail" on this tab in order to list all plugins.
 
 ![Plugin Dialog - Installed Tab](resources/plugindialoginstalled.png)
 
-Alternatively the plugin can be downloaded directly from Maven Central.  The current release is v5.0.1-SNAPSHOT, which can be downloaded
-[from Maven Central](http://central.maven.org/maven2/uk/theretiredprogrammer/nbpcg/5.0.1-SNAPSHOT/nbpcg-5.0.1-SNAPSHOT.nbm).
+Alternatively the plugin can be downloaded directly from Maven Central.  The current release is v5.0.1, which can be downloaded
+[from Maven Central](http://central.maven.org/maven2/uk/theretiredprogrammer/nbpcg/5.0.1/nbpcg-5.0.1.nbm).
 
 The nbm file can be placed anywhere in the filesystem on your machine, and loaded manually into the IDE using the
 Plugin Dialog.

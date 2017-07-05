@@ -12,7 +12,7 @@ these entities.
 It is a Netbeans plug-in, and works with Netbeans 8.2 and the Java
 8 runtime environment
                
-**Current release**: v5.0.1-SNAPSHOT
+**Current release**: v5.0.1
                         
 **Project Status**: Additional functionality releases planned throughout 2017
   
