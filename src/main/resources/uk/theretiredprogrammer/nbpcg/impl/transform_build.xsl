@@ -94,6 +94,7 @@
                         <folder project="{$project}" location="java" package="{$package}" message="generating entity files" log="{$log}" license="{$license}">
                             <xsl:call-template name="rootentity" />
                             <xsl:call-template name="entity" />
+                            <xsl:call-template name="baseentity" />
                             <xsl:call-template name="alias" />
                         </folder>
                     </xsl:when>
@@ -203,6 +204,12 @@
     <xsl:template name="entity" >
         <xsl:for-each select="/nbpcg/databases/database[not(@usepackage)]/table" >
             <execute template="entity" filename="{@name}.java" useentityinfo="{@name}"/>
+        </xsl:for-each>
+    </xsl:template>
+    
+    <xsl:template name="baseentity" >
+        <xsl:for-each select="/nbpcg/databases/database[not(@usepackage)]/table" >
+            <execute template="baseentity" filename="{@name}Entity.java" useentityinfo="{@name}"/>
         </xsl:for-each>
     </xsl:template>
     
