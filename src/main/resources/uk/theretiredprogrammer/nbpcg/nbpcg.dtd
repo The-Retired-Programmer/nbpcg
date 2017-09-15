@@ -22,9 +22,10 @@
                 >
             <!ELEMENT generate EMPTY>
                 <!ATTLIST generate
-                    type (data|node|nodeviewer|editor|remotedb|mysqldatabase|jsondatabase) #REQUIRED
+                    type (data|dataaccess|node|nodeviewer|editor|remotedb|mysqldatabase|jsondatabase) #REQUIRED
                     package CDATA #REQUIRED
                     exclude CDATA #IMPLIED
+                    protocol (HTMLRest) #IMPLIED
                     >
     <!ELEMENT node (entryfield*, node*)>
         <!ATTLIST node
@@ -67,6 +68,7 @@
                 pkey (idauto) #IMPLIED
                 extrafields (usertimestamp) #IMPLIED
                 usepackage CDATA #IMPLIED
+                location CDATA #IMPLIED
                 >
             <!ELEMENT table (field*,insertentity*)>
                 <!ATTLIST table

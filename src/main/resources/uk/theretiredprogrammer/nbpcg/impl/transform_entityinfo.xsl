@@ -46,7 +46,7 @@
                     </xsl:otherwise>
                 </xsl:choose>
             </xsl:variable>
-            <persistencestore name="{@name}" dbname="{$database}">
+            <persistencestore name="{@name}" dbname="{$database}" location="{@location}" >
                 <xsl:for-each select="table">
                     <xsl:variable name="ename" select="@name" />
                     <xsl:variable name="tname">

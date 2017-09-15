@@ -124,11 +124,11 @@ public class ${ENTITYINFO.name} extends CoreEntity {
 <#list ENTITYINFO.child![] as child>
 <#assign CHILDENTITY = entityinfo[child.name?cap_first]>
 <#if child.orderable = "yes" >
-    private final EntityIndexedReferenceSet<${CHILDENTITY.pkeytype}, ${child.references}, ${ENTITYINFO.name}> ${child.name}s;
+    private final EntityIndexedReferenceSet<${child.references}, ${ENTITYINFO.name}> ${child.name}s;
 <#elseif child.sort = "yes" >
-    private final EntitySortedReferenceSet<${CHILDENTITY.pkeytype}, ${child.references}, ${ENTITYINFO.name}, ${child.references}Field> ${child.name}s;
+    private final EntitySortedReferenceSet<${child.references}, ${ENTITYINFO.name}, ${child.references}Field> ${child.name}s;
 <#else>
-    private final EntityReferenceSet<${CHILDENTITY.pkeytype}, ${child.references}, ${ENTITYINFO.name}> ${child.name}s;
+    private final EntityReferenceSet<${child.references}, ${ENTITYINFO.name}> ${child.name}s;
 </#if>
 </#list>
 

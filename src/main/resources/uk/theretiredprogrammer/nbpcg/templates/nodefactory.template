@@ -98,7 +98,7 @@ import org.openide.nodes.Node;
 <#if ENTITYINFO.isroot??>
 public class ${ENTITYINFO.name}${type}NodeChildFactory extends RootChildFactory<${ENTITYINFO.name}> {
 <#else>
-public class ${ENTITYINFO.name}${type}NodeChildFactory extends BasicChildFactory<${ENTITYINFO.pkeytype},${ENTITYINFO.name}, ${ENTITYINFO.parentname}> {
+public class ${ENTITYINFO.name}${type}NodeChildFactory extends BasicChildFactory<${ENTITYINFO.name}, ${ENTITYINFO.parentname}> {
 </#if>
 
 <#list ENTITYINFO.child![] as child>

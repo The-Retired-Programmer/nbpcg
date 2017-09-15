@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+    <!DOCTYPE nbpcg-build PUBLIC "-//uk/theretiredprogrammer/nbpcgbuild/DTD NBPCGBUILD SCHEMA 1.0//EN" "nbres:/uk/theretiredprogrammer/nbpcg/nbpcgbuild.dtd">
+<nbpcg-build name="Access Control Manager" copyright="2017 Richard Linsdale (richard at theretiredprogrammer.uk)">
+    <folder project="Access Control Manager - Business Logic" location="resource" package="uk.theretiredprogrammer.accesscontrolmanager.mysql" message="generating mysql script files for auth" log="accessccontrolmanager" license="apache20">
+        <execute template="createsqldatabase" filename="createdb.sql" usepersistencestore="auth"/>
+        <execute template="backupscript" filename="backupscript.sh" usepersistencestore="auth"/>
+        <execute template="createsqltables" filename="createtables.sql" usepersistencestore="auth"/>
+    </folder>
+    <folder project="Access Control Manager - Business Logic" location="java" package="uk.theretiredprogrammer.accesscontrolmanager.dataobjects" message="generating entity files" log="accessccontrolmanager" license="apache20">
+        <execute template="rootentity" filename="UserRoot.java" useentityinfo="UserRoot"/>
+        <execute template="entity" filename="User.java" useentityinfo="User"/>
+        <execute template="entity" filename="Claim.java" useentityinfo="Claim"/>
+        <execute template="baseentity" filename="UserEntity.java" useentityinfo="User"/>
+        <execute template="baseentity" filename="ClaimEntity.java" useentityinfo="Claim"/>
+    </folder>
+    <folder project="Access Control Manager - Business Logic" location="java" package="uk.theretiredprogrammer.accesscontrolmanager.dataobjects" message="generating dataaccess files" log="accessccontrolmanager" license="apache20">
+        <execute template="htmlrest" filename="UserRest.java" useentityinfo="User" usepersistencestore="auth"/>
+        <execute template="htmlrest" filename="ClaimRest.java" useentityinfo="Claim" usepersistencestore="auth"/>
+    </folder>
+    <folder project="Access Control Manager - Business Logic" location="java" package="uk.theretiredprogrammer.accesscontrolmanager.nodes" message="generating node files" log="accessccontrolmanager" license="apache20" datapackage="uk.theretiredprogrammer.accesscontrolmanager.dataobjects" editorpackage="uk.theretiredprogrammer.accesscontrolmanager.topcomponents">
+        <execute template="rootnode" type="" filename="UserRootNode.java" useentityinfo="UserRoot"/>
+        <execute template="node" type="" filename="UserNode.java" useentityinfo="User"/>
+        <execute template="node" type="" filename="ClaimNode.java" useentityinfo="Claim"/>
+        <execute template="nodefactory" type="" filename="UserRootNodeChildFactory.java" useentityinfo="UserRoot"/>
+        <execute template="nodefactory" type="" filename="UserNodeChildFactory.java" useentityinfo="User"/>
+        <execute template="undoaction" filename="UndoUser.java" useentityinfo="User"/>
+        <execute template="undoaction" filename="UndoClaim.java" useentityinfo="Claim"/>
+        <execute template="addaction" filename="AddUser.java" useentityinfo="User"/>
+        <execute template="addaction" filename="AddClaim.java" useentityinfo="Claim"/>
+    </folder>
+    <folder project="Access Control Manager - Business Logic" location="java" package="uk.theretiredprogrammer.accesscontrolmanager.topcomponents" message="generating node viewer files" log="accessccontrolmanager" license="apache20" datapackage="uk.theretiredprogrammer.accesscontrolmanager.dataobjects" nodepackage="uk.theretiredprogrammer.accesscontrolmanager.nodes">
+        <execute template="rootnodeviewer" type="Tree" filename="UserRootNodeViewer.java" useentityinfo="UserRoot"/>
+    </folder>
+    <folder project="Access Control Manager - Business Logic" location="java" package="uk.theretiredprogrammer.accesscontrolmanager.topcomponents" message="generating editor files" log="accessccontrolmanager" license="apache20" datapackage="uk.theretiredprogrammer.accesscontrolmanager.dataobjects" nodepackage="uk.theretiredprogrammer.accesscontrolmanager.nodes">
+        <execute template="editor" filename="UserEditor.java" useentityinfo="User"/>
+        <execute template="editor" filename="ClaimEditor.java" useentityinfo="Claim"/>
+        <execute template="editaction" filename="EditUser.java" useentityinfo="User"/>
+        <execute template="editaction" filename="EditClaim.java" useentityinfo="Claim"/>
+        <execute template="presenter" filename="UserPresenter.java" useentityinfo="User"/>
+        <execute template="presenter" filename="ClaimPresenter.java" useentityinfo="Claim"/>
+    </folder>
+    <folder project="auth" location="resource" package="uk.theretiredprogrammer.auth.mysql" message="generating mysql script files for auth" log="authentication" license="apache20">
+        <execute template="createsqldatabase" filename="createdb.sql" usepersistencestore="auth"/>
+        <execute template="backupscript" filename="backupscript.sh" usepersistencestore="auth"/>
+        <execute template="createsqltables" filename="createtables.sql" usepersistencestore="auth"/>
+    </folder>
+</nbpcg-build>
+    
+        
+        
+    
+    
+        
+            
+                
+                
+                
+                
+                
+                    
+                    
+                    
+                    
+                
+            
+            
+                
+                
+                
+                    
+                    
+                    
+                
+            
+        
+    

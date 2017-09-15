@@ -98,6 +98,11 @@
                             <xsl:call-template name="alias" />
                         </folder>
                     </xsl:when>
+                    <xsl:when test="@type = 'dataaccess' ">
+                        <folder project="{$project}" location="java" package="{$package}" message="generating dataaccess files" log="{$log}" license="{$license}">
+                            <xsl:call-template name="dataaccess" />
+                        </folder>
+                    </xsl:when>
                     <xsl:when test="@type = 'node' ">
                         <folder project="{$project}" location="java" package="{$package}"  message="generating node files" log="{$log}" license="{$license}" datapackage="{$datapackage}" editorpackage="{$editorpackage}">
                             <xsl:call-template name="rootnode" />
@@ -204,6 +209,24 @@
     <xsl:template name="entity" >
         <xsl:for-each select="/nbpcg/databases/database[not(@usepackage)]/table" >
             <execute template="entity" filename="{@name}.java" useentityinfo="{@name}"/>
+        </xsl:for-each>
+    </xsl:template>
+    
+    <xsl:template name="dataaccess" >
+        <xsl:variable name="protocol">
+            <xsl:choose>
+                <xsl:when test="@protocol">
+                    <xsl:value-of select="@protocol"/>
+                </xsl:when>
+                <xsl:otherwise>HTMLRest</xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+        <xsl:for-each select="/nbpcg/databases/database[not(@usepackage)]/table" >
+            <xsl:choose>
+                <xsl:when test="$protocol = 'HTMLRest' ">
+                    <execute template="htmlrest" filename="{@name}Rest.java" useentityinfo="{@name}" usepersistencestore="{../@name}"/>
+                </xsl:when>
+            </xsl:choose>
         </xsl:for-each>
     </xsl:template>
     
@@ -499,7 +522,6 @@
         </xsl:for-each>
     </xsl:template>
 
-    
     <!-- set of useful utility templates -->
     
     <xsl:template name="firsttouppercase">

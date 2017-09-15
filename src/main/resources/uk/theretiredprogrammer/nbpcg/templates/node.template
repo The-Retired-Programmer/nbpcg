@@ -81,6 +81,7 @@ package ${package};
 
 import java.awt.datatransfer.DataFlavor;
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.List;
 import javax.swing.Action;
 import ${datapackage}.*;
@@ -113,7 +114,7 @@ import static ${package}.${COPYMOVEENTITYINFO.name}${type}Node.${COPYMOVEENTITYI
  *
  * @author ${templateauthor}
  */
-public class ${ENTITYINFO.name}${type}Node extends ${type2}Node<${ENTITYINFO.pkeytype},${ENTITYINFO.name}, ${ENTITYINFO.parentname},${ENTITYINFO.name}Field> {
+public class ${ENTITYINFO.name}${type}Node extends ${type2}Node<${ENTITYINFO.name}, ${ENTITYINFO.parentname},${ENTITYINFO.name}Field> {
 
     /**
     * Data Flavor for Nodes of type ${ENTITYINFO.name}${type}Node
@@ -243,7 +244,13 @@ public class ${ENTITYINFO.name}${type}Node extends ${type2}Node<${ENTITYINFO.pke
                 props.add(new StringReadonlyProperty("Node Type", "${ENTITYINFO.name}${type}Node"));
 <#list ENTITYINFO.field![] as field>
 <#if field.type != "rootref" >
+<#if field.type == "datetime" >
+                try {
+</#if>
                 props.add(${field.name}property = new StringReadonlyProperty("${field.label}", e.format${field.name?cap_first}()));
+<#if field.type == "datetime" >
+                } catch (ParseException ex) { /* ignore prop if it fails to format */ } 
+</#if>
 </#if>
 </#list>
             }
@@ -257,7 +264,13 @@ public class ${ENTITYINFO.name}${type}Node extends ${type2}Node<${ENTITYINFO.pke
                 if (e != null && idproperty != null) {
 <#list ENTITYINFO.field![] as field>
 <#if field.type != "rootref" >
+<#if field.type == "datetime" >
+                try {
+</#if>
                     ${field.name}property.update(e.format${field.name?cap_first}());
+<#if field.type == "datetime" >
+                } catch (ParseException ex) { /* ignore prop if it fails to format */ } 
+</#if>
 </#if>
 </#list>
                     propertyChange();
