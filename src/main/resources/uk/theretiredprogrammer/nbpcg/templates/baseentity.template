@@ -74,6 +74,8 @@
 <#assign ENTITYINFO = entityinfo[useentityinfo] >
 package ${package};
 
+import uk.theretiredprogrammer.nbpcglibrary.data.entity.IdTimestampBaseEntity;
+
 /**
  * The ${ENTITYINFO.name} BaseEntity.
  *
@@ -82,27 +84,34 @@ package ${package};
  *
  * @author ${templateauthor}
  */
-public class ${ENTITYINFO.name}Entity  {
+public class ${ENTITYINFO.name}Entity extends IdTimestampBaseEntity {
 
 <#list ENTITYINFO.field![] as field>
+<#if !(field.hidden??) >
     private ${field.jsontype} ${field.name};
+</#if>
 </#list>
 
     /**
      * Constructor - ${ENTITYINFO.name}Entity.
      */
     public ${ENTITYINFO.name}Entity() {
+        super();
     }
 
     /**
      * Constructor - ${ENTITYINFO.name}Entity.
      */
     public ${ENTITYINFO.name}Entity(${ENTITYINFO.name}Entity from) {
+        super(from);
 <#list ENTITYINFO.field![] as field>
+<#if !(field.hidden??) >
     ${field.name} = from.${field.name};
+</#if>
 </#list>
     }
 <#list ENTITYINFO.field![] as field>
+<#if !(field.hidden??) >
 
     /**
      * Get the ${field.name}.
@@ -121,5 +130,6 @@ public class ${ENTITYINFO.name}Entity  {
     public void set${field.name?cap_first}(${field.jsontype} ${field.name}) {
         this.${field.name} = ${field.name};
     }
+</#if>
 </#list>
 }
