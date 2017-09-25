@@ -92,15 +92,8 @@ import uk.theretiredprogrammer.nbpcglibrary.htmlrest.HTMLRest;
 public class ${ENTITYINFO.name}Rest extends HTMLRest<${ENTITYINFO.name}Entity> {
     
     public ${ENTITYINFO.name}Rest(String jwtoken) {
-        super("${PSTORE.location}/${ENTITYINFO.name?lower_case}s", ${ENTITYINFO.name}Entity.class, jwtoken);
-    }
-    
-    @Override
-    public List<${ENTITYINFO.name}Entity> getAll() {
-        Response response = getAllResponse();
-        return response == null 
-                ? new ArrayList<>()
-                :response.readEntity(new GenericType<List<${ENTITYINFO.name}Entity>>() {
-                });
+        super("${PSTORE.location}/${ENTITYINFO.name?lower_case}s",
+            new GenericType<List<${ENTITYINFO.name}Entity>>(){},
+            ${ENTITYINFO.name}Entity.class, jwtoken);
     }
 }

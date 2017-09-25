@@ -992,11 +992,6 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.name}Entity,${ENTITY
         }
 
         @Override
-        protected final EntityPersistenceProvider createEntityPersistenceProvider() {
-            return EntityPersistenceProviderManager.getEntityPersistenceProvider("${ENTITYINFO.dbkey}", "${ENTITYINFO.dbtablename}"<#if ENTITYINFO.orderable = "yes">, "idx"</#if>);
-        }
-
-        @Override
         protected boolean isPersistent(int pkey) {
             return pkey > 0;
         }

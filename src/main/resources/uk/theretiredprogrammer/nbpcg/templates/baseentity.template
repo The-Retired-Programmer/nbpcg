@@ -74,7 +74,7 @@
 <#assign ENTITYINFO = entityinfo[useentityinfo] >
 package ${package};
 
-import uk.theretiredprogrammer.nbpcglibrary.data.entity.IdTimestampBaseEntity;
+import uk.theretiredprogrammer.nbpcglibrary.api.IdTimestampBaseEntity;
 
 /**
  * The ${ENTITYINFO.name} BaseEntity.
@@ -127,7 +127,7 @@ public class ${ENTITYINFO.name}Entity extends IdTimestampBaseEntity {
      *
      * @param ${field.name} the ${field.name}
      */
-    public void set${field.name?cap_first}(${field.jsontype} ${field.name}) {
+    public final void set${field.name?cap_first}(${field.jsontype} ${field.name}) {
         this.${field.name} = ${field.name};
     }
 </#if>
