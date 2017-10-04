@@ -78,13 +78,13 @@ package ${package};
 import java.util.Arrays;
 import java.util.List;
 import javax.swing.JComponent;
-import ${datapackage}.*;
 import uk.theretiredprogrammer.nbpcglibrary.form.*;
 import uk.theretiredprogrammer.nbpcglibrary.common.*;
 import uk.theretiredprogrammer.nbpcglibrary.topcomponent.*;
 import org.openide.util.NbBundle;
 import org.openide.util.NbBundle.Messages;
 import org.openide.windows.TopComponent;
+import ${nodepackage}.${ENTITYINFO.name}Node;
 
 /**
  * Editor for ${ENTITYINFO.name}.
@@ -102,27 +102,27 @@ persistenceType = TopComponent.PERSISTENCE_NEVER)
     "CTL_${ENTITYINFO.name}Editor=${ENTITYINFO.name} Editor",
     "HINT_${ENTITYINFO.name}Editor=This is the ${ENTITYINFO.name} Editor"
 })
-public final class ${ENTITYINFO.name}Editor extends EditorTopComponent<${ENTITYINFO.name}> {
+public final class ${ENTITYINFO.name}Editor extends EditorTopComponent<${ENTITYINFO.name}Node> {
     
     private final TitleChangeListener titlechangelistener;
     private final CompositePresenter presenter;
   
-    public ${ENTITYINFO.name}Editor(${ENTITYINFO.name} e) {
-        super(e,
+    public ${ENTITYINFO.name}Editor(${ENTITYINFO.name}Node node) {
+        super(node,
                 NbBundle.getMessage(${ENTITYINFO.name}Editor.class, "CTL_${ENTITYINFO.name}Editor"),
                 NbBundle.getMessage(${ENTITYINFO.name}Editor.class, "HINT_${ENTITYINFO.name}Editor"));
         presenter = new CompositePresenter();
         presenter.setGetChildPresentersFunction(() -> getPanePresenters());
-        titlechangelistener = new TitleChangeListener("Editor:" + e.instanceDescription());
+        titlechangelistener = new TitleChangeListener();
     }
 
     private List<PanePresenter> getPanePresenters() {
         return Arrays.asList(
-                         new ${ENTITYINFO.name}Presenter(entity)
+                         new ${ENTITYINFO.name}Presenter(node.getEntity())
 <#if ENTITYINFO.childnodesineditor??>
 <#list ENTITYINFO.childnodesineditor?split(",") as childnode>
                         ,
-                        new ${childnode}TablePresenter(entity)
+                        new ${childnode}TablePresenter(node.getEntity())
 </#list>
 </#if>
         );
@@ -142,25 +142,21 @@ public final class ${ENTITYINFO.name}Editor extends EditorTopComponent<${ENTITYI
     protected void opened() {
         super.opened();
         presenter.enableView();
-        setName("${ENTITYINFO.name}: " + entity.getDisplayTitle());
-        entity.addTitleListener(titlechangelistener);
+        setName("${ENTITYINFO.name}: " + node.getDisplayTitle());
+        node.getEntity().addTitleListener(titlechangelistener);
     }
 
     @Override
     protected void closed() {
-        entity.removeTitleListener(titlechangelistener);
+        node.getEntity().removeTitleListener(titlechangelistener);
         super.closed();
     }
 
-    private class TitleChangeListener extends Listener<SimpleEventParams> {
-
-        public TitleChangeListener(String name) {
-            super(name);
-        }
+    private class TitleChangeListener extends Listener {
 
         @Override
-        public void action(SimpleEventParams p) {
-            setName("${ENTITYINFO.name}: " + entity.getDisplayTitle());
+        public void action(Object p) {
+            setName("${ENTITYINFO.name}: " + node.getDisplayTitle());
         }
     }
 }

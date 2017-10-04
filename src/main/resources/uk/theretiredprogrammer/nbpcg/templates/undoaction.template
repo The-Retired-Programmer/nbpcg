@@ -81,7 +81,6 @@ import static javax.swing.Action.NAME;
 import org.openide.util.ContextAwareAction;
 import org.openide.util.Lookup;
 import uk.theretiredprogrammer.nbpcglibrary.annotations.RegisterNodeAction;
-import uk.theretiredprogrammer.nbpcglibrary.common.LogBuilder;
 
 /**
  * UndoAction for ${ENTITYINFO.name}.
@@ -115,7 +114,6 @@ public final class Undo${ENTITYINFO.name} extends AbstractAction implements Cont
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            LogBuilder.writeLog("${log}", this, "actionPerformed");
             node.getEntity().cancelEdit();
         }
     }

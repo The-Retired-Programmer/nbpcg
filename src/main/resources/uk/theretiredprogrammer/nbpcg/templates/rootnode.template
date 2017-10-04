@@ -115,13 +115,13 @@ public class ${ENTITYINFO.name}${type}Node extends RootNode<${ENTITYINFO.name}> 
     }
 
     private ${ENTITYINFO.name}${type}Node(${ENTITYINFO.name} e, ${ENTITYINFO.name}${type}NodeChildFactory cf) {
-        super(e, cf, new DataFlavor[] {<#list ENTITYINFO.child![] as child>${child.name?upper_case}${type?upper_case}NODE_FLAVOR, </#list>});
+        super(e, cf, new DataFlavor[] {<#list ENTITYINFO.child![] as child>${child.name?upper_case}${type?upper_case}NODE_FLAVOR, </#list>}, "${ENTITYINFO.icon}");
         this.cf = cf;
     }
  
     @Override
     public String getDisplayName() {
-        return ${ENTITYINFO.name}.get().getDisplayName();
+        return "${ENTITYINFO.label}";
     }
 
     @Override
@@ -179,7 +179,9 @@ public class ${ENTITYINFO.name}${type}Node extends RootNode<${ENTITYINFO.name}> 
         CoreEntity e = child.getEntity();
 <#list ENTITYINFO.child![] as child>
         if (e instanceof ${child.name?cap_first}) {
-            ${child.name?cap_first}.getEM().getNew((${child.name?cap_first}) e  ,getEntity());
+            ${child.name?cap_first} f = new ${child.name?cap_first}(((${child.name?cap_first}) e).getBaseEntity());
+            ${ENTITYINFO.name} p = getEntity();
+            p.add${child.name?cap_first}(f);
             return;
         }
 </#list>

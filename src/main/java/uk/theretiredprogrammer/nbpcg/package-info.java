@@ -26,6 +26,7 @@
     @TemplateRegistration(folder = "uk-theretiredprogrammer-nbpcg", displayName = "entity", content = "templates/entity.template", scriptEngine = "freemarker"),
     @TemplateRegistration(folder = "uk-theretiredprogrammer-nbpcg", displayName = "baseentity", content = "templates/baseentity.template", scriptEngine = "freemarker"),
     @TemplateRegistration(folder = "uk-theretiredprogrammer-nbpcg", displayName = "htmlrest", content = "templates/htmlrest.template", scriptEngine = "freemarker"),
+    @TemplateRegistration(folder = "uk-theretiredprogrammer-nbpcg", displayName = "restcreatorlist", content = "templates/restcreatorlist.template", scriptEngine = "freemarker"),
     @TemplateRegistration(folder = "uk-theretiredprogrammer-nbpcg", displayName = "presenter", content = "templates/presenter.template", scriptEngine = "freemarker"),
     @TemplateRegistration(folder = "uk-theretiredprogrammer-nbpcg", displayName = "tablepresenter", content = "templates/tablepresenter.template", scriptEngine = "freemarker"),
     @TemplateRegistration(folder = "uk-theretiredprogrammer-nbpcg", displayName = "editor", content = "templates/editor.template", scriptEngine = "freemarker"),

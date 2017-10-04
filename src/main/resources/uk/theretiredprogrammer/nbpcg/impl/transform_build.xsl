@@ -96,6 +96,7 @@
                             <xsl:call-template name="entity" />
                             <xsl:call-template name="baseentity" />
                             <xsl:call-template name="alias" />
+                            <xsl:call-template name="restcreatorlist" />
                         </folder>
                     </xsl:when>
                     <xsl:when test="@type = 'dataaccess' ">
@@ -233,6 +234,12 @@
     <xsl:template name="baseentity" >
         <xsl:for-each select="/nbpcg/databases/database[not(@usepackage)]/table" >
             <execute template="baseentity" filename="{@name}Entity.java" useentityinfo="{@name}"/>
+        </xsl:for-each>
+    </xsl:template>
+    
+    <xsl:template name="restcreatorlist" >
+        <xsl:for-each select="/nbpcg/databases/database" >
+            <execute template="restcreatorlist" filename="RestCreatorList.java" usepersistencestore="{@name}" />
         </xsl:for-each>
     </xsl:template>
     

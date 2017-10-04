@@ -81,6 +81,7 @@ package ${package};
 
 import java.awt.datatransfer.DataFlavor;
 import java.io.IOException;
+import java.text.MessageFormat;
 import java.text.ParseException;
 import java.util.List;
 import javax.swing.Action;
@@ -96,6 +97,7 @@ import uk.theretiredprogrammer.nbpcglibrary.node.properties.*;
 import uk.theretiredprogrammer.nbpcglibrary.api.LogicException;
 import org.openide.nodes.PropertySupport;
 import ${datapackage}.${ENTITYINFO.name}.${ENTITYINFO.name}Field;
+import uk.theretiredprogrammer.nbpcglibrary.common.StringX;
 <#list ENTITYINFO.child![] as c>
 <#if (type = "Icon" && c.hasiconview = "yes" ) || (type = "") >
 import static ${package}.${c.name?cap_first}${type}Node.${c.name?upper_case}${type?upper_case}NODE_FLAVOR;
@@ -114,7 +116,7 @@ import static ${package}.${COPYMOVEENTITYINFO.name}${type}Node.${COPYMOVEENTITYI
  *
  * @author ${templateauthor}
  */
-public class ${ENTITYINFO.name}${type}Node extends ${type2}Node<${ENTITYINFO.name}, ${ENTITYINFO.parentname},${ENTITYINFO.name}Field> {
+public class ${ENTITYINFO.name}${type}Node extends ${type2}Node<${ENTITYINFO.name}Entity, ${ENTITYINFO.name}, ${ENTITYINFO.parentname},${ENTITYINFO.name}Field> {
 
     /**
     * Data Flavor for Nodes of type ${ENTITYINFO.name}${type}Node
@@ -142,7 +144,7 @@ public class ${ENTITYINFO.name}${type}Node extends ${type2}Node<${ENTITYINFO.nam
         }
 
         private ${ENTITYINFO.name}${type}Node(${ENTITYINFO.name} e, ${ENTITYINFO.name}${type}NodeChildFactory cf) {
-            super("${ENTITYINFO.name}${type}Node", e, cf, ${ENTITYINFO.name}.EM.class,
+            super((be) -> new ${ENTITYINFO.name}(be), e, cf, ${ENTITYINFO.name}Rest.class,
                 new DataFlavor[] {
 <#list ENTITYINFO.child![] as c>
 <#if (type = "Icon" && c.hasiconview = "yes" ) || (type = "") >
@@ -155,9 +157,9 @@ public class ${ENTITYINFO.name}${type}Node extends ${type2}Node<${ENTITYINFO.nam
 </#list>
                     }
 <#if ENTITYINFO.nomodifiers?? || type == "Icon" >
-                 , 0 );
+                 ,"${ENTITYINFO.icon}", 0 );
 <#else>
-                 , CAN_COPY | CAN_DELETE | CAN_CUT);
+                 ,"${ENTITYINFO.icon}", CAN_COPY | CAN_DELETE | CAN_CUT);
 </#if>
             this.cf = cf;
         }
@@ -169,11 +171,11 @@ public class ${ENTITYINFO.name}${type}Node extends ${type2}Node<${ENTITYINFO.nam
          * @param e the entity associated with this node
          */
         public ${ENTITYINFO.name}${type}Node(${ENTITYINFO.name} e) {
-            super("${ENTITYINFO.name}${type}Node", e, ${ENTITYINFO.name}.EM.class
+            super((be) -> new ${ENTITYINFO.name}(be), e, ${ENTITYINFO.name}Rest.class
 <#if ENTITYINFO.nomodifiers?? || type == "Icon">
-                    , 0 );
+                    ,"${ENTITYINFO.icon}", 0 );
 <#else>
-                    , CAN_COPY | CAN_DELETE | CAN_CUT);
+                    ,"${ENTITYINFO.icon}", CAN_COPY | CAN_DELETE | CAN_CUT);
 </#if>
         }
 </#if>
@@ -211,26 +213,6 @@ public class ${ENTITYINFO.name}${type}Node extends ${type2}Node<${ENTITYINFO.nam
            return ${ENTITYINFO.name?upper_case}${type?upper_case}NODE_FLAVOR; 
         }
 
-         /**
-         * Get the node display name
-         *
-         * @return the display name
-         */
-        @Override
-        public String getDisplayName() {
-            return getEntity() != null? getEntity().getDisplayName(): "#undefined#";
-        }
-
-        /**
-         * Get the node display title
-         *
-         * @return the display title
-         */
-        @Override
-        public String getDisplayTitle() {
-            return getEntity() != null? getEntity().getDisplayTitle(): "#undefined#";
-        }
-
 <#list ENTITYINFO.field![] as field>
 <#if field.type != "rootref" >
         StringReadonlyProperty ${field.name}property;
@@ -239,42 +221,36 @@ public class ${ENTITYINFO.name}${type}Node extends ${type2}Node<${ENTITYINFO.nam
 
         @Override
         protected List<PropertySupport.ReadOnly<?>> createPropertyItems(List<PropertySupport.ReadOnly<?>> props) {
-            ${ENTITYINFO.name} e =  getEntity();
-            if (e != null) {
                 props.add(new StringReadonlyProperty("Node Type", "${ENTITYINFO.name}${type}Node"));
 <#list ENTITYINFO.field![] as field>
 <#if field.type != "rootref" >
 <#if field.type == "datetime" >
                 try {
 </#if>
-                props.add(${field.name}property = new StringReadonlyProperty("${field.label}", e.format${field.name?cap_first}()));
+                props.add(${field.name}property = new StringReadonlyProperty("${field.label}", format${field.name?cap_first}()));
 <#if field.type == "datetime" >
                 } catch (ParseException ex) { /* ignore prop if it fails to format */ } 
 </#if>
 </#if>
 </#list>
-            }
             return props;
         }
         
         @Override
         protected void nodeProcessFieldChange(${ENTITYINFO.name}Field field) {
-            ${ENTITYINFO.name} e =  getEntity();
-            if (field == null) {
-                if (e != null && idproperty != null) {
+                if (idproperty != null) {
 <#list ENTITYINFO.field![] as field>
 <#if field.type != "rootref" >
 <#if field.type == "datetime" >
                 try {
 </#if>
-                    ${field.name}property.update(e.format${field.name?cap_first}());
+                    ${field.name}property.update(format${field.name?cap_first}());
 <#if field.type == "datetime" >
                 } catch (ParseException ex) { /* ignore prop if it fails to format */ } 
 </#if>
 </#if>
 </#list>
                     propertyChange();
-                }
             } else {
                 switch (field) {
 <#list ENTITYINFO.field![] as field>
@@ -282,15 +258,15 @@ public class ${ENTITYINFO.name}${type}Node extends ${type2}Node<${ENTITYINFO.nam
 <#if field.type = "rootref" >
 <#elseif field.type = "idx" >
                     case ${field.name?upper_case}:
-                        if (e != null && ${field.name}property != null) {
-                            ${field.name}property.update(e.format${field.name?cap_first}());
+                        if (${field.name}property != null) {
+                            ${field.name}property.update(format${field.name?cap_first}());
                             propertyChange("${field.label}");
                         }
                         break;
 <#else>
                     case ${field.name?upper_case}:
-                        if (e != null && ${field.name}property != null) {
-                            ${field.name}property.update(e.format${field.name?cap_first}());
+                        if (${field.name}property != null) {
+                            ${field.name}property.update(format${field.name?cap_first}());
                             propertyChange("${field.label}");
                         }
                         break;
@@ -320,7 +296,10 @@ public class ${ENTITYINFO.name}${type}Node extends ${type2}Node<${ENTITYINFO.nam
         CoreEntity e = child.getEntity();
 <#list ENTITYINFO.child![] as child>
         if (e instanceof ${child.name?cap_first}) {
-            ${child.name?cap_first}.getEM().getNew((${child.name?cap_first}) e  ,getEntity());
+            ${child.name?cap_first} f = new ${child.name?cap_first}(((${child.name?cap_first}) e).getBaseEntity());
+            ${ENTITYINFO.name} p = getEntity();
+            p.add${child.name?cap_first}(f);
+            f.linkToParent(p);
             return;
         }
 </#list>
@@ -366,4 +345,196 @@ public class ${ENTITYINFO.name}${type}Node extends ${type2}Node<${ENTITYINFO.nam
     public Action[] getActions(boolean context) {
         return findActions("${ENTITYINFO.name}${type}Node");
     }
+
+    @Override
+    public String getDisplayName() {
+<#list ENTITYINFO.displaynameformat as df >
+        return MessageFormat.format("${df.format}", <#list df.display as dp>format${dp.field}()<#if dp_has_next>, </#if></#list>);
+</#list>
+    }
+
+    @Override
+    public String getDisplayTitle() {
+<#if ENTITYINFO.displaytitleformat??>
+<#list ENTITYINFO.displaytitleformat as df>
+        return MessageFormat.format("${df.format}", <#list df.display as dp>format${dp.field}()<#if dp_has_next>, </#if></#list>);
+</#list>
+<#else>
+        return getDisplayName();
+</#if>
+    }
+
+    @Override
+    public String getSortKey() {
+<#if ENTITYINFO.sortformat?? >
+<#list ENTITYINFO.sortformat as df>
+        return MessageFormat.format("${df.format}", <#list df.display as dp>format${dp.field}(<#if dp.length??>${dp.length}</#if>)<#if dp_has_next>, </#if></#list>);
+</#list>
+<#else>
+        return getDisplayTitle();
+</#if>
+    }
+
+<#list ENTITYINFO.field![] as field>
+<#if field.type != "rootref" >
+<#if field.type="reference" >
+    /**
+     * Get the formatted text version of ${field.name} field
+     *
+     * @return the formatted String 
+     */
+    public String format${field.name?cap_first}() {
+        return getEntity().get${field.name?cap_first}()!=null ? get${field.name?cap_first}().getDisplayTitle(): "undefined";
+    }
+<#elseif field.type="ref" >
+    /**
+     * Get the formatted text version of ${field.name} field
+     *
+     * @return the formatted String 
+     */
+    public String format${field.name?cap_first}() {
+        return getParentNode().getDisplayName();
+    }
+<#elseif field.type="int" >
+    /**
+     * Get the formatted text version of ${field.name} field
+     *
+     * @return the formatted String 
+     */
+    public String format${field.name?cap_first}() {
+        return Integer.toString(getEntity().get${field.name?cap_first}());
+    }
+<#elseif field.type="idx"  >
+    /**
+     * Get the formatted text version of ${field.name} field
+     *
+     * @return the formatted String 
+     */
+    public String format${field.name?cap_first}() {
+        return Integer.toString(getEntity().getIdx());
+    }
+<#elseif field.type="long" >
+    /**
+     * Get the formatted text version of ${field.name} field
+     *
+     * @return the formatted String 
+     */
+    public String format${field.name?cap_first}() {
+        return Long.toString(getEntity().get${field.name?cap_first}());
+    }
+<#elseif field.type="boolean" >
+    /**
+     * Get the formatted text version of ${field.name} field
+     *
+     * @return the formatted String 
+     */
+    public String format${field.name?cap_first}() {
+        return getEntity().get${field.name?cap_first}()? "Yes": "No";
+    }
+<#elseif field.type="date">
+    /**
+     * Get the formatted text version of ${field.name} field
+     *
+     * @return the formatted String 
+     * @throws java.text.ParseException if problems
+     */
+    public String format${field.name?cap_first}() throws ParseException {
+        return DATEONLY_READABLE.format(getEntity().get${field.name?cap_first}());
+    }
+<#elseif field.type="datetime" >
+    /**
+     * Get the formatted text version of ${field.name} field
+     *
+     * @return the formatted String
+     * @throws java.text.ParseException if problems 
+     */
+    public String format${field.name?cap_first}() throws ParseException {
+        return DATETIME_READABLE.format(getEntity().get${field.name?cap_first}());
+    }
+<#elseif field.type="currency" || field.type="decimal" >
+    /**
+     * Get the formatted text version of ${field.name} field
+     *
+     * @return the formatted String 
+     */
+    public String format${field.name?cap_first}() {
+        return getEntity().get${field.name?cap_first}().toPlainString();
+    }
+<#elseif field.type="String" ||  field.type="enum" || field.type="password" >
+    /**
+     * Get the formatted text version of ${field.name} field
+     *
+     * @return the formatted String 
+     */
+    public String format${field.name?cap_first}() {
+        return getEntity().get${field.name?cap_first}();
+    }
+</#if>
+
+</#if>
+</#list>
+<#list ENTITYINFO.field![] as field>
+<#if field.type="int" >
+    /**
+     * Get the formatted text version of ${field.name} field left padded with
+     * zeros if less than minimum size.
+     *
+     * @param minDigits minimum size
+     * @return the formatted String
+     */
+    public String format${field.name?cap_first}(int minDigits) {
+        return StringX.padLeft(format${field.name?cap_first}(),minDigits,'0');
+    }
+<#elseif field.type="String" >
+    /**
+     * Get the formatted text version of ${field.name} field left padded with
+     * zeros if less than minimum size.
+     *
+     * @param minChars minimum size
+     * @return the formatted String
+     */
+    public String format${field.name?cap_first}(int minChars) {
+        return StringX.padLeftIfInt(format${field.name?cap_first}(),minChars,'0');
+    }
+</#if>
+</#list>
+<#assign fireName = "no">
+<#assign fireTitle = "no">
+<#list ENTITYINFO.field![] as field>
+<#if field.type == "ref" || field.type == "reference" >
+<#list ENTITYINFO.displaynameformat as df >
+<#list df.display as dp>
+<#if dp.field = field.label >
+<#assign fireName  = "yes" >
+</#if>
+</#list>
+</#list>
+<#if ENTITYINFO.displaytitleformat??>
+<#list ENTITYINFO.displaytitleformat as df >
+<#list df.display as dp>
+<#if dp.field = field.label >
+<#assign fireTitle = "yes" >
+</#if>
+</#list>
+</#list>
+<#else>
+<#assign fireTitle = fireName >
+</#if>
+</#if>
+</#list>
+<#if fireName = "yes" || fireTitle = "yes" >
+
+    private class ReferencedEntityTitleChangeListener extends Listener {
+
+        @Override
+        public void action(Object p) {
+<#if fireName = "yes" >
+            nameListenerFire();
+</#if>
+<#if fireTitle = "yes" >
+            titleListenerFire();
+</#if>
+        }
+    }
+</#if>
 }

@@ -72,6 +72,7 @@
 <#-- Freemarker Template for any Node Add Action class -->
 <#assign templateauthor = "Richard Linsdale (richard at theretiredprogrammer.uk)" />
 <#assign ENTITYINFO = entityinfo[useentityinfo] >
+<#assign PARENTENTITYINFO = entityinfo[ENTITYINFO.parentname] >
 package ${package};
 
 import java.awt.event.ActionEvent;
@@ -81,11 +82,11 @@ import static javax.swing.Action.NAME;
 import org.openide.util.ContextAwareAction;
 import org.openide.util.Lookup;
 import ${datapackage}.${ENTITYINFO.name};
+import ${datapackage}.${ENTITYINFO.parentname};
 <#if editorpackage != "">
 import ${editorpackage}.${ENTITYINFO.name}Editor;
 </#if>
 import uk.theretiredprogrammer.nbpcglibrary.annotations.RegisterNodeAction;
-import uk.theretiredprogrammer.nbpcglibrary.common.LogBuilder;
 
 
 /**
@@ -120,11 +121,15 @@ public final class Add${ENTITYINFO.name} extends AbstractAction implements Conte
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            LogBuilder.writeLog("${log}", this, "actionPerformed");
-<#if editorpackage = "">
-            ${ENTITYINFO.name}.getEM().getNew(parent.getEntity());
-<#else>
-            new ${ENTITYINFO.name}Editor(${ENTITYINFO.name}.getEM().getNew(parent.getEntity())).visible();
+            ${ENTITYINFO.parentname} p = parent.getEntity();
+            ${ENTITYINFO.name} c = new ${ENTITYINFO.name}();
+            p.add${ENTITYINFO.name}(c);
+<#if ! PARENTENTITYINFO.isroot?? >
+           c.linkToParent(p);
+</#if>
+<#if editorpackage != "">
+            //TODO - call editor
+            //new ${ENTITYINFO.name}Editor(c).visible();
 </#if>
         }
     }

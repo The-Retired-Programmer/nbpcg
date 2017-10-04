@@ -94,7 +94,6 @@ import uk.theretiredprogrammer.nbpcglibrary.common.Listener;
 import ${package}.${child.references}.${child.references}Field;
 </#if>
 </#list>
-import uk.theretiredprogrammer.nbpcglibrary.common.LogBuilder;
 import uk.theretiredprogrammer.nbpcglibrary.data.entity.*;
 import uk.theretiredprogrammer.nbpcglibrary.data.entityreferences.*;
 
@@ -124,19 +123,14 @@ public class ${ENTITYINFO.name} extends CoreEntity {
 <#list ENTITYINFO.child![] as child>
 <#assign CHILDENTITY = entityinfo[child.name?cap_first]>
 <#if child.orderable = "yes" >
-    private final EntityIndexedReferenceSet<${child.references}, ${ENTITYINFO.name}> ${child.name}s;
+    private final EntityIndexedReferenceSet<${child.references}Entity, ${child.references}, ${ENTITYINFO.name}> ${child.name}s;
 <#elseif child.sort = "yes" >
-    private final EntitySortedReferenceSet<${child.references}, ${ENTITYINFO.name}, ${child.references}Field> ${child.name}s;
+    private final EntitySortedReferenceSet<${child.references}Entity, ${child.references}, ${ENTITYINFO.name}, ${child.references}Field> ${child.name}s;
 <#else>
-    private final EntityReferenceSet<${child.references}, ${ENTITYINFO.name}> ${child.name}s;
+    private final EntityReferenceSet<${child.references}Entity, ${child.references}, ${ENTITYINFO.name}> ${child.name}s;
 </#if>
 </#list>
 
-    @Override
-    public final String instanceDescription() {
-        return LogBuilder.instanceDescription(this);
-    }
-    
     /**
      * Get the ${ENTITYINFO.name} entity.
      * 
@@ -151,14 +145,13 @@ public class ${ENTITYINFO.name} extends CoreEntity {
      * @throws IOException if problem with obtaining/parsing data
      */
     public ${ENTITYINFO.name}() throws IOException {
-        super("${ENTITYINFO.name}", "${ENTITYINFO.icon}");
 <#list ENTITYINFO.child![] as child>
 <#if child.orderable = "yes" >
-        ${child.name}s = new EntityIndexedReferenceSet<>(instanceDescription()+">${child.name?cap_first}s", ${child.references}.EM.class);
+        ${child.name}s = new EntityIndexedReferenceSet<>((be) -> new ${child.references}(be), ${child.references}Rest.class);
 <#elseif child.sort = "yes" >
-        ${child.name}s = new EntitySortedReferenceSet<>(instanceDescription()+">${child.name?cap_first}s", new ${child.references}Comparator(), ${child.references}.EM.class);
+        ${child.name}s = new EntitySortedReferenceSet<>((be) -> new ${child.references}(be), ${child.references}Rest.class, new ${child.references}Comparator());
 <#else>
-        ${child.name}s = new EntityReferenceSet<>(instanceDescription()+">${child.name?cap_first}s", ${child.references}.EM.class);
+        ${child.name}s = new EntityReferenceSet<>((be) -> new ${child.references}(be), ${child.references}Rest.class);
 </#if>
         ${child.name}s.load();
 </#list>
@@ -188,7 +181,7 @@ public class ${ENTITYINFO.name} extends CoreEntity {
      *
      * @param listener the set change listener to add
      */
-    public void add${child.references}SetChangeListener(Listener<SetChangeEventParams> listener) {
+    public void add${child.references}SetChangeListener(Listener listener) {
         ${child.name}s.addSetListener(listener);
     }
     
@@ -197,7 +190,7 @@ public class ${ENTITYINFO.name} extends CoreEntity {
      *
      * @param listener the set change listener to add
      */
-    public void remove${child.references}SetChangeListener(Listener<SetChangeEventParams> listener) {
+    public void remove${child.references}SetChangeListener(Listener listener) {
         ${child.name}s.removeSetListener(listener);
     }
 
@@ -206,7 +199,7 @@ public class ${ENTITYINFO.name} extends CoreEntity {
      *
      * @param listener the set change listener to be added
      */
-    public static void add${child.references}sSetChangeListeners(Listener<SetChangeEventParams> listener) {
+    public static void add${child.references}sSetChangeListeners(Listener listener) {
         get().${child.name}s.addSetListener(listener);
     }
 
@@ -215,7 +208,7 @@ public class ${ENTITYINFO.name} extends CoreEntity {
      *
      * @param listener the set change listener to be removed
      */
-    public static void remove${child.references}sSetChangeListeners(Listener<SetChangeEventParams> listener) {
+    public static void remove${child.references}sSetChangeListeners(Listener listener) {
         get().${child.name}s.removeSetListener(listener);
     }
 
@@ -262,9 +255,4 @@ public class ${ENTITYINFO.name} extends CoreEntity {
     }
 </#if>
 </#list>
-
-    @Override
-    public String getDisplayName() {
-        return "${ENTITYINFO.label}";
-    }
 }

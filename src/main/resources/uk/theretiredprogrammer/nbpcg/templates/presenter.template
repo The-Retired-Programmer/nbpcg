@@ -101,10 +101,8 @@ import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 import ${datapackage}.*;
-import uk.theretiredprogrammer.nbpcglibrary.data.entity.*;
 import uk.theretiredprogrammer.nbpcglibrary.form.*;
 import uk.theretiredprogrammer.nbpcglibrary.common.*;
-import ${datapackage}.${ENTITYINFO.name}.${ENTITYINFO.name}Field;
 <#if needDateOnlyImport = "yes">
 import uk.theretiredprogrammer.nbpcglibrary.api.DateOnly;
 </#if>
@@ -129,7 +127,7 @@ public final class ${ENTITYINFO.name}Presenter extends FormPresenter {
         this.entity = entity;
         setSaveFunction(sb -> this.entity.save(sb));
         setGetChildPresentersFunction(() -> getFieldPresenters());
-        entityfieldchangelistener = new FieldChangeListener(entity.instanceDescription());
+        entityfieldchangelistener = new FieldChangeListener();
         entity.addFieldListener(entityfieldchangelistener);
     }
 
@@ -538,14 +536,10 @@ public final class ${ENTITYINFO.name}Presenter extends FormPresenter {
 </#if>
 </#list>
 
-    private class FieldChangeListener extends Listener<EntityFieldChangeEventParams<${ENTITYINFO.name}Field>> {
-
-        public FieldChangeListener(String name) {
-            super(name);
-        }
+    private class FieldChangeListener extends Listener {
 
         @Override
-        public void action(EntityFieldChangeEventParams<${ENTITYINFO.name}Field> p) {
+        public void action(Object p) {
             ${ENTITYINFO.name}Presenter.this.refreshView();
         }
     }

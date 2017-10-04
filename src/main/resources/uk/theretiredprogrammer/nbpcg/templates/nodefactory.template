@@ -98,14 +98,14 @@ import org.openide.nodes.Node;
 <#if ENTITYINFO.isroot??>
 public class ${ENTITYINFO.name}${type}NodeChildFactory extends RootChildFactory<${ENTITYINFO.name}> {
 <#else>
-public class ${ENTITYINFO.name}${type}NodeChildFactory extends BasicChildFactory<${ENTITYINFO.name}, ${ENTITYINFO.parentname}> {
+public class ${ENTITYINFO.name}${type}NodeChildFactory extends BasicChildFactory<${ENTITYINFO.name}Entity, ${ENTITYINFO.name}, ${ENTITYINFO.parentname}> {
 </#if>
 
 <#list ENTITYINFO.child![] as child>
     private int offsetMin${child.name?cap_first}s;
     private int offsetMax${child.name?cap_first}s;
 </#list>
-    private final Listener<SetChangeEventParams> setListener;
+    private final Listener setListener;
 
     /**
     * Constructor
@@ -115,7 +115,7 @@ public class ${ENTITYINFO.name}${type}NodeChildFactory extends BasicChildFactory
 <#if ENTITYINFO.isroot??>
     public   ${ENTITYINFO.name}${type}NodeChildFactory(${ENTITYINFO.name} parent) {
         super(parent);
-        setListener = getSetChangeListener("${ENTITYINFO.name}>*");
+        setListener = getSetChangeListener();
 <#list ENTITYINFO.child![] as child >
         parent.add${child.name?cap_first}SetChangeListener(setListener);
 </#list>
@@ -123,8 +123,8 @@ public class ${ENTITYINFO.name}${type}NodeChildFactory extends BasicChildFactory
 
 <#else>
     public   ${ENTITYINFO.name}${type}NodeChildFactory(  ${ENTITYINFO.name} parent) {
-        super("  ${ENTITYINFO.name}Node", parent, ${ENTITYINFO.name}.EM.class);
-        setListener = getSetChangeListener("${ENTITYINFO.name}>*");
+        super(parent, (be) -> new ${ENTITYINFO.name}(be), ${ENTITYINFO.name}Rest.class);
+        setListener = getSetChangeListener();
 <#list ENTITYINFO.child![] as child >
         parent.add${child.name?cap_first}SetChangeListener(setListener);
 </#list>

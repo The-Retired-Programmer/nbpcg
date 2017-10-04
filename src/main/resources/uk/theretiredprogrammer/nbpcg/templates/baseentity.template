@@ -101,6 +101,7 @@ public class ${ENTITYINFO.name}Entity extends IdTimestampBaseEntity {
 
     /**
      * Constructor - ${ENTITYINFO.name}Entity.
+     * @param from the claim entity to be copied from
      */
     public ${ENTITYINFO.name}Entity(${ENTITYINFO.name}Entity from) {
         super(from);
