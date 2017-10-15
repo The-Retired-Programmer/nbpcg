@@ -100,6 +100,7 @@ import java.math.BigDecimal;
 </#if>
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Supplier;
 import ${datapackage}.*;
 import uk.theretiredprogrammer.nbpcglibrary.form.*;
 import uk.theretiredprogrammer.nbpcglibrary.common.*;
@@ -247,7 +248,7 @@ public final class ${ENTITYINFO.name}Presenter extends FormPresenter {
         public ${entryfield.name?cap_first}FieldModel() {
             rules = new Rules();
             rules.addRules(entity.get${field.name?cap_first}Rules());
-            rules.addRule(new LocalRule());
+            rules.addRule(new LocalRule(()->val));
         }
         
         @Override
@@ -266,15 +267,15 @@ public final class ${ENTITYINFO.name}Presenter extends FormPresenter {
             return rules.checkRules(sb);
         }
         
-        private class LocalRule extends Rule {
+        private class LocalRule extends Rule<String> {
             
-            public LocalRule() {
-                super("${entryfield.errormessage}");
+            public LocalRule(Supplier<String> provider) {
+                super(provider, "${entryfield.errormessage}");
             }
-
+            
             @Override
-            protected boolean ruleCheck() {
-                return ${entryfield.rule}(val);
+            protected boolean ruleCheck(Supplier<String> provider) {
+                return ${entryfield.rule}(provider.get());
             }
         }
     }

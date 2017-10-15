@@ -108,18 +108,6 @@ import uk.theretiredprogrammer.nbpcglibrary.data.entityreferences.*;
 @ServiceProvider(service = ${ENTITYINFO.name}.class)
 public class ${ENTITYINFO.name} extends CoreEntity {
 
-    /**
-     * the ${ENTITYINFO.name} field identifiers
-     */
-    public enum ${ENTITYINFO.name}Field {
-<#list ENTITYINFO.child as child>
-        /**
-         * the ${child.name}s collection
-         */
-        ${child.name?upper_case}S,
-</#list>
-    }
-
 <#list ENTITYINFO.child![] as child>
 <#assign CHILDENTITY = entityinfo[child.name?cap_first]>
 <#if child.orderable = "yes" >

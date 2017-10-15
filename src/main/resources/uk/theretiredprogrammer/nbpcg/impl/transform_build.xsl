@@ -111,6 +111,7 @@
                             <xsl:call-template name="nodefactory" />
                             <xsl:call-template name="undoaction" />
                             <xsl:call-template name="addaction" />
+                            <xsl:call-template name="children" />
                         </folder>
                     </xsl:when>
                     <xsl:when test="@type = 'editor' ">
@@ -125,11 +126,6 @@
                         <folder project="{$project}" location="java" package="{$package}" message="generating node viewer files" log="{$log}" license="{$license}"  datapackage="{$datapackage}" nodepackage="{$nodepackage}">
                             <xsl:call-template name="rootnodeviewer" />
                             <xsl:call-template name="iconviewer" />
-                        </folder>
-                    </xsl:when>
-                    <xsl:when test="@type = 'remotedb' ">
-                        <folder project="{$project}" location="java" package="{$package}" message="generating remote files" log="{$log}" license="{$license}">
-                            <xsl:call-template name="remoteobjects" />
                         </folder>
                     </xsl:when>
                 </xsl:choose>
@@ -363,6 +359,22 @@
         </xsl:for-each>
     </xsl:template>
     
+    <xsl:template name="children">
+        <xsl:variable name="exclude">
+            <xsl:choose>
+                <xsl:when test="@exclude">
+                    <xsl:value-of select="concat(',',@exclude,',')" />
+                </xsl:when>
+                <xsl:otherwise>,,</xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+        <xsl:for-each select="//node[not(@nomodifiers)]">
+            <xsl:if test="not(contains($exclude,concat(',',@name,',')))" >
+                <execute template="children" filename="{@name}s.java" useentityinfo="{@name}" />
+            </xsl:if>
+        </xsl:for-each>
+    </xsl:template>
+    
     <xsl:template name="editor">
         <xsl:variable name="exclude">
             <xsl:choose>
@@ -471,31 +483,6 @@
                     <execute template="editaction" filename="Edit{@name}.java" useentityinfo="{@name}" />
                 </xsl:if>
             </xsl:if>
-        </xsl:for-each>
-    </xsl:template>
-    
-    <xsl:template name="remoteobjects">
-        <xsl:for-each select="/nbpcg/databases/database[not(@usepackage)]" >
-            <xsl:variable name="nameuc">
-                <xsl:call-template name="firsttouppercase">
-                    <xsl:with-param name="string" select="@name" />
-                </xsl:call-template>
-            </xsl:variable>
-            <execute template="remotepingservlet" filename="{$nameuc}PingServlet.java" usepersistencestore="{$nameuc}"/>
-            <xsl:for-each select="table" >
-                <execute template="remoteentity" filename="{@name}.java"  usepersistencestore="{../@name}" useentity="{@name}"/>
-                <execute template="remotecreateejb" filename="{@name}CreateEJB.java"  usepersistencestore="{../@name}" useentity="{@name}"/>
-                <execute template="remotecreateservlet" filename="{@name}CreateServlet.java"  usepersistencestore="{../@name}" useentity="{@name}"/>
-                <execute template="remotedeleteejb" filename="{@name}DeleteEJB.java"  usepersistencestore="{../@name}" useentity="{@name}"/>
-                <execute template="remotedeleteservlet" filename="{@name}DeleteServlet.java"  usepersistencestore="{../@name}" useentity="{@name}"/>
-                <execute template="remotefindallservlet" filename="{@name}FindAllServlet.java"  usepersistencestore="{../@name}" useentity="{@name}"/>
-                <execute template="remotefindbyfieldservlet" filename="{@name}FindByFieldServlet.java"  usepersistencestore="{../@name}" useentity="{@name}"/>
-                <execute template="remotegetallservlet" filename="{@name}GetAllServlet.java"  usepersistencestore="{../@name}" useentity="{@name}"/>
-                <execute template="remotegetbyfieldservlet" filename="{@name}GetByFieldServlet.java"  usepersistencestore="{../@name}" useentity="{@name}"/>
-                <execute template="remotegetservlet" filename="{@name}GetServlet.java"  usepersistencestore="{../@name}" useentity="{@name}"/>
-                <execute template="remoteupdateejb" filename="{@name}UpdateEJB.java"  usepersistencestore="{../@name}" useentity="{@name}"/>
-                <execute template="remoteupdateservlet" filename="{@name}UpdateServlet.java"  usepersistencestore="{../@name}" useentity="{@name}"/>
-            </xsl:for-each>
         </xsl:for-each>
     </xsl:template>
     

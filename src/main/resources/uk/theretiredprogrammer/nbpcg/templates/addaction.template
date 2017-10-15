@@ -80,9 +80,10 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import static javax.swing.Action.NAME;
 import org.openide.util.ContextAwareAction;
+import org.openide.util.HelpCtx;
 import org.openide.util.Lookup;
+import org.openide.util.actions.SystemAction;
 import ${datapackage}.${ENTITYINFO.name};
-import ${datapackage}.${ENTITYINFO.parentname};
 <#if editorpackage != "">
 import ${editorpackage}.${ENTITYINFO.name}Editor;
 </#if>
@@ -98,7 +99,7 @@ import uk.theretiredprogrammer.nbpcglibrary.annotations.RegisterNodeAction;
  * @author ${templateauthor}
  */
 @RegisterNodeAction(node = "${ENTITYINFO.parentname}Node", position=61${ENTITYINFO.nodeorder})
-public final class Add${ENTITYINFO.name} extends AbstractAction implements ContextAwareAction {
+public final class Add${ENTITYINFO.name} extends SystemAction implements ContextAwareAction {
 
     @Override
     public Action createContextAwareInstance(Lookup context) {
@@ -110,7 +111,17 @@ public final class Add${ENTITYINFO.name} extends AbstractAction implements Conte
         assert false;
     }
 
-    private static final class ContextAction extends AbstractAction {
+    @Override
+    public String getName() {
+        return "Add ${ENTITYINFO.name}";
+    }
+
+    @Override
+    public HelpCtx getHelpCtx() {
+        return new HelpCtx(Add${ENTITYINFO.name}.class);
+    }
+    
+private static final class ContextAction extends AbstractAction {
 
         private final ${ENTITYINFO.parentname}Node parent;
 
@@ -121,12 +132,8 @@ public final class Add${ENTITYINFO.name} extends AbstractAction implements Conte
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            ${ENTITYINFO.parentname} p = parent.getEntity();
             ${ENTITYINFO.name} c = new ${ENTITYINFO.name}();
-            p.add${ENTITYINFO.name}(c);
-<#if ! PARENTENTITYINFO.isroot?? >
-           c.linkToParent(p);
-</#if>
+            parent.add${ENTITYINFO.name}(c);
 <#if editorpackage != "">
             //TODO - call editor
             //new ${ENTITYINFO.name}Editor(c).visible();

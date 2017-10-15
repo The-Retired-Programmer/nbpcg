@@ -81,7 +81,9 @@ import static javax.swing.Action.NAME;
 import ${nodepackage}.${ENTITYINFO.name}Node;
 import uk.theretiredprogrammer.nbpcglibrary.annotations.RegisterNodeAction;
 import org.openide.util.ContextAwareAction;
+import org.openide.util.HelpCtx;
 import org.openide.util.Lookup;
+import org.openide.util.actions.SystemAction;
 
 /**
  * EditorAction for ${ENTITYINFO.name}.
@@ -92,7 +94,7 @@ import org.openide.util.Lookup;
  * @author ${templateauthor}
  */
 @RegisterNodeAction(node = "${ENTITYINFO.name}Node", position=100, separator = 500, isDefaultAction=true)
-public final class Edit${ENTITYINFO.name} extends AbstractAction implements ContextAwareAction {
+public final class Edit${ENTITYINFO.name} extends SystemAction implements ContextAwareAction {
 
     @Override
     public Action createContextAwareInstance(Lookup context) {
@@ -104,6 +106,16 @@ public final class Edit${ENTITYINFO.name} extends AbstractAction implements Cont
         assert false;
     }
 
+    @Override
+    public String getName() {
+        return "Edit";
+    }
+
+    @Override
+    public HelpCtx getHelpCtx() {
+        return new HelpCtx(Edit${ENTITYINFO.name}.class);
+    }
+    
     private static final class ContextAction extends AbstractAction {
 
         private final ${ENTITYINFO.name}Node node;

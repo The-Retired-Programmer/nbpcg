@@ -79,7 +79,10 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import static javax.swing.Action.NAME;
 import org.openide.util.ContextAwareAction;
+import org.openide.util.HelpCtx;
 import org.openide.util.Lookup;
+import org.openide.util.actions.SystemAction;
+import ${datapackage}.${ENTITYINFO.name};
 import uk.theretiredprogrammer.nbpcglibrary.annotations.RegisterNodeAction;
 
 /**
@@ -91,7 +94,7 @@ import uk.theretiredprogrammer.nbpcglibrary.annotations.RegisterNodeAction;
  * @author ${templateauthor}
  */
 @RegisterNodeAction(node = "${ENTITYINFO.name}Node", position=510, separator = 600)
-public final class Undo${ENTITYINFO.name} extends AbstractAction implements ContextAwareAction {
+public final class Undo${ENTITYINFO.name} extends SystemAction implements ContextAwareAction {
 
     @Override
     public Action createContextAwareInstance(Lookup context) {
@@ -102,6 +105,17 @@ public final class Undo${ENTITYINFO.name} extends AbstractAction implements Cont
     public void actionPerformed(ActionEvent e) {
         assert false;
     }
+
+    @Override
+    public String getName() {
+        return "Undo changes";
+    }
+
+    @Override
+    public HelpCtx getHelpCtx() {
+        return new HelpCtx(Undo${ENTITYINFO.name}.class);
+    }
+
 
     private static final class ContextAction extends AbstractAction {
 
@@ -114,7 +128,7 @@ public final class Undo${ENTITYINFO.name} extends AbstractAction implements Cont
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            node.getEntity().cancelEdit();
+            node.getLookup().lookup(${ENTITYINFO.name}.class).cancelEdit();
         }
     }
 }

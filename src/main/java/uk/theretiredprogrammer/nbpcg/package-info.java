@@ -33,25 +33,13 @@
     @TemplateRegistration(folder = "uk-theretiredprogrammer-nbpcg", displayName = "editaction", content = "templates/editaction.template", scriptEngine = "freemarker"),
     @TemplateRegistration(folder = "uk-theretiredprogrammer-nbpcg", displayName = "node", content = "templates/node.template", scriptEngine = "freemarker"),
     @TemplateRegistration(folder = "uk-theretiredprogrammer-nbpcg", displayName = "nodefactory", content = "templates/nodefactory.template", scriptEngine = "freemarker"),
+    @TemplateRegistration(folder = "uk-theretiredprogrammer-nbpcg", displayName = "children", content = "templates/children.template", scriptEngine = "freemarker"),
     @TemplateRegistration(folder = "uk-theretiredprogrammer-nbpcg", displayName = "undoaction", content = "templates/undoaction.template", scriptEngine = "freemarker"),
     @TemplateRegistration(folder = "uk-theretiredprogrammer-nbpcg", displayName = "addaction", content = "templates/addaction.template", scriptEngine = "freemarker"),
     @TemplateRegistration(folder = "uk-theretiredprogrammer-nbpcg", displayName = "rootentity", content = "templates/rootentity.template", scriptEngine = "freemarker"),
     @TemplateRegistration(folder = "uk-theretiredprogrammer-nbpcg", displayName = "rootnode", content = "templates/rootnode.template", scriptEngine = "freemarker"),
     @TemplateRegistration(folder = "uk-theretiredprogrammer-nbpcg", displayName = "rootnodeviewer", content = "templates/rootnodeviewer.template", scriptEngine = "freemarker"),
     @TemplateRegistration(folder = "uk-theretiredprogrammer-nbpcg", displayName = "iconnodeviewer", content = "templates/iconnodeviewer.template", scriptEngine = "freemarker"),
-    @TemplateRegistration(folder = "uk-theretiredprogrammer-nbpcg", displayName = "remoteentity", content = "templates/remoteentity.template", scriptEngine = "freemarker"),
-    @TemplateRegistration(folder = "uk-theretiredprogrammer-nbpcg", displayName = "remotecreateejb", content = "templates/remotecreateejb.template", scriptEngine = "freemarker"),
-    @TemplateRegistration(folder = "uk-theretiredprogrammer-nbpcg", displayName = "remotedeleteejb", content = "templates/remotedeleteejb.template", scriptEngine = "freemarker"),
-    @TemplateRegistration(folder = "uk-theretiredprogrammer-nbpcg", displayName = "remoteupdateejb", content = "templates/remoteupdateejb.template", scriptEngine = "freemarker"),
-    @TemplateRegistration(folder = "uk-theretiredprogrammer-nbpcg", displayName = "remotepingservlet", content = "templates/remotepingservlet.template", scriptEngine = "freemarker"),
-    @TemplateRegistration(folder = "uk-theretiredprogrammer-nbpcg", displayName = "remotecreateservlet", content = "templates/remotecreateservlet.template", scriptEngine = "freemarker"),
-    @TemplateRegistration(folder = "uk-theretiredprogrammer-nbpcg", displayName = "remotedeleteservlet", content = "templates/remotedeleteservlet.template", scriptEngine = "freemarker"),
-    @TemplateRegistration(folder = "uk-theretiredprogrammer-nbpcg", displayName = "remoteupdateservlet", content = "templates/remoteupdateservlet.template", scriptEngine = "freemarker"),
-    @TemplateRegistration(folder = "uk-theretiredprogrammer-nbpcg", displayName = "remotefindallservlet", content = "templates/remotefindallservlet.template", scriptEngine = "freemarker"),
-    @TemplateRegistration(folder = "uk-theretiredprogrammer-nbpcg", displayName = "remotefindbyfieldservlet", content = "templates/remotefindbyfieldservlet.template", scriptEngine = "freemarker"),
-    @TemplateRegistration(folder = "uk-theretiredprogrammer-nbpcg", displayName = "remotegetallservlet", content = "templates/remotegetallservlet.template", scriptEngine = "freemarker"),
-    @TemplateRegistration(folder = "uk-theretiredprogrammer-nbpcg", displayName = "remotegetbyfieldservlet", content = "templates/remotegetbyfieldservlet.template", scriptEngine = "freemarker"),
-    @TemplateRegistration(folder = "uk-theretiredprogrammer-nbpcg", displayName = "remotegetservlet", content = "templates/remotegetservlet.template", scriptEngine = "freemarker")
 })
 package uk.theretiredprogrammer.nbpcg;
 

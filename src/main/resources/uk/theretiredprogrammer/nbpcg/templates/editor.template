@@ -84,6 +84,7 @@ import uk.theretiredprogrammer.nbpcglibrary.topcomponent.*;
 import org.openide.util.NbBundle;
 import org.openide.util.NbBundle.Messages;
 import org.openide.windows.TopComponent;
+import ${datapackage}.${ENTITYINFO.name};
 import ${nodepackage}.${ENTITYINFO.name}Node;
 
 /**
@@ -118,11 +119,11 @@ public final class ${ENTITYINFO.name}Editor extends EditorTopComponent<${ENTITYI
 
     private List<PanePresenter> getPanePresenters() {
         return Arrays.asList(
-                         new ${ENTITYINFO.name}Presenter(node.getEntity())
+                         new ${ENTITYINFO.name}Presenter(node.getLookup().lookup(${ENTITYINFO.name}.class))
 <#if ENTITYINFO.childnodesineditor??>
 <#list ENTITYINFO.childnodesineditor?split(",") as childnode>
                         ,
-                        new ${childnode}TablePresenter(node.getEntity())
+                        new ${childnode}TablePresenter(node.getLookup().lookup(${childnode}.class))
 </#list>
 </#if>
         );
@@ -143,12 +144,12 @@ public final class ${ENTITYINFO.name}Editor extends EditorTopComponent<${ENTITYI
         super.opened();
         presenter.enableView();
         setName("${ENTITYINFO.name}: " + node.getDisplayTitle());
-        node.getEntity().addTitleListener(titlechangelistener);
+        node.addTitleListener(titlechangelistener);
     }
 
     @Override
     protected void closed() {
-        node.getEntity().removeTitleListener(titlechangelistener);
+        node.removeTitleListener(titlechangelistener);
         super.closed();
     }
 
