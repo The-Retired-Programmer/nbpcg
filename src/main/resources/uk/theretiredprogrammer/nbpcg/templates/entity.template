@@ -90,22 +90,12 @@ import java.beans.PropertyChangeListener;
 <#if hasbigdecimal>
 import java.math.BigDecimal;
 </#if>
-import java.text.ParseException;
 import java.util.Collections;
-import java.util.Date;
 <#if hassortchildren>
 import java.util.Comparator;
 </#if>
 import java.util.LinkedList;
 import java.util.List;
-import uk.theretiredprogrammer.nbpcglibrary.api.*;
-import uk.theretiredprogrammer.nbpcglibrary.common.*;
-import uk.theretiredprogrammer.nbpcglibrary.data.entity.*;
-<#if ENTITYINFO.orderable = "yes">
-import uk.theretiredprogrammer.nbpcglibrary.data.entity.EntityStateChangeEventParams.EntityState;
-import static uk.theretiredprogrammer.nbpcglibrary.data.entity.EntityStateChangeEventParams.EntityState.NEW;
-import static uk.theretiredprogrammer.nbpcglibrary.data.entity.EntityStateChangeEventParams.EntityState.NEWEDITING;
-</#if>
 
 /**
  * The ${ENTITYINFO.name} Entity.
@@ -115,39 +105,10 @@ import static uk.theretiredprogrammer.nbpcglibrary.data.entity.EntityStateChange
  *
  * @author ${templateauthor}
  */
-<#if ENTITYINFO.ordercolumn??>
-public class ${ENTITYINFO.name} extends EntityIndexed<${ENTITYINFO.name}Entity,${ENTITYINFO.name},${ENTITYINFO.parentname}> {
-<#else>
-public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.name}Entity,${ENTITYINFO.name},${ENTITYINFO.parentname}> {
-</#if>
+public class ${ENTITYINFO.name} {
 
     private ${ENTITYINFO.name}Entity baseentity;
-    private ${ENTITYINFO.name}Entity baseentityoriginal;
-    private final Rules entityRules = new Rules();
-<#list ENTITYINFO.field![] as field>
-<#if field.type == "ref">
-    private final Rules ${field.name}Rules = new Rules();
-<#elseif field.type == "reference">
-<#assign FIELDENTITY = entityinfo[field.references]>
-    private final Rules ${field.name}Rules = new Rules();
-<#elseif field.type == "rootref" >
-<#else>
-<#if !field.hidden??>
-    private final Rules ${field.name}Rules = new Rules();
-</#if>
-<#if field.type == "decimal" || field.type == "currency" >
-<#if field.min??>
-    private final BigDecimal ${field.name}decimalmin = new BigDecimal("${field.min}");
-</#if>
-<#if field.min??>
-    private final BigDecimal ${field.name}decimalmax = new BigDecimal("${field.max}");
-</#if>
-</#if>
-</#if>
-</#list>
-    //
     private final List listeners = Collections.synchronizedList(new LinkedList());
-
 
     /**
      * Constructor - ${ENTITYINFO.name}.
@@ -161,60 +122,14 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.name}Entity,${ENTITY
      * @param baseentity the base entity for this Entity
      */
     public ${ENTITYINFO.name}(${ENTITYINFO.name}Entity baseentity) {
-        super(${ENTITYINFO.name}Rest.class);
         this.baseentity = baseentity;
-<#list ENTITYINFO.field![] as field>
-<#if field.type == "ref" || field.type == "reference" >
-
-<#if !field.optional??>
-        addRule(${field.name}Rules, new Rules.DefinedRule(()->baseentity.get${field.name?cap_first}() ));
-</#if>
-</#if>
-</#list>
-<#list ENTITYINFO.field![] as field>
-<#if !(field.hidden??) >
-<#if field.type = "String" >
-<#if field.min??>
-        addRule(${field.name}Rules, new Rules.MinStringRule(()-> get${field.name?cap_first}(), ${field.min}));
-</#if>
-<#if field.max??>
-        addRule(${field.name}Rules, new Rules.MaxStringRule(()-> get${field.name?cap_first}(), ${field.max}));
-</#if>
-<#if field.unique??>
-       // addRule(${field.name}Rules, new Rules.UniqueStringRule(()-> get${field.name?cap_first}(),
-       //     () -> getParent().get${ENTITYINFO.name}s().stream().filter((e) -> e != ${ENTITYINFO.name}.this).map((e)-> e.get${field.name?cap_first}())));
-</#if>
-<#elseif field.type = "int" || field.type = "long" || field.type = "currency" || field.type = "decimal" >
-<#if field.min??>
-        addRule(${field.name}Rules, new Rules.MinIntegerRule(()-> get${field.name?cap_first}(), ${field.min}));
-</#if>
-<#if field.max??>
-        addRule(${field.name}Rules, new Rules.MaxIntegerRule(()-> get${field.name?cap_first}(), ${field.max}));
-</#if>
-<#elseif field.type = "date" || field.type = "datetime" >
-<#if field.future??>
-        addRule(${field.name}Rules, new Rules.FutureRule(()-> get${field.name?cap_first}()));
-</#if>
-<#if field.past??>
-        addRule(${field.name}Rules, new Rules.PastRule(()-> get${field.name?cap_first}()));
-</#if>
-<#elseif field.type = "enum" >
-        addRule(${field.name}Rules, new Rules.EnumRule(()-> get${field.name?cap_first}()));
-</#if>
-</#if>
-</#list>
-<#if ENTITYINFO.rule??>
-        addRule(entityRules, new ${ENTITYINFO.rule}(this));
-</#if>
-        checkRulesAtLoad(new StringBuilder());
+        ${ENTITYINFO.name}Rules.areAllRulesExceptUniqueValid(new StringBuilder(), baseentity);
     }
 
-    @Override
     public ${ENTITYINFO.name}Entity getBaseEntity() {
         return baseentity;
     }
     
-    @Override
     public void setBaseEntity(${ENTITYINFO.name}Entity baseentity){
         this.baseentity = baseentity;
     }
@@ -234,35 +149,13 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.name}Entity,${ENTITY
             pcl.propertyChange(new PropertyChangeEvent(this, propertyName, old, nue));
         }
     }
-    @Override
+
     public boolean isPersistent() {
-        return getPK() > 0;
-    }
-
-    @Override
-    public final int getPK() {
-        return getId();
-    }
-
-    /**
-     * Get all rules for this entity
-     * @return the set of rules
-     */
-    public final Rules getEntityRules() {
-        return entityRules;
+        return getId() > 0;
     }
 
 <#list ENTITYINFO.field![] as field>
 <#if field.type = "ref" >
- 
-        /**
-         * Get the ${field.name} field rules.
-         *
-         * @return the rules
-         */
-        public Rules get${field.name?cap_first}Rules() {
-            return ${field.name}Rules;
-        }
 
         /**
          * Get the ${field.name}.
@@ -279,23 +172,10 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.name}Entity,${ENTITY
          * @param ${field.name} the ${field.name}
          */
         public void set${field.name?cap_first}(int ${field.name}) {
-            int old = baseentity.get${field.name?cap_first}();
-            if (old != ${field.name}) {
-                ensureEditing();
-                baseentity.set${field.name?cap_first}(${field.name});
-                fire("${field.name}", old, ${field.name});
-            }
+            baseentity.set${field.name?cap_first}(${field.name});
+            fire("${field.name}",  null, ${field.name});
         }
 <#elseif field.type = "reference" >
-
-        /**
-         * Get the ${field.name} field rules.
-         *
-         * @return the rules
-         */
-        public Rules get${field.name?cap_first}Rules() {
-            return ${field.name}Rules;
-        }
 
     /**
      * Get the ${field.name?cap_first} Entity associated with this entity.
@@ -314,14 +194,12 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.name}Entity,${ENTITY
     public void set${field.name?cap_first}(${field.references} e) {
         if (e == null) {
             if (${field.name}.getPK() != null) {
-                ensureEditing();
                 if (${field.name}.set()) {
                     fireFieldChange("${field.name}");
                 }
             }
         } else {
             if (!e.getPK().equals(${field.name}.getPK())) {
-                ensureEditing();
                 if (${field.name}.set(e.getPK())) {
                     fireFieldChange("${field.name}");
                 }
@@ -338,36 +216,19 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.name}Entity,${ENTITY
 
     @Override
     public void setIdx(int idx) {
-        int old = baseentity.getIdx();
-        if (old != idx) {
-            ensureEditing();
-            baseentity.setIdx(idx);
-            fire("${field.name}", old,idx);
-        }
+        baseentity.setIdx(idx);
+        fire("${field.name}", null,idx);
     }
 
 <#else>
-    <#if !(field.hidden??) >
-
-        /**
-         * Get the ${field.name} field rules.
-         *
-         * @return the rules
-         */
-        public Rules get${field.name?cap_first}Rules() {
-            return ${field.name}Rules;
-        }
-    </#if>
-
     <#if field.type == "datetime">
     /**
      * Get the ${field.name}.
      *
      * @return the ${field.name}
-     * @throws java.text.ParseException if problems
      */
-        public final Date get${field.name?cap_first}() throws ParseException {
-            return DATETIME_ISO8601.parse(baseentity.get${field.name?cap_first}());
+        public final String get${field.name?cap_first}() {
+            return baseentity.get${field.name?cap_first}();
         }
     <#else>
     /**
@@ -390,142 +251,22 @@ public class ${ENTITYINFO.name} extends Entity<${ENTITYINFO.name}Entity,${ENTITY
         <#if field.type == "enum" >
             if (${field.name} == null) {
                 if (baseentity.get${field.name?cap_first}() != null) {
-                    ensureEditing();
                     baseentity.set${field.name?cap_first}(null);
                     fire("${field.name}");
                 }
             } else {
                 if (!${field.name}.equals(baseentity.get${field.name?cap_first}())) {
-                    ensureEditing();
                     baseentity.set${field.name?cap_first}(${field.name});
                     this.${field.name} = ${field.name};
                     fire("${field.name}");
                 }
             }
         <#else>
-            <#if field.type == "String" || field.type == "date" || field.type == "datetime">
-                ${field.javatype} old = baseentity.get${field.name?cap_first}();
-                if (!old.equals(${field.name})) {
-            <#elseif field.type == "decimal" || field.type == "currency" >
-                ${field.javatype} old = baseentity.get${field.name?cap_first}();
-                if (old.compareTo(${field.name}) != 0) {
-            <#else>
-                ${field.javatype} old = baseentity.get${field.name?cap_first}();
-                if (old != ${field.name}) {
-            </#if>
-                ensureEditing();
-                baseentity.set${field.name?cap_first}(${field.name});
-                fire("${field.name}", old, ${field.name});
-            }
+            baseentity.set${field.name?cap_first}(${field.name});
+            fire("${field.name}", null, ${field.name});
         </#if>
         }
     </#if>
 </#if>
 </#list>
-
-    @Override
-    protected final void entitySaveState() {
-        baseentityoriginal = new ${ENTITYINFO.name}Entity(baseentity);
-        }
-
-    @Override
-    protected final void entityRestoreState() {
-        baseentity = baseentityoriginal;
-    }
-
-    @Override
-    protected final void entityRemove(){
-    }
-
-    @Override
-    protected final void entityCopy(${ENTITYINFO.name} from) {
-        setBaseEntity( new ${ENTITYINFO.name}Entity(from.getBaseEntity()));
-    }
-
-    @Override
-    protected final boolean entityDiffs(EntityFields data) {
-<#list ENTITYINFO.field![] as field>
-<#if !(field.hidden??) >
-<#if field.type == "ref" || field.type == "reference" >
-//        if (${field.name}.isDirty()) {
-<#if field.optional??>
-//            Integer idrefpf = ${field.name}.getPK();
-//            if (idrefpf != null) {
-//                int idref${field.name?cap_first} = idrefpf;
-//                if (idref${field.name?cap_first} < 0 ) {
-//                    ${field.name}.get().save(new StringBuilder());
-//                    idref${field.name?cap_first} = ${field.name}.get().getPK();
-//                    if (idref${field.name?cap_first} < 0 ) {
-//                        return false;
-//                    }
-//                    data.put("${field.name}", idref${field.name?cap_first});
-//                } else if (idref${field.name?cap_first} == 0) {
-//                    data.put("${field.name}", null);
-//                } else {
-//                    data.put("${field.name}", idref${field.name?cap_first});
-//                }
-//            }
-<#else>
-//            int idref${field.name?cap_first} = ${field.name}.getPK();
-//            if (idref${field.name?cap_first} < 0 ) {
-//                ${field.name}.get().save(new StringBuilder());
-//                idref${field.name?cap_first} = ${field.name}.get().getPK();
-//                if (idref${field.name?cap_first} < 0 ) {
-//                    return false;
-//                }
-//            }
-</#if>
-//        }
-</#if>
-</#if>
-</#list>
-        return true;
-    }
-
-    @Override
-    protected final boolean entityValues(EntityFields data) {
-<#list ENTITYINFO.field![] as field>
-<#if !(field.hidden??) >
-<#if field.type == "ref" || field.type == "reference" >
-<#if field.optional??>
-//            Integer idrefpf = ${field.name}.getPK();
-//            if (idrefpf != null) {
-//                int idref${field.name?cap_first} = idrefpf;
-//                if (idref${field.name?cap_first} < 0 ) {
-//                    ${field.name}.get().save(new StringBuilder());
-//                    idref${field.name?cap_first} = ${field.name}.get().getPK();
-//                    if (idref${field.name?cap_first} < 0 ) {
-//                        return false;
-//                    }
-//                }
-//            }
-<#else>
-//        int idref${field.name?cap_first} = ${field.name}.getPK();
-//        if (idref${field.name?cap_first} < 0 ) {
-//            ${field.name}.get().save(new StringBuilder());
-//            idref${field.name?cap_first} = ${field.name}.get().getPK();
-//            if (idref${field.name?cap_first} < 0 ) {
-//                return false;
-//            }
-//        }
-</#if>
-</#if>
-</#if>
-</#list>
-        return true;
-    }
-
-<#if ENTITYINFO.orderable = "yes">
-    @Override
-    public final boolean save() {
-        EntityState state = getState();
-        if (state == NEW || state == NEWEDITING) {
-            if (getIdx() == Integer.MAX_VALUE) {
-                setIdx(epp.findNextIdx());
-            }
-        }
-        return super.save();
-    }
-
-</#if>
 }

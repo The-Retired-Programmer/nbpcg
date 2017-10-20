@@ -119,11 +119,11 @@ public final class ${ENTITYINFO.name}Editor extends EditorTopComponent<${ENTITYI
 
     private List<PanePresenter> getPanePresenters() {
         return Arrays.asList(
-                         new ${ENTITYINFO.name}Presenter(node.getLookup().lookup(${ENTITYINFO.name}.class))
+                         new ${ENTITYINFO.name}Presenter(node)
 <#if ENTITYINFO.childnodesineditor??>
 <#list ENTITYINFO.childnodesineditor?split(",") as childnode>
                         ,
-                        new ${childnode}TablePresenter(node.getLookup().lookup(${childnode}.class))
+                        new ${childnode}TablePresenter(node)
 </#list>
 </#if>
         );

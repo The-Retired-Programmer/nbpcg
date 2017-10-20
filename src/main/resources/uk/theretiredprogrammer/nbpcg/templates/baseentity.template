@@ -87,8 +87,10 @@ import uk.theretiredprogrammer.nbpcglibrary.api.IdTimestampBaseEntity;
 public class ${ENTITYINFO.name}Entity extends IdTimestampBaseEntity {
 
 <#list ENTITYINFO.field![] as field>
+<#if field.type != "rootref" >
 <#if !(field.hidden??) >
     private ${field.jsontype} ${field.name};
+</#if>
 </#if>
 </#list>
 
@@ -106,12 +108,15 @@ public class ${ENTITYINFO.name}Entity extends IdTimestampBaseEntity {
     public ${ENTITYINFO.name}Entity(${ENTITYINFO.name}Entity from) {
         super(from);
 <#list ENTITYINFO.field![] as field>
+<#if field.type != "rootref" >
 <#if !(field.hidden??) >
     ${field.name} = from.${field.name};
+</#if>
 </#if>
 </#list>
     }
 <#list ENTITYINFO.field![] as field>
+<#if field.type != "rootref" >
 <#if !(field.hidden??) >
 
     /**
@@ -131,6 +136,7 @@ public class ${ENTITYINFO.name}Entity extends IdTimestampBaseEntity {
     public final void set${field.name?cap_first}(${field.jsontype} ${field.name}) {
         this.${field.name} = ${field.name};
     }
+</#if>
 </#if>
 </#list>
 }

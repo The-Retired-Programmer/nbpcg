@@ -75,17 +75,28 @@
 package ${package};
 
 import com.famfamfam.www.silkicons.Icons;
+import java.awt.Component;
+import java.awt.EventQueue;
+import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
+import static java.beans.BeanInfo.ICON_COLOR_16x16;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.IOException;
+import java.text.DateFormat;
 import java.text.MessageFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.function.Function;
 import javax.swing.Action;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import org.netbeans.spi.actions.AbstractSavable;
 import org.openide.ErrorManager;
 import org.openide.actions.CopyAction;
 import org.openide.actions.CutAction;
@@ -103,13 +114,17 @@ import org.openide.util.ImageUtilities;
 import org.openide.util.WeakListeners;
 import org.openide.util.datatransfer.ExTransferable;
 import org.openide.util.datatransfer.PasteType;
-import org.openide.util.lookup.Lookups;
+import org.openide.util.lookup.AbstractLookup;
+import org.openide.util.lookup.InstanceContent;
 <#list ENTITYINFO.child![] as c>
 import static ${package}.${c.name?cap_first}Node.${c.name?upper_case}NODE_FLAVOR;
 </#list>
 import uk.theretiredprogrammer.accesscontrolmanager.topcomponents.Edit${ENTITYINFO.name};
+import uk.theretiredprogrammer.nbpcglibrary.api.ApplicationLookup;
 import uk.theretiredprogrammer.nbpcglibrary.common.Event;
 import uk.theretiredprogrammer.nbpcglibrary.common.Listener;
+import uk.theretiredprogrammer.nbpcglibrary.lifecycle.LibraryOnStop;
+import static uk.theretiredprogrammer.nbpcglibrary.lifecycle.LibraryOnStop.isSavableEnabled;
 import uk.theretiredprogrammer.nbpcglibrary.icons.SpecialIcons;
 
 
@@ -123,12 +138,30 @@ import uk.theretiredprogrammer.nbpcglibrary.icons.SpecialIcons;
  */
 public class ${ENTITYINFO.name}Node extends AbstractNode implements PropertyChangeListener {
 
+    private enum EntityStateChange {
+        CREATE, LOAD, EDIT, SAVE, RESET, REMOVE
+    };
+
+    private enum EntityState {
+        INIT, NEW, NEWEDITING, REMOVED, DBENTITY, DBENTITYEDITING
+    };
+
     /**
      * Data Flavor for Nodes of type ${ENTITYINFO.name}Node
      */
     public static final DataFlavor ${ENTITYINFO.name?upper_case}NODE_FLAVOR = new DataFlavor(${ENTITYINFO.name}Node.class, "${ENTITYINFO.name}Node");
+    private static final DateFormat DATETIME_ISO8601;
+    
+    static {
+        DATETIME_ISO8601 = new SimpleDateFormat("yyyyMMddHHmmss");
+        DATETIME_ISO8601.setLenient(false);
+    }
+    
     private final Event titlechange = new Event();
-        
+     private final InstanceContent lookupcontent;
+    private final NodeSavable savable = new NodeSavable();
+    private EntityState state = EntityState.INIT;
+    private ${ENTITYINFO.name}Entity baseentityoriginal;   
 <#assign haschildren = false>
 <#list ENTITYINFO.child![] as c>
 <#assign haschildren = true >
@@ -150,15 +183,20 @@ public class ${ENTITYINFO.name}Node extends AbstractNode implements PropertyChan
         }
 
         private ${ENTITYINFO.name}Node(${ENTITYINFO.name} e, Function<Integer, ${child}s> creator) {
-            this(e, new ${ENTITYINFO.name}NodeChildFactory(e.getId(), creator));
+            this(e, new ${ENTITYINFO.name}NodeChildFactory(e.getId(), creator), new InstanceContent());
         }
 
         @SuppressWarnings("LeakingThisInConstructor")
-        private ${ENTITYINFO.name}Node(${ENTITYINFO.name} e, ${ENTITYINFO.name}NodeChildFactory factory) {
-            super(Children.create(factory, true), Lookups.singleton(e));
+        private ${ENTITYINFO.name}Node(${ENTITYINFO.name} e, ${ENTITYINFO.name}NodeChildFactory factory, InstanceContent lookupcontent) {
+            super(Children.create(factory, true), new AbstractLookup(lookupcontent));
+            this.lookupcontent = lookupcontent;
+            lookupcontent.add(e);
             this.factory = factory;
-            getEntity().addStateListener(new EntityStateChangeListener());
             e.addPropertyChangeListener(WeakListeners.propertyChange(this, e));
+            state = EntityState.NEW;
+            entityStateChange(EntityStateChange.CREATE);
+            // and as this is new it is saveable (too early to rely on listener)
+            savable.add();
         }
 <#else>
    
@@ -168,9 +206,18 @@ public class ${ENTITYINFO.name}Node extends AbstractNode implements PropertyChan
          * @param e the entity associated with this node
          */
         public ${ENTITYINFO.name}Node(${ENTITYINFO.name} e) {
-            super(Children.LEAF, Lookups.singleton(e));
-            getEntity().addStateListener(new EntityStateChangeListener());
+            this(e, new InstanceContent());
+        }
+
+        private ${ENTITYINFO.name}Node(${ENTITYINFO.name} e, InstanceContent lookupcontent) {
+            super(Children.LEAF, new AbstractLookup(lookupcontent));
+            this.lookupcontent = lookupcontent;
+            lookupcontent.add(e);
             e.addPropertyChangeListener(WeakListeners.propertyChange(this, e));
+            state = EntityState.NEW;
+            entityStateChange(EntityStateChange.CREATE);
+            // and as this is new it is saveable (too early to rely on listener)
+            savable.add();
         }
 </#if>
 
@@ -180,19 +227,174 @@ public class ${ENTITYINFO.name}Node extends AbstractNode implements PropertyChan
 
 <#if haschildren>
     /**
-     * add a ${child} entity to the children model
+     * add a ${child} nodeto the children model
      *
-     * @param e the entity to add
+     * @param node the node to add
      */
-    public void add${child}(${child} e){
-        factory.add(e);
+    public void add${child}(${child}Node node){
+        factory.add(node);
+    }
+
+    /**
+     * remove a ${child} node from the children model
+     *
+     * @param node the node to remove
+     */
+    public void remove${child}(${child}Node node){
+        factory.remove(node);
     }
 
 </#if>
+
+    // ------------------------------------------------------------------------
+    //
+    //  Entity Getters and Setters (Facade)
+    //
+    // ------------------------------------------------------------------------
+
+<#list ENTITYINFO.field![] as field>
+<#if field.type = "ref" >
+
+        /**
+         * Get the ${field.name}.
+         *
+         * @return the ${field.name}
+         */
+        public final int get${field.name?cap_first}() {
+            return getEntity().get${field.name?cap_first}();
+        }
+
+        /**
+         * Define the ${field.name?cap_first}.
+         *
+         * @param ${field.name} the ${field.name}
+         */
+        public void set${field.name?cap_first}(int ${field.name}) {
+            int old = getEntity().get${field.name?cap_first}();
+            if (old != ${field.name}) {
+                ensureEditing();
+                getEntity().set${field.name?cap_first}(${field.name});
+            }
+        }
+<#elseif field.type = "reference" >
+
+    /**
+     * Get the ${field.name?cap_first} Entity associated with this entity.
+     *
+     * @return the ${field.name?cap_first} entity
+     */
+    public ${field.references} get${field.name?cap_first}() {
+        return ${field.name}.get();
+    }
+
+    /**
+     * Set the ${field.name?cap_first} Entity associated with this entity.
+     *
+     * @param e the ${field.name} entity
+     */
+    public void set${field.name?cap_first}(${field.references} e) {
+        if (e == null) {
+            if (${field.name}.getPK() != null) {
+                ensureEditing();
+                ${field.name}.set();
+            }
+        } else {
+            if (!e.getPK().equals(${field.name}.getPK())) {
+                ensureEditing();
+                ${field.name}.set(e.getPK());
+            }
+        }
+    }
+<#elseif field.type = "rootref" >
+<#elseif field.type == "idx" >
+
+    @Override
+    public final int getIdx() {
+        return idx;
+    }
+
+    @Override
+    public void setIdx(int idx) {
+        int old = getEntity().getIdx();
+        if (old != idx) {
+            ensureEditing();
+            getEntity().setIdx(idx);
+        }
+    }
+
+<#else>
+    <#if field.type == "datetime">
+    /**
+     * Get the ${field.name}.
+     *
+     * @return the ${field.name}
+     * @throws java.text.ParseException if problems
+     */
+        public final Date get${field.name?cap_first}() throws ParseException {
+            return DATETIME_ISO8601.parse(getEntity().get${field.name?cap_first}());
+        }
+    <#else>
+    /**
+     * Get the ${field.name}.
+     *
+     * @return the ${field.name}
+     */
+        public final ${field.javatype} get${field.name?cap_first}() {
+            return getEntity().get${field.name?cap_first}();
+        }
+    </#if>
+    <#if !(field.hidden??) >
+
+        /**
+         * Define the ${field.name?cap_first}.
+         *
+         * @param ${field.name} the ${field.name}
+         */
+        public void set${field.name?cap_first}(${field.javatype} ${field.name}) {
+        <#if field.type == "enum" >
+            if (${field.name} == null) {
+                if (getEntity().get${field.name?cap_first}() != null) {
+                    ensureEditing();
+                    getEntity().set${field.name?cap_first}(null);
+                }
+            } else {
+                if (!${field.name}.equals(getEntity().get${field.name?cap_first}())) {
+                    ensureEditing();
+                    getEntity().set${field.name?cap_first}(${field.name});
+                }
+            }
+        <#else>
+            <#if field.type == "String" || field.type == "date" || field.type == "datetime">
+                ${field.javatype} old = getEntity().get${field.name?cap_first}();
+                if (!old.equals(${field.name})) {
+            <#elseif field.type == "decimal" || field.type == "currency" >
+                ${field.javatype} old = getEntity().get${field.name?cap_first}();
+                if (old.compareTo(${field.name}) != 0) {
+            <#else>
+                ${field.javatype} old = getEntity().get${field.name?cap_first}();
+                if (old != ${field.name}) {
+            </#if>
+                ensureEditing();
+                getEntity().set${field.name?cap_first}(${field.name});
+            }
+        </#if>
+        }
+    </#if>
+</#if>
+</#list>
+
+    // ------------------------------------------------------------------------
+    //
+    //   Icon, DisplayName and Title Management
+    //
+    // ------------------------------------------------------------------------
+    
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         if ("username".equals(evt.getPropertyName())) {
+            // TODO ---- need to add a list of properties which form the displayname     
             fireDisplayNameChange(null, getDisplayName());
+            // TODO ---- need to move this to its own list of properties   
             titlechange.fire(evt);
         }
     }
@@ -217,9 +419,13 @@ public class ${ENTITYINFO.name}Node extends AbstractNode implements PropertyChan
 
     @Override
     public String getHtmlDisplayName() {
-        ${ENTITYINFO.name} entity = getEntity();
-        return (entity.isNew() ? "<font color='#0000FF'><b>" : (entity.isEditing() ? "<b>" : "")) + getDisplayName();
-    }
+        return (state == EntityState.NEW || state == EntityState.NEWEDITING
+                ? "<font color='#0000FF'><b>"
+                : (state == EntityState.NEWEDITING || state == EntityState.DBENTITYEDITING
+                        ? "<b>"
+                        : ""))
+                + getDisplayName();
+}
 
     @Override
     public String getDisplayName() {
@@ -328,7 +534,9 @@ public class ${ENTITYINFO.name}Node extends AbstractNode implements PropertyChan
 
     @Override
     public Image getIcon(int type) {
-        return getEntity().checkRules(new StringBuilder()) ? super.getIcon(type) : getIconWithError();
+        return ${ENTITYINFO.name}Rules.areAllRulesValid(new StringBuilder(), getEntity().getBaseEntity())
+                ? Icons.get("${ENTITYINFO.icon}")
+                : ImageUtilities.mergeImages(Icons.get("${ENTITYINFO.icon}"), SpecialIcons.get("errormarker"), 0, 6);
     }
 
     @Override
@@ -336,36 +544,236 @@ public class ${ENTITYINFO.name}Node extends AbstractNode implements PropertyChan
         return getIcon(type);
     }
 
+    // ------------------------------------------------------------------------
+    //
+    //                         CRUD OPERATIONS
+    //
+    // ------------------------------------------------------------------------
+    
     /**
-     * Get the node icon combined with an error marker.
+     * Save this entity to entity storage.
      *
-     * @return the image
+     * @param sb Stringbuilder object used to collect any failure messages
+     * @return true if save is successful
      */
-    private Image getIconWithError() {
-        return addErrorToIcon(Icons.get("${ENTITYINFO.icon}"));
+    public boolean save(StringBuilder sb) {
+        ${ENTITYINFO.name}Rest rest;
+        switch (state) {
+            case DBENTITY:
+                return true;
+            case REMOVED:
+                return false;
+            case NEW:
+            case NEWEDITING:
+                if (!${ENTITYINFO.name}Rules.areAllRulesValid(sb, getEntity().getBaseEntity())) {
+                    return false;
+                }
+                rest = ApplicationLookup.getDefault().lookup(${ENTITYINFO.name}Rest.class);
+                getEntity().setBaseEntity(rest.create(getEntity().getBaseEntity()));
+                state = EntityState.DBENTITY;
+                // TODO - we need to refresh the child list
+                break;
+            case DBENTITYEDITING:
+                if (!${ENTITYINFO.name}Rules.areAllRulesValid(sb, getEntity().getBaseEntity())) {
+                    return false;
+                }
+                rest = ApplicationLookup.getDefault().lookup(${ENTITYINFO.name}Rest.class);
+                getEntity().setBaseEntity(rest.update(getEntity().getId(), getEntity().getBaseEntity()));
+                state = EntityState.DBENTITY;
+                break;
+            default:
+                if (!${ENTITYINFO.name}Rules.areAllRulesValid(sb, getEntity().getBaseEntity())) {
+                    return false;
+                }
+        }
+        entityStateChange(EntityStateChange.SAVE);
+        return true;
     }
 
-    /**
-     * Create the node icon combined with an error marker.
-     *
-     * @param icon the node icon image
-     * @return the node icon image combined with error marker
-     */
-    private Image addErrorToIcon(Image icon) {
-        return ImageUtilities.mergeImages(icon, SpecialIcons.get("errormarker"), 0, 6);
-    }
-
-    private class EntityStateChangeListener extends Listener {
-
-        @Override
-        public void action(Object p) {
-            fireIconChange();
-            fireOpenedIconChange();
-            fireDisplayNameChange("old", "new");
-            titlechange.fire(p);
+    @Override
+    public final void destroy() throws IOException {
+<#if haschildren>
+        factory.clearChildren();
+</#if>
+        switch (state) {
+            case NEW:
+            case NEWEDITING:
+                ((${ENTITYINFO.parentname}Node)getParentNode()).remove${ENTITYINFO.name}(this);
+                state = EntityState.REMOVED;
+                entityStateChange(EntityStateChange.REMOVE);
+                return;
+            case DBENTITY:
+            case DBENTITYEDITING:
+                ${ENTITYINFO.name}Rest rest = ApplicationLookup.getDefault().lookup(${ENTITYINFO.name}Rest.class);
+                rest.delete(getEntity().getId());
+                ((${ENTITYINFO.parentname}Node)getParentNode()).remove${ENTITYINFO.name}(this);
+                state = EntityState.REMOVED;
+                entityStateChange(EntityStateChange.REMOVE);
         }
     }
 
+    /**
+     * Copy entity fields into this entity.
+     *
+     * @param e the copy source entity
+     */
+    private void copy(${ENTITYINFO.name} e) {
+        if (state == EntityState.NEW || state == EntityState.NEWEDITING) {
+            getEntity().setBaseEntity(new ${ENTITYINFO.name}Entity(e.getBaseEntity()));
+            ensureEditing();
+        }
+    }
+
+    // ------------------------------------------------------------------------
+    //
+    //                         STATE MANAGEMENT
+    //
+    // ------------------------------------------------------------------------
+    
+    /**
+     * Switch into an editing state, updating state. If already in state then
+     * this does nothing.
+     */
+    private void ensureEditing() {
+        switch (state) {
+            case NEW:
+                baseentityoriginal = new ${ENTITYINFO.name}Entity(getEntity().getBaseEntity());
+                state = EntityState.NEWEDITING;
+                entityStateChange(EntityStateChange.EDIT);
+                return;
+            case DBENTITY:
+                baseentityoriginal = new ${ENTITYINFO.name}Entity(getEntity().getBaseEntity());
+                state = EntityState.DBENTITYEDITING;
+                entityStateChange(EntityStateChange.EDIT);
+        }
+    }
+
+    public void cancelEdit() {
+        switch (state) {
+            case NEWEDITING:
+                state = EntityState.NEW;
+                getEntity().setBaseEntity(baseentityoriginal);
+                entityStateChange(EntityStateChange.RESET);
+                break;
+            case DBENTITYEDITING:
+                state = EntityState.DBENTITY;
+                getEntity().setBaseEntity(baseentityoriginal);
+                entityStateChange(EntityStateChange.RESET);
+        }
+    }
+
+    private void entityStateChange(EntityStateChange esc) {
+        switch (esc) {
+            case EDIT:
+                savable.add();
+                break;
+            case LOAD:
+            case SAVE:
+            case REMOVE:
+            case RESET:
+                savable.remove();
+        }
+        fireIconChange();
+        fireOpenedIconChange();
+        fireDisplayNameChange("old", "new");
+        titlechange.fire(null);
+    }
+
+    private class NodeSavable<E> extends AbstractSavable implements Icon {
+
+        private Icon icon;
+        private boolean isRegisteredAsOutstanding = false;
+
+        public void add() {
+            if (isSavableEnabled()) {
+                if (getLookup().lookup(NodeSavable.class) == null) {
+                    register();
+                    lookupcontent.add(this);
+                }
+                icon = null;
+            } else {
+                if (!isRegisteredAsOutstanding) {
+                    LibraryOnStop.incRegisterOutstanding();
+                    isRegisteredAsOutstanding = true;
+                }
+            }
+        }
+
+        public void remove() {
+            if (isSavableEnabled()) {
+                lookupcontent.remove(this);
+                unregister();
+            } else {
+                if (isRegisteredAsOutstanding) {
+                    LibraryOnStop.decRegisterOutstanding();
+                    isRegisteredAsOutstanding = false;
+                }
+            }
+        }
+
+        @Override
+        protected void handleSave() throws IOException {
+            StringBuilder sb = new StringBuilder();
+            if (!${ENTITYINFO.name}Node.this.save(sb)) {
+                EventQueue.invokeLater(new ReRegister());
+                LibraryOnStop.incRegisterOutstanding();
+                // TODO - should we place the error message in a visible place
+            }
+        }
+
+        private class ReRegister implements Runnable {
+
+            @Override
+            public void run() {
+                NodeSavable.this.register();
+                LibraryOnStop.decRegisterOutstanding();
+            }
+        }
+
+        @Override
+        protected String findDisplayName() {
+            return ${ENTITYINFO.name}Node.this.getDisplayName();
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (obj instanceof NodeSavable) {
+                return node() == ((NodeSavable) obj).node();
+            }
+            return false;
+        }
+
+        @Override
+        public int hashCode() {
+            return node().hashCode();
+        }
+
+        ${ENTITYINFO.name}Node node() {
+            return ${ENTITYINFO.name}Node.this;
+        }
+
+        @Override
+        public void paintIcon(Component c, Graphics g, int x, int y) {
+            new ImageIcon(getIcon(ICON_COLOR_16x16)).paintIcon(c, g, x, y);
+        }
+
+        @Override
+        public int getIconWidth() {
+            if (icon == null) {
+                icon = new ImageIcon(getIcon(ICON_COLOR_16x16));
+            }
+            return icon.getIconWidth();
+        }
+
+        @Override
+        public int getIconHeight() {
+            if (icon == null) {
+                icon = new ImageIcon(getIcon(ICON_COLOR_16x16));
+            }
+            return icon.getIconHeight();
+        }
+    }
+   
     @Override
     public Action[] getActions(boolean context) {
         return new Action[]{
@@ -392,7 +800,7 @@ public class ${ENTITYINFO.name}Node extends AbstractNode implements PropertyChan
     }
 
     @Override
-    protected Sheet createSheet() {
+    public Sheet createSheet() {
         Sheet sheet = Sheet.createDefault();
         Sheet.Set set = Sheet.createPropertiesSet();
         ${ENTITYINFO.name} obj = getEntity();
@@ -435,7 +843,7 @@ public class ${ENTITYINFO.name}Node extends AbstractNode implements PropertyChan
                 @Override
                 public Transferable paste() throws IOException {
                     try {
-                        factory.add((${child}) t.getTransferData(${child?upper_case}NODE_FLAVOR));
+                        factory.add((${child}Node) t.getTransferData(${child?upper_case}NODE_FLAVOR));
                         final Node node = NodeTransfer.node(t, NodeTransfer.DND_MOVE + NodeTransfer.CLIPBOARD_CUT);
                         if (node != null) {
                             node.destroy();
@@ -453,7 +861,7 @@ public class ${ENTITYINFO.name}Node extends AbstractNode implements PropertyChan
 
     // CUT / COPY target support
     @Override
-    protected void createPasteTypes(Transferable t, List<PasteType> s) {
+    public void createPasteTypes(Transferable t, List<PasteType> s) {
         super.createPasteTypes(t, s);
         PasteType p = getDropType(t, 0, 0);
         if (p != null) {
@@ -486,11 +894,6 @@ public class ${ENTITYINFO.name}Node extends AbstractNode implements PropertyChan
         protected ${ENTITYINFO.name} getData() {
             return getEntity();
         }
-    }
-
-    @Override
-    public final void destroy() throws IOException {
-        getEntity().remove();
     }
 }
  

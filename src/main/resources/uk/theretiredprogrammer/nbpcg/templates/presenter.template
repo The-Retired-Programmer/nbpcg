@@ -81,8 +81,6 @@
 </#list>
 package ${package};
 
-<#assign needListImport = "no" >
-<#assign needArraysImport = "no" >
 <#assign needDateOnlyImport = "no" >
 <#assign needTimestampImport = "no" >
 <#list ENTITYINFO.field![] as field>
@@ -95,15 +93,20 @@ package ${package};
 </#if>
 </#if>
 </#list>
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 <#if hasbigdecimal>
 import java.math.BigDecimal;
 </#if>
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.Supplier;
-import ${datapackage}.*;
+import java.util.function.Function;
+import org.openide.util.WeakListeners;
+import uk.theretiredprogrammer.accesscontrolmanager.dataobjects.${ENTITYINFO.name};
+import uk.theretiredprogrammer.accesscontrolmanager.dataobjects.${ENTITYINFO.name}Rules;
+import uk.theretiredprogrammer.accesscontrolmanager.nodes.${ENTITYINFO.name}Node;
 import uk.theretiredprogrammer.nbpcglibrary.form.*;
-import uk.theretiredprogrammer.nbpcglibrary.common.*;
+import uk.theretiredprogrammer.nbpcglibrary.rules.Rule;
 <#if needDateOnlyImport = "yes">
 import uk.theretiredprogrammer.nbpcglibrary.api.DateOnly;
 </#if>
@@ -119,17 +122,23 @@ import uk.theretiredprogrammer.nbpcglibrary.api.Timestamp;
  *
  * @author ${templateauthor}
  */
-public final class ${ENTITYINFO.name}Presenter extends FormPresenter {
+public final class ${ENTITYINFO.name}Presenter extends FormPresenter implements PropertyChangeListener {
     
-    private final ${ENTITYINFO.name} entity;
-    private final FieldChangeListener entityfieldchangelistener;
+    private final ${ENTITYINFO.name}Node node;
   
-    public ${ENTITYINFO.name}Presenter(${ENTITYINFO.name} entity) {
-        this.entity = entity;
-        setSaveFunction(sb -> this.entity.save(sb));
+    /**
+     * Constructor
+     *
+     * @param node - the ${ENTITYINFO.name} node which is backing this presenter as its
+     * underlying model.
+     */
+    @SuppressWarnings("LeakingThisInConstructor")
+    public ${ENTITYINFO.name}Presenter(${ENTITYINFO.name}Node node) {
+        this.node = node;
+        setSaveFunction(sb -> this.node.save(sb));
         setGetChildPresentersFunction(() -> getFieldPresenters());
-        entityfieldchangelistener = new FieldChangeListener();
-        entity.addFieldListener(entityfieldchangelistener);
+        ${ENTITYINFO.name} e = node.getLookup().lookup(${ENTITYINFO.name}.class);
+        e.addPropertyChangeListener(WeakListeners.propertyChange(this, e));
     }
 
     private List<FieldPresenter> getFieldPresenters() {
@@ -231,9 +240,13 @@ public final class ${ENTITYINFO.name}Presenter extends FormPresenter {
 
         @Override
         public boolean test(StringBuilder sb) {
-            return entity.getEntityRules().checkRules(sb);
+            return ${ENTITYINFO.name}Rules.areAllRulesValid(sb,
+                    ${ENTITYINFO.name}Presenter.this.node
+                            .getLookup().lookup(${ENTITYINFO.name}.class)
+                            .getBaseEntity()
+                    );
+                }
         }
-    }
 <#list ENTITYINFO.field![] as field>
 <#if field.useentryfield??>
 <#list ENTITYINFO.entryfield![] as entryfield>
@@ -242,19 +255,13 @@ public final class ${ENTITYINFO.name}Presenter extends FormPresenter {
 
     private class ${entryfield.name?cap_first}FieldModel extends EntityFieldModel<String> {
     
-        private final Rules rules;
         private String val = "";
-        
-        public ${entryfield.name?cap_first}FieldModel() {
-            rules = new Rules();
-            rules.addRules(entity.get${field.name?cap_first}Rules());
-            rules.addRule(new LocalRule(()->val));
-        }
+        private final LocalRule rule = new LocalRule((v) -> v);
         
         @Override
         public void set(String value) {
             val = value;
-            entity.set${field.name?cap_first}(${entryfield.mapping}(value));
+            node.set${field.name?cap_first}(${entryfield.mapping}(value));
         }
         
         @Override
@@ -264,18 +271,18 @@ public final class ${ENTITYINFO.name}Presenter extends FormPresenter {
         
         @Override
         public boolean test(StringBuilder sb) {
-            return rules.checkRules(sb);
+            return rule.check(sb, val);
         }
         
-        private class LocalRule extends Rule<String> {
+        private class LocalRule extends Rule<String, String> {
             
-            public LocalRule(Supplier<String> provider) {
+            public LocalRule(Function<String, String> provider) {
                 super(provider, "${entryfield.errormessage}");
             }
             
             @Override
-            protected boolean ruleCheck(Supplier<String> provider) {
-                return ${entryfield.rule}(provider.get());
+            protected boolean ruleCheck(Function<String,String> provider, String v) {
+                return ${entryfield.rule}(provider.apply(v));
             }
         }
     }
@@ -294,18 +301,22 @@ public final class ${ENTITYINFO.name}Presenter extends FormPresenter {
 
         @Override
         public void set(${field.references} value) {
-            entity.set${field.name?cap_first}(value);
+            node.set${field.name?cap_first}(value);
         }
 
         @Override
         public ${field.references} get() {
-            return entity.get${field.name?cap_first}();
+            return node.get${field.name?cap_first}();
         }
 
 
         @Override
         public boolean test(StringBuilder sb) {
-            return entity.get${field.name?cap_first}Rules().checkRules(sb);
+            return ${ENTITYINFO.name}Rules.are${field.name?cap_first}RulesValid(sb,
+                    ${ENTITYINFO.name}Presenter.this.node
+                            .getLookup().lookup(${ENTITYINFO.name}.class)
+                            .getBaseEntity()
+                    );
         }
 <#if field.optional??>
 
@@ -327,17 +338,21 @@ public final class ${ENTITYINFO.name}Presenter extends FormPresenter {
 
         @Override
         public void set(String value) {
-           entity.set${field.name?cap_first}(value);
+           node.set${field.name?cap_first}(value);
         }
 
         @Override
         public String get() {
-            return entity.get${field.name?cap_first}();
+            return node.get${field.name?cap_first}();
         }
 
         @Override
         public boolean test(StringBuilder sb) {
-            return entity.get${field.name?cap_first}Rules().checkRules(sb);
+            return ${ENTITYINFO.name}Rules.are${field.name?cap_first}RulesValid(sb,
+                    ${ENTITYINFO.name}Presenter.this.node
+                            .getLookup().lookup(${ENTITYINFO.name}.class)
+                            .getBaseEntity()
+                    );
         }
     }
 <#elseif field.type == "rootref" || field.type="idx" >
@@ -347,17 +362,21 @@ public final class ${ENTITYINFO.name}Presenter extends FormPresenter {
     
     @Override
         public void set(Boolean value) {
-             entity.set${field.name?cap_first}(value);
+             node.set${field.name?cap_first}(value);
         }
 
         @Override
         public Boolean get() {
-            return entity.get${field.name?cap_first}();
+            return node.get${field.name?cap_first}();
         }
 
         @Override
         public boolean test(StringBuilder sb) {
-            return entity.get${field.name?cap_first}Rules().checkRules(sb);
+            return ${ENTITYINFO.name}Rules.are${field.name?cap_first}RulesValid(sb,
+                    ${ENTITYINFO.name}Presenter.this.node
+                            .getLookup().lookup(${ENTITYINFO.name}.class)
+                            .getBaseEntity()
+                    );
         }
     }
 <#elseif field.type = "password" >
@@ -366,17 +385,21 @@ public final class ${ENTITYINFO.name}Presenter extends FormPresenter {
     
         @Override
         public void set(String value) {
-                entity.set${field.name?cap_first}(value);
+                node.set${field.name?cap_first}(value);
         }
 
         @Override
         public String get() {
-            return entity.get${field.name?cap_first}();
+            return node.get${field.name?cap_first}();
         }
 
         @Override
         public boolean test(StringBuilder sb) {
-            return entity.get${field.name?cap_first}Rules().checkRules(sb);
+            return ${ENTITYINFO.name}Rules.are${field.name?cap_first}RulesValid(sb,
+                    ${ENTITYINFO.name}Presenter.this.node
+                            .getLookup().lookup(${ENTITYINFO.name}.class)
+                            .getBaseEntity()
+                    );
         }
     }
 <#elseif field.type=="int" >
@@ -386,17 +409,21 @@ public final class ${ENTITYINFO.name}Presenter extends FormPresenter {
     
     @Override
         public void set(Integer value) {
-            entity.set${field.name?cap_first}(value);
+            node.set${field.name?cap_first}(value);
         }
 
         @Override
         public Integer get() {
-            return entity.get${field.name?cap_first}();
+            return node.get${field.name?cap_first}();
         }
 
         @Override
         public boolean test(StringBuilder sb) {
-            return entity.get${field.name?cap_first}Rules().checkRules(sb);
+            return ${ENTITYINFO.name}Rules.are${field.name?cap_first}RulesValid(sb,
+                    ${ENTITYINFO.name}Presenter.this.node
+                            .getLookup().lookup(${ENTITYINFO.name}.class)
+                            .getBaseEntity()
+                    );
         }
     }
 </#if>
@@ -407,17 +434,21 @@ public final class ${ENTITYINFO.name}Presenter extends FormPresenter {
     
     @Override
         public void set(Long value) {
-            entity.set${field.name?cap_first}(value);
+            node.set${field.name?cap_first}(value);
         }
 
         @Override
         public Long get() {
-            return entity.get${field.name?cap_first}();
+            return node.get${field.name?cap_first}();
         }
 
         @Override
         public boolean test(StringBuilder sb) {
-            return entity.get${field.name?cap_first}Rules().checkRules(sb);
+            return ${ENTITYINFO.name}Rules.are${field.name?cap_first}RulesValid(sb,
+                    ${ENTITYINFO.name}Presenter.this.node
+                            .getLookup().lookup(${ENTITYINFO.name}.class)
+                            .getBaseEntity()
+                    );
         }
     }
 </#if>
@@ -428,7 +459,7 @@ public final class ${ENTITYINFO.name}Presenter extends FormPresenter {
     
     @Override
         public void set(DateOnly value) {
-            entity.set${field.name?cap_first}(value);
+            node.set${field.name?cap_first}(value);
         }
 
         @Override
@@ -438,7 +469,11 @@ public final class ${ENTITYINFO.name}Presenter extends FormPresenter {
 
         @Override
         public boolean test(StringBuilder sb) {
-            return entity.get${field.name?cap_first}Rules().checkRules(sb);
+            return ${ENTITYINFO.name}Rules.are${field.name?cap_first}RulesValid(sb,
+                    ${ENTITYINFO.name}Presenter.this.node
+                            .getLookup().lookup(${ENTITYINFO.name}.class)
+                            .getBaseEntity()
+                    );
         }
     }
 </#if>
@@ -449,17 +484,21 @@ public final class ${ENTITYINFO.name}Presenter extends FormPresenter {
     
     @Override
         public void set(Timestamp value) {
-            entity.set${field.name?cap_first}(value);
+            node.set${field.name?cap_first}(value);
         }
 
         @Override
         public Timestamp get() {
-            return entity.get${field.name?cap_first}();
+            return node.get${field.name?cap_first}();
         }
 
         @Override
         public boolean test(StringBuilder sb) {
-            return entity.get${field.name?cap_first}Rules().checkRules(sb);
+            return ${ENTITYINFO.name}Rules.are${field.name?cap_first}RulesValid(sb,
+                    ${ENTITYINFO.name}Presenter.this.node
+                            .getLookup().lookup(${ENTITYINFO.name}.class)
+                            .getBaseEntity()
+                    );
         }
     }
 </#if>
@@ -470,17 +509,21 @@ public final class ${ENTITYINFO.name}Presenter extends FormPresenter {
     
     @Override
         public void set(BigDecimal value) {
-            entity.set${field.name?cap_first}(value);
+            node.set${field.name?cap_first}(value);
         }
 
         @Override
         public BigDecimal get() {
-            return entity.get${field.name?cap_first}();
+            return node.get${field.name?cap_first}();
         }
 
         @Override
         public boolean test(StringBuilder sb) {
-            return entity.get${field.name?cap_first}Rules().checkRules(sb);
+            return ${ENTITYINFO.name}Rules.are${field.name?cap_first}RulesValid(sb,
+                    ${ENTITYINFO.name}Presenter.this.node
+                            .getLookup().lookup(${ENTITYINFO.name}.class)
+                            .getBaseEntity()
+                    );
         }
     }
 </#if>
@@ -497,12 +540,16 @@ public final class ${ENTITYINFO.name}Presenter extends FormPresenter {
 
         @Override
         public void set(String value) {
-            entity.set${field.name?cap_first}(value);
+            node.set${field.name?cap_first}(value);
         }
 
         @Override
         public String get() {
-            return entity.get${field.name?cap_first}();
+            return ${ENTITYINFO.name}Rules.are${field.name?cap_first}RulesValid(sb,
+                    ${ENTITYINFO.name}Presenter.this.node
+                            .getLookup().lookup(${ENTITYINFO.name}.class)
+                            .getBaseEntity()
+                    );
         }
 <#if field.optional??>
 
@@ -518,30 +565,31 @@ public final class ${ENTITYINFO.name}Presenter extends FormPresenter {
     
     @Override
         public void set(String value) {
-            entity.set${field.name?cap_first}(value);
+            node.set${field.name?cap_first}(value);
         }
 
         @Override
         public String get() {
-            return entity.get${field.name?cap_first}();
+            return node.get${field.name?cap_first}();
         }
 
         @Override
         public boolean test(StringBuilder sb) {
-            return entity.get${field.name?cap_first}Rules().checkRules(sb);
+            return ${ENTITYINFO.name}Rules.are${field.name?cap_first}RulesValid(sb,
+                    ${ENTITYINFO.name}Presenter.this.node
+                            .getLookup().lookup(${ENTITYINFO.name}.class)
+                            .getBaseEntity()
+                    );
+            }
         }
-    }
 </#if>
 </#if>
 </#if>
 </#if>
 </#list>
 
-    private class FieldChangeListener extends Listener {
-
-        @Override
-        public void action(Object p) {
-            ${ENTITYINFO.name}Presenter.this.refreshView();
-        }
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        ${ENTITYINFO.name}Presenter.this.refreshView();
     }
 }

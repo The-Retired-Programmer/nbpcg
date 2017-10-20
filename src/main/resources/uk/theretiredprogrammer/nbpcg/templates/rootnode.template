@@ -90,7 +90,6 @@ import java.io.IOException;
 import java.util.function.Supplier;
 import javax.swing.Action;
 import org.openide.actions.PasteAction;
-import ${datapackage}.*;
 import org.openide.nodes.*;
 import org.openide.util.Exceptions;
 import org.openide.util.datatransfer.PasteType;
@@ -126,8 +125,17 @@ public class ${ENTITYINFO.name}Node extends AbstractNode {
         this.factory = factory;
     }
  
-    public void add${child}(${child} e) {
-        factory.add(e);
+    public void add${child}(${child}Node node) {
+        factory.add(node);
+    }
+
+    public void remove${child}(${child}Node node) {
+        factory.remove(node);
+    }
+
+    @Override
+    public final void destroy() throws IOException {
+        factory.clearChildren();
     }
 
     @Override
@@ -169,7 +177,7 @@ public class ${ENTITYINFO.name}Node extends AbstractNode {
                 @Override
                 public Transferable paste() throws IOException {
                     try {
-                        factory.add((${child}) t.getTransferData(${child?upper_case}NODE_FLAVOR));
+                        factory.add((${child}Node) t.getTransferData(${child?upper_case}NODE_FLAVOR));
                         final Node node = NodeTransfer.node(t, NodeTransfer.DND_MOVE + NodeTransfer.CLIPBOARD_CUT);
                         if (node != null) {
                             node.destroy();

@@ -86,8 +86,8 @@ import java.util.function.Supplier;
 import java.util.function.Function;
 </#if>
 import org.openide.nodes.ChildFactory;
-import  ${datapackage}.*;
 import org.openide.nodes.Node;
+import uk.theretiredprogrammer.accesscontrolmanager.dataobjects.${child};
 
 /**
  * ${ENTITYINFO.name}NodeChildFactory.
@@ -97,7 +97,7 @@ import org.openide.nodes.Node;
  *
  * @author ${templateauthor}
  */
-public class ${ENTITYINFO.name}NodeChildFactory extends ChildFactory<${child}> {
+public class ${ENTITYINFO.name}NodeChildFactory extends ChildFactory<${child}Node> {
 
 <#if ENTITYINFO.isroot?? >
     private final Supplier<${child}s> creator;
@@ -105,7 +105,6 @@ public class ${ENTITYINFO.name}NodeChildFactory extends ChildFactory<${child}> {
     private final int parentId;
     private final Function<Integer,${child}s> creator;
 </#if>
-    
     private ${child}s model;
 
 <#if ENTITYINFO.isroot?? >
@@ -130,10 +129,15 @@ public class ${ENTITYINFO.name}NodeChildFactory extends ChildFactory<${child}> {
     }
 </#if>
 
+    public void clearChildren() {
+        model = null;
+        refresh(true);
+    }
+
     /**
      * Add a new ${child} child, link to parent if required and refresh the child nodes
      */
-    public void add(${child} e) {
+    public void add(${child}Node node) {
 <#if ENTITYINFO.isroot?? >
         if (model == null){
             model = creator.get();
@@ -142,20 +146,32 @@ public class ${ENTITYINFO.name}NodeChildFactory extends ChildFactory<${child}> {
         if (model == null){
             model = creator.apply(parentId);
         }
+        ${child} e = node.getLookup().lookup(${child}.class);
         e.set${ENTITYINFO.name}(parentId);
 </#if>
-        model.add(e);
+        model.add(node);
         refresh(true);
     }
    
     /**
-     * Create the list of Child Entities
+     * Remove a ${ENTITYINFO.name} Node from the child list and refresh the child nodes
+     */
+    public void remove(${child}Node node) {
+        if (model == null) {
+            return;
+        }
+        model.remove(node);
+        refresh(true);
+    }
+
+    /**
+     * Create the list of Child Nodes
      *
-     * @param list the list into which child entities are to be added
+     * @param list the list into which child nodes are to be added
      * @return true
      */
     @Override
-    protected boolean createKeys(List<${child}> list) {
+    protected boolean createKeys(List<${child}Node> list) {
 <#if ENTITYINFO.isroot?? >
         if (model == null){
             model = creator.get();
@@ -172,11 +188,11 @@ public class ${ENTITYINFO.name}NodeChildFactory extends ChildFactory<${child}> {
     /**
      * Create a Child Node from a given Child Entity
      *
-     * @param e the Child Entity
+     * @param node the Child Node
      * @return the Child Node
      */
     @Override
-    protected Node createNodeForKey(${child} e) {
-        return new ${child}Node(e);
+    protected Node createNodeForKey(${child}Node node) {
+        return node;
     }
 }

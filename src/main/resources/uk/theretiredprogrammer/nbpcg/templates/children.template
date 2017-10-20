@@ -93,7 +93,7 @@ import uk.theretiredprogrammer.nbpcglibrary.htmlrest.AandA;
  */
 public class ${ENTITYINFO.name}s {
     
-    private final List<${ENTITYINFO.name}> model;
+    private final List<${ENTITYINFO.name}Node> model;
     
 <#if PARENTENTITYINFO.isroot?? >
     /**
@@ -103,7 +103,7 @@ public class ${ENTITYINFO.name}s {
         model = new ${ENTITYINFO.name}Rest(AandA.getToken())
                     .getAll()
                     .stream()
-                    .map(ce -> new ${ENTITYINFO.name}(ce))
+                    .map(ce -> new ${ENTITYINFO.name}Node(new ${ENTITYINFO.name}(ce)))
                     .collect(Collectors.toList());
     }
 <#else>
@@ -116,25 +116,34 @@ public class ${ENTITYINFO.name}s {
         model = new ${ENTITYINFO.name}Rest(AandA.getToken())
                     .getMany("${ENTITYINFO.parentname?lower_case}", parentid)
                     .stream()
-                    .map(ce -> new ${ENTITYINFO.name}(ce))
+                    .map(ce -> new ${ENTITYINFO.name}Node(new ${ENTITYINFO.name}(ce)))
                     .collect(Collectors.toList());
     }
 </#if>
     
     /**
-     * Get all the children entities
+     * Get all the children nodes
      * 
-     * return the list of children entities
+     * return the list of children nodes
      */
-    public List<${ENTITYINFO.name}> getAll() {
+    public List<${ENTITYINFO.name}Node> getAll() {
         return model;
     }
     
     /**
-     * Add a child entity to the children set
-     * @param claim the entity to be added
+     * Add a child node to the children set
+     * @param node the node to be added
      */
-    public void add(${ENTITYINFO.name} e) {
-       model.add(e);
+    public void add(${ENTITYINFO.name}Node node) {
+       model.add(node);
+    }
+
+    /**
+     * Remove a child node from the children set
+     *
+     * @param node the node to be removed
+     */
+    public void remove(${ENTITYINFO.name}Node node) {
+        model.remove(node);
     }
 }

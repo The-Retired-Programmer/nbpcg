@@ -92,9 +92,9 @@
                     </xsl:when>
                     <xsl:when test="@type = 'data' ">
                         <folder project="{$project}" location="java" package="{$package}" message="generating entity files" log="{$log}" license="{$license}">
-                            <xsl:call-template name="rootentity" />
                             <xsl:call-template name="entity" />
                             <xsl:call-template name="baseentity" />
+                            <xsl:call-template name="rules" />
                             <xsl:call-template name="alias" />
                             <xsl:call-template name="restcreatorlist" />
                         </folder>
@@ -133,12 +133,6 @@
         </nbpcg-build>
     </xsl:template>
    
-    <xsl:template name="rootentity">
-        <xsl:for-each select="/nbpcg/node" >
-            <execute template="rootentity" filename="{@name}Root.java" useentityinfo="{@name}Root" />
-        </xsl:for-each>
-    </xsl:template>
-    
     <xsl:template name="rootnode">
         <xsl:for-each select="/nbpcg/node" >
             <xsl:variable name="view">
@@ -230,6 +224,12 @@
     <xsl:template name="baseentity" >
         <xsl:for-each select="/nbpcg/databases/database[not(@usepackage)]/table" >
             <execute template="baseentity" filename="{@name}Entity.java" useentityinfo="{@name}"/>
+        </xsl:for-each>
+    </xsl:template>
+    
+    <xsl:template name="rules" >
+        <xsl:for-each select="/nbpcg/databases/database[not(@usepackage)]/table" >
+            <execute template="rules" filename="{@name}Rules.java" useentityinfo="{@name}"/>
         </xsl:for-each>
     </xsl:template>
     
