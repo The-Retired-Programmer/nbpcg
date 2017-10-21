@@ -74,10 +74,14 @@
 <#assign ENTITYINFO = entityinfo[useentityinfo] >
 package ${package};
 
-import ${nodepackage}.*;
-import uk.theretiredprogrammer.nbpcglibrary.topcomponent.ExplorerTopComponent;
+import javax.swing.ActionMap;
+import javax.swing.GroupLayout;
+import javax.swing.JScrollPane;
+import javax.swing.text.DefaultEditorKit;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
+import org.openide.explorer.ExplorerManager;
+import org.openide.explorer.ExplorerUtils;
 <#if type="Tree">
 <#assign view = "BeanTreeView"/>
 <#assign nameext = "" />
@@ -87,10 +91,11 @@ import org.openide.awt.ActionReference;
 <#assign nameext = "Icon" />
 </#if>
 import org.openide.explorer.view.${view};
-import org.openide.nodes.AbstractNode;
+import org.openide.nodes.Node;
 import org.openide.util.NbBundle;
 import org.openide.util.NbBundle.Messages;
 import org.openide.windows.TopComponent;
+import uk.theretiredprogrammer.accesscontrolmanager.nodes.UserRootNode;
 
 /**
  * Viewer for ${ENTITYINFO.name} (type=${type})
@@ -110,17 +115,51 @@ preferredID = "${ENTITYINFO.name}${nameext}NodeViewer")
     "CTL_${ENTITYINFO.name}${nameext}NodeViewer=${ENTITYINFO.label}",
     "HINT_${ENTITYINFO.name}${nameext}NodeViewer=Viewer for ${ENTITYINFO.label}"
 })
-public final class ${ENTITYINFO.name}${nameext}NodeViewer extends ExplorerTopComponent {
+public final class ${ENTITYINFO.name}${nameext}NodeViewer extends TopComponent implements ExplorerManager.Provider {
 
+    private final ExplorerManager em = new ExplorerManager();
+    
+    /**
+     *  Constructor
+     */
     public ${ENTITYINFO.name}${nameext}NodeViewer() {
-        super("${ENTITYINFO.name}${nameext}NodeViewer",
-                new ${view}(),
-                NbBundle.getMessage(${ENTITYINFO.name}${nameext}NodeViewer.class, "CTL_${ENTITYINFO.name}${nameext}NodeViewer"),
-                NbBundle.getMessage(${ENTITYINFO.name}${nameext}NodeViewer.class, "HINT_${ENTITYINFO.name}${nameext}NodeViewer"));
+        JScrollPane viewComponent = new ${view}();
+        GroupLayout layout = new GroupLayout(this);
+        this.setLayout(layout);
+        layout.setHorizontalGroup(
+                layout.createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(viewComponent, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE));
+        layout.setVerticalGroup(
+                layout.createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(viewComponent, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE));
+        setName(NbBundle.getMessage(${ENTITYINFO.name}${nameext}NodeViewer.class, "CTL_${ENTITYINFO.name}${nameext}NodeViewer"));
+        setToolTipText(NbBundle.getMessage(${ENTITYINFO.name}${nameext}NodeViewer.class, "HINT_${ENTITYINFO.name}${nameext}NodeViewer"));
+        ActionMap map = getActionMap();
+        map.put(DefaultEditorKit.copyAction, ExplorerUtils.actionCopy(em));
+        map.put(DefaultEditorKit.cutAction, ExplorerUtils.actionCut(em));
+        map.put(DefaultEditorKit.pasteAction, ExplorerUtils.actionPaste(em));
+        map.put("delete", ExplorerUtils.actionDelete(em, true));
+        associateLookup(ExplorerUtils.createLookup(em, map));
+    }
+
+    /**
+     * Open the Topcomponent and make it visible.
+     */
+    public void visible() {
+        open();
+        requestActive();
     }
 
     @Override
-    public AbstractNode getRootContextNode() {
-        return new ${ENTITYINFO.name}${nameext}Node();
+    public void componentOpened() {
+        em.setRootContext(new ${ENTITYINFO.name}${nameext}Node());
+    }
+
+    @Override
+    public void componentClosed() {
+        em.setRootContext(Node.EMPTY);
+    }
+
+    @Override
+    public ExplorerManager getExplorerManager() {
+        return em;
     }
 }
