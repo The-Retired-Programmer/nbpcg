@@ -87,7 +87,6 @@ import ${datapackage}.${ENTITYINFO.name};
 <#if editorpackage != "">
 import ${editorpackage}.${ENTITYINFO.name}Editor;
 </#if>
-import uk.theretiredprogrammer.nbpcglibrary.annotations.RegisterNodeAction;
 
 
 /**
@@ -98,7 +97,6 @@ import uk.theretiredprogrammer.nbpcglibrary.annotations.RegisterNodeAction;
  *
  * @author ${templateauthor}
  */
-@RegisterNodeAction(node = "${ENTITYINFO.parentname}Node", position=61${ENTITYINFO.nodeorder})
 public final class Add${ENTITYINFO.name} extends SystemAction implements ContextAwareAction {
 
     @Override

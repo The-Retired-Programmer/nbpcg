@@ -121,8 +121,6 @@ import static ${package}.${c.name?cap_first}Node.${c.name?upper_case}NODE_FLAVOR
 </#list>
 import uk.theretiredprogrammer.accesscontrolmanager.topcomponents.Edit${ENTITYINFO.name};
 import uk.theretiredprogrammer.nbpcglibrary.api.ApplicationLookup;
-import uk.theretiredprogrammer.nbpcglibrary.common.Event;
-import uk.theretiredprogrammer.nbpcglibrary.common.Listener;
 import uk.theretiredprogrammer.nbpcglibrary.lifecycle.LibraryOnStop;
 import static uk.theretiredprogrammer.nbpcglibrary.lifecycle.LibraryOnStop.isSavableEnabled;
 import uk.theretiredprogrammer.nbpcglibrary.icons.SpecialIcons;
@@ -157,8 +155,7 @@ public class ${ENTITYINFO.name}Node extends AbstractNode implements PropertyChan
         DATETIME_ISO8601.setLenient(false);
     }
     
-    private final Event titlechange = new Event();
-     private final InstanceContent lookupcontent;
+    private final InstanceContent lookupcontent;
     private final NodeSavable savable = new NodeSavable();
     private EntityState state = EntityState.INIT;
     private ${ENTITYINFO.name}Entity baseentityoriginal;   
@@ -392,31 +389,13 @@ public class ${ENTITYINFO.name}Node extends AbstractNode implements PropertyChan
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         if ("username".equals(evt.getPropertyName())) {
-            // TODO ---- need to add a list of properties which form the displayname     
+            // TODO ---- need to add a list of getters which form the displayname     
             fireDisplayNameChange(null, getDisplayName());
-            // TODO ---- need to move this to its own list of properties   
-            titlechange.fire(evt);
+            // TODO ---- need to move this to its own list of getters   
+            firePropertyChange("DISPLAYTITLE", null, getDisplayTitle());
         }
     }
     
-    /**
-     * Add a listener to track changes to the title string
-     *
-     * @param listener the listener
-     */
-    public void addTitleListener(Listener listener){
-        titlechange.addListener(listener);
-    }
-    
-    /**
-     * Remove a listener used to track changes to the title string
-     *
-     * @param listener the listener
-     */
-    public void removeTitleListener(Listener listener){
-        titlechange.removeListener(listener);
-    }
-
     @Override
     public String getHtmlDisplayName() {
         return (state == EntityState.NEW || state == EntityState.NEWEDITING
@@ -613,7 +592,7 @@ public class ${ENTITYINFO.name}Node extends AbstractNode implements PropertyChan
     }
 
     /**
-     * Copy entity fields into this entity.
+     * Copy entity fields into this node.
      *
      * @param e the copy source entity
      */
@@ -676,7 +655,7 @@ public class ${ENTITYINFO.name}Node extends AbstractNode implements PropertyChan
         fireIconChange();
         fireOpenedIconChange();
         fireDisplayNameChange("old", "new");
-        titlechange.fire(null);
+        firePropertyChange("DISPLAYTITLE", null, getDisplayTitle());
     }
 
     private class NodeSavable<E> extends AbstractSavable implements Icon {

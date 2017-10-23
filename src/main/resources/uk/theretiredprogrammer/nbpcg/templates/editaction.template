@@ -79,7 +79,6 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import static javax.swing.Action.NAME;
 import ${nodepackage}.${ENTITYINFO.name}Node;
-import uk.theretiredprogrammer.nbpcglibrary.annotations.RegisterNodeAction;
 import org.openide.util.ContextAwareAction;
 import org.openide.util.HelpCtx;
 import org.openide.util.Lookup;
@@ -93,7 +92,6 @@ import org.openide.util.actions.SystemAction;
  *
  * @author ${templateauthor}
  */
-@RegisterNodeAction(node = "${ENTITYINFO.name}Node", position=100, separator = 500, isDefaultAction=true)
 public final class Edit${ENTITYINFO.name} extends SystemAction implements ContextAwareAction {
 
     @Override

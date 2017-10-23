@@ -79,6 +79,8 @@ import com.famfamfam.www.silkicons.Icons;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Supplier;
@@ -87,11 +89,13 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JToolBar;
 import org.openide.awt.StatusDisplayer;
+import org.openide.nodes.NodeAdapter;
+import org.openide.nodes.NodeEvent;
 import org.openide.util.NbBundle;
 import org.openide.util.NbBundle.Messages;
+import org.openide.util.WeakListeners;
 import org.openide.windows.TopComponent;
 import ${nodepackage}.${ENTITYINFO.name}Node;
-import uk.theretiredprogrammer.nbpcglibrary.common.Listener;
 import uk.theretiredprogrammer.nbpcglibrary.form.CompositePresenter;
 import uk.theretiredprogrammer.nbpcglibrary.form.PanePresenter;
 
@@ -111,15 +115,14 @@ persistenceType = TopComponent.PERSISTENCE_NEVER)
     "CTL_${ENTITYINFO.name}Editor=${ENTITYINFO.name} Editor",
     "HINT_${ENTITYINFO.name}Editor=This is the ${ENTITYINFO.name} Editor"
 })
-public final class ${ENTITYINFO.name}Editor extends TopComponent {
+public final class ${ENTITYINFO.name}Editor extends TopComponent implements PropertyChangeListener {
     
-    private final TitleChangeListener titlechangelistener;
     private final CompositePresenter presenter;
     private boolean abandon = false;
-    private EntityStateChangeListener statechangelistener;
     private final ${ENTITYINFO.name}Node node;
     private JComponent displaycomponent;
     private JToolBar toolbar;
+    private NListener nodelistener;
 
     public ${ENTITYINFO.name}Editor(${ENTITYINFO.name}Node node) {
         setName(NbBundle.getMessage(${ENTITYINFO.name}Editor.class, "CTL_${ENTITYINFO.name}Editor"));
@@ -127,7 +130,6 @@ public final class ${ENTITYINFO.name}Editor extends TopComponent {
         this.node = node;
         presenter = new CompositePresenter();
         presenter.setGetChildPresentersFunction(() -> getPanePresenters());
-        titlechangelistener = new TitleChangeListener();
     }
 
     private List<PanePresenter> getPanePresenters() {
@@ -161,7 +163,18 @@ public final class ${ENTITYINFO.name}Editor extends TopComponent {
         add(displaycomponent, BorderLayout.CENTER);
         presenter.enableView();
         setName("${ENTITYINFO.name}: " + node.getDisplayTitle());
-        node.addTitleListener(titlechangelistener);
+        node.addPropertyChangeListener(WeakListeners.propertyChange(this, node));
+        nodelistener = new NListener();
+        node.addNodeListener(nodelistener);
+    }
+
+    public class NListener extends NodeAdapter {
+        
+        @Override
+        public void nodeDestroyed(NodeEvent ev) {
+            abandon = true;
+            ${ENTITYINFO.name}Editor.this.close();
+        }
     }
 
     public class ToolbarButton extends JButton implements ActionListener {
@@ -184,17 +197,15 @@ public final class ${ENTITYINFO.name}Editor extends TopComponent {
 
     @Override
     public void componentClosed() {
-        node.removeTitleListener(titlechangelistener);
-        statechangelistener = null;
+        node.removeNodeListener(nodelistener);
         remove(displaycomponent);
         remove(toolbar);
         displaycomponent = null;
     }
 
-    private class TitleChangeListener extends Listener {
-
-        @Override
-        public void action(Object p) {
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        if ("DISPLAYTITLE".equals(evt.getPropertyName())) {
             setName("${ENTITYINFO.name}: " + node.getDisplayTitle());
         }
     }
@@ -225,16 +236,4 @@ public final class ${ENTITYINFO.name}Editor extends TopComponent {
         }
         return res;
     }
-
-    private class EntityStateChangeListener extends Listener {
-
-        @Override
-        public void action(Object p) {
-//            if ( ((EntityStateChangeEventParams)p).getTransition() == REMOVE) {
-            abandon = true;
-//                EditorTopComponent.this.close();
-//            }
-        }
-    }
-
 }
