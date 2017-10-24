@@ -2,8 +2,6 @@
     <!DOCTYPE nbpcg-build PUBLIC "-//uk/theretiredprogrammer/nbpcgbuild/DTD NBPCGBUILD SCHEMA 1.0//EN" "nbres:/uk/theretiredprogrammer/nbpcg/nbpcgbuild.dtd">
 <nbpcg-build name="Access Control Manager" copyright="2017 Richard Linsdale (richard at theretiredprogrammer.uk)">
     <folder project="Access Control Manager - Business Logic" location="java" package="uk.theretiredprogrammer.accesscontrolmanager.dataobjects" message="generating entity files" log="accessccontrolmanager" license="apache20">
-        <execute template="entity" filename="User.java" useentityinfo="User"/>
-        <execute template="entity" filename="Claim.java" useentityinfo="Claim"/>
         <execute template="baseentity" filename="UserEntity.java" useentityinfo="User"/>
         <execute template="baseentity" filename="ClaimEntity.java" useentityinfo="Claim"/>
         <execute template="rules" filename="UserRules.java" useentityinfo="User"/>

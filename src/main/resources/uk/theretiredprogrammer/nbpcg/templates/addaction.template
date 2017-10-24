@@ -83,7 +83,6 @@ import org.openide.util.ContextAwareAction;
 import org.openide.util.HelpCtx;
 import org.openide.util.Lookup;
 import org.openide.util.actions.SystemAction;
-import ${datapackage}.${ENTITYINFO.name};
 <#if editorpackage != "">
 import ${editorpackage}.${ENTITYINFO.name}Editor;
 </#if>
@@ -130,7 +129,7 @@ private static final class ContextAction extends AbstractAction {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            ${ENTITYINFO.name}Node node = new ${ENTITYINFO.name}Node(new ${ENTITYINFO.name}());
+            ${ENTITYINFO.name}Node node = new ${ENTITYINFO.name}Node();
             parent.add${ENTITYINFO.name}(node);
 <#if editorpackage != "">
             new ${ENTITYINFO.name}Editor(node).visible();

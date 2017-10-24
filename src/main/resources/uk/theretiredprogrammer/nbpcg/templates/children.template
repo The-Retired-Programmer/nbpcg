@@ -78,7 +78,6 @@ package ${package};
 
 import java.util.List;
 import java.util.stream.Collectors;
-import uk.theretiredprogrammer.accesscontrolmanager.dataobjects.${ENTITYINFO.name};
 import uk.theretiredprogrammer.accesscontrolmanager.dataobjects.${ENTITYINFO.name}Rest;
 import uk.theretiredprogrammer.nbpcglibrary.htmlrest.AandA;
 
@@ -103,7 +102,7 @@ public class ${ENTITYINFO.name}s {
         model = new ${ENTITYINFO.name}Rest(AandA.getToken())
                     .getAll()
                     .stream()
-                    .map(ce -> new ${ENTITYINFO.name}Node(new ${ENTITYINFO.name}(ce)))
+                    .map(ce -> new ${ENTITYINFO.name}Node(ce))
                     .collect(Collectors.toList());
     }
 <#else>
@@ -116,7 +115,7 @@ public class ${ENTITYINFO.name}s {
         model = new ${ENTITYINFO.name}Rest(AandA.getToken())
                     .getMany("${ENTITYINFO.parentname?lower_case}", parentid)
                     .stream()
-                    .map(ce -> new ${ENTITYINFO.name}Node(new ${ENTITYINFO.name}(ce)))
+                    .map(ce -> new ${ENTITYINFO.name}Node(ce))
                     .collect(Collectors.toList());
     }
 </#if>

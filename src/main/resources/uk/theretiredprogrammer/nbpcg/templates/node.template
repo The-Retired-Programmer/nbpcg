@@ -158,7 +158,7 @@ public class ${ENTITYINFO.name}Node extends AbstractNode implements PropertyChan
     private final InstanceContent lookupcontent;
     private final NodeSavable savable = new NodeSavable();
     private EntityState state = EntityState.INIT;
-    private ${ENTITYINFO.name}Entity baseentityoriginal;   
+    private ${ENTITYINFO.name}Entity entitybackup;   
 <#assign haschildren = false>
 <#list ENTITYINFO.child![] as c>
 <#assign haschildren = true >
@@ -175,25 +175,32 @@ public class ${ENTITYINFO.name}Node extends AbstractNode implements PropertyChan
          *
          * @param e the entity associated with this node
          */
-        public ${ENTITYINFO.name}Node(${ENTITYINFO.name} e) {
-            this(e, (id) -> new ${child}s(id));
+        public ${ENTITYINFO.name}Node(${ENTITYINFO.name}Entity e) {
+            this(e, EntityState.DBENTITY, EntityStateChange.LOAD, new ${ENTITYINFO.name}NodeChildFactory(e.getId(),(id) -> new ${child}s(id)),new InstanceContent());
         }
 
-        private ${ENTITYINFO.name}Node(${ENTITYINFO.name} e, Function<Integer, ${child}s> creator) {
-            this(e, new ${ENTITYINFO.name}NodeChildFactory(e.getId(), creator), new InstanceContent());
+        /**
+         * Constructor
+         *
+         * @param e the entity associated with this node
+         */
+        public ${ENTITYINFO.name}Node() {
+            this(new ${ENTITYINFO.name}Entity(), EntityState.NEW, EntityStateChange.CREATE);
+        }
+
+        private ${ENTITYINFO.name}Node(${ENTITYINFO.name}Entity e, EntityState state, EntityStateChange statechange) {
+            this(e, state, statechange, new ${ENTITYINFO.name}NodeChildFactory(e.getId(), (id) -> new Claims(id)), new InstanceContent());
         }
 
         @SuppressWarnings("LeakingThisInConstructor")
-        private ${ENTITYINFO.name}Node(${ENTITYINFO.name} e, ${ENTITYINFO.name}NodeChildFactory factory, InstanceContent lookupcontent) {
+        private ${ENTITYINFO.name}Node(${ENTITYINFO.name}Entity e, EntityState state, EntityStateChange statechange, ${ENTITYINFO.name}NodeChildFactory factory, InstanceContent lookupcontent) {
             super(Children.create(factory, true), new AbstractLookup(lookupcontent));
             this.lookupcontent = lookupcontent;
             lookupcontent.add(e);
             this.factory = factory;
             e.addPropertyChangeListener(WeakListeners.propertyChange(this, e));
-            state = EntityState.NEW;
-            entityStateChange(EntityStateChange.CREATE);
-            // and as this is new it is saveable (too early to rely on listener)
-            savable.add();
+            this.state = state;
+        entityStateChange(statechange);
         }
 <#else>
    
@@ -202,24 +209,31 @@ public class ${ENTITYINFO.name}Node extends AbstractNode implements PropertyChan
          *
          * @param e the entity associated with this node
          */
-        public ${ENTITYINFO.name}Node(${ENTITYINFO.name} e) {
-            this(e, new InstanceContent());
+        public ${ENTITYINFO.name}Node(${ENTITYINFO.name}Entity e) {
+            this(e, EntityState.DBENTITY, EntityStateChange.LOAD, new InstanceContent());
         }
 
-        private ${ENTITYINFO.name}Node(${ENTITYINFO.name} e, InstanceContent lookupcontent) {
-            super(Children.LEAF, new AbstractLookup(lookupcontent));
-            this.lookupcontent = lookupcontent;
-            lookupcontent.add(e);
-            e.addPropertyChangeListener(WeakListeners.propertyChange(this, e));
-            state = EntityState.NEW;
-            entityStateChange(EntityStateChange.CREATE);
-            // and as this is new it is saveable (too early to rely on listener)
-            savable.add();
-        }
+    /**
+     * Constructor
+     *
+     */
+    public ${ENTITYINFO.name}Node() {
+        this(new ${ENTITYINFO.name}Entity(), EntityState.NEW, EntityStateChange.CREATE, new InstanceContent());
+    }
+
+    @SuppressWarnings("LeakingThisInConstructor")
+    private ${ENTITYINFO.name}Node(${ENTITYINFO.name}Entity e, EntityState state, EntityStateChange statechange, InstanceContent lookupcontent) {
+        super(Children.LEAF, new AbstractLookup(lookupcontent));
+        this.lookupcontent = lookupcontent;
+        lookupcontent.add(e);
+        e.addPropertyChangeListener(WeakListeners.propertyChange(this, e));
+        this.state = state;
+        entityStateChange(statechange);
+    }
 </#if>
 
-    private ${ENTITYINFO.name} getEntity() {
-        return getLookup().lookup(${ENTITYINFO.name}.class);
+    private ${ENTITYINFO.name}Entity getEntity() {
+        return getLookup().lookup(${ENTITYINFO.name}Entity.class);
     }
 
 <#if haschildren>
@@ -513,7 +527,7 @@ public class ${ENTITYINFO.name}Node extends AbstractNode implements PropertyChan
 
     @Override
     public Image getIcon(int type) {
-        return ${ENTITYINFO.name}Rules.areAllRulesValid(new StringBuilder(), getEntity().getBaseEntity())
+        return ${ENTITYINFO.name}Rules.areAllRulesValid(new StringBuilder(), getEntity())
                 ? Icons.get("${ENTITYINFO.icon}")
                 : ImageUtilities.mergeImages(Icons.get("${ENTITYINFO.icon}"), SpecialIcons.get("errormarker"), 0, 6);
     }
@@ -544,24 +558,24 @@ public class ${ENTITYINFO.name}Node extends AbstractNode implements PropertyChan
                 return false;
             case NEW:
             case NEWEDITING:
-                if (!${ENTITYINFO.name}Rules.areAllRulesValid(sb, getEntity().getBaseEntity())) {
+                if (!${ENTITYINFO.name}Rules.areAllRulesValid(sb, getEntity())) {
                     return false;
                 }
                 rest = ApplicationLookup.getDefault().lookup(${ENTITYINFO.name}Rest.class);
-                getEntity().setBaseEntity(rest.create(getEntity().getBaseEntity()));
+                getEntity().copy(rest.create(getEntity()));
                 state = EntityState.DBENTITY;
                 // TODO - we need to refresh the child list
                 break;
             case DBENTITYEDITING:
-                if (!${ENTITYINFO.name}Rules.areAllRulesValid(sb, getEntity().getBaseEntity())) {
+                if (!${ENTITYINFO.name}Rules.areAllRulesValid(sb, getEntity())) {
                     return false;
                 }
                 rest = ApplicationLookup.getDefault().lookup(${ENTITYINFO.name}Rest.class);
-                getEntity().setBaseEntity(rest.update(getEntity().getId(), getEntity().getBaseEntity()));
+                getEntity().copy(rest.update(getEntity().getId(), getEntity()));
                 state = EntityState.DBENTITY;
                 break;
             default:
-                if (!${ENTITYINFO.name}Rules.areAllRulesValid(sb, getEntity().getBaseEntity())) {
+                if (!${ENTITYINFO.name}Rules.areAllRulesValid(sb, getEntity())) {
                     return false;
                 }
         }
@@ -591,18 +605,6 @@ public class ${ENTITYINFO.name}Node extends AbstractNode implements PropertyChan
         }
     }
 
-    /**
-     * Copy entity fields into this node.
-     *
-     * @param e the copy source entity
-     */
-    private void copy(${ENTITYINFO.name} e) {
-        if (state == EntityState.NEW || state == EntityState.NEWEDITING) {
-            getEntity().setBaseEntity(new ${ENTITYINFO.name}Entity(e.getBaseEntity()));
-            ensureEditing();
-        }
-    }
-
     // ------------------------------------------------------------------------
     //
     //                         STATE MANAGEMENT
@@ -616,29 +618,31 @@ public class ${ENTITYINFO.name}Node extends AbstractNode implements PropertyChan
     private void ensureEditing() {
         switch (state) {
             case NEW:
-                baseentityoriginal = new ${ENTITYINFO.name}Entity(getEntity().getBaseEntity());
                 state = EntityState.NEWEDITING;
-                entityStateChange(EntityStateChange.EDIT);
-                return;
+                break;
             case DBENTITY:
-                baseentityoriginal = new ${ENTITYINFO.name}Entity(getEntity().getBaseEntity());
                 state = EntityState.DBENTITYEDITING;
-                entityStateChange(EntityStateChange.EDIT);
+                break;
+            default:
+                return;
         }
+        entitybackup = new ${ENTITYINFO.name}Entity(getEntity());
+        entityStateChange(EntityStateChange.EDIT);
     }
 
     public void cancelEdit() {
         switch (state) {
             case NEWEDITING:
                 state = EntityState.NEW;
-                getEntity().setBaseEntity(baseentityoriginal);
-                entityStateChange(EntityStateChange.RESET);
                 break;
             case DBENTITYEDITING:
                 state = EntityState.DBENTITY;
-                getEntity().setBaseEntity(baseentityoriginal);
-                entityStateChange(EntityStateChange.RESET);
+                break;
+            default:
+                return;
         }
+        getEntity().copy(entitybackup);
+        entityStateChange(EntityStateChange.RESET);
     }
 
     private void entityStateChange(EntityStateChange esc) {
@@ -782,7 +786,7 @@ public class ${ENTITYINFO.name}Node extends AbstractNode implements PropertyChan
     public Sheet createSheet() {
         Sheet sheet = Sheet.createDefault();
         Sheet.Set set = Sheet.createPropertiesSet();
-        ${ENTITYINFO.name} obj = getEntity();
+        ${ENTITYINFO.name}Entity obj = getEntity();
         try {
 <#list ENTITYINFO.field![] as field>
 <#if !(field.hidden?? || field.type == "rootref" || field.type == "ref" || field.type == "reference" ) >
@@ -870,7 +874,7 @@ public class ${ENTITYINFO.name}Node extends AbstractNode implements PropertyChan
         }
 
         @Override
-        protected ${ENTITYINFO.name} getData() {
+        protected ${ENTITYINFO.name}Entity getData() {
             return getEntity();
         }
     }

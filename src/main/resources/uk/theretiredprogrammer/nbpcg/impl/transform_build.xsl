@@ -92,7 +92,6 @@
                     </xsl:when>
                     <xsl:when test="@type = 'data' ">
                         <folder project="{$project}" location="java" package="{$package}" message="generating entity files" log="{$log}" license="{$license}">
-                            <xsl:call-template name="entity" />
                             <xsl:call-template name="baseentity" />
                             <xsl:call-template name="rules" />
                             <xsl:call-template name="alias" />
@@ -194,12 +193,6 @@
             <xsl:if test="not(contains($exclude,concat(',',@name,',')))" >
                 <execute template="iconnodeviewer" filename="{@name}IconNodeViewer.java" useentityinfo="{@name}" />
             </xsl:if>
-        </xsl:for-each>
-    </xsl:template>
-    
-    <xsl:template name="entity" >
-        <xsl:for-each select="/nbpcg/databases/database[not(@usepackage)]/table" >
-            <execute template="entity" filename="{@name}.java" useentityinfo="{@name}"/>
         </xsl:for-each>
     </xsl:template>
     
