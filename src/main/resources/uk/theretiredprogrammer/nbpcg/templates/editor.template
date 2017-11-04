@@ -77,10 +77,10 @@ package ${package};
 
 import com.famfamfam.www.silkicons.Icons;
 import java.awt.BorderLayout;
+import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Supplier;
@@ -93,7 +93,6 @@ import org.openide.nodes.NodeAdapter;
 import org.openide.nodes.NodeEvent;
 import org.openide.util.NbBundle;
 import org.openide.util.NbBundle.Messages;
-import org.openide.util.WeakListeners;
 import org.openide.windows.TopComponent;
 import ${nodepackage}.${ENTITYINFO.name}Node;
 import uk.theretiredprogrammer.nbpcglibrary.form.CompositePresenter;
@@ -115,7 +114,7 @@ persistenceType = TopComponent.PERSISTENCE_NEVER)
     "CTL_${ENTITYINFO.name}Editor=${ENTITYINFO.name} Editor",
     "HINT_${ENTITYINFO.name}Editor=This is the ${ENTITYINFO.name} Editor"
 })
-public final class ${ENTITYINFO.name}Editor extends TopComponent implements PropertyChangeListener {
+public final class ${ENTITYINFO.name}Editor extends TopComponent {
     
     private final CompositePresenter presenter;
     private boolean abandon = false;
@@ -163,7 +162,6 @@ public final class ${ENTITYINFO.name}Editor extends TopComponent implements Prop
         add(displaycomponent, BorderLayout.CENTER);
         presenter.enableView();
         setName("${ENTITYINFO.name}: " + node.getDisplayTitle());
-        node.addPropertyChangeListener(WeakListeners.propertyChange(this, node));
         nodelistener = new NListener();
         node.addNodeListener(nodelistener);
     }
@@ -173,7 +171,14 @@ public final class ${ENTITYINFO.name}Editor extends TopComponent implements Prop
         @Override
         public void nodeDestroyed(NodeEvent ev) {
             abandon = true;
-            ${ENTITYINFO.name}Editor.this.close();
+            EventQueue.invokeLater(() -> ${ENTITYINFO.name}Editor.this.close());
+        }
+
+        @Override
+        public void propertyChange(PropertyChangeEvent ev) {
+            if ("displayName".equals(ev.getPropertyName())) {
+                setName("${ENTITYINFO.name}: " + node.getDisplayTitle());
+            }
         }
     }
 
@@ -201,13 +206,6 @@ public final class ${ENTITYINFO.name}Editor extends TopComponent implements Prop
         remove(displaycomponent);
         remove(toolbar);
         displaycomponent = null;
-    }
-
-    @Override
-    public void propertyChange(PropertyChangeEvent evt) {
-        if ("DISPLAYTITLE".equals(evt.getPropertyName())) {
-            setName("${ENTITYINFO.name}: " + node.getDisplayTitle());
-        }
     }
 
     @Override

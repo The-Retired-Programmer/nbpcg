@@ -955,7 +955,7 @@
                 <xsl:when test="($type='long') or ($type='int') "> = 0</xsl:when>
                 <xsl:when test="$type='date' "> = new DateOnly()</xsl:when>
                 <xsl:when test="$type='datetime' "> = new Timestamp()</xsl:when>
-                <xsl:when test="($type='reference') or ($type='ref') or ($type='rootref') "/>
+                <xsl:when test="($type='reference') or ($type='ref') or ($type='rootref') "> = 0</xsl:when>
                 <xsl:when test="@type='currency' or @type='decimal'"> = BigDecimal.ZERO</xsl:when>
                 <xsl:when test="($type='enum') or ($type='String') or ($type='password') "> = ""</xsl:when>
             </xsl:choose>

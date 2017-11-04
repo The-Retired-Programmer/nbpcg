@@ -72,6 +72,14 @@
 <#-- Freemarker Template for ChildFactory class plus an inner classes for Nodes. -->
 <#assign templateauthor = "Richard Linsdale (richard at theretiredprogrammer.uk)" />
 <#assign ENTITYINFO = entityinfo[useentityinfo] >
+<#assign haschildren = false>
+<#list ENTITYINFO.child![] as c>
+<#assign haschildren = true >
+<#assign child = c.name?cap_first />
+</#list>
+<#if ENTITYINFO.customchildfactorypackage?? >
+<#assign haschildren = true >
+</#if>
 package ${package};
 
 import com.famfamfam.www.silkicons.Icons;
@@ -81,7 +89,6 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
-import java.awt.datatransfer.UnsupportedFlavorException;
 import static java.beans.BeanInfo.ICON_COLOR_16x16;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -91,8 +98,6 @@ import java.text.MessageFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
-import java.util.function.Function;
 import javax.swing.Action;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -101,19 +106,14 @@ import org.openide.ErrorManager;
 import org.openide.actions.CopyAction;
 import org.openide.actions.CutAction;
 import org.openide.actions.DeleteAction;
-import org.openide.actions.PasteAction;
 import org.openide.nodes.AbstractNode;
 import org.openide.nodes.Children;
-import org.openide.nodes.Node;
-import org.openide.nodes.NodeTransfer;
 import ${datapackage}.*;
 import org.openide.nodes.PropertySupport;
 import org.openide.nodes.Sheet;
-import org.openide.util.Exceptions;
 import org.openide.util.ImageUtilities;
 import org.openide.util.WeakListeners;
 import org.openide.util.datatransfer.ExTransferable;
-import org.openide.util.datatransfer.PasteType;
 import org.openide.util.lookup.AbstractLookup;
 import org.openide.util.lookup.InstanceContent;
 <#list ENTITYINFO.child![] as c>
@@ -121,10 +121,16 @@ import static ${package}.${c.name?cap_first}Node.${c.name?upper_case}NODE_FLAVOR
 </#list>
 import uk.theretiredprogrammer.accesscontrolmanager.topcomponents.Edit${ENTITYINFO.name};
 import uk.theretiredprogrammer.nbpcglibrary.api.ApplicationLookup;
+import static uk.theretiredprogrammer.nbpcglibrary.api.IdTimestampBaseEntity.COPYNEWSTATE;
 import uk.theretiredprogrammer.nbpcglibrary.lifecycle.LibraryOnStop;
 import static uk.theretiredprogrammer.nbpcglibrary.lifecycle.LibraryOnStop.isSavableEnabled;
 import uk.theretiredprogrammer.nbpcglibrary.icons.SpecialIcons;
-
+<#if haschildren >
+import java.util.List;
+import org.openide.actions.PasteAction;
+import org.openide.nodes.NodeTransfer;
+import org.openide.util.datatransfer.PasteType;
+</#if>
 
 /**
  * Node for ${ENTITYINFO.name}Node.
@@ -159,37 +165,35 @@ public class ${ENTITYINFO.name}Node extends AbstractNode implements PropertyChan
     private final NodeSavable savable = new NodeSavable();
     private EntityState state = EntityState.INIT;
     private ${ENTITYINFO.name}Entity entitybackup;   
-<#assign haschildren = false>
-<#list ENTITYINFO.child![] as c>
-<#assign haschildren = true >
-<#assign child = c.name?cap_first />
-</#list>
-<#if ENTITYINFO.customchildfactorypackage?? >
-<#assign haschildren = true >
-</#if>
 <#if haschildren >
         private final ${ENTITYINFO.name}NodeChildFactory factory;
+</#if>
 
-        /**
-         * Constructor
-         *
-         * @param e the entity associated with this node
-         */
-        public ${ENTITYINFO.name}Node(${ENTITYINFO.name}Entity e) {
-            this(e, EntityState.DBENTITY, EntityStateChange.LOAD, new ${ENTITYINFO.name}NodeChildFactory(e.getId(),(id) -> new ${child}s(id)),new InstanceContent());
+    /**
+     * Constructor Factory
+     *
+     * @param e the entity associated with this node
+     */
+    public static ${ENTITYINFO.name}Node create(${ENTITYINFO.name}Entity e){
+        if (e.isPersistent()) {
+            return new ${ENTITYINFO.name}Node(e, EntityState.DBENTITY, EntityStateChange.LOAD, new InstanceContent());
         }
-
-        /**
-         * Constructor
-         *
-         * @param e the entity associated with this node
-         */
-        public ${ENTITYINFO.name}Node() {
-            this(new ${ENTITYINFO.name}Entity(), EntityState.NEW, EntityStateChange.CREATE);
+        if (e.getId() == COPYNEWSTATE) {
+          return new ${ENTITYINFO.name}Node(e, EntityState.NEWEDITING, EntityStateChange.EDIT, new InstanceContent());
         }
+        return new ${ENTITYINFO.name}Node(e, EntityState.NEW, EntityStateChange.CREATE, new InstanceContent());
+    }
 
-        private ${ENTITYINFO.name}Node(${ENTITYINFO.name}Entity e, EntityState state, EntityStateChange statechange) {
-            this(e, state, statechange, new ${ENTITYINFO.name}NodeChildFactory(e.getId(), (id) -> new Claims(id)), new InstanceContent());
+    /**
+     * Constructor Factory
+     */
+    public static ${ENTITYINFO.name}Node create(){
+        return new ${ENTITYINFO.name}Node(${ENTITYINFO.name}Entity.createNew(), EntityState.NEW, EntityStateChange.CREATE, new InstanceContent());
+    }
+<#if haschildren >
+
+        private ${ENTITYINFO.name}Node(${ENTITYINFO.name}Entity e, EntityState state, EntityStateChange statechange, InstanceContent lookupcontent) {
+            this(e, state, statechange, new ${ENTITYINFO.name}NodeChildFactory(e.getId(), (id) -> new Claims(id)), lookupcontent);
         }
 
         @SuppressWarnings("LeakingThisInConstructor")
@@ -204,23 +208,6 @@ public class ${ENTITYINFO.name}Node extends AbstractNode implements PropertyChan
         }
 <#else>
    
-        /**
-         * Constructor
-         *
-         * @param e the entity associated with this node
-         */
-        public ${ENTITYINFO.name}Node(${ENTITYINFO.name}Entity e) {
-            this(e, EntityState.DBENTITY, EntityStateChange.LOAD, new InstanceContent());
-        }
-
-    /**
-     * Constructor
-     *
-     */
-    public ${ENTITYINFO.name}Node() {
-        this(new ${ENTITYINFO.name}Entity(), EntityState.NEW, EntityStateChange.CREATE, new InstanceContent());
-    }
-
     @SuppressWarnings("LeakingThisInConstructor")
     private ${ENTITYINFO.name}Node(${ENTITYINFO.name}Entity e, EntityState state, EntityStateChange statechange, InstanceContent lookupcontent) {
         super(Children.LEAF, new AbstractLookup(lookupcontent));
@@ -232,27 +219,27 @@ public class ${ENTITYINFO.name}Node extends AbstractNode implements PropertyChan
     }
 </#if>
 
-    private ${ENTITYINFO.name}Entity getEntity() {
+    public final ${ENTITYINFO.name}Entity getEntity() {
         return getLookup().lookup(${ENTITYINFO.name}Entity.class);
     }
 
 <#if haschildren>
     /**
-     * add a ${child} nodeto the children model
+     * add a ${child} entity to the children model
      *
-     * @param node the node to add
+     * @param e the entity to add
      */
-    public void add${child}(${child}Node node){
-        factory.add(node);
+    public void add${child}(${child}Entity e){
+        factory.add(e);
     }
 
     /**
-     * remove a ${child} node from the children model
+     * remove a ${child} entity from the children model
      *
-     * @param node the node to remove
+     * @param e the entity to remove
      */
-    public void remove${child}(${child}Node node){
-        factory.remove(node);
+    public void remove${child}(${child}Entity e){
+        factory.remove(e);
     }
 
 </#if>
@@ -402,12 +389,20 @@ public class ${ENTITYINFO.name}Node extends AbstractNode implements PropertyChan
     
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        if ("username".equals(evt.getPropertyName())) {
-            // TODO ---- need to add a list of getters which form the displayname     
+<#list ENTITYINFO.displaynameformat as df >
+        if ( 
+<#list df.display as dp>
+<#list ENTITYINFO.field![] as fd>
+<#if fd.name == dp.field?lower_case >
+            "${fd.name}".equals(evt.getPropertyName())<#if dp_has_next> || </#if>
+</#if>
+</#list>
+</#list>
+            ) {
             fireDisplayNameChange(null, getDisplayName());
             // TODO ---- need to move this to its own list of getters   
-            firePropertyChange("DISPLAYTITLE", null, getDisplayTitle());
         }
+</#list>
     }
     
     @Override
@@ -591,7 +586,7 @@ public class ${ENTITYINFO.name}Node extends AbstractNode implements PropertyChan
         switch (state) {
             case NEW:
             case NEWEDITING:
-                ((${ENTITYINFO.parentname}Node)getParentNode()).remove${ENTITYINFO.name}(this);
+                ((${ENTITYINFO.parentname}Node)getParentNode()).remove${ENTITYINFO.name}(getEntity());
                 state = EntityState.REMOVED;
                 entityStateChange(EntityStateChange.REMOVE);
                 return;
@@ -599,7 +594,7 @@ public class ${ENTITYINFO.name}Node extends AbstractNode implements PropertyChan
             case DBENTITYEDITING:
                 ${ENTITYINFO.name}Rest rest = ApplicationLookup.getDefault().lookup(${ENTITYINFO.name}Rest.class);
                 rest.delete(getEntity().getId());
-                ((${ENTITYINFO.parentname}Node)getParentNode()).remove${ENTITYINFO.name}(this);
+                ((${ENTITYINFO.parentname}Node)getParentNode()).remove${ENTITYINFO.name}(getEntity());
                 state = EntityState.REMOVED;
                 entityStateChange(EntityStateChange.REMOVE);
         }
@@ -626,7 +621,7 @@ public class ${ENTITYINFO.name}Node extends AbstractNode implements PropertyChan
             default:
                 return;
         }
-        entitybackup = new ${ENTITYINFO.name}Entity(getEntity());
+        entitybackup = ${ENTITYINFO.name}Entity.createCopy(getEntity());
         entityStateChange(EntityStateChange.EDIT);
     }
 
@@ -658,8 +653,8 @@ public class ${ENTITYINFO.name}Node extends AbstractNode implements PropertyChan
         }
         fireIconChange();
         fireOpenedIconChange();
-        fireDisplayNameChange("old", "new");
-        firePropertyChange("DISPLAYTITLE", null, getDisplayTitle());
+        fireDisplayNameChange("old", getDisplayName());
+        //firePropertyChange("DISPLAYTITLE", null, getDisplayTitle());
     }
 
     private class NodeSavable<E> extends AbstractSavable implements Icon {
@@ -822,21 +817,7 @@ public class ${ENTITYINFO.name}Node extends AbstractNode implements PropertyChan
     @Override
     public PasteType getDropType(final Transferable t, int arg1, int arg2) {
         if (t.isDataFlavorSupported(${child?upper_case}NODE_FLAVOR)) {
-            return new PasteType() {
-                @Override
-                public Transferable paste() throws IOException {
-                    try {
-                        factory.add((${child}Node) t.getTransferData(${child?upper_case}NODE_FLAVOR));
-                        final Node node = NodeTransfer.node(t, NodeTransfer.DND_MOVE + NodeTransfer.CLIPBOARD_CUT);
-                        if (node != null) {
-                            node.destroy();
-                        }
-                    } catch (UnsupportedFlavorException ex) {
-                        Exceptions.printStackTrace(ex);
-                    }
-                    return null;
-                }
-            };
+            return new AllowedPasteType(t);
         } else {
             return null;
         }
@@ -849,6 +830,30 @@ public class ${ENTITYINFO.name}Node extends AbstractNode implements PropertyChan
         PasteType p = getDropType(t, 0, 0);
         if (p != null) {
             s.add(p);
+        }
+    }
+
+    private class AllowedPasteType extends PasteType {
+
+        private final Transferable t;
+        
+        public AllowedPasteType(Transferable t) {
+            this.t = t;
+        }
+
+        @Override
+        public Transferable paste() throws IOException {
+            ${child}Node node = (${child}Node) NodeTransfer.node(t, NodeTransfer.MOVE);
+            if (node != null) {
+                ((UserNode)node.getParentNode()).remove${child}(node.getEntity());
+                add${child}(node.getEntity());
+                return null;
+            }
+            node = (${child}Node) NodeTransfer.node(t, NodeTransfer.COPY);
+            if (node != null) {
+                factory.add(${child}Entity.createNewCopy(node.getEntity()));
+            }
+            return null;
         }
     }
 
@@ -874,8 +879,8 @@ public class ${ENTITYINFO.name}Node extends AbstractNode implements PropertyChan
         }
 
         @Override
-        protected ${ENTITYINFO.name}Entity getData() {
-            return getEntity();
+        protected ${ENTITYINFO.name}Node getData() {
+            return ${ENTITYINFO.name}Node.this;
         }
     }
 }

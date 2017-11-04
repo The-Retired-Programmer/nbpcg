@@ -95,32 +95,57 @@ public class ${ENTITYINFO.name}Entity extends IdTimestampBaseEntity {
 <#list ENTITYINFO.field![] as field>
 <#if field.type != "rootref" >
 <#if !(field.hidden??) >
-    private ${field.jsontype} ${field.name};
+    private ${field.jsontype} ${field.name}${field.initialisation};
 </#if>
 </#if>
 </#list>
 
-    /**
-     * Constructor - ${ENTITYINFO.name}Entity.
+/**
+     * Factory Constructor - ${ENTITYINFO.name}Entity.
+     * @return the created entity
      */
-    public ${ENTITYINFO.name}Entity() {
+    public static ${ENTITYINFO.name}Entity createNew(){
+        return new ${ENTITYINFO.name}Entity();
+    }
+    
+    /**
+     * Factory Constructor - ${ENTITYINFO.name}Entity.
+     * @param e the entity to copy
+     * @return the created entity
+     */
+    public static ${ENTITYINFO.name}Entity createNewCopy(${ENTITYINFO.name}Entity e) {
+        return new ${ENTITYINFO.name}Entity(COPYNEWSTATE, e);
+    }
+    
+    /**
+     * Factory Constructor - ${ENTITYINFO.name}Entity.
+     * @param e the entity to copy
+     * @return the created entity
+     */
+    public static ${ENTITYINFO.name}Entity createCopy(${ENTITYINFO.name}Entity e) {
+        return new ${ENTITYINFO.name}Entity(e);
+    }
+    
+
+    private ${ENTITYINFO.name}Entity() {
         super();
     }
 
-    /**
-     * Constructor - ${ENTITYINFO.name}Entity.
-     * @param from the ${ENTITYINFO.name} entity to be copied from
-     */
-    @SuppressWarnings("LeakingThisInConstructor")
-    public ${ENTITYINFO.name}Entity(${ENTITYINFO.name}Entity from) {
+    private ${ENTITYINFO.name}Entity(${ENTITYINFO.name}Entity from) {
         copy(from);
     }
 
-    /**
-     * Copy values from the provided entity into this entity
-     *
-     * @param from the ${ENTITYINFO.name} entity to be copied from
-     */
+    private ${ENTITYINFO.name}Entity(int state, ${ENTITYINFO.name}Entity from) {
+        super.copy(state, from);
+<#list ENTITYINFO.field![] as field>
+<#if field.type != "rootref" >
+<#if !(field.hidden??) >
+        ${field.name} = from.${field.name};
+</#if>
+</#if>
+</#list>
+    }
+
     public final void copy(${ENTITYINFO.name}Entity from) {
         super.copy(from);
 <#list ENTITYINFO.field![] as field>

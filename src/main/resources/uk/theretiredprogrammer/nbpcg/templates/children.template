@@ -76,8 +76,8 @@
 
 package ${package};
 
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import uk.theretiredprogrammer.accesscontrolmanager.dataobjects.${ENTITYINFO.name}Entity;
 import uk.theretiredprogrammer.accesscontrolmanager.dataobjects.${ENTITYINFO.name}Rest;
 import uk.theretiredprogrammer.nbpcglibrary.htmlrest.AandA;
 
@@ -90,20 +90,16 @@ import uk.theretiredprogrammer.nbpcglibrary.htmlrest.AandA;
  *
  * @author ${templateauthor}
  */
-public class ${ENTITYINFO.name}s {
-    
-    private final List<${ENTITYINFO.name}Node> model;
+public class ${ENTITYINFO.name}s extends ArrayList<${ENTITYINFO.name}Entity> {
     
 <#if PARENTENTITYINFO.isroot?? >
     /**
      * Constructor
      */
     public ${ENTITYINFO.name}s() {
-        model = new ${ENTITYINFO.name}Rest(AandA.getToken())
+        addAll(new ${ENTITYINFO.name}Rest(AandA.getToken())
                     .getAll()
-                    .stream()
-                    .map(ce -> new ${ENTITYINFO.name}Node(ce))
-                    .collect(Collectors.toList());
+                );
     }
 <#else>
     /**
@@ -112,37 +108,9 @@ public class ${ENTITYINFO.name}s {
      * @param parentid the parent Id
      */
     public ${ENTITYINFO.name}s(int parentid) {
-        model = new ${ENTITYINFO.name}Rest(AandA.getToken())
+        addAll(new ${ENTITYINFO.name}Rest(AandA.getToken())
                     .getMany("${ENTITYINFO.parentname?lower_case}", parentid)
-                    .stream()
-                    .map(ce -> new ${ENTITYINFO.name}Node(ce))
-                    .collect(Collectors.toList());
+                );
     }
 </#if>
-    
-    /**
-     * Get all the children nodes
-     * 
-     * return the list of children nodes
-     */
-    public List<${ENTITYINFO.name}Node> getAll() {
-        return model;
-    }
-    
-    /**
-     * Add a child node to the children set
-     * @param node the node to be added
-     */
-    public void add(${ENTITYINFO.name}Node node) {
-       model.add(node);
-    }
-
-    /**
-     * Remove a child node from the children set
-     *
-     * @param node the node to be removed
-     */
-    public void remove(${ENTITYINFO.name}Node node) {
-        model.remove(node);
-    }
 }
