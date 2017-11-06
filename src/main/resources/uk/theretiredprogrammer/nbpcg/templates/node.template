@@ -121,7 +121,6 @@ import static ${package}.${c.name?cap_first}Node.${c.name?upper_case}NODE_FLAVOR
 </#list>
 import uk.theretiredprogrammer.accesscontrolmanager.topcomponents.Edit${ENTITYINFO.name};
 import uk.theretiredprogrammer.nbpcglibrary.api.ApplicationLookup;
-import static uk.theretiredprogrammer.nbpcglibrary.api.IdTimestampBaseEntity.COPYNEWSTATE;
 import uk.theretiredprogrammer.nbpcglibrary.lifecycle.LibraryOnStop;
 import static uk.theretiredprogrammer.nbpcglibrary.lifecycle.LibraryOnStop.isSavableEnabled;
 import uk.theretiredprogrammer.nbpcglibrary.icons.SpecialIcons;
@@ -142,14 +141,6 @@ import org.openide.util.datatransfer.PasteType;
  */
 public class ${ENTITYINFO.name}Node extends AbstractNode implements PropertyChangeListener {
 
-    private enum EntityStateChange {
-        CREATE, LOAD, EDIT, SAVE, RESET, REMOVE
-    };
-
-    private enum EntityState {
-        INIT, NEW, NEWEDITING, REMOVED, DBENTITY, DBENTITYEDITING
-    };
-
     /**
      * Data Flavor for Nodes of type ${ENTITYINFO.name}Node
      */
@@ -163,7 +154,6 @@ public class ${ENTITYINFO.name}Node extends AbstractNode implements PropertyChan
     
     private final InstanceContent lookupcontent;
     private final NodeSavable savable = new NodeSavable();
-    private EntityState state = EntityState.INIT;
     private ${ENTITYINFO.name}Entity entitybackup;   
 <#if haschildren >
         private final ${ENTITYINFO.name}NodeChildFactory factory;
@@ -176,46 +166,48 @@ public class ${ENTITYINFO.name}Node extends AbstractNode implements PropertyChan
      */
     public static ${ENTITYINFO.name}Node create(${ENTITYINFO.name}Entity e){
         if (e.isPersistent()) {
-            return new ${ENTITYINFO.name}Node(e, EntityState.DBENTITY, EntityStateChange.LOAD, new InstanceContent());
+            return new ${ENTITYINFO.name}Node(e, new InstanceContent());
         }
-        if (e.getId() == COPYNEWSTATE) {
-          return new ${ENTITYINFO.name}Node(e, EntityState.NEWEDITING, EntityStateChange.EDIT, new InstanceContent());
+        if (e.dirty()) {
+          return new ${ENTITYINFO.name}Node(e, new InstanceContent());
         }
-        return new ${ENTITYINFO.name}Node(e, EntityState.NEW, EntityStateChange.CREATE, new InstanceContent());
+        return new ${ENTITYINFO.name}Node(e, new InstanceContent());
     }
 
     /**
      * Constructor Factory
      */
     public static ${ENTITYINFO.name}Node create(){
-        return new ${ENTITYINFO.name}Node(${ENTITYINFO.name}Entity.createNew(), EntityState.NEW, EntityStateChange.CREATE, new InstanceContent());
+        return new ${ENTITYINFO.name}Node(new ${ENTITYINFO.name}Entity(), new InstanceContent());
     }
 <#if haschildren >
 
-        private ${ENTITYINFO.name}Node(${ENTITYINFO.name}Entity e, EntityState state, EntityStateChange statechange, InstanceContent lookupcontent) {
-            this(e, state, statechange, new ${ENTITYINFO.name}NodeChildFactory(e.getId(), (id) -> new Claims(id)), lookupcontent);
+        private ${ENTITYINFO.name}Node(${ENTITYINFO.name}Entity e, InstanceContent lookupcontent) {
+            this(e, new ${ENTITYINFO.name}NodeChildFactory(e.getId(), (id) -> new Claims(id)), lookupcontent);
         }
 
         @SuppressWarnings("LeakingThisInConstructor")
-        private ${ENTITYINFO.name}Node(${ENTITYINFO.name}Entity e, EntityState state, EntityStateChange statechange, ${ENTITYINFO.name}NodeChildFactory factory, InstanceContent lookupcontent) {
+        private ${ENTITYINFO.name}Node(${ENTITYINFO.name}Entity e, ${ENTITYINFO.name}NodeChildFactory factory, InstanceContent lookupcontent) {
             super(Children.create(factory, true), new AbstractLookup(lookupcontent));
             this.lookupcontent = lookupcontent;
             lookupcontent.add(e);
             this.factory = factory;
             e.addPropertyChangeListener(WeakListeners.propertyChange(this, e));
-            this.state = state;
-        entityStateChange(statechange);
+            if (e.dirty()) {
+                savable.add();
+            }
         }
 <#else>
    
     @SuppressWarnings("LeakingThisInConstructor")
-    private ${ENTITYINFO.name}Node(${ENTITYINFO.name}Entity e, EntityState state, EntityStateChange statechange, InstanceContent lookupcontent) {
+    private ${ENTITYINFO.name}Node(${ENTITYINFO.name}Entity e, InstanceContent lookupcontent) {
         super(Children.LEAF, new AbstractLookup(lookupcontent));
         this.lookupcontent = lookupcontent;
         lookupcontent.add(e);
         e.addPropertyChangeListener(WeakListeners.propertyChange(this, e));
-        this.state = state;
-        entityStateChange(statechange);
+        if (e.dirty()) {
+            savable.add();
+        }
     }
 </#if>
 
@@ -407,9 +399,9 @@ public class ${ENTITYINFO.name}Node extends AbstractNode implements PropertyChan
     
     @Override
     public String getHtmlDisplayName() {
-        return (state == EntityState.NEW || state == EntityState.NEWEDITING
+        return (!getEntity().isPersistent()
                 ? "<font color='#0000FF'><b>"
-                : (state == EntityState.NEWEDITING || state == EntityState.DBENTITYEDITING
+                : (getEntity().dirty()
                         ? "<b>"
                         : ""))
                 + getDisplayName();
@@ -546,35 +538,30 @@ public class ${ENTITYINFO.name}Node extends AbstractNode implements PropertyChan
      */
     public boolean save(StringBuilder sb) {
         ${ENTITYINFO.name}Rest rest;
-        switch (state) {
-            case DBENTITY:
-                return true;
-            case REMOVED:
-                return false;
-            case NEW:
-            case NEWEDITING:
-                if (!${ENTITYINFO.name}Rules.areAllRulesValid(sb, getEntity())) {
-                    return false;
-                }
-                rest = ApplicationLookup.getDefault().lookup(${ENTITYINFO.name}Rest.class);
-                getEntity().copy(rest.create(getEntity()));
-                state = EntityState.DBENTITY;
-                // TODO - we need to refresh the child list
-                break;
-            case DBENTITYEDITING:
+        if (getEntity().isPersistent()) {
+            if (getEntity().dirty()){
                 if (!${ENTITYINFO.name}Rules.areAllRulesValid(sb, getEntity())) {
                     return false;
                 }
                 rest = ApplicationLookup.getDefault().lookup(${ENTITYINFO.name}Rest.class);
                 getEntity().copy(rest.update(getEntity().getId(), getEntity()));
-                state = EntityState.DBENTITY;
-                break;
-            default:
-                if (!${ENTITYINFO.name}Rules.areAllRulesValid(sb, getEntity())) {
-                    return false;
-                }
+                getEntity().dirty(false);
+            } else {
+                return true;
+            }
+        } else {
+            if (!${ENTITYINFO.name}Rules.areAllRulesValid(sb, getEntity())) {
+                return false;
+            }
+            rest = ApplicationLookup.getDefault().lookup(${ENTITYINFO.name}Rest.class);
+            getEntity().copy(rest.create(getEntity()));
+            getEntity().dirty(false);
+            // TODO - we need to refresh the child list
         }
-        entityStateChange(EntityStateChange.SAVE);
+        savable.remove();
+        fireIconChange();
+        fireOpenedIconChange();
+        fireDisplayNameChange(null, getDisplayName());
         return true;
     }
 
@@ -583,21 +570,15 @@ public class ${ENTITYINFO.name}Node extends AbstractNode implements PropertyChan
 <#if haschildren>
         factory.clearChildren();
 </#if>
-        switch (state) {
-            case NEW:
-            case NEWEDITING:
-                ((${ENTITYINFO.parentname}Node)getParentNode()).remove${ENTITYINFO.name}(getEntity());
-                state = EntityState.REMOVED;
-                entityStateChange(EntityStateChange.REMOVE);
-                return;
-            case DBENTITY:
-            case DBENTITYEDITING:
-                ${ENTITYINFO.name}Rest rest = ApplicationLookup.getDefault().lookup(${ENTITYINFO.name}Rest.class);
-                rest.delete(getEntity().getId());
-                ((${ENTITYINFO.parentname}Node)getParentNode()).remove${ENTITYINFO.name}(getEntity());
-                state = EntityState.REMOVED;
-                entityStateChange(EntityStateChange.REMOVE);
+        if (getEntity().isPersistent()) {
+            ${ENTITYINFO.name}Rest rest = ApplicationLookup.getDefault().lookup(${ENTITYINFO.name}Rest.class);
+            rest.delete(getEntity().getId());
         }
+        ((${ENTITYINFO.parentname}Node) getParentNode()).remove${ENTITYINFO.name}(getEntity());
+        savable.remove();
+        fireIconChange();
+        fireOpenedIconChange();
+        fireDisplayNameChange(null, getDisplayName());
     }
 
     // ------------------------------------------------------------------------
@@ -611,50 +592,27 @@ public class ${ENTITYINFO.name}Node extends AbstractNode implements PropertyChan
      * this does nothing.
      */
     private void ensureEditing() {
-        switch (state) {
-            case NEW:
-                state = EntityState.NEWEDITING;
-                break;
-            case DBENTITY:
-                state = EntityState.DBENTITYEDITING;
-                break;
-            default:
-                return;
+        if (getEntity().dirty()) {
+            return;
         }
-        entitybackup = ${ENTITYINFO.name}Entity.createCopy(getEntity());
-        entityStateChange(EntityStateChange.EDIT);
+        entitybackup = new ${ENTITYINFO.name}Entity(getEntity());
+        getEntity().dirty(true);
+        savable.add();
+        fireIconChange();
+        fireOpenedIconChange();
+        fireDisplayNameChange(null, getDisplayName());
     }
 
     public void cancelEdit() {
-        switch (state) {
-            case NEWEDITING:
-                state = EntityState.NEW;
-                break;
-            case DBENTITYEDITING:
-                state = EntityState.DBENTITY;
-                break;
-            default:
-                return;
+        if (!getEntity().dirty()) {
+            return;
         }
         getEntity().copy(entitybackup);
-        entityStateChange(EntityStateChange.RESET);
-    }
-
-    private void entityStateChange(EntityStateChange esc) {
-        switch (esc) {
-            case EDIT:
-                savable.add();
-                break;
-            case LOAD:
-            case SAVE:
-            case REMOVE:
-            case RESET:
-                savable.remove();
-        }
+        getEntity().dirty(false);
+        savable.remove();
         fireIconChange();
         fireOpenedIconChange();
-        fireDisplayNameChange("old", getDisplayName());
-        //firePropertyChange("DISPLAYTITLE", null, getDisplayTitle());
+        fireDisplayNameChange(null, getDisplayName());
     }
 
     private class NodeSavable<E> extends AbstractSavable implements Icon {
@@ -846,12 +804,14 @@ public class ${ENTITYINFO.name}Node extends AbstractNode implements PropertyChan
             ${child}Node node = (${child}Node) NodeTransfer.node(t, NodeTransfer.MOVE);
             if (node != null) {
                 ((UserNode)node.getParentNode()).remove${child}(node.getEntity());
-                add${child}(node.getEntity());
+                factory.add(node.getEntity());
                 return null;
             }
             node = (${child}Node) NodeTransfer.node(t, NodeTransfer.COPY);
             if (node != null) {
-                factory.add(${child}Entity.createNewCopy(node.getEntity()));
+                ${child}Entity e = new ${child}Entity(true, node.getEntity());
+                e.setId(0);
+                factory.add(e);
             }
             return null;
         }

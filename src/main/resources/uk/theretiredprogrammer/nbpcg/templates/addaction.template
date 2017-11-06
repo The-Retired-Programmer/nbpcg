@@ -130,7 +130,7 @@ private static final class ContextAction extends AbstractAction {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            parent.add${ENTITYINFO.name}(${ENTITYINFO.name}Entity.createNew());
+            parent.add${ENTITYINFO.name}(new ${ENTITYINFO.name}Entity());
 <#if editorpackage != "">
             // new ${ENTITYINFO.name}Editor(node).visible();
 </#if>

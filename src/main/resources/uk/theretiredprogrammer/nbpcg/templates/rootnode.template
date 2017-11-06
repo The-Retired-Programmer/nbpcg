@@ -85,14 +85,14 @@ package ${package};
 import com.famfamfam.www.silkicons.Icons;
 import java.awt.Image;
 import java.awt.datatransfer.Transferable;
-import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.IOException;
+import java.util.List;
 import java.util.function.Supplier;
 import javax.swing.Action;
 import org.openide.actions.PasteAction;
 import org.openide.nodes.*;
-import org.openide.util.Exceptions;
 import org.openide.util.datatransfer.PasteType;
+import uk.theretiredprogrammer.accesscontrolmanager.dataobjects.${child}Entity;
 <#list ENTITYINFO.child![] as child>
 import static ${package}.${child.name?cap_first}Node.${child.name?upper_case}NODE_FLAVOR;
 </#list>
@@ -125,12 +125,12 @@ public class ${ENTITYINFO.name}Node extends AbstractNode {
         this.factory = factory;
     }
  
-    public void add${child}(${child}Node node) {
-        factory.add(node);
+    public void add${child}(${child}Entity e) {
+        factory.add(e);
     }
 
-    public void remove${child}(${child}Node node) {
-        factory.remove(node);
+    public void remove${child}(${child}Entity e) {
+        factory.remove(e);
     }
 
     @Override
@@ -169,26 +169,46 @@ public class ${ENTITYINFO.name}Node extends AbstractNode {
         return PasteAction.get(PasteAction.class);
     }
 
-    // DND target support
+// DND target support
     @Override
-    public final PasteType getDropType(final Transferable t, int action, int index) {
+    public PasteType getDropType(final Transferable t, int arg1, int arg2) {
         if (t.isDataFlavorSupported(${child?upper_case}NODE_FLAVOR)) {
-            return new PasteType() {
-                @Override
-                public Transferable paste() throws IOException {
-                    try {
-                        factory.add((${child}Node) t.getTransferData(${child?upper_case}NODE_FLAVOR));
-                        final Node node = NodeTransfer.node(t, NodeTransfer.DND_MOVE + NodeTransfer.CLIPBOARD_CUT);
-                        if (node != null) {
-                            node.destroy();
-                        }
-                    } catch (UnsupportedFlavorException ex) {
-                        Exceptions.printStackTrace(ex);
-                    }
-                    return null;
-                }
-            };
+            return new AllowedPasteType(t);
         } else {
+            return null;
+        }
+    }
+
+    // CUT / COPY target support
+    @Override
+    public void createPasteTypes(Transferable t, List<PasteType> s) {
+        super.createPasteTypes(t, s);
+        PasteType p = getDropType(t, 0, 0);
+        if (p != null) {
+            s.add(p);
+        }
+    }
+    
+    private class AllowedPasteType extends PasteType {
+        
+        private final Transferable t;
+        
+        public AllowedPasteType(Transferable t) {
+            this.t = t;
+        }
+        
+        @Override
+        public Transferable paste() throws IOException {
+            UserNode node = (${child}Node) NodeTransfer.node(t, NodeTransfer.MOVE);
+            if (node != null) {
+                ((${ENTITYINFO.name}Node) node.getParentNode()).remove${child}(node.getEntity());
+                factory.add(node.getEntity());
+                return null;
+            }
+            node = (${child}Node) NodeTransfer.node(t, NodeTransfer.COPY);
+            if (node != null) {
+                factory.add(new ${child}Entity(true, node.getEntity()));
+            }
             return null;
         }
     }
