@@ -154,31 +154,26 @@ public class ${ENTITYINFO.name}Node extends AbstractNode implements PropertyChan
     
     private final InstanceContent lookupcontent;
     private final NodeSavable savable = new NodeSavable();
+    private final ${ENTITYINFO.name}Entity entity;
     private ${ENTITYINFO.name}Entity entitybackup;   
 <#if haschildren >
         private final ${ENTITYINFO.name}NodeChildFactory factory;
 </#if>
 
     /**
-     * Constructor Factory
+     * Constructor
      *
      * @param e the entity associated with this node
      */
-    public static ${ENTITYINFO.name}Node create(${ENTITYINFO.name}Entity e){
-        if (e.isPersistent()) {
-            return new ${ENTITYINFO.name}Node(e, new InstanceContent());
-        }
-        if (e.dirty()) {
-          return new ${ENTITYINFO.name}Node(e, new InstanceContent());
-        }
-        return new ${ENTITYINFO.name}Node(e, new InstanceContent());
+    public ${ENTITYINFO.name}Node(${ENTITYINFO.name}Entity e){
+       this(e, new InstanceContent());
     }
 
     /**
-     * Constructor Factory
+     * Constructor
      */
-    public static ${ENTITYINFO.name}Node create(){
-        return new ${ENTITYINFO.name}Node(new ${ENTITYINFO.name}Entity(), new InstanceContent());
+    public ${ENTITYINFO.name}Node(){
+        this(new ${ENTITYINFO.name}Entity(), new InstanceContent());
     }
 <#if haschildren >
 
@@ -189,6 +184,7 @@ public class ${ENTITYINFO.name}Node extends AbstractNode implements PropertyChan
         @SuppressWarnings("LeakingThisInConstructor")
         private ${ENTITYINFO.name}Node(${ENTITYINFO.name}Entity e, ${ENTITYINFO.name}NodeChildFactory factory, InstanceContent lookupcontent) {
             super(Children.create(factory, true), new AbstractLookup(lookupcontent));
+            entity = e;
             this.lookupcontent = lookupcontent;
             lookupcontent.add(e);
             this.factory = factory;
@@ -202,6 +198,7 @@ public class ${ENTITYINFO.name}Node extends AbstractNode implements PropertyChan
     @SuppressWarnings("LeakingThisInConstructor")
     private ${ENTITYINFO.name}Node(${ENTITYINFO.name}Entity e, InstanceContent lookupcontent) {
         super(Children.LEAF, new AbstractLookup(lookupcontent));
+        entity = e;
         this.lookupcontent = lookupcontent;
         lookupcontent.add(e);
         e.addPropertyChangeListener(WeakListeners.propertyChange(this, e));
@@ -212,7 +209,7 @@ public class ${ENTITYINFO.name}Node extends AbstractNode implements PropertyChan
 </#if>
 
     public final ${ENTITYINFO.name}Entity getEntity() {
-        return getLookup().lookup(${ENTITYINFO.name}Entity.class);
+        return entity;
     }
 
 <#if haschildren>
@@ -251,7 +248,7 @@ public class ${ENTITYINFO.name}Node extends AbstractNode implements PropertyChan
          * @return the ${field.name}
          */
         public final int get${field.name?cap_first}() {
-            return getEntity().get${field.name?cap_first}();
+            return entity.get${field.name?cap_first}();
         }
 
         /**
@@ -260,10 +257,10 @@ public class ${ENTITYINFO.name}Node extends AbstractNode implements PropertyChan
          * @param ${field.name} the ${field.name}
          */
         public void set${field.name?cap_first}(int ${field.name}) {
-            int old = getEntity().get${field.name?cap_first}();
+            int old = entity.get${field.name?cap_first}();
             if (old != ${field.name}) {
                 ensureEditing();
-                getEntity().set${field.name?cap_first}(${field.name});
+                entity.set${field.name?cap_first}(${field.name});
             }
         }
 <#elseif field.type = "reference" >
@@ -305,10 +302,10 @@ public class ${ENTITYINFO.name}Node extends AbstractNode implements PropertyChan
 
     @Override
     public void setIdx(int idx) {
-        int old = getEntity().getIdx();
+        int old = entity.getIdx();
         if (old != idx) {
             ensureEditing();
-            getEntity().setIdx(idx);
+            entity.setIdx(idx);
         }
     }
 
@@ -321,7 +318,7 @@ public class ${ENTITYINFO.name}Node extends AbstractNode implements PropertyChan
      * @throws java.text.ParseException if problems
      */
         public final Date get${field.name?cap_first}() throws ParseException {
-            return DATETIME_ISO8601.parse(getEntity().get${field.name?cap_first}());
+            return DATETIME_ISO8601.parse(entity.get${field.name?cap_first}());
         }
     <#else>
     /**
@@ -330,7 +327,7 @@ public class ${ENTITYINFO.name}Node extends AbstractNode implements PropertyChan
      * @return the ${field.name}
      */
         public final ${field.javatype} get${field.name?cap_first}() {
-            return getEntity().get${field.name?cap_first}();
+            return entity.get${field.name?cap_first}();
         }
     </#if>
     <#if !(field.hidden??) >
@@ -343,29 +340,29 @@ public class ${ENTITYINFO.name}Node extends AbstractNode implements PropertyChan
         public void set${field.name?cap_first}(${field.javatype} ${field.name}) {
         <#if field.type == "enum" >
             if (${field.name} == null) {
-                if (getEntity().get${field.name?cap_first}() != null) {
+                if (entity.get${field.name?cap_first}() != null) {
                     ensureEditing();
-                    getEntity().set${field.name?cap_first}(null);
+                    entity.set${field.name?cap_first}(null);
                 }
             } else {
-                if (!${field.name}.equals(getEntity().get${field.name?cap_first}())) {
+                if (!${field.name}.equals(entity.get${field.name?cap_first}())) {
                     ensureEditing();
-                    getEntity().set${field.name?cap_first}(${field.name});
+                    entity.set${field.name?cap_first}(${field.name});
                 }
             }
         <#else>
             <#if field.type == "String" || field.type == "date" || field.type == "datetime">
-                ${field.javatype} old = getEntity().get${field.name?cap_first}();
+                ${field.javatype} old = entity.get${field.name?cap_first}();
                 if (!old.equals(${field.name})) {
             <#elseif field.type == "decimal" || field.type == "currency" >
-                ${field.javatype} old = getEntity().get${field.name?cap_first}();
+                ${field.javatype} old = entity.get${field.name?cap_first}();
                 if (old.compareTo(${field.name}) != 0) {
             <#else>
-                ${field.javatype} old = getEntity().get${field.name?cap_first}();
+                ${field.javatype} old = entity.get${field.name?cap_first}();
                 if (old != ${field.name}) {
             </#if>
                 ensureEditing();
-                getEntity().set${field.name?cap_first}(${field.name});
+                entity.set${field.name?cap_first}(${field.name});
             }
         </#if>
         }
@@ -392,16 +389,15 @@ public class ${ENTITYINFO.name}Node extends AbstractNode implements PropertyChan
 </#list>
             ) {
             fireDisplayNameChange(null, getDisplayName());
-            // TODO ---- need to move this to its own list of getters   
         }
 </#list>
     }
     
     @Override
     public String getHtmlDisplayName() {
-        return (!getEntity().isPersistent()
+        return (!entity.isPersistent()
                 ? "<font color='#0000FF'><b>"
-                : (getEntity().dirty()
+                : (entity.dirty()
                         ? "<b>"
                         : ""))
                 + getDisplayName();
@@ -415,23 +411,23 @@ public class ${ENTITYINFO.name}Node extends AbstractNode implements PropertyChan
 <#list ENTITYINFO.field![] as fd>
 <#if fd.name == dp.field?lower_case >
 <#if fd.type="reference" >
-                getEntity().get${fd.name?cap_first}().getDisplayTitle()<#if dp_has_next>, </#if>
+                entity.get${fd.name?cap_first}().getDisplayTitle()<#if dp_has_next>, </#if>
 <#elseif fd.type="ref" >
                 getParentNode().getDisplayName();<#if dp_has_next>, </#if>
 <#elseif fd.type="int" >
-                Integer.toString(getEntity().get${fd.name?cap_first}())<#if dp_has_next>, </#if>
+                Integer.toString(entity.get${fd.name?cap_first}())<#if dp_has_next>, </#if>
 <#elseif fd.type="idx"  >
-                Integer.toString(getEntity().getIdx())<#if dp_has_next>, </#if>
+                Integer.toString(entity.getIdx())<#if dp_has_next>, </#if>
 <#elseif fd.type="long" >
-                Long.toString(getEntity().get${fd.name?cap_first}())<#if dp_has_next>, </#if>
+                Long.toString(entity.get${fd.name?cap_first}())<#if dp_has_next>, </#if>
 <#elseif fd.type="boolean" >
-                getEntity().get${fd.name?cap_first}()? "Yes": "No"<#if dp_has_next>, </#if>
+                entity.get${fd.name?cap_first}()? "Yes": "No"<#if dp_has_next>, </#if>
 <#elseif fd.type="date" || fd.type="datetime" >
-                getEntity().get${fd.name?cap_first}().toString()<#if dp_has_next>, </#if>
+                entity.get${fd.name?cap_first}().toString()<#if dp_has_next>, </#if>
 <#elseif fd.type="currency" || fd.type="decimal" >
-                getEntity().get${fd.name?cap_first}().toPlainString()<#if dp_has_next>, </#if>
+                entity.get${fd.name?cap_first}().toPlainString()<#if dp_has_next>, </#if>
 <#elseif fd.type="String" ||  fd.type="enum" || fd.type="password" >
-                getEntity().get${fd.name?cap_first}()<#if dp_has_next>, </#if>
+                entity.get${fd.name?cap_first}()<#if dp_has_next>, </#if>
 </#if>
 </#if>
 </#list>
@@ -440,6 +436,11 @@ public class ${ENTITYINFO.name}Node extends AbstractNode implements PropertyChan
 </#list>
     }
 
+    /**
+     * Get the string which is to be used in titles
+     * 
+     * @return the title string
+     */
     public String getDisplayTitle() {
 <#if ENTITYINFO.displaytitleformat??>
 <#list ENTITYINFO.displaytitleformat as df >
@@ -448,23 +449,23 @@ public class ${ENTITYINFO.name}Node extends AbstractNode implements PropertyChan
 <#list ENTITYINFO.field![] as fd>
 <#if fd.name == dp.field?lower_case >
 <#if fd.type="reference" >
-                getEntity().get${fd.name?cap_first}().getDisplayTitle()<#if dp_has_next>, </#if>
+                entity.get${fd.name?cap_first}().getDisplayTitle()<#if dp_has_next>, </#if>
 <#elseif fd.type="ref" >
                 getParentNode().getDisplayName();<#if dp_has_next>, </#if>
 <#elseif fd.type="int" >
-                Integer.toString(getEntity().get${fd.name?cap_first}())<#if dp_has_next>, </#if>
+                Integer.toString(entity.get${fd.name?cap_first}())<#if dp_has_next>, </#if>
 <#elseif fd.type="idx"  >
-                Integer.toString(getEntity().getIdx())<#if dp_has_next>, </#if>
+                Integer.toString(entity.getIdx())<#if dp_has_next>, </#if>
 <#elseif fd.type="long" >
-                Long.toString(getEntity().get${fd.name?cap_first}())<#if dp_has_next>, </#if>
+                Long.toString(entity.get${fd.name?cap_first}())<#if dp_has_next>, </#if>
 <#elseif fd.type="boolean" >
-                getEntity().get${fd.name?cap_first}()? "Yes": "No"<#if dp_has_next>, </#if>
+                entity.get${fd.name?cap_first}()? "Yes": "No"<#if dp_has_next>, </#if>
 <#elseif fd.type="date" || fd.type="datetime" >
-                getEntity().get${fd.name?cap_first}().toString()<#if dp_has_next>, </#if>
+                entity.get${fd.name?cap_first}().toString()<#if dp_has_next>, </#if>
 <#elseif fd.type="currency" || fd.type="decimal" >
-                getEntity().get${fd.name?cap_first}().toPlainString()<#if dp_has_next>, </#if>
+                entity.get${fd.name?cap_first}().toPlainString()<#if dp_has_next>, </#if>
 <#elseif fd.type="String" ||  fd.type="enum" || fd.type="password" >
-                getEntity().get${fd.name?cap_first}()<#if dp_has_next>, </#if>
+                entity.get${fd.name?cap_first}()<#if dp_has_next>, </#if>
 </#if>
 </#if>
 </#list>
@@ -476,6 +477,11 @@ public class ${ENTITYINFO.name}Node extends AbstractNode implements PropertyChan
 </#if>
     }
 
+    /**
+     * Get the string which is to be used to order records in a collection
+     * 
+     * @return the sort key
+     */
     public String getSortKey() {
 <#if ENTITYINFO.sortformat?? >
 <#list ENTITYINFO.displaysortformat as df >
@@ -484,23 +490,23 @@ public class ${ENTITYINFO.name}Node extends AbstractNode implements PropertyChan
 <#list ENTITYINFO.field![] as fd>
 <#if fd.name == dp.field?lower_case >
 <#if fd.type="reference" >
-                getEntity().get${fd.name?cap_first}().getDisplayTitle()<#if dp_has_next>, </#if>
+                entity.get${fd.name?cap_first}().getDisplayTitle()<#if dp_has_next>, </#if>
 <#elseif fd.type="ref" >
                 getParentNode().getDisplayName();<#if dp_has_next>, </#if>
 <#elseif fd.type="int" >
-                Integer.toString(getEntity().get${fd.name?cap_first}())<#if dp_has_next>, </#if>
+                Integer.toString(entity.get${fd.name?cap_first}())<#if dp_has_next>, </#if>
 <#elseif fd.type="idx"  >
-                Integer.toString(getEntity().getIdx())<#if dp_has_next>, </#if>
+                Integer.toString(entity.getIdx())<#if dp_has_next>, </#if>
 <#elseif fd.type="long" >
-                Long.toString(getEntity().get${fd.name?cap_first}())<#if dp_has_next>, </#if>
+                Long.toString(entity.get${fd.name?cap_first}())<#if dp_has_next>, </#if>
 <#elseif fd.type="boolean" >
-                getEntity().get${fd.name?cap_first}()? "Yes": "No"<#if dp_has_next>, </#if>
+                entity.get${fd.name?cap_first}()? "Yes": "No"<#if dp_has_next>, </#if>
 <#elseif fd.type="date" || fd.type="datetime" >
-                getEntity().get${fd.name?cap_first}().toString()<#if dp_has_next>, </#if>
+                entity.get${fd.name?cap_first}().toString()<#if dp_has_next>, </#if>
 <#elseif fd.type="currency" || fd.type="decimal" >
-                getEntity().get${fd.name?cap_first}().toPlainString()<#if dp_has_next>, </#if>
+                entity.get${fd.name?cap_first}().toPlainString()<#if dp_has_next>, </#if>
 <#elseif fd.type="String" ||  fd.type="enum" || fd.type="password" >
-                getEntity().get${fd.name?cap_first}()<#if dp_has_next>, </#if>
+                entity.get${fd.name?cap_first}()<#if dp_has_next>, </#if>
 </#if>
 </#if>
 </#list>
@@ -538,14 +544,14 @@ public class ${ENTITYINFO.name}Node extends AbstractNode implements PropertyChan
      */
     public boolean save(StringBuilder sb) {
         ${ENTITYINFO.name}Rest rest;
-        if (getEntity().isPersistent()) {
-            if (getEntity().dirty()){
+        if (entity.isPersistent()) {
+            if (entity.dirty()){
                 if (!${ENTITYINFO.name}Rules.areAllRulesValid(sb, getEntity())) {
                     return false;
                 }
                 rest = ApplicationLookup.getDefault().lookup(${ENTITYINFO.name}Rest.class);
-                getEntity().copy(rest.update(getEntity().getId(), getEntity()));
-                getEntity().dirty(false);
+                entity.copy(rest.update(entity.getId(), getEntity()));
+                entity.dirty(false);
             } else {
                 return true;
             }
@@ -554,8 +560,8 @@ public class ${ENTITYINFO.name}Node extends AbstractNode implements PropertyChan
                 return false;
             }
             rest = ApplicationLookup.getDefault().lookup(${ENTITYINFO.name}Rest.class);
-            getEntity().copy(rest.create(getEntity()));
-            getEntity().dirty(false);
+            entity.copy(rest.create(getEntity()));
+            entity.dirty(false);
             // TODO - we need to refresh the child list
         }
         savable.remove();
@@ -570,9 +576,9 @@ public class ${ENTITYINFO.name}Node extends AbstractNode implements PropertyChan
 <#if haschildren>
         factory.clearChildren();
 </#if>
-        if (getEntity().isPersistent()) {
+        if (entity.isPersistent()) {
             ${ENTITYINFO.name}Rest rest = ApplicationLookup.getDefault().lookup(${ENTITYINFO.name}Rest.class);
-            rest.delete(getEntity().getId());
+            rest.delete(entity.getId());
         }
         ((${ENTITYINFO.parentname}Node) getParentNode()).remove${ENTITYINFO.name}(getEntity());
         savable.remove();
@@ -587,28 +593,28 @@ public class ${ENTITYINFO.name}Node extends AbstractNode implements PropertyChan
     //
     // ------------------------------------------------------------------------
     
-    /**
-     * Switch into an editing state, updating state. If already in state then
-     * this does nothing.
-     */
     private void ensureEditing() {
-        if (getEntity().dirty()) {
+        if (entity.dirty()) {
             return;
         }
         entitybackup = new ${ENTITYINFO.name}Entity(getEntity());
-        getEntity().dirty(true);
+        entity.dirty(true);
         savable.add();
         fireIconChange();
         fireOpenedIconChange();
         fireDisplayNameChange(null, getDisplayName());
     }
 
+    /**
+     * Cancel the current node editing - undoing changes.
+     * 
+     */
     public void cancelEdit() {
-        if (!getEntity().dirty()) {
+        if (!entity.dirty()) {
             return;
         }
-        getEntity().copy(entitybackup);
-        getEntity().dirty(false);
+        entity.copy(entitybackup);
+        entity.dirty(false);
         savable.remove();
         fireIconChange();
         fireOpenedIconChange();
@@ -771,7 +777,6 @@ public class ${ENTITYINFO.name}Node extends AbstractNode implements PropertyChan
     }
 
 <#if haschildren>
-    // DND target support
     @Override
     public PasteType getDropType(final Transferable t, int arg1, int arg2) {
         if (t.isDataFlavorSupported(${child?upper_case}NODE_FLAVOR)) {
@@ -781,7 +786,6 @@ public class ${ENTITYINFO.name}Node extends AbstractNode implements PropertyChan
         }
     }
 
-    // CUT / COPY target support
     @Override
     public void createPasteTypes(Transferable t, List<PasteType> s) {
         super.createPasteTypes(t, s);
@@ -809,9 +813,7 @@ public class ${ENTITYINFO.name}Node extends AbstractNode implements PropertyChan
             }
             node = (${child}Node) NodeTransfer.node(t, NodeTransfer.COPY);
             if (node != null) {
-                ${child}Entity e = new ${child}Entity(true, node.getEntity());
-                e.setId(0);
-                factory.add(e);
+                factory.add(new ${child}Entity(true, node.getEntity()));
             }
             return null;
         }

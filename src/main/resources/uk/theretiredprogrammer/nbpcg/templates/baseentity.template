@@ -106,6 +106,7 @@ public class ${ENTITYINFO.name}Entity extends IdTimestampBaseEntity {
 
     public ${ENTITYINFO.name}Entity(boolean dirtystate, ${ENTITYINFO.name}Entity from) {
         copy(dirtystate, from);
+        setId(0);
     }
 
     public ${ENTITYINFO.name}Entity(${ENTITYINFO.name}Entity from) {

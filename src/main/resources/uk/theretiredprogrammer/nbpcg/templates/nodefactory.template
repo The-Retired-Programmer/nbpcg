@@ -192,6 +192,6 @@ public class ${ENTITYINFO.name}NodeChildFactory extends ChildFactory<${child}Ent
      */
     @Override
     protected Node createNodeForKey(${child}Entity e) {
-        return ${child}Node.create(e);
+        return new ${child}Node(e);
     }
 }
