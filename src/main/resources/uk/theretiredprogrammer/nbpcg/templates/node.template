@@ -395,7 +395,7 @@ public class ${ENTITYINFO.name}Node extends AbstractNode implements PropertyChan
     
     @Override
     public String getHtmlDisplayName() {
-        return (!entity.isPersistent()
+        return (!entity.persistent()
                 ? "<font color='#0000FF'><b>"
                 : (entity.dirty()
                         ? "<b>"
@@ -544,7 +544,7 @@ public class ${ENTITYINFO.name}Node extends AbstractNode implements PropertyChan
      */
     public boolean save(StringBuilder sb) {
         ${ENTITYINFO.name}Rest rest;
-        if (entity.isPersistent()) {
+        if (entity.persistent()) {
             if (entity.dirty()){
                 if (!${ENTITYINFO.name}Rules.areAllRulesValid(sb, getEntity())) {
                     return false;
@@ -576,7 +576,7 @@ public class ${ENTITYINFO.name}Node extends AbstractNode implements PropertyChan
 <#if haschildren>
         factory.clearChildren();
 </#if>
-        if (entity.isPersistent()) {
+        if (entity.persistent()) {
             ${ENTITYINFO.name}Rest rest = ApplicationLookup.getDefault().lookup(${ENTITYINFO.name}Rest.class);
             rest.delete(entity.getId());
         }
