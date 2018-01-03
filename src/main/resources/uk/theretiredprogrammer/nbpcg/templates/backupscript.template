@@ -82,5 +82,5 @@
 # @package generated-scripts
 # @author ${templateauthor}
 #
-mysqldump --user=developer --password=dev --single-transaction ${PSTORE.dbname} > backup_${PSTORE.dbname}.sql
+mysqldump --user=developer --password=dev --single-transaction ${PSTORE.name} > backup_${PSTORE.name}.sql
 

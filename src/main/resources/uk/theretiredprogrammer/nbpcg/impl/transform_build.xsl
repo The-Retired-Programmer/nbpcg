@@ -50,40 +50,23 @@
                         <xsl:otherwise>apache20</xsl:otherwise>
                     </xsl:choose>
                 </xsl:variable>
-                <xsl:variable name="log">
-                    <xsl:value-of select="../@log"/>
-                </xsl:variable>
                 <xsl:choose>
                     <xsl:when test="@type = 'jsondatabase' ">
-                        <xsl:for-each select="/nbpcg/databases/database[not(@usepackage)]" >
+                        <xsl:for-each select="/nbpcg/databases/database" >
                             <xsl:variable name="name">
-                                <xsl:choose>
-                                    <xsl:when test="@dbname">
-                                        <xsl:value-of select="@dbname"/>
-                                    </xsl:when>
-                                    <xsl:otherwise>
-                                        <xsl:value-of select="@name"/>
-                                    </xsl:otherwise>
-                                </xsl:choose>
+                                <xsl:value-of select="@name"/>
                             </xsl:variable>
-                            <folder project="{$project}" location="resource" package="{$package}.{$name}" message="generating json persistence files for {$name}" log="{$log}" license="{$license}">
+                            <folder project="{$project}" location="resource" package="{$package}.{$name}" message="generating json persistence files for {$name}" license="{$license}">
                                 <xsl:call-template name="createstandardjsontables"/>
                             </folder>
                         </xsl:for-each>
                     </xsl:when>
                     <xsl:when test="@type = 'mysqldatabase' ">
-                        <xsl:for-each select="/nbpcg/databases/database[not(@usepackage)]" >
+                        <xsl:for-each select="/nbpcg/databases/database" >
                             <xsl:variable name="name">
-                                <xsl:choose>
-                                    <xsl:when test="@dbname">
-                                        <xsl:value-of select="@dbname"/>
-                                    </xsl:when>
-                                    <xsl:otherwise>
-                                        <xsl:value-of select="@name"/>
-                                    </xsl:otherwise>
-                                </xsl:choose>
+                                <xsl:value-of select="@name"/>
                             </xsl:variable>
-                            <folder project="{$project}" location="resource" package="{$package}" message="generating mysql script files for {$name}" log="{$log}" license="{$license}">
+                            <folder project="{$project}" location="resource" package="{$package}" message="generating mysql script files for {$name}" license="{$license}">
                                 <xsl:call-template name="createsqldatabase"/>
                                 <xsl:call-template name="backupscript"/>
                                 <xsl:call-template name="createstandardsqltables"/>
@@ -91,20 +74,19 @@
                         </xsl:for-each>
                     </xsl:when>
                     <xsl:when test="@type = 'data' ">
-                        <folder project="{$project}" location="java" package="{$package}" message="generating entity files" log="{$log}" license="{$license}">
+                        <folder project="{$project}" location="java" package="{$package}" message="generating entity files" license="{$license}">
                             <xsl:call-template name="baseentity" />
                             <xsl:call-template name="rules" />
-                            <xsl:call-template name="alias" />
                             <xsl:call-template name="restcreatorlist" />
                         </folder>
                     </xsl:when>
                     <xsl:when test="@type = 'dataaccess' ">
-                        <folder project="{$project}" location="java" package="{$package}" message="generating dataaccess files" log="{$log}" license="{$license}">
+                        <folder project="{$project}" location="java" package="{$package}" message="generating dataaccess files" license="{$license}">
                             <xsl:call-template name="dataaccess" />
                         </folder>
                     </xsl:when>
                     <xsl:when test="@type = 'node' ">
-                        <folder project="{$project}" location="java" package="{$package}"  message="generating node files" log="{$log}" license="{$license}" datapackage="{$datapackage}" editorpackage="{$editorpackage}">
+                        <folder project="{$project}" location="java" package="{$package}"  message="generating node files" license="{$license}" datapackage="{$datapackage}" editorpackage="{$editorpackage}">
                             <xsl:call-template name="rootnode" />
                             <xsl:call-template name="node" />
                             <xsl:call-template name="nodefactory" />
@@ -114,7 +96,7 @@
                         </folder>
                     </xsl:when>
                     <xsl:when test="@type = 'editor' ">
-                        <folder project="{$project}" location="java" package="{$package}" message="generating editor files" log="{$log}" license="{$license}" datapackage="{$datapackage}" nodepackage="{$nodepackage}">
+                        <folder project="{$project}" location="java" package="{$package}" message="generating editor files" license="{$license}" datapackage="{$datapackage}" nodepackage="{$nodepackage}">
                             <xsl:call-template name="editor" />
                             <xsl:call-template name="editaction" />
                             <xsl:call-template name="presenter" />
@@ -122,7 +104,7 @@
                         </folder>
                     </xsl:when>
                     <xsl:when test="@type = 'nodeviewer' ">
-                        <folder project="{$project}" location="java" package="{$package}" message="generating node viewer files" log="{$log}" license="{$license}"  datapackage="{$datapackage}" nodepackage="{$nodepackage}">
+                        <folder project="{$project}" location="java" package="{$package}" message="generating node viewer files" license="{$license}"  datapackage="{$datapackage}" nodepackage="{$nodepackage}">
                             <xsl:call-template name="rootnodeviewer" />
                             <xsl:call-template name="iconviewer" />
                         </folder>
@@ -205,7 +187,7 @@
                 <xsl:otherwise>HTMLRest</xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
-        <xsl:for-each select="/nbpcg/databases/database[not(@usepackage)]/table" >
+        <xsl:for-each select="/nbpcg/databases/database/table" >
             <xsl:choose>
                 <xsl:when test="$protocol = 'HTMLRest' ">
                     <execute template="htmlrest" filename="{@name}Rest.java" useentityinfo="{@name}" usepersistencestore="{../@name}"/>
@@ -215,13 +197,13 @@
     </xsl:template>
     
     <xsl:template name="baseentity" >
-        <xsl:for-each select="/nbpcg/databases/database[not(@usepackage)]/table" >
+        <xsl:for-each select="/nbpcg/databases/database/table" >
             <execute template="baseentity" filename="{@name}Entity.java" useentityinfo="{@name}"/>
         </xsl:for-each>
     </xsl:template>
     
     <xsl:template name="rules" >
-        <xsl:for-each select="/nbpcg/databases/database[not(@usepackage)]/table" >
+        <xsl:for-each select="/nbpcg/databases/database/table" >
             <execute template="rules" filename="{@name}Rules.java" useentityinfo="{@name}"/>
         </xsl:for-each>
     </xsl:template>
@@ -229,12 +211,6 @@
     <xsl:template name="restcreatorlist" >
         <xsl:for-each select="/nbpcg/databases/database" >
             <execute template="restcreatorlist" filename="RestCreatorList.java" usepersistencestore="{@name}" />
-        </xsl:for-each>
-    </xsl:template>
-    
-    <xsl:template name="alias" >
-        <xsl:for-each select="/nbpcg/databases/database[@usepackage]/table" >
-            <execute template="entity" filename="{@name}.java" useentityinfo="{@name}" />
         </xsl:for-each>
     </xsl:template>
     
@@ -377,7 +353,7 @@
                 <xsl:otherwise>,,</xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
-        <xsl:for-each select="/nbpcg/databases/database[not(@usepackage)]/table" >
+        <xsl:for-each select="/nbpcg/databases/database/table" >
             <xsl:if test="not(contains($exclude,concat(',',@name,',')))" >
                 <xsl:variable name="ename" select="@name" />
                 <xsl:choose>
@@ -405,7 +381,7 @@
                 <xsl:otherwise>,,</xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
-        <xsl:for-each select="/nbpcg/databases/database[not(@usepackage)]/table" >
+        <xsl:for-each select="/nbpcg/databases/database/table" >
             <xsl:if test="not(contains($exclude,concat(',',@name,',')))" >
                 <xsl:variable name="ename" select="@name" />
                 <xsl:choose>
@@ -472,7 +448,7 @@
         <xsl:for-each select="//node" >
             <xsl:if test="not(contains($exclude,concat(',',@name,',')))" >
                 <xsl:variable name="nname" select="@name" />
-                <xsl:if test="/nbpcg/databases/database[not(@usepackage)]/table[@name=$nname]" >
+                <xsl:if test="/nbpcg/databases/database/table[@name=$nname]" >
                     <execute template="editaction" filename="Edit{@name}.java" useentityinfo="{@name}" />
                 </xsl:if>
             </xsl:if>
@@ -480,13 +456,13 @@
     </xsl:template>
     
     <xsl:template name="createsqldatabase">
-        <xsl:for-each select="/nbpcg/databases/database[not(@usepackage)]" >
+        <xsl:for-each select="/nbpcg/databases/database" >
             <execute template="createsqldatabase" filename="createdb.sql" usepersistencestore="{@name}"/>
         </xsl:for-each>
     </xsl:template> 
     
     <xsl:template name="backupscript">
-        <xsl:for-each select="/nbpcg/databases/database[not(@usepackage)]" > 
+        <xsl:for-each select="/nbpcg/databases/database" > 
             <xsl:variable name="dbuc">
                 <xsl:call-template name="firsttouppercase">
                     <xsl:with-param name="string" select="@name" />
@@ -497,13 +473,13 @@
     </xsl:template> 
     
     <xsl:template name="createstandardsqltables">
-        <xsl:for-each select="/nbpcg/databases/database[not(@usepackage)]" > 
+        <xsl:for-each select="/nbpcg/databases/database" > 
             <execute template="createsqltables" filename="createtables.sql" usepersistencestore="{@name}"/>
         </xsl:for-each>
     </xsl:template> 
     
     <xsl:template name="createstandardjsontables">
-        <xsl:for-each select="/nbpcg/databases/database[not(@usepackage)]/table" >
+        <xsl:for-each select="/nbpcg/databases/database/table" >
             <execute template="createjsontable" filename="{@name}" usepersistencestore="{../@name}" useentity="{@name}">
             </execute>
         </xsl:for-each>

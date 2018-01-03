@@ -83,5 +83,5 @@
 -- @package generated-scripts
 -- @author ${templateauthor}
 --
-CREATE DATABASE ${PSTORE.dbname} CHARACTER SET utf8 COLLATE utf8_bin;
-GRANT DELETE,INSERT,SELECT,UPDATE ON ${PSTORE.dbname}.* TO 'nbplatform'@'localhost';
+CREATE DATABASE ${PSTORE.name} CHARACTER SET utf8 COLLATE utf8_bin;
+GRANT DELETE,INSERT,SELECT,UPDATE ON ${PSTORE.name}.* TO 'nbplatform'@'localhost';

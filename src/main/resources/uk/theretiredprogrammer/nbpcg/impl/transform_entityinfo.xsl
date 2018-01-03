@@ -29,56 +29,16 @@
     <xsl:template match="/nbpcg">
         <nbpcg-entity-info name="{@name}">
             <xsl:call-template name="entityinfo" />
-            <xsl:call-template name="usepackageentityinfo" />
             <xsl:call-template name="persistencestore" />
         </nbpcg-entity-info>
     </xsl:template>
     
     <xsl:template name="persistencestore">
-        <xsl:for-each select="databases/database[not(@usepackage)]" > 
-            <xsl:variable name="database">
-                <xsl:choose>
-                    <xsl:when test="@dbname">
-                        <xsl:value-of select="@dbname" />
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:value-of select="@name" />
-                    </xsl:otherwise>
-                </xsl:choose>
-            </xsl:variable>
-            <persistencestore name="{@name}" dbname="{$database}" location="{@location}" >
+        <xsl:for-each select="databases/database" > 
+            <persistencestore name="{@name}" location="{@location}" >
                 <xsl:for-each select="table">
                     <xsl:variable name="ename" select="@name" />
-                    <xsl:variable name="tname">
-                        <xsl:choose>
-                            <xsl:when test="@dbname">
-                                <xsl:value-of select="@dbname" />
-                            </xsl:when>
-                            <xsl:otherwise>
-                                <xsl:value-of select="@name" />
-                            </xsl:otherwise>
-                        </xsl:choose>
-                    </xsl:variable>
-                    <xsl:variable name="pkey">
-                        <xsl:choose>
-                            <xsl:when test="@pkey">
-                                <xsl:value-of select="@pkey" />
-                            </xsl:when>
-                            <xsl:otherwise>
-                                <xsl:value-of select="../@pkey" />
-                            </xsl:otherwise>
-                        </xsl:choose>
-                    </xsl:variable>
-                    <xsl:variable name="extrafields">
-                        <xsl:choose>
-                            <xsl:when test="@extrafields">
-                                <xsl:value-of select="@extrafields" />
-                            </xsl:when>
-                            <xsl:otherwise>
-                                <xsl:value-of select="../@extrafields" />
-                            </xsl:otherwise>
-                        </xsl:choose>
-                    </xsl:variable>
+                    <xsl:variable name="tname" select="@name" />
                     <persistenceentity name="{$tname}">
                         <!-- create column definitions -->
                         <!-- first the explicitely defined columns from the script -->
@@ -102,18 +62,6 @@
                                         <xsl:value-of select="@decimalsize" />
                                     </xsl:when>
                                     <xsl:otherwise>15,2</xsl:otherwise>
-                                </xsl:choose>
-                            </xsl:variable>
-                            <xsl:variable name="pk" >
-                                <xsl:choose>
-                                    <xsl:when test="@pk">PRIMARY KEY</xsl:when>
-                                    <xsl:otherwise></xsl:otherwise>
-                                </xsl:choose>
-                            </xsl:variable>
-                            <xsl:variable name="primarykey" >
-                                <xsl:choose>
-                                    <xsl:when test="@pk">yes</xsl:when>
-                                    <xsl:otherwise>no</xsl:otherwise>
                                 </xsl:choose>
                             </xsl:variable>
                             <xsl:variable name="nullsql" >
@@ -251,29 +199,29 @@
                                     </xsl:variable>
                                     <xsl:choose>
                                         <xsl:when test="$indextype='unique'">
-                                            <persistencefield name="{@name}" primarykey="{$primarykey}" jsontype="{$jsontype}" min="{$min}" max="{$max}" createsql="{concat($pk,' ',$sqltype,' ',$uniquesql,' ',$nullsql,' ,UNIQUE INDEX (',@name,')')}" /> 
+                                            <persistencefield name="{@name}" jsontype="{$jsontype}" min="{$min}" max="{$max}" createsql="{concat($sqltype,' ',$uniquesql,' ',$nullsql,' ,UNIQUE INDEX (',@name,')')}" /> 
                                         </xsl:when>
                                         <xsl:when test="$indextype='yes'">
-                                            <persistencefield name="{@name}" primarykey="{$primarykey}" jsontype="{$jsontype}" min="{$min}" max="{$max}" createsql="{concat($pk,' ',$sqltype,' ',$uniquesql,' ',$nullsql,',INDEX (',@name,')')}" /> 
+                                            <persistencefield name="{@name}" jsontype="{$jsontype}" min="{$min}" max="{$max}" createsql="{concat($sqltype,' ',$uniquesql,' ',$nullsql,',INDEX (',@name,')')}" /> 
                                         </xsl:when>
                                         <xsl:otherwise>
-                                            <persistencefield name="{@name}" primarykey="{$primarykey}" jsontype="{$jsontype}" min="{$min}" max="{$max}" createsql="{concat($pk,' ',$sqltype,' ',$uniquesql,' ',$nullsql)}" />
+                                            <persistencefield name="{@name}" jsontype="{$jsontype}" min="{$min}" max="{$max}" createsql="{concat($sqltype,' ',$uniquesql,' ',$nullsql)}" />
                                         </xsl:otherwise>
                                     </xsl:choose>
                                 </xsl:when>
                                 <xsl:otherwise>
                                     <xsl:choose>
                                         <xsl:when test="$type='reference' and  $fkey= 'yes'" >
-                                            <persistencefield name="{@name}" primarykey="{$primarykey}" jsontype="{$jsontype}" createsql="{concat($pk,' ',$sqltype,' ',$uniquesql,' ',$nullsql,' ,FOREIGN KEY (',@name,') REFERENCES ',@references,'(id)')}" /> 
+                                            <persistencefield name="{@name}" jsontype="{$jsontype}" createsql="{concat($sqltype,' ',$uniquesql,' ',$nullsql,' ,FOREIGN KEY (',@name,') REFERENCES ',@references,'(id)')}" /> 
                                         </xsl:when>
                                         <xsl:when test="$indextype='unique'">
-                                            <persistencefield name="{@name}" primarykey="{$primarykey}" jsontype="{$jsontype}" createsql="{concat($pk,' ',$sqltype,' ',$uniquesql,' ',$nullsql,' ,UNIQUE INDEX (',@name,')')}" /> 
+                                            <persistencefield name="{@name}" jsontype="{$jsontype}" createsql="{concat($sqltype,' ',$uniquesql,' ',$nullsql,' ,UNIQUE INDEX (',@name,')')}" /> 
                                         </xsl:when>
                                         <xsl:when test="$indextype='yes'">
-                                            <persistencefield name="{@name}" primarykey="{$primarykey}" jsontype="{$jsontype}" createsql="{concat($pk,' ',$sqltype,' ',$uniquesql,' ',$nullsql,',INDEX (',@name,')')}" /> 
+                                            <persistencefield name="{@name}" jsontype="{$jsontype}" createsql="{concat($sqltype,' ',$uniquesql,' ',$nullsql,',INDEX (',@name,')')}" /> 
                                         </xsl:when>
                                         <xsl:otherwise>
-                                            <persistencefield name="{@name}" primarykey="{$primarykey}" jsontype="{$jsontype}" createsql="{concat($pk,' ',$sqltype,' ',$uniquesql,' ',$nullsql)}" />
+                                            <persistencefield name="{@name}" jsontype="{$jsontype}" createsql="{concat($sqltype,' ',$uniquesql,' ',$nullsql)}" />
                                         </xsl:otherwise>
                                     </xsl:choose>
                                 </xsl:otherwise>
@@ -294,45 +242,21 @@
                                     <xsl:otherwise>NOT NULL</xsl:otherwise>
                                 </xsl:choose>
                             </xsl:variable>
-                            <persistencefield name="{$fname}" primarykey="no" jsontype="Reference" createsql="{concat('MEDIUMINT UNSIGNED ',$nullsql,' ,FOREIGN KEY (',$fname,') REFERENCES ',../@name,'(id)')}" > 
+                            <persistencefield name="{$fname}" jsontype="Reference" createsql="{concat('MEDIUMINT UNSIGNED ',$nullsql,' ,FOREIGN KEY (',$fname,') REFERENCES ',../@name,'(id)')}" > 
                                 <xsl:if test= "@nullallowed='yes'">
                                     <xsl:attribute name="nullallowed">yes</xsl:attribute>
                                 </xsl:if>
                             </persistencefield>
                         </xsl:for-each> 
                         <!-- thirdly the requested additional columns -->
-                        <xsl:variable name="pkey">
-                            <xsl:choose>
-                                <xsl:when test="@pkey">
-                                    <xsl:value-of select="@pkey" />
-                                </xsl:when>
-                                <xsl:otherwise>
-                                    <xsl:value-of select="../@pkey" />
-                                </xsl:otherwise>
-                            </xsl:choose>
-                        </xsl:variable>
-                        <xsl:variable name="extrafields">
-                            <xsl:choose>
-                                <xsl:when test="@extrafields">
-                                    <xsl:value-of select="@extrafields" />
-                                </xsl:when>
-                                <xsl:otherwise>
-                                    <xsl:value-of select="../@extrafields" />
-                                </xsl:otherwise>
-                            </xsl:choose>
-                        </xsl:variable>
-                        <xsl:if test="$pkey = 'idauto' ">
-                            <persistencefield name="id" sys="yes" jsontype="Integer" primarykey="auto" createsql="MEDIUMINT UNSIGNED AUTO_INCREMENT PRIMARY KEY"/>
-                        </xsl:if>
+                        <persistencefield name="id" sys="yes" jsontype="Integer" createsql="MEDIUMINT UNSIGNED AUTO_INCREMENT PRIMARY KEY"/>
                         <xsl:if test="//node[@name=$ename and @orderable='yes']">
-                            <persistencefield name="idx" jsontype="Integer" primarykey="no" createsql="MEDIUMINT UNSIGNED NOT NULL" />
+                            <persistencefield name="idx" jsontype="Integer" createsql="MEDIUMINT UNSIGNED NOT NULL" />
                         </xsl:if>
-                        <xsl:if test="$extrafields = 'usertimestamp' ">
-                            <persistencefield name="createdby" sys="yes" primarykey="no" jsontype="String" min="4" max="4" createsql="CHAR(4) NOT NULL" />
-                            <persistencefield name="createdon" final="yes" sys="yes" primarykey="no" jsontype="String" min="14" max="14" createsql="CHAR(14) NOT NULL" />
-                            <persistencefield name="updatedby" sys="yes" primarykey="no" jsontype="String" min="4" max="4" createsql="CHAR(4) NOT NULL" />
-                            <persistencefield name="updatedon" final="yes" sys="yes" primarykey="no" jsontype="String" min="14" max="14" createsql="CHAR(14) NOT NULL" />
-                        </xsl:if>
+                        <persistencefield name="createdby" sys="yes" jsontype="String" min="4" max="4" createsql="CHAR(4) NOT NULL" />
+                        <persistencefield name="createdon" final="yes" sys="yes" jsontype="String" min="14" max="14" createsql="CHAR(14) NOT NULL" />
+                        <persistencefield name="updatedby" sys="yes" jsontype="String" min="4" max="4" createsql="CHAR(4) NOT NULL" />
+                        <persistencefield name="updatedon" final="yes" sys="yes" jsontype="String" min="14" max="14" createsql="CHAR(14) NOT NULL" />
                         <!-- insert data into persistenceentity -->
                         <xsl:for-each select="insertentity">
                             <insertentity>
@@ -382,15 +306,11 @@
                                         </xsl:otherwise>
                                     </xsl:choose>
                                 </xsl:for-each>
-                                <xsl:if test="$extrafields = 'usertimestamp' ">
-                                    <insertfield name="createdby" quote="yes" var="USERCODE" />
-                                    <insertfield name="createdon" quote="yes" var="NOW" />
-                                    <insertfield name="updatedby" quote="yes" var="USERCODE" />
-                                    <insertfield name="updatedon" quote="yes" var="NOW" />
-                                </xsl:if>
-                                <xsl:if test="$pkey = 'idauto' ">
-                                    <insertautopkfield name="id" />
-                                </xsl:if>
+                                <insertfield name="createdby" quote="yes" var="USERCODE" />
+                                <insertfield name="createdon" quote="yes" var="NOW" />
+                                <insertfield name="updatedby" quote="yes" var="USERCODE" />
+                                <insertfield name="updatedon" quote="yes" var="NOW" />
+                                <insertautopkfield name="id" />
                                 <xsl:if test="//node[@name=$ename and @orderable='yes']">
                                     <insertorderablefield name="idx" />
                                 </xsl:if>
@@ -402,48 +322,8 @@
         </xsl:for-each>
     </xsl:template>
     
-    <xsl:template name="usepackageentityinfo">
-        <xsl:for-each select="databases/database[@usepackage]/table" >
-            <entityinfo name="{@name}">
-                <xsl:call-template name="commonentityattributes" />
-                <xsl:variable name="ename" select="@name" />
-                <xsl:for-each select="/nbpcg/node[@name=$ename]" >
-                    <xsl:variable name="fname">
-                        <xsl:choose>
-                            <xsl:when test="@referencevariable">
-                                <xsl:value-of select="@referencevariable" />
-                            </xsl:when>
-                            <xsl:otherwise>root</xsl:otherwise>
-                        </xsl:choose>
-                    </xsl:variable>
-                    <field name="{$fname}" pkey="no" references="{concat(@name,'Root')}" >
-                        <xsl:call-template name="commonfieldattributes" >
-                            <xsl:with-param name="fname" select="$fname" />
-                            <xsl:with-param name="type" >rootref</xsl:with-param>
-                        </xsl:call-template>
-                    </field>
-                </xsl:for-each>
-                <xsl:for-each select="field" >
-                    <field name="{@name}" pkey="no" >
-                        <xsl:call-template name="commonfieldattributes" >
-                            <xsl:with-param name="type">
-                                <xsl:choose>
-                                    <xsl:when test="@type">
-                                        <xsl:value-of select="@type" />
-                                    </xsl:when>
-                                    <xsl:otherwise>String</xsl:otherwise>
-                                </xsl:choose>
-                            </xsl:with-param>
-                        </xsl:call-template>
-                    </field>
-                </xsl:for-each>
-                <xsl:call-template name="children" />
-            </entityinfo>
-        </xsl:for-each>
-    </xsl:template>
-   
     <xsl:template name="entityinfo">
-        <xsl:for-each select="/nbpcg/databases/database[not(@usepackage)]/table" >
+        <xsl:for-each select="/nbpcg/databases/database/table" >
             <entityinfo name="{@name}" >
                 <xsl:call-template name="commonentityattributes" />
                 <xsl:variable name="ename" select="@name" />
@@ -503,7 +383,7 @@
                         <xsl:value-of select="concat(@name,'Root')"/>
                     </xsl:attribute>
                     <xsl:variable name="fname">root</xsl:variable>
-                    <field name="{$fname}" pkey="no" references="{concat(@name,'Root')}" >
+                    <field name="{$fname}" references="{concat(@name,'Root')}" >
                         <xsl:call-template name="commonfieldattributes" >
                             <xsl:with-param name="fname" select="$fname" />
                             <xsl:with-param name="type" >rootref</xsl:with-param>
@@ -521,14 +401,6 @@
                                 <xsl:otherwise>String</xsl:otherwise>
                             </xsl:choose>
                         </xsl:variable>
-                        <xsl:attribute name="pkey" >
-                            <xsl:choose>
-                                <xsl:when test="@pkey">
-                                    <xsl:value-of select="@pkey"  />
-                                </xsl:when>
-                                <xsl:otherwise>no</xsl:otherwise>
-                            </xsl:choose>
-                        </xsl:attribute>
                         <xsl:copy-of select="@index"/>
                         <xsl:choose>
                             <xsl:when test="$type='String'" >
@@ -597,7 +469,7 @@
                         </xsl:call-template>
                     </xsl:variable>
                     <xsl:variable name="references" select="../@name"/>
-                    <field name="{$fname}" pkey="no" references="{$references}" >
+                    <field name="{$fname}" references="{$references}" >
                         <xsl:if test="@selectfrom">
                             <xsl:copy-of select="@selectfrom" />
                         </xsl:if>
@@ -609,38 +481,14 @@
                         </xsl:call-template>
                     </field>
                 </xsl:for-each>
-                <xsl:variable name="pkey">
-                    <xsl:choose>
-                        <xsl:when test="@pkey">
-                            <xsl:value-of select="@pkey" />
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <xsl:value-of select="../@pkey" />
-                        </xsl:otherwise>
-                    </xsl:choose>
-                </xsl:variable>
-                <xsl:variable name="extrafields">
-                    <xsl:choose>
-                        <xsl:when test="@extrafields">
-                            <xsl:value-of select="@extrafields" />
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <xsl:value-of select="../@extrafields" />
-                        </xsl:otherwise>
-                    </xsl:choose>
-                </xsl:variable>
-                <xsl:if test="$pkey = 'idauto' ">
-                    <field name="id" pkey="yes" hidden="yes" type="int" fieldclass="IntegerField" label="Id" javatype="int" jsontype="Integer" initialisation=" = 0"/>
-                </xsl:if>
+                <field name="id" hidden="yes" type="int" fieldclass="IntegerField" label="Id" javatype="int" jsontype="Integer" initialisation=" = 0"/>
                 <xsl:if test="//node[@name=$ename and @orderable='yes']">
-                    <field name="idx" pkey="no" hidden="yes" type="idx" index="yes" fieldclass="IntegerField" label="Idx" javatype="int" jsontype="Integer" initialisation=" = Integer.MAX_VALUE"/>
+                    <field name="idx" hidden="yes" type="idx" index="yes" fieldclass="IntegerField" label="Idx" javatype="int" jsontype="Integer" initialisation=" = Integer.MAX_VALUE"/>
                 </xsl:if>
-                <xsl:if test="$extrafields = 'usertimestamp' ">
-                    <field name="createdby" pkey="no" hidden="yes" type="String" min="4" max="4" fieldclass="TextField" label="Created by" javatype="String" jsontype="String" initialisation=" = &quot;&quot;"/>
-                    <field name="createdon" pkey="no" final="yes" hidden="yes" type="datetime" fieldclass="DatetimeField" label="Created on" javatype="Timestamp" jsontype="String" initialisation=" = new Timestamp()"/>
-                    <field name="updatedby" pkey="no" hidden="yes" type="String" min="4" max="4" fieldclass="TextField" label="Updated by" javatype="String" jsontype="String" initialisation=" = &quot;&quot;"/>
-                    <field name="updatedon" pkey="no" final="yes" hidden="yes" type="datetime" fieldclass="DatetimeField" label="Updated on" javatype="Timestamp" jsontype="String" initialisation=" = new Timestamp()"/>
-                </xsl:if>
+                <field name="createdby" hidden="yes" type="String" min="4" max="4" fieldclass="TextField" label="Created by" javatype="String" jsontype="String" initialisation=" = &quot;&quot;"/>
+                <field name="createdon" final="yes" hidden="yes" type="datetime" fieldclass="DatetimeField" label="Created on" javatype="Timestamp" jsontype="String" initialisation=" = new Timestamp()"/>
+                <field name="updatedby" hidden="yes" type="String" min="4" max="4" fieldclass="TextField" label="Updated by" javatype="String" jsontype="String" initialisation=" = &quot;&quot;"/>
+                <field name="updatedon" final="yes" hidden="yes" type="datetime" fieldclass="DatetimeField" label="Updated on" javatype="Timestamp" jsontype="String" initialisation=" = new Timestamp()"/>
                 <xsl:for-each select="//node[@name=$ename]/entryfield" >
                     <entryfield>
                         <xsl:copy-of select="@name | @type "/>
@@ -673,7 +521,7 @@
                     <xsl:with-param name="entityname" select="$ename"/>
                 </xsl:call-template>
                 <!-- and now add any referenced elements -->
-                <xsl:for-each select="/nbpcg/databases/database[not(@usepackage)]/table/field[@type='reference' and  @references=$ename ]" >
+                <xsl:for-each select="/nbpcg/databases/database/table/field[@type='reference' and  @references=$ename ]" >
                     <referenced name="{../@name}" field="{@name}">
                         <xsl:if test="@nullallowed = 'yes'">
                             <xsl:attribute name="optional">yes</xsl:attribute>
@@ -813,100 +661,11 @@
     </xsl:template>
     
     <xsl:template name="commonentityattributes" >
-        <xsl:attribute name="dbkey">
-            <xsl:choose>
-                <xsl:when test="../@key">
-                    <xsl:value-of select="../@key" />
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:value-of select="../@name" />
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:attribute>
-        <xsl:if test="../@usepackage">
-            <xsl:attribute name="package">
-                <xsl:value-of select="../@usepackage" />
-            </xsl:attribute>
-        </xsl:if>
         <xsl:if test="@rule">
             <xsl:attribute name="rule">
                 <xsl:value-of select="@rule" />
             </xsl:attribute>
         </xsl:if>
-        <xsl:attribute name="dbtablename" >
-            <xsl:choose>
-                <xsl:when test="@dbname">
-                    <xsl:value-of select="@dbname"/>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:value-of select="@name"/>
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:attribute>
-        <xsl:variable name="pk">
-            <xsl:for-each select="/nbpcg/databases/database[not(@usepackage)]/table/field[@pk='yes']">
-                <xsl:value-of select="@name"/>
-            </xsl:for-each>
-        </xsl:variable>
-        <xsl:variable name="pkt">
-            <xsl:for-each select="/nbpcg/databases/database[not(@usepackage)]/table/field[@pk='yes']">
-                <xsl:choose>
-                    <xsl:when test="@type='int'">Integer</xsl:when>
-                    <xsl:when test="@type='long'">Long</xsl:when>
-                    <xsl:when test="@type='boolean'">Boolean</xsl:when>
-                    <xsl:when test="@type='reference'">Integer</xsl:when> <!-- this might need improvement (lookup reference class) -->
-                    <xsl:when test="@type='datetime'">Timestamp</xsl:when>
-                    <xsl:when test="@type='date'">DateOnly</xsl:when>
-                    <xsl:when test="@type='currency' or @type='decimal'">BigDecimal</xsl:when>
-                    <xsl:otherwise>String</xsl:otherwise>
-                </xsl:choose>
-            </xsl:for-each>
-        </xsl:variable>
-        <xsl:variable name="pktf">
-            <xsl:for-each select="/nbpcg/databases/database[not(@usepackage)]/table/field[@pk='yes']">
-                <xsl:choose>
-                    <xsl:when test="@type='int'">getInt</xsl:when>
-                    <xsl:when test="@type='long'">getLong</xsl:when>
-                    <xsl:when test="@type='boolean'">GetBoolean</xsl:when>
-                    <xsl:when test="@type='reference'">getInt</xsl:when> <!-- this might need improvement (lookup reference class) -->
-                    <xsl:when test="@type='datetime'">getTimestamp</xsl:when>
-                    <xsl:when test="@type='date'">getDateOnly</xsl:when>
-                    <xsl:when test="@type='currency' or @type='decimal'">getBigDecimal</xsl:when>
-                    <xsl:otherwise>getString</xsl:otherwise>
-                </xsl:choose>
-            </xsl:for-each>
-        </xsl:variable>
-        <xsl:attribute name="pkey">
-            <xsl:choose>
-                <xsl:when test="$pk != '' ">
-                    <xsl:value-of select="$pk"/>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:choose>
-                        <xsl:when test="@pkey = 'idauto' ">id</xsl:when>
-                        <xsl:otherwise>
-                            <xsl:if test="../@pkey = 'idauto' ">id</xsl:if>
-                        </xsl:otherwise>
-                    </xsl:choose>
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:attribute>
-        <xsl:attribute name="pkeytype">
-            <xsl:choose>
-                <xsl:when test="$pkt != '' ">
-                    <xsl:value-of select="$pkt"/>
-                </xsl:when>
-                <xsl:otherwise>Integer</xsl:otherwise>
-            </xsl:choose>
-        </xsl:attribute>
-        <xsl:attribute name="pkeytypefunction">
-            <xsl:choose>
-                <xsl:when test="$pkt != '' ">
-                    <xsl:value-of select="$pktf"/>
-                </xsl:when>
-                <xsl:otherwise>getInt</xsl:otherwise>
-            </xsl:choose>
-        </xsl:attribute>
     </xsl:template>
     
     <xsl:template name="commonfieldattributes" >
@@ -986,20 +745,6 @@
                         <xsl:when test="@view = 'icon'">yes</xsl:when>
                         <xsl:when test="@view = 'both'">yes</xsl:when>
                         <xsl:otherwise>no</xsl:otherwise>
-                    </xsl:choose>
-                </xsl:attribute>
-                <xsl:attribute name="dbname" >
-                    <xsl:choose>
-                        <xsl:when test="@dbname">
-                            <xsl:value-of select="@dbname" />
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <xsl:call-template name="firsttolowercase">
-                                <xsl:with-param name="string">
-                                    <xsl:value-of select="../@name"/>
-                                </xsl:with-param>
-                            </xsl:call-template>
-                        </xsl:otherwise>
                     </xsl:choose>
                 </xsl:attribute>
                 <xsl:attribute name="references" >

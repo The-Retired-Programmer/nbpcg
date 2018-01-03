@@ -17,7 +17,6 @@
         <!ELEMENT project (generate*) >
             <!ATTLIST project
                 name CDATA #REQUIRED
-                log CDATA #REQUIRED
                 license (gpl30|lgpl21|apache20) #IMPLIED
                 >
             <!ELEMENT generate EMPTY>
@@ -32,7 +31,6 @@
             name CDATA #REQUIRED
             view (both|icon|tree|none) #IMPLIED
             viewers CDATA #IMPLIED
-            dbname CDATA #IMPLIED
             rootlabel CDATA #IMPLIED
             rooticon CDATA #IMPLIED
             icon CDATA #IMPLIED
@@ -64,25 +62,16 @@
         <!ELEMENT database (table+)>
             <!ATTLIST database
                 name CDATA #REQUIRED
-                dbname CDATA #IMPLIED
-                pkey (idauto) #IMPLIED
-                extrafields (usertimestamp) #IMPLIED
-                usepackage CDATA #IMPLIED
                 location CDATA #IMPLIED
                 >
             <!ELEMENT table (field*,insertentity*)>
                 <!ATTLIST table
                     name CDATA #REQUIRED
-                    dbname CDATA #IMPLIED
-                    pkey (idauto) #IMPLIED
-                    extrafields (usertimestamp) #IMPLIED
                     rule CDATA #IMPLIED
                     >
                 <!ELEMENT field EMPTY>
                     <!ATTLIST field
-                        pkey (yes) #IMPLIED
                         name CDATA #REQUIRED
-                        dbname  CDATA #IMPLIED
                         index (unique|yes) #IMPLIED
                         unique (yes) #IMPLIED
                         type (boolean|long|int|currency|decimal|date|datetime|enum|reference|password) #IMPLIED

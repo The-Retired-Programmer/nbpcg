@@ -12,9 +12,6 @@
     <!ELEMENT entityinfo (field*, entryfield*, child*, referenced*, sortformat*, displaytitleformat*, displaynameformat*)  >
         <!ATTLIST entityinfo
             name CDATA #REQUIRED
-            pkey CDATA #IMPLIED
-            pkeytype (Integer|String|Boolean) #IMPLIED
-            pkeytypefunction CDATA #IMPLIED
             isroot CDATA #IMPLIED
             nodeorder CDATA #IMPLIED
             nomodifiers (yes) #IMPLIED
@@ -22,7 +19,6 @@
             dynamicicon CDATA #IMPLIED
             childnodesineditor CDATA #IMPLIED
             dbkey CDATA #IMPLIED
-            dbtablename CDATA #IMPLIED 
             parentname CDATA #IMPLIED
             ordercolumn CDATA #IMPLIED
             orderable (yes|no) #IMPLIED
@@ -33,7 +29,6 @@
         <!ELEMENT field EMPTY  >
             <!ATTLIST field
                 name CDATA #REQUIRED
-                pkey CDATA #REQUIRED
                 fkey (no) #IMPLIED
                 hidden (yes) #IMPLIED
                 final (yes) #IMPLIED
@@ -67,7 +62,6 @@
         <!ELEMENT child EMPTY  >
             <!ATTLIST child
                 name CDATA #REQUIRED
-                dbname CDATA #IMPLIED 
                 references CDATA #REQUIRED
                 sort (yes|no) #REQUIRED
                 orderable (yes|no) #REQUIRED
@@ -102,7 +96,6 @@
     <!ELEMENT persistencestore (persistenceentity+) >
         <!ATTLIST persistencestore
             name CDATA #REQUIRED
-            dbname CDATA #REQUIRED
             >
         <!ELEMENT persistenceentity (persistencefield*, insertentity*) >
             <!ATTLIST persistenceentity
