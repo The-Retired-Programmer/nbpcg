@@ -1,5 +1,5 @@
 <#--
-     Copyright 2017 Richard Linsdale.
+     Copyright 2017-2018 Richard Linsdale.
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -77,8 +77,8 @@
 package ${package};
 
 import java.util.ArrayList;
-import uk.theretiredprogrammer.accesscontrolmanager.dataobjects.${ENTITYINFO.name}Entity;
-import uk.theretiredprogrammer.accesscontrolmanager.dataobjects.${ENTITYINFO.name}Rest;
+import ${datapackage}.${ENTITYINFO.name}Entity;
+import ${datapackage}.${ENTITYINFO.name}Rest;
 import uk.theretiredprogrammer.nbpcglibrary.htmlrest.AandA;
 
 

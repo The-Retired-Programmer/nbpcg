@@ -1,5 +1,5 @@
 <#--
-     Copyright 2017 Richard Linsdale.
+     Copyright 2017-2018 Richard Linsdale.
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -72,8 +72,17 @@
 <#-- Freemarker Template for any Rules class -->
 <#assign templateauthor = "Richard Linsdale (richard at theretiredprogrammer.uk)" />
 <#assign ENTITYINFO = entityinfo[useentityinfo] >
+<#assign arrayimport = "no" >
+<#list ENTITYINFO.field![] as field>
+<#if field.type = "enum" >
+<#assign arrayimport = "yes" >
+</#if>
+</#list>
 package ${package};
 
+<#if arrayimport = "yes" >
+import java.util.Arrays;
+</#if>
 import uk.theretiredprogrammer.nbpcglibrary.rules.*;
 
 /**
@@ -86,16 +95,16 @@ import uk.theretiredprogrammer.nbpcglibrary.rules.*;
  */
 public class ${ENTITYINFO.name}Rules {
 
-    private final static Rules<${ENTITYINFO.name}Entity> ENTITY_RULES = new Rules<>();
+    private final static Rules<${ENTITYINFO.name}> ENTITY_RULES = new Rules<>();
 <#list ENTITYINFO.field![] as field>
 <#if field.type == "ref">
-    private final static Rules<${ENTITYINFO.name}Entity> ${field.name?upper_case}_RULES = new Rules<>();
+    private final static Rules<${ENTITYINFO.name}> ${field.name?upper_case}_RULES = new Rules<>();
 <#elseif field.type == "reference">
-    private final static Rules<${ENTITYINFO.name}Entity> ${field.name?upper_case}_RULES = new Rules<>();
+    private final static Rules<${ENTITYINFO.name}> ${field.name?upper_case}_RULES = new Rules<>();
 <#elseif field.type == "rootref" >
 <#else>
 <#if !field.hidden??>
-    private final static Rules<${ENTITYINFO.name}Entity> ${field.name?upper_case}_RULES = new Rules<>();
+    private final static Rules<${ENTITYINFO.name}> ${field.name?upper_case}_RULES = new Rules<>();
 </#if>
 </#if>
 </#list>
@@ -104,7 +113,7 @@ public class ${ENTITYINFO.name}Rules {
 <#list ENTITYINFO.field![] as field>
 <#if field.type == "ref" || field.type == "reference">
 <#if !field.optional??>
-        ${field.name?upper_case}_RULES.addRule(new DefinedRule<${ENTITYINFO.name}Entity>(e->e.get${field.name?cap_first}()));
+        ${field.name?upper_case}_RULES.addRule(new DefinedRule<${ENTITYINFO.name}>(e->e.get${field.name?cap_first}()));
 </#if>
 </#if>
 </#list>
@@ -112,40 +121,41 @@ public class ${ENTITYINFO.name}Rules {
 <#if !field.hidden??>
 <#if field.type = "String" >
 <#if field.min??>
-        ${field.name?upper_case}_RULES.addRule(new MinStringRule<${ENTITYINFO.name}Entity>(e-> e.get${field.name?cap_first}(), ${field.min}));
+        ${field.name?upper_case}_RULES.addRule(new MinStringRule<${ENTITYINFO.name}>(e-> e.get${field.name?cap_first}(), ${field.min}));
 </#if>
 <#if field.max??>
-        ${field.name?upper_case}_RULES.addRule(new MaxStringRule<${ENTITYINFO.name}Entity>(e-> e.get${field.name?cap_first}(), ${field.max}));
+        ${field.name?upper_case}_RULES.addRule(new MaxStringRule<${ENTITYINFO.name}>(e-> e.get${field.name?cap_first}(), ${field.max}));
 </#if>
 <#if field.unique??>
-       // ${field.name?upper_case}_RULES.addRule(new UniqueStringRule<${ENTITYINFO.name}Entity>(e-> e.get${field.name?cap_first}(),
+       // ${field.name?upper_case}_RULES.addRule(new UniqueStringRule<${ENTITYINFO.name}>(e-> e.get${field.name?cap_first}(),
        //     () -> getParent().get${ENTITYINFO.name}s().stream().filter((e) -> e != ${ENTITYINFO.name}.this).map((e)-> e.get${field.name?cap_first}())));
 </#if>
 <#elseif field.type = "int" || field.type = "long" || field.type = "currency" || field.type = "decimal" >
 <#if field.min??>
-        ${field.name?upper_case}_RULES.addRule(new MinIntegerRule<${ENTITYINFO.name}Entity>(e-> e.get${field.name?cap_first}(), ${field.min}));
+        ${field.name?upper_case}_RULES.addRule(new MinIntegerRule<${ENTITYINFO.name}>(e-> e.get${field.name?cap_first}(), ${field.min}));
 </#if>
 <#if field.max??>
-        ${field.name?upper_case}_RULES.addRule(new MaxIntegerRule<${ENTITYINFO.name}Entity>(e-> e.get${field.name?cap_first}(), ${field.max}));
+        ${field.name?upper_case}_RULES.addRule(new MaxIntegerRule<${ENTITYINFO.name}>(e-> e.get${field.name?cap_first}(), ${field.max}));
 </#if>
 <#elseif field.type = "date" || field.type = "datetime" >
 <#if field.future??>
-        ${field.name?upper_case}_RULES.addRule(new FutureRule<${ENTITYINFO.name}Entity>(e-> e.get${field.name?cap_first}()));
+        ${field.name?upper_case}_RULES.addRule(new FutureRule<${ENTITYINFO.name}>(e-> e.get${field.name?cap_first}()));
 </#if>
 <#if field.past??>
-        ${field.name?upper_case}_RULES.addRule(new PastRule<${ENTITYINFO.name}Entity>(e-> e.get${field.name?cap_first}()));
+        ${field.name?upper_case}_RULES.addRule(new PastRule<${ENTITYINFO.name}>(e-> e.get${field.name?cap_first}()));
 </#if>
 <#elseif field.type = "enum" >
-        ${field.name?upper_case}_RULES.addRule(new EnumRule<${ENTITYINFO.name}Entity>(e-> e.get${field.name?cap_first}()));
+        ${field.name?upper_case}_RULES.addRule(new AllowedStringRule<${ENTITYINFO.name}>(e-> e.get${field.name?cap_first}(),
+            Arrays.asList(new String[]{${field.values?replace("'","\"")}})));
 </#if>
 </#if>
 </#list>
 <#if ENTITYINFO.rule??>
-        ${field.name?upper_case}_RULES.addRule(new ${ENTITYINFO.rule}(this));
+        ENTITY_RULES.addRule(new ${ENTITYINFO.rule}(this));
 </#if>
     }
 
-    public static boolean areAllRulesValid(StringBuilder sb, ${ENTITYINFO.name}Entity be) {
+    public static boolean areAllRulesValid(StringBuilder sb, ${ENTITYINFO.name} be) {
         boolean res = true;
 <#list ENTITYINFO.field![] as field>
 <#if field.type == "ref" || field.type == "reference">
@@ -160,7 +170,7 @@ public class ${ENTITYINFO.name}Rules {
         return ENTITY_RULES.checkRules(sb,  be) && res;
     }
     
-    public static boolean areAllRulesExceptUniqueValid(StringBuilder sb, ${ENTITYINFO.name}Entity be) {
+    public static boolean areAllRulesExceptUniqueValid(StringBuilder sb, ${ENTITYINFO.name} be) {
         boolean res = true;
 <#list ENTITYINFO.field![] as field>
 <#if field.type == "ref" || field.type == "reference">
@@ -175,20 +185,20 @@ public class ${ENTITYINFO.name}Rules {
         return ENTITY_RULES.checkRulesAtLoad(sb,  be) && res;
     }
     
-    public static boolean areEntityRulesValid(StringBuilder sb, ${ENTITYINFO.name}Entity be) {
+    public static boolean areEntityRulesValid(StringBuilder sb, ${ENTITYINFO.name} be) {
         return ENTITY_RULES.checkRules(sb,  be);
     } 
 
 <#list ENTITYINFO.field![] as field>
 <#if field.type == "ref" || field.type == "reference">
-    public static boolean are${field.name?cap_first}RulesValid(StringBuilder sb, ${ENTITYINFO.name}Entity be) {
+    public static boolean are${field.name?cap_first}RulesValid(StringBuilder sb, ${ENTITYINFO.name} be) {
         return ${field.name?upper_case}_RULES.checkRules(sb,  be);
     }
 
 <#elseif field.type == "rootref" >
 <#else>
 <#if !field.hidden??>
-    public static boolean are${field.name?cap_first}RulesValid(StringBuilder sb, ${ENTITYINFO.name}Entity be) {
+    public static boolean are${field.name?cap_first}RulesValid(StringBuilder sb, ${ENTITYINFO.name} be) {
         return ${field.name?upper_case}_RULES.checkRules(sb,  be);
     }
 </#if>

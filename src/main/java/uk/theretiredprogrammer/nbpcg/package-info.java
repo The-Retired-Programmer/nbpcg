@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2017 Richard Linsdale.
+ * Copyright 2015-2018 Richard Linsdale.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@
     @TemplateRegistration(folder = "uk-theretiredprogrammer-nbpcg", displayName = "createsqldatabase", content = "templates/createsqldatabase.template", scriptEngine = "freemarker"),
     @TemplateRegistration(folder = "uk-theretiredprogrammer-nbpcg", displayName = "createsqltables", content = "templates/createsqltables.template", scriptEngine = "freemarker"),
     @TemplateRegistration(folder = "uk-theretiredprogrammer-nbpcg", displayName = "createjsontable", content = "templates/createjsontable.template", scriptEngine = "freemarker"),
-    @TemplateRegistration(folder = "uk-theretiredprogrammer-nbpcg", displayName = "baseentity", content = "templates/baseentity.template", scriptEngine = "freemarker"),
+    @TemplateRegistration(folder = "uk-theretiredprogrammer-nbpcg", displayName = "entity", content = "templates/entity.template", scriptEngine = "freemarker"),
     @TemplateRegistration(folder = "uk-theretiredprogrammer-nbpcg", displayName = "rules", content = "templates/rules.template", scriptEngine = "freemarker"),
     @TemplateRegistration(folder = "uk-theretiredprogrammer-nbpcg", displayName = "htmlrest", content = "templates/htmlrest.template", scriptEngine = "freemarker"),
     @TemplateRegistration(folder = "uk-theretiredprogrammer-nbpcg", displayName = "restcreatorlist", content = "templates/restcreatorlist.template", scriptEngine = "freemarker"),

@@ -67,6 +67,7 @@
             <!ELEMENT table (field*,insertentity*)>
                 <!ATTLIST table
                     name CDATA #REQUIRED
+                    tostring CDATA #IMPLIED
                     rule CDATA #IMPLIED
                     >
                 <!ELEMENT field EMPTY>

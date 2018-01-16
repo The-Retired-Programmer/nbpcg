@@ -1,5 +1,5 @@
 <#--
-     Copyright 2017 Richard Linsdale.
+     Copyright 2017-2018 Richard Linsdale.
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -87,12 +87,12 @@ import uk.theretiredprogrammer.nbpcglibrary.htmlrest.HTMLRest;
  *
  * @author ${templateauthor}
  */
-public class ${ENTITYINFO.name}Rest extends HTMLRest<${ENTITYINFO.name}Entity> {
+public class ${ENTITYINFO.name}Rest extends HTMLRest<${ENTITYINFO.name}> {
     
     public ${ENTITYINFO.name}Rest(String jwtoken) {
         super("${PSTORE.location}/${ENTITYINFO.name?lower_case}s",
-            new GenericType<List<${ENTITYINFO.name}Entity>>(){},
-            ${ENTITYINFO.name}Entity.class, jwtoken);
+            new GenericType<List<${ENTITYINFO.name}>>(){},
+            ${ENTITYINFO.name}.class, jwtoken);
             open();
     }
 }

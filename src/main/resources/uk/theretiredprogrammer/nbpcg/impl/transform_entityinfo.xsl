@@ -2,7 +2,7 @@
 
 <!--
     
-    Copyright 2015-2017 Richard Linsdale.
+    Copyright 2015-2018 Richard Linsdale.
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -589,6 +589,27 @@
                         </xsl:otherwise>
                     </xsl:choose>
                 </xsl:for-each >
+                <xsl:choose>
+                    <xsl:when test="@tostring">
+                        <tostring>
+                            <xsl:call-template name="display">
+                                <xsl:with-param name="displayformat" select="@tostring" />
+                            </xsl:call-template>
+                        </tostring>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <tostring>
+                            <xsl:attribute name="format">{0}</xsl:attribute>
+                            <display>
+                                <xsl:attribute name="field" >
+                                    <xsl:call-template name="firsttouppercase">
+                                        <xsl:with-param name="string" select="field[position() = 1]/@name" />
+                                    </xsl:call-template>
+                                </xsl:attribute>
+                            </display>
+                        </tostring>
+                    </xsl:otherwise>
+                </xsl:choose>
             </entityinfo>
         </xsl:for-each>
         <xsl:for-each select="node">
@@ -691,8 +712,8 @@
                 <xsl:when test="$type='boolean'">boolean</xsl:when>
                 <xsl:when test="$type='long' ">long</xsl:when>
                 <xsl:when test="($type='int') or ($type='reference') or ($type='ref') or ($type='rootref')">int</xsl:when>
-                <xsl:when test="$type='date' ">DateOnly</xsl:when>
-                <xsl:when test="$type='datetime' ">Timestamp</xsl:when>
+                <xsl:when test="$type='date' ">Date</xsl:when>
+                <xsl:when test="$type='datetime' ">Date</xsl:when>
                 <xsl:when test="@type='currency' or @type='decimal'">BigDecimal</xsl:when>
                 <xsl:when test="($type='enum') or ($type='String')  or ($type='password') ">String</xsl:when>
             </xsl:choose>
@@ -712,9 +733,9 @@
             <xsl:choose>
                 <xsl:when test="$type='boolean'"> = false</xsl:when>
                 <xsl:when test="($type='long') or ($type='int') "> = 0</xsl:when>
-                <xsl:when test="$type='date' "> = new DateOnly()</xsl:when>
-                <xsl:when test="$type='datetime' "> = new Timestamp()</xsl:when>
-                <xsl:when test="($type='reference') or ($type='ref') or ($type='rootref') "> = 0</xsl:when>
+                <xsl:when test="$type='date' "> = ""</xsl:when>
+                <xsl:when test="$type='datetime' "> = ""</xsl:when>
+                <xsl:when test="($type='reference') or ($type='ref') or ($type='rootref') "></xsl:when>
                 <xsl:when test="@type='currency' or @type='decimal'"> = BigDecimal.ZERO</xsl:when>
                 <xsl:when test="($type='enum') or ($type='String') or ($type='password') "> = ""</xsl:when>
             </xsl:choose>

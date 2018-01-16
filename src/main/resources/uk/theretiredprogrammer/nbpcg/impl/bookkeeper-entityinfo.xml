@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE nbpcg-entity-info PUBLIC "-//uk/theretiredprogrammer/nbpcgentityinfo/DTD NBPCGENTITYINFO SCHEMA 1.0//EN" "nbres:/uk/theretiredprogrammer/nbpcg/nbpcgentityinfo.dtd">
+<nbpcg-entity-info name="Book-Keeper">
+    <entityinfo name="Accounttype" icon="table" orderable="no" nodeorder="1" parentname="AccounttypeRoot">
+        <field name="root" references="AccounttypeRoot" type="rootref" label="Root" javatype="int" jsontype="Integer" initialisation=" = 0"/>
+        <field name="shortname" unique="yes" min="1" max="40" fieldclass="TextField" type="String" label="Shortname" javatype="String" jsontype="String" initialisation=" = &quot;&quot;"/>
+        <field name="description" min="1" max="200" fieldclass="TextField" type="String" label="Description" javatype="String" jsontype="String" initialisation=" = &quot;&quot;" optional="yes"/>
+        <field name="id" hidden="yes" type="int" fieldclass="IntegerField" label="Id" javatype="int" jsontype="Integer" initialisation=" = 0"/>
+        <field name="createdby" hidden="yes" type="String" min="4" max="4" fieldclass="TextField" label="Created by" javatype="String" jsontype="String" initialisation=" = &quot;&quot;"/>
+        <field name="createdon" final="yes" hidden="yes" type="datetime" fieldclass="DatetimeField" label="Created on" javatype="Timestamp" jsontype="String" initialisation=" = new Timestamp()"/>
+        <field name="updatedby" hidden="yes" type="String" min="4" max="4" fieldclass="TextField" label="Updated by" javatype="String" jsontype="String" initialisation=" = &quot;&quot;"/>
+        <field name="updatedon" final="yes" hidden="yes" type="datetime" fieldclass="DatetimeField" label="Updated on" javatype="Timestamp" jsontype="String" initialisation=" = new Timestamp()"/>
+        <child name="account" hasiconview="no" references="Account" orderable="no" sort="no"/>
+        <displaynameformat format="{0}">
+            <display field="Shortname"/>
+        </displaynameformat>
+        <tostring format="{0}">
+            <display field="Shortname"/>
+        </tostring>
+    </entityinfo>
+    <entityinfo name="Account" icon="money" orderable="no" parentname="Accounttype" nodeorder="1">
+        <field name="shortname" unique="yes" min="1" max="50" fieldclass="TextField" type="String" label="Shortname" javatype="String" jsontype="String" initialisation=" = &quot;&quot;"/>
+        <field name="description" min="1" max="200" fieldclass="TextField" type="String" label="Description" javatype="String" jsontype="String" initialisation=" = &quot;&quot;" optional="yes"/>
+        <field name="provider" fieldclass="EntityChoiceField" references="Provider" type="reference" label="Provider" javatype="int" jsontype="Integer" initialisation=" = 0"/>
+        <field name="company" fieldclass="EntityChoiceField" references="Company" type="reference" label="Company" javatype="int" jsontype="Integer" initialisation=" = 0" optional="yes"/>
+        <field name="active" fieldclass="CheckboxField" type="boolean" label="Active" javatype="boolean" jsontype="Boolean" initialisation=" = false"/>
+        <field name="accounttype" references="Accounttype" fieldclass="EntityChoiceField" type="ref" label="Accounttype" javatype="int" jsontype="Integer" initialisation=" = 0"/>
+        <field name="id" hidden="yes" type="int" fieldclass="IntegerField" label="Id" javatype="int" jsontype="Integer" initialisation=" = 0"/>
+        <field name="createdby" hidden="yes" type="String" min="4" max="4" fieldclass="TextField" label="Created by" javatype="String" jsontype="String" initialisation=" = &quot;&quot;"/>
+        <field name="createdon" final="yes" hidden="yes" type="datetime" fieldclass="DatetimeField" label="Created on" javatype="Timestamp" jsontype="String" initialisation=" = new Timestamp()"/>
+        <field name="updatedby" hidden="yes" type="String" min="4" max="4" fieldclass="TextField" label="Updated by" javatype="String" jsontype="String" initialisation=" = &quot;&quot;"/>
+        <field name="updatedon" final="yes" hidden="yes" type="datetime" fieldclass="DatetimeField" label="Updated on" javatype="Timestamp" jsontype="String" initialisation=" = new Timestamp()"/>
+        <referenced name="Journalentry" field="account"/>
+        <displaytitleformat format="{0}">
+            <display field="Description"/>
+        </displaytitleformat>
+        <displaynameformat format="{0}">
+            <display field="Shortdescription"/>
+        </displaynameformat>
+        <tostring format="{0}">
+            <display field="Shortname"/>
+        </tostring>
+    </entityinfo>
+    <entityinfo name="Provider" icon="table" orderable="no" nodeorder="1" parentname="ProviderRoot">
+        <field name="root" references="ProviderRoot" type="rootref" label="Root" javatype="int" jsontype="Integer" initialisation=" = 0"/>
+        <field name="shortname" unique="yes" min="1" max="40" fieldclass="TextField" type="String" label="Shortname" javatype="String" jsontype="String" initialisation=" = &quot;&quot;"/>
+        <field name="description" min="1" max="200" fieldclass="TextField" type="String" label="Description" javatype="String" jsontype="String" initialisation=" = &quot;&quot;" optional="yes"/>
+        <field name="allowpandl" fieldclass="CheckboxField" type="boolean" label="Allowpandl" javatype="boolean" jsontype="Boolean" initialisation=" = false"/>
+        <field name="allowbs" fieldclass="CheckboxField" type="boolean" label="Allowbs" javatype="boolean" jsontype="Boolean" initialisation=" = false"/>
+        <field name="id" hidden="yes" type="int" fieldclass="IntegerField" label="Id" javatype="int" jsontype="Integer" initialisation=" = 0"/>
+        <field name="createdby" hidden="yes" type="String" min="4" max="4" fieldclass="TextField" label="Created by" javatype="String" jsontype="String" initialisation=" = &quot;&quot;"/>
+        <field name="createdon" final="yes" hidden="yes" type="datetime" fieldclass="DatetimeField" label="Created on" javatype="Timestamp" jsontype="String" initialisation=" = new Timestamp()"/>
+        <field name="updatedby" hidden="yes" type="String" min="4" max="4" fieldclass="TextField" label="Updated by" javatype="String" jsontype="String" initialisation=" = &quot;&quot;"/>
+        <field name="updatedon" final="yes" hidden="yes" type="datetime" fieldclass="DatetimeField" label="Updated on" javatype="Timestamp" jsontype="String" initialisation=" = new Timestamp()"/>
+        <referenced name="Account" field="provider"/>
+        <referenced name="Journalentry" field="provider"/>
+        <displaynameformat format="{0}">
+            <display field="Shortname"/>
+        </displaynameformat>
+        <tostring format="{0}">
+            <display field="Shortname"/>
+        </tostring>
+    </entityinfo>
+    <entityinfo name="Company" icon="table" orderable="no" nodeorder="1" parentname="CompanyRoot">
+        <field name="root" references="CompanyRoot" type="rootref" label="Root" javatype="int" jsontype="Integer" initialisation=" = 0"/>
+        <field name="shortname" unique="yes" min="1" max="40" fieldclass="TextField" type="String" label="Shortname" javatype="String" jsontype="String" initialisation=" = &quot;&quot;"/>
+        <field name="description" min="1" max="200" fieldclass="TextField" type="String" label="Description" javatype="String" jsontype="String" initialisation=" = &quot;&quot;" optional="yes"/>
+        <field name="id" hidden="yes" type="int" fieldclass="IntegerField" label="Id" javatype="int" jsontype="Integer" initialisation=" = 0"/>
+        <field name="createdby" hidden="yes" type="String" min="4" max="4" fieldclass="TextField" label="Created by" javatype="String" jsontype="String" initialisation=" = &quot;&quot;"/>
+        <field name="createdon" final="yes" hidden="yes" type="datetime" fieldclass="DatetimeField" label="Created on" javatype="Timestamp" jsontype="String" initialisation=" = new Timestamp()"/>
+        <field name="updatedby" hidden="yes" type="String" min="4" max="4" fieldclass="TextField" label="Updated by" javatype="String" jsontype="String" initialisation=" = &quot;&quot;"/>
+        <field name="updatedon" final="yes" hidden="yes" type="datetime" fieldclass="DatetimeField" label="Updated on" javatype="Timestamp" jsontype="String" initialisation=" = new Timestamp()"/>
+        <referenced name="Account" field="company" optional="yes"/>
+        <referenced name="Journalentry" field="company"/>
+        <displaynameformat format="{0}">
+            <display field="Shortname"/>
+        </displaynameformat>
+        <tostring format="{0}">
+            <display field="Shortname"/>
+        </tostring>
+    </entityinfo>
+    <entityinfo name="Journal" icon="book_open" orderable="no" childnodesineditor="Journalentry" nodeorder="1" parentname="JournalRoot">
+        <field name="root" references="JournalRoot" type="rootref" label="Root" javatype="int" jsontype="Integer" initialisation=" = 0"/>
+        <field name="date" fieldclass="DateField" type="date" label="Date" javatype="Date" jsontype="String" initialisation=" = &quot;&quot;"/>
+        <field name="description" min="1" max="200" fieldclass="TextField" type="String" label="Description" javatype="String" jsontype="String" initialisation=" = &quot;&quot;" optional="yes"/>
+        <field name="transferjournalID" fieldclass="IntegerField" type="int" label="TransferjournalID" javatype="int" jsontype="Integer" initialisation=" = 0" optional="yes"/>
+        <field name="id" hidden="yes" type="int" fieldclass="IntegerField" label="Id" javatype="int" jsontype="Integer" initialisation=" = 0"/>
+        <field name="createdby" hidden="yes" type="String" min="4" max="4" fieldclass="TextField" label="Created by" javatype="String" jsontype="String" initialisation=" = &quot;&quot;"/>
+        <field name="createdon" final="yes" hidden="yes" type="datetime" fieldclass="DatetimeField" label="Created on" javatype="Timestamp" jsontype="String" initialisation=" = new Timestamp()"/>
+        <field name="updatedby" hidden="yes" type="String" min="4" max="4" fieldclass="TextField" label="Updated by" javatype="String" jsontype="String" initialisation=" = &quot;&quot;"/>
+        <field name="updatedon" final="yes" hidden="yes" type="datetime" fieldclass="DatetimeField" label="Updated on" javatype="Timestamp" jsontype="String" initialisation=" = new Timestamp()"/>
+        <child name="journalentry" hasiconview="no" references="Journalentry" orderable="no" sort="no"/>
+        <displaynameformat format="{0} {1}">
+            <display field="Transactiondate"/>
+            <display field="Description"/>
+        </displaynameformat>
+        <tostring format="{0}">
+            <display field="Date"/>
+        </tostring>
+    </entityinfo>
+    <entityinfo name="Journalentry" icon="pencil" orderable="no" parentname="Journal" nodeorder="1">
+        <field name="company" fieldclass="EntityChoiceField" references="Company" type="reference" label="Company" javatype="int" jsontype="Integer" initialisation=" = 0"/>
+        <field name="account" fieldclass="EntityChoiceField" references="Account" type="reference" label="Account" javatype="int" jsontype="Integer" initialisation=" = 0"/>
+        <field name="provider" fieldclass="EntityChoiceField" references="Provider" type="reference" label="Provider" javatype="int" jsontype="Integer" initialisation=" = 0"/>
+        <field name="description" min="0" max="200" fieldclass="TextField" type="String" label="Description" javatype="String" jsontype="String" initialisation=" = &quot;&quot;" optional="yes"/>
+        <field name="amount" fieldclass="DecimalField" type="currency" label="Amount" javatype="BigDecimal" jsontype="BigDecimal" initialisation=" = BigDecimal.ZERO"/>
+        <field name="creditdebit" values="'Cr.', 'Dr.'" fieldclass="ChoiceField" type="enum" label="Creditdebit" javatype="String" jsontype="String" initialisation=" = &quot;&quot;"/>
+        <field name="checked" fieldclass="CheckboxField" type="boolean" label="Checked" javatype="boolean" jsontype="Boolean" initialisation=" = false"/>
+        <field name="transferID" fieldclass="IntegerField" type="int" label="TransferID" javatype="int" jsontype="Integer" initialisation=" = 0" optional="yes"/>
+        <field name="journal" references="Journal" fieldclass="EntityChoiceField" type="ref" label="Journal" javatype="int" jsontype="Integer" initialisation=" = 0"/>
+        <field name="id" hidden="yes" type="int" fieldclass="IntegerField" label="Id" javatype="int" jsontype="Integer" initialisation=" = 0"/>
+        <field name="createdby" hidden="yes" type="String" min="4" max="4" fieldclass="TextField" label="Created by" javatype="String" jsontype="String" initialisation=" = &quot;&quot;"/>
+        <field name="createdon" final="yes" hidden="yes" type="datetime" fieldclass="DatetimeField" label="Created on" javatype="Timestamp" jsontype="String" initialisation=" = new Timestamp()"/>
+        <field name="updatedby" hidden="yes" type="String" min="4" max="4" fieldclass="TextField" label="Updated by" javatype="String" jsontype="String" initialisation=" = &quot;&quot;"/>
+        <field name="updatedon" final="yes" hidden="yes" type="datetime" fieldclass="DatetimeField" label="Updated on" javatype="Timestamp" jsontype="String" initialisation=" = new Timestamp()"/>
+        <displaynameformat format="{0} {1} {2} ">
+            <display field="Account"/>
+            <display field="Amount"/>
+            <display field="Type"/>
+        </displaynameformat>
+        <tostring format="{0}">
+            <display field="Company"/>
+        </tostring>
+    </entityinfo>
+    <entityinfo name="AccounttypeRoot" isroot="" label="Accounttypes" viewers="OPERATIONAL" icon="table">
+        <child name="accounttype" references="Accounttype" hasiconview="no" orderable="no" sort="no"/>
+    </entityinfo>
+    <entityinfo name="ProviderRoot" isroot="" label="Providers" viewers="OPERATIONAL" icon="table">
+        <child name="provider" references="Provider" hasiconview="no" orderable="no" sort="no"/>
+    </entityinfo>
+    <entityinfo name="CompanyRoot" isroot="" label="Companys" viewers="OPERATIONAL" icon="table">
+        <child name="company" references="Company" hasiconview="no" orderable="no" sort="no"/>
+    </entityinfo>
+    <entityinfo name="JournalRoot" isroot="" label="Journals" viewers="OPERATIONAL" icon="book">
+        <child name="journal" references="Journal" hasiconview="no" orderable="no" sort="no"/>
+    </entityinfo>
+    <persistencestore name="fin" location="http://localhost:8080/fin">
+        <persistenceentity name="Accounttype">
+            <persistencefield name="shortname" jsontype="String" min="1" max="40" createsql="VARCHAR(40) UNIQUE NOT NULL"/>
+            <persistencefield name="description" jsontype="String" min="1" max="200" createsql="VARCHAR(200)  NULL"/>
+            <persistencefield name="id" sys="yes" jsontype="Integer" createsql="MEDIUMINT UNSIGNED AUTO_INCREMENT PRIMARY KEY"/>
+            <persistencefield name="createdby" sys="yes" jsontype="String" min="4" max="4" createsql="CHAR(4) NOT NULL"/>
+            <persistencefield name="createdon" final="yes" sys="yes" jsontype="String" min="14" max="14" createsql="CHAR(14) NOT NULL"/>
+            <persistencefield name="updatedby" sys="yes" jsontype="String" min="4" max="4" createsql="CHAR(4) NOT NULL"/>
+            <persistencefield name="updatedon" final="yes" sys="yes" jsontype="String" min="14" max="14" createsql="CHAR(14) NOT NULL"/>
+        </persistenceentity>
+        <persistenceentity name="Account">
+            <persistencefield name="shortname" jsontype="String" min="1" max="50" createsql="VARCHAR(50) UNIQUE NOT NULL"/>
+            <persistencefield name="description" jsontype="String" min="1" max="200" createsql="VARCHAR(200)  NULL"/>
+            <persistencefield name="provider" jsontype="Reference" createsql="MEDIUMINT UNSIGNED  NOT NULL ,FOREIGN KEY (provider) REFERENCES Provider(id)"/>
+            <persistencefield name="company" jsontype="Reference" createsql="MEDIUMINT UNSIGNED  NULL ,FOREIGN KEY (company) REFERENCES Company(id)"/>
+            <persistencefield name="active" jsontype="Boolean" createsql="BOOLEAN  NOT NULL"/>
+            <persistencefield name="accounttype" jsontype="Reference" createsql="MEDIUMINT UNSIGNED NOT NULL ,FOREIGN KEY (accounttype) REFERENCES Accounttype(id)"/>
+            <persistencefield name="id" sys="yes" jsontype="Integer" createsql="MEDIUMINT UNSIGNED AUTO_INCREMENT PRIMARY KEY"/>
+            <persistencefield name="createdby" sys="yes" jsontype="String" min="4" max="4" createsql="CHAR(4) NOT NULL"/>
+            <persistencefield name="createdon" final="yes" sys="yes" jsontype="String" min="14" max="14" createsql="CHAR(14) NOT NULL"/>
+            <persistencefield name="updatedby" sys="yes" jsontype="String" min="4" max="4" createsql="CHAR(4) NOT NULL"/>
+            <persistencefield name="updatedon" final="yes" sys="yes" jsontype="String" min="14" max="14" createsql="CHAR(14) NOT NULL"/>
+        </persistenceentity>
+        <persistenceentity name="Provider">
+            <persistencefield name="shortname" jsontype="String" min="1" max="40" createsql="VARCHAR(40) UNIQUE NOT NULL"/>
+            <persistencefield name="description" jsontype="String" min="1" max="200" createsql="VARCHAR(200)  NULL"/>
+            <persistencefield name="allowpandl" jsontype="Boolean" createsql="BOOLEAN  NOT NULL"/>
+            <persistencefield name="allowbs" jsontype="Boolean" createsql="BOOLEAN  NOT NULL"/>
+            <persistencefield name="id" sys="yes" jsontype="Integer" createsql="MEDIUMINT UNSIGNED AUTO_INCREMENT PRIMARY KEY"/>
+            <persistencefield name="createdby" sys="yes" jsontype="String" min="4" max="4" createsql="CHAR(4) NOT NULL"/>
+            <persistencefield name="createdon" final="yes" sys="yes" jsontype="String" min="14" max="14" createsql="CHAR(14) NOT NULL"/>
+            <persistencefield name="updatedby" sys="yes" jsontype="String" min="4" max="4" createsql="CHAR(4) NOT NULL"/>
+            <persistencefield name="updatedon" final="yes" sys="yes" jsontype="String" min="14" max="14" createsql="CHAR(14) NOT NULL"/>
+        </persistenceentity>
+        <persistenceentity name="Company">
+            <persistencefield name="shortname" jsontype="String" min="1" max="40" createsql="VARCHAR(40) UNIQUE NOT NULL"/>
+            <persistencefield name="description" jsontype="String" min="1" max="200" createsql="VARCHAR(200)  NULL"/>
+            <persistencefield name="id" sys="yes" jsontype="Integer" createsql="MEDIUMINT UNSIGNED AUTO_INCREMENT PRIMARY KEY"/>
+            <persistencefield name="createdby" sys="yes" jsontype="String" min="4" max="4" createsql="CHAR(4) NOT NULL"/>
+            <persistencefield name="createdon" final="yes" sys="yes" jsontype="String" min="14" max="14" createsql="CHAR(14) NOT NULL"/>
+            <persistencefield name="updatedby" sys="yes" jsontype="String" min="4" max="4" createsql="CHAR(4) NOT NULL"/>
+            <persistencefield name="updatedon" final="yes" sys="yes" jsontype="String" min="14" max="14" createsql="CHAR(14) NOT NULL"/>
+        </persistenceentity>
+        <persistenceentity name="Journal">
+            <persistencefield name="date" jsontype="String" min="8" max="8" createsql="CHAR(8)  NOT NULL"/>
+            <persistencefield name="description" jsontype="String" min="1" max="200" createsql="VARCHAR(200)  NULL"/>
+            <persistencefield name="transferjournalID" jsontype="Integer" createsql="MEDIUMINT  NULL"/>
+            <persistencefield name="id" sys="yes" jsontype="Integer" createsql="MEDIUMINT UNSIGNED AUTO_INCREMENT PRIMARY KEY"/>
+            <persistencefield name="createdby" sys="yes" jsontype="String" min="4" max="4" createsql="CHAR(4) NOT NULL"/>
+            <persistencefield name="createdon" final="yes" sys="yes" jsontype="String" min="14" max="14" createsql="CHAR(14) NOT NULL"/>
+            <persistencefield name="updatedby" sys="yes" jsontype="String" min="4" max="4" createsql="CHAR(4) NOT NULL"/>
+            <persistencefield name="updatedon" final="yes" sys="yes" jsontype="String" min="14" max="14" createsql="CHAR(14) NOT NULL"/>
+        </persistenceentity>
+        <persistenceentity name="Journalentry">
+            <persistencefield name="company" jsontype="Reference" createsql="MEDIUMINT UNSIGNED  NOT NULL ,FOREIGN KEY (company) REFERENCES Company(id)"/>
+            <persistencefield name="account" jsontype="Reference" createsql="MEDIUMINT UNSIGNED  NOT NULL ,FOREIGN KEY (account) REFERENCES Account(id)"/>
+            <persistencefield name="provider" jsontype="Reference" createsql="MEDIUMINT UNSIGNED  NOT NULL ,FOREIGN KEY (provider) REFERENCES Provider(id)"/>
+            <persistencefield name="description" jsontype="String" min="0" max="200" createsql="VARCHAR(200)  NULL"/>
+            <persistencefield name="amount" jsontype="Decimal" createsql="DECIMAL(15,2)  NOT NULL"/>
+            <persistencefield name="creditdebit" jsontype="String" min="0" max="255" createsql="ENUM ('Cr.', 'Dr.')  NOT NULL"/>
+            <persistencefield name="checked" jsontype="Boolean" createsql="BOOLEAN  NOT NULL"/>
+            <persistencefield name="transferID" jsontype="Integer" createsql="MEDIUMINT  NULL"/>
+            <persistencefield name="journal" jsontype="Reference" createsql="MEDIUMINT UNSIGNED NOT NULL ,FOREIGN KEY (journal) REFERENCES Journal(id)"/>
+            <persistencefield name="id" sys="yes" jsontype="Integer" createsql="MEDIUMINT UNSIGNED AUTO_INCREMENT PRIMARY KEY"/>
+            <persistencefield name="createdby" sys="yes" jsontype="String" min="4" max="4" createsql="CHAR(4) NOT NULL"/>
+            <persistencefield name="createdon" final="yes" sys="yes" jsontype="String" min="14" max="14" createsql="CHAR(14) NOT NULL"/>
+            <persistencefield name="updatedby" sys="yes" jsontype="String" min="4" max="4" createsql="CHAR(4) NOT NULL"/>
+            <persistencefield name="updatedon" final="yes" sys="yes" jsontype="String" min="14" max="14" createsql="CHAR(14) NOT NULL"/>
+        </persistenceentity>
+    </persistencestore>
+</nbpcg-entity-info>

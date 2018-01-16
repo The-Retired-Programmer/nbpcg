@@ -2,7 +2,7 @@
 
 <!--
 
-    Copyright 2015-2017 Richard Linsdale.
+    Copyright 2015-2018 Richard Linsdale.
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -75,7 +75,7 @@
                     </xsl:when>
                     <xsl:when test="@type = 'data' ">
                         <folder project="{$project}" location="java" package="{$package}" message="generating entity files" license="{$license}">
-                            <xsl:call-template name="baseentity" />
+                            <xsl:call-template name="entity" />
                             <xsl:call-template name="rules" />
                             <xsl:call-template name="restcreatorlist" />
                         </folder>
@@ -196,9 +196,9 @@
         </xsl:for-each>
     </xsl:template>
     
-    <xsl:template name="baseentity" >
+    <xsl:template name="entity" >
         <xsl:for-each select="/nbpcg/databases/database/table" >
-            <execute template="baseentity" filename="{@name}Entity.java" useentityinfo="{@name}"/>
+            <execute template="entity" filename="{@name}.java" useentityinfo="{@name}"/>
         </xsl:for-each>
     </xsl:template>
     
