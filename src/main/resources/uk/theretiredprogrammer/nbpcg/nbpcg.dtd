@@ -21,12 +21,11 @@
                 >
             <!ELEMENT generate EMPTY>
                 <!ATTLIST generate
-                    type (data|dataaccess|node|nodeviewer|editor|remotedb|mysqldatabase|jsondatabase) #REQUIRED
+                    type (data|dataaccess|node|nodeviewer|editor|script) #REQUIRED
                     package CDATA #REQUIRED
                     exclude CDATA #IMPLIED
-                    protocol (HTMLRest) #IMPLIED
                     >
-    <!ELEMENT node (entryfield*, node*)>
+    <!ELEMENT node (entryfield*, action*, node*)>
         <!ATTLIST node
             name CDATA #REQUIRED
             view (both|icon|tree|none) #IMPLIED
@@ -58,17 +57,25 @@
             rule CDATA #IMPLIED
             errormessage CDATA #IMPLIED
             >
+    <!ELEMENT action EMPTY>
+        <!ATTLIST action
+            name CDATA #REQUIRED
+            label CDATA #REQUIRED
+            >
     <!ELEMENT databases (database+)>
         <!ELEMENT database (table+)>
             <!ATTLIST database
                 name CDATA #REQUIRED
+                type (htmlrest|mysql|postgresql|jsonfile|csvfile) #REQUIRED
                 location CDATA #IMPLIED
+                authlocation CDATA #IMPLIED
                 >
             <!ELEMENT table (field*,insertentity*)>
                 <!ATTLIST table
                     name CDATA #REQUIRED
                     tostring CDATA #IMPLIED
                     rule CDATA #IMPLIED
+                    addswingtablemodel (yes) #IMPLIED
                     >
                 <!ELEMENT field EMPTY>
                     <!ATTLIST field
@@ -87,6 +94,7 @@
                         max CDATA #IMPLIED
                         future (yes) #IMPLIED
                         past (yes) #IMPLIED
+                        tablecolumnname CDATA #IMPLIED
                         >
                 <!ELEMENT insertentity (insertfield*)>
                     <!ELEMENT insertfield EMPTY>

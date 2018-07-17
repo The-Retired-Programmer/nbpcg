@@ -120,7 +120,7 @@ public final class ${ENTITYINFO.name}TablePresenter extends TablePresenter {
 <#assign columnnames = "" >
 <#list ENTITYINFO.field![] as field>
 <#if !(field.hidden??) >
-<#if !(field.type="ref" | field.type="rootref") >
+<#if (field.type!="ref") >
 <#if field.useentryfield?? >
 <#list ENTITYINFO.entryfield![] as entryfield>
 <#if entryfield.name == field.useentryfield>
@@ -186,7 +186,7 @@ public final class ${ENTITYINFO.name}TablePresenter extends TablePresenter {
 </#if>
 </#list>
 <#else>
-<#if field.type=="idx"  || field.type=="ref" || field.type = "rootref">
+<#if field.type=="idx"  || field.type=="ref">
 <#elseif field.type=="password">
                 ${prefix}
                 new FieldPresenter("${field.label}",
@@ -367,7 +367,7 @@ public final class ${ENTITYINFO.name}TablePresenter extends TablePresenter {
                 return entity.get${field.name?cap_first}Rules().checkRules(sb);
             }
         }
-<#elseif field.type == "rootref" || field.type="idx" >
+<#elseif field.type="idx" >
 <#elseif field.type == "boolean" >
 
         private class ${field.name?cap_first}FieldModel extends EntityFieldModel<Boolean> {

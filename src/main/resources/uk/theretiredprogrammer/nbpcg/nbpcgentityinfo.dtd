@@ -32,7 +32,7 @@
                 fkey (no) #IMPLIED
                 hidden (yes) #IMPLIED
                 final (yes) #IMPLIED
-                type (rootref|ref|String|int|decimal|reference|date|enum|idx|datetime|boolean|long|password) #REQUIRED
+                type (ref|String|int|decimal|reference|date|enum|idx|datetime|boolean|long|password) #REQUIRED
                 decimalsize CDATA #IMPLIED
                 references CDATA #IMPLIED
                 label CDATA #REQUIRED
@@ -96,6 +96,9 @@
     <!ELEMENT persistencestore (persistenceentity+) >
         <!ATTLIST persistencestore
             name CDATA #REQUIRED
+            type (htmlrest|mysql|postgresql|jsonfile|csvfile) #REQUIRED
+            location CDATA #REQUIRED
+            authlocation CDATA #REQUIRED 
             >
         <!ELEMENT persistenceentity (persistencefield*, insertentity*) >
             <!ATTLIST persistenceentity

@@ -2,11 +2,11 @@
     <!DOCTYPE nbpcg-build PUBLIC "-//uk/theretiredprogrammer/nbpcgbuild/DTD NBPCGBUILD SCHEMA 1.0//EN" "nbres:/uk/theretiredprogrammer/nbpcg/nbpcgbuild.dtd">
 <nbpcg-build name="Access Control Manager" copyright="2017 Richard Linsdale (richard at theretiredprogrammer.uk)">
     <folder project="Access Control Manager - Business Logic" location="java" package="uk.theretiredprogrammer.accesscontrolmanager.dataobjects" message="generating entity files" license="apache20">
-        <execute template="baseentity" filename="UserEntity.java" useentityinfo="User"/>
-        <execute template="baseentity" filename="ClaimEntity.java" useentityinfo="Claim"/>
+        <execute template="entity" filename="User.java" useentityinfo="User"/>
+        <execute template="entity" filename="Claim.java" useentityinfo="Claim"/>
         <execute template="rules" filename="UserRules.java" useentityinfo="User"/>
         <execute template="rules" filename="ClaimRules.java" useentityinfo="Claim"/>
-        <execute template="restcreatorlist" filename="RestCreatorList.java" usepersistencestore="auth"/>
+        <execute template="restcreator" filename="AuthRestCreator.java" usepersistencestore="auth"/>
     </folder>
     <folder project="Access Control Manager - Business Logic" location="java" package="uk.theretiredprogrammer.accesscontrolmanager.dataobjects" message="generating dataaccess files" license="apache20">
         <execute template="htmlrest" filename="UserRest.java" useentityinfo="User" usepersistencestore="auth"/>
@@ -36,11 +36,7 @@
         <execute template="presenter" filename="UserPresenter.java" useentityinfo="User"/>
         <execute template="presenter" filename="ClaimPresenter.java" useentityinfo="Claim"/>
     </folder>
-    <folder project="auth" location="resource" package="uk.theretiredprogrammer.auth.mysql" message="generating mysql script files for auth" license="apache20">
-        <execute template="createsqldatabase" filename="createdb.sql" usepersistencestore="auth"/>
-        <execute template="backupscript" filename="backupscript.sh" usepersistencestore="auth"/>
-        <execute template="createsqltables" filename="createtables.sql" usepersistencestore="auth"/>
-    </folder>
+    <folder project="Access Control Manager - Business Logic" location="resource" package="uk.theretiredprogrammer.accesscontrolmanager.scripts.auth" message="generating script files for database" license="apache20"/>
 </nbpcg-build>
     
         

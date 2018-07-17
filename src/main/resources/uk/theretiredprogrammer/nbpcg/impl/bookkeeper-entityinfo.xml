@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE nbpcg-entity-info PUBLIC "-//uk/theretiredprogrammer/nbpcgentityinfo/DTD NBPCGENTITYINFO SCHEMA 1.0//EN" "nbres:/uk/theretiredprogrammer/nbpcg/nbpcgentityinfo.dtd">
 <nbpcg-entity-info name="Book-Keeper">
-    <entityinfo name="Accounttype" icon="table" orderable="no" nodeorder="1" parentname="AccounttypeRoot">
-        <field name="root" references="AccounttypeRoot" type="rootref" label="Root" javatype="int" jsontype="Integer" initialisation=" = 0"/>
+    <entityinfo name="Accounttype" icon="table" orderable="no">
         <field name="shortname" unique="yes" min="1" max="40" fieldclass="TextField" type="String" label="Shortname" javatype="String" jsontype="String" initialisation=" = &quot;&quot;"/>
         <field name="description" min="1" max="200" fieldclass="TextField" type="String" label="Description" javatype="String" jsontype="String" initialisation=" = &quot;&quot;" optional="yes"/>
         <field name="id" hidden="yes" type="int" fieldclass="IntegerField" label="Id" javatype="int" jsontype="Integer" initialisation=" = 0"/>
@@ -20,10 +19,10 @@
     <entityinfo name="Account" icon="money" orderable="no" parentname="Accounttype" nodeorder="1">
         <field name="shortname" unique="yes" min="1" max="50" fieldclass="TextField" type="String" label="Shortname" javatype="String" jsontype="String" initialisation=" = &quot;&quot;"/>
         <field name="description" min="1" max="200" fieldclass="TextField" type="String" label="Description" javatype="String" jsontype="String" initialisation=" = &quot;&quot;" optional="yes"/>
-        <field name="provider" fieldclass="EntityChoiceField" references="Provider" type="reference" label="Provider" javatype="int" jsontype="Integer" initialisation=" = 0"/>
-        <field name="company" fieldclass="EntityChoiceField" references="Company" type="reference" label="Company" javatype="int" jsontype="Integer" initialisation=" = 0" optional="yes"/>
+        <field name="provider" fieldclass="EntityChoiceField" references="Provider" type="reference" label="Provider" javatype="int" jsontype="Integer" initialisation=""/>
+        <field name="company" fieldclass="EntityChoiceField" references="Company" type="reference" label="Company" javatype="int" jsontype="Integer" initialisation="" optional="yes"/>
         <field name="active" fieldclass="CheckboxField" type="boolean" label="Active" javatype="boolean" jsontype="Boolean" initialisation=" = false"/>
-        <field name="accounttype" references="Accounttype" fieldclass="EntityChoiceField" type="ref" label="Accounttype" javatype="int" jsontype="Integer" initialisation=" = 0"/>
+        <field name="accounttype" references="Accounttype" fieldclass="EntityChoiceField" type="ref" label="Accounttype" javatype="int" jsontype="Integer" initialisation=""/>
         <field name="id" hidden="yes" type="int" fieldclass="IntegerField" label="Id" javatype="int" jsontype="Integer" initialisation=" = 0"/>
         <field name="createdby" hidden="yes" type="String" min="4" max="4" fieldclass="TextField" label="Created by" javatype="String" jsontype="String" initialisation=" = &quot;&quot;"/>
         <field name="createdon" final="yes" hidden="yes" type="datetime" fieldclass="DatetimeField" label="Created on" javatype="Timestamp" jsontype="String" initialisation=" = new Timestamp()"/>
@@ -40,8 +39,7 @@
             <display field="Shortname"/>
         </tostring>
     </entityinfo>
-    <entityinfo name="Provider" icon="table" orderable="no" nodeorder="1" parentname="ProviderRoot">
-        <field name="root" references="ProviderRoot" type="rootref" label="Root" javatype="int" jsontype="Integer" initialisation=" = 0"/>
+    <entityinfo name="Provider" icon="table" orderable="no">
         <field name="shortname" unique="yes" min="1" max="40" fieldclass="TextField" type="String" label="Shortname" javatype="String" jsontype="String" initialisation=" = &quot;&quot;"/>
         <field name="description" min="1" max="200" fieldclass="TextField" type="String" label="Description" javatype="String" jsontype="String" initialisation=" = &quot;&quot;" optional="yes"/>
         <field name="allowpandl" fieldclass="CheckboxField" type="boolean" label="Allowpandl" javatype="boolean" jsontype="Boolean" initialisation=" = false"/>
@@ -60,8 +58,7 @@
             <display field="Shortname"/>
         </tostring>
     </entityinfo>
-    <entityinfo name="Company" icon="table" orderable="no" nodeorder="1" parentname="CompanyRoot">
-        <field name="root" references="CompanyRoot" type="rootref" label="Root" javatype="int" jsontype="Integer" initialisation=" = 0"/>
+    <entityinfo name="Company" icon="table" orderable="no">
         <field name="shortname" unique="yes" min="1" max="40" fieldclass="TextField" type="String" label="Shortname" javatype="String" jsontype="String" initialisation=" = &quot;&quot;"/>
         <field name="description" min="1" max="200" fieldclass="TextField" type="String" label="Description" javatype="String" jsontype="String" initialisation=" = &quot;&quot;" optional="yes"/>
         <field name="id" hidden="yes" type="int" fieldclass="IntegerField" label="Id" javatype="int" jsontype="Integer" initialisation=" = 0"/>
@@ -78,8 +75,7 @@
             <display field="Shortname"/>
         </tostring>
     </entityinfo>
-    <entityinfo name="Journal" icon="book_open" orderable="no" childnodesineditor="Journalentry" nodeorder="1" parentname="JournalRoot">
-        <field name="root" references="JournalRoot" type="rootref" label="Root" javatype="int" jsontype="Integer" initialisation=" = 0"/>
+    <entityinfo name="Journal" icon="book_open" orderable="no" childnodesineditor="Journalentry">
         <field name="date" fieldclass="DateField" type="date" label="Date" javatype="Date" jsontype="String" initialisation=" = &quot;&quot;"/>
         <field name="description" min="1" max="200" fieldclass="TextField" type="String" label="Description" javatype="String" jsontype="String" initialisation=" = &quot;&quot;" optional="yes"/>
         <field name="transferjournalID" fieldclass="IntegerField" type="int" label="TransferjournalID" javatype="int" jsontype="Integer" initialisation=" = 0" optional="yes"/>
@@ -94,19 +90,19 @@
             <display field="Description"/>
         </displaynameformat>
         <tostring format="{0}">
-            <display field="Date"/>
+            <display field="Description"/>
         </tostring>
     </entityinfo>
     <entityinfo name="Journalentry" icon="pencil" orderable="no" parentname="Journal" nodeorder="1">
-        <field name="company" fieldclass="EntityChoiceField" references="Company" type="reference" label="Company" javatype="int" jsontype="Integer" initialisation=" = 0"/>
-        <field name="account" fieldclass="EntityChoiceField" references="Account" type="reference" label="Account" javatype="int" jsontype="Integer" initialisation=" = 0"/>
-        <field name="provider" fieldclass="EntityChoiceField" references="Provider" type="reference" label="Provider" javatype="int" jsontype="Integer" initialisation=" = 0"/>
+        <field name="company" fieldclass="EntityChoiceField" references="Company" type="reference" label="Company" javatype="int" jsontype="Integer" initialisation=""/>
+        <field name="account" fieldclass="EntityChoiceField" references="Account" type="reference" label="Account" javatype="int" jsontype="Integer" initialisation=""/>
+        <field name="provider" fieldclass="EntityChoiceField" references="Provider" type="reference" label="Provider" javatype="int" jsontype="Integer" initialisation=""/>
         <field name="description" min="0" max="200" fieldclass="TextField" type="String" label="Description" javatype="String" jsontype="String" initialisation=" = &quot;&quot;" optional="yes"/>
         <field name="amount" fieldclass="DecimalField" type="currency" label="Amount" javatype="BigDecimal" jsontype="BigDecimal" initialisation=" = BigDecimal.ZERO"/>
         <field name="creditdebit" values="'Cr.', 'Dr.'" fieldclass="ChoiceField" type="enum" label="Creditdebit" javatype="String" jsontype="String" initialisation=" = &quot;&quot;"/>
         <field name="checked" fieldclass="CheckboxField" type="boolean" label="Checked" javatype="boolean" jsontype="Boolean" initialisation=" = false"/>
         <field name="transferID" fieldclass="IntegerField" type="int" label="TransferID" javatype="int" jsontype="Integer" initialisation=" = 0" optional="yes"/>
-        <field name="journal" references="Journal" fieldclass="EntityChoiceField" type="ref" label="Journal" javatype="int" jsontype="Integer" initialisation=" = 0"/>
+        <field name="journal" references="Journal" fieldclass="EntityChoiceField" type="ref" label="Journal" javatype="int" jsontype="Integer" initialisation=""/>
         <field name="id" hidden="yes" type="int" fieldclass="IntegerField" label="Id" javatype="int" jsontype="Integer" initialisation=" = 0"/>
         <field name="createdby" hidden="yes" type="String" min="4" max="4" fieldclass="TextField" label="Created by" javatype="String" jsontype="String" initialisation=" = &quot;&quot;"/>
         <field name="createdon" final="yes" hidden="yes" type="datetime" fieldclass="DatetimeField" label="Created on" javatype="Timestamp" jsontype="String" initialisation=" = new Timestamp()"/>
@@ -117,8 +113,10 @@
             <display field="Amount"/>
             <display field="Type"/>
         </displaynameformat>
-        <tostring format="{0}">
-            <display field="Company"/>
+        <tostring format="{0} {1} {2}">
+            <display field="Account"/>
+            <display field="Amount"/>
+            <display field="Creditdebit"/>
         </tostring>
     </entityinfo>
     <entityinfo name="AccounttypeRoot" isroot="" label="Accounttypes" viewers="OPERATIONAL" icon="table">

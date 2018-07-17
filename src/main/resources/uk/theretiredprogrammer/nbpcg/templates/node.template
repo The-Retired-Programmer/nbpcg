@@ -1,5 +1,5 @@
 <#--
-    Copyright 2015-2017 Richard Linsdale.
+    Copyright 2015-2018 Richard Linsdale.
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -80,6 +80,12 @@
 <#if ENTITYINFO.customchildfactorypackage?? >
 <#assign haschildren = true >
 </#if>
+<#assign require_bigdecimal = "no">
+<#list ENTITYINFO.field![] as field>
+<#if field.javatype = "BigDecimal" >
+<#assign require_bigdecimal = "yes" >
+</#if>
+</#list>
 package ${package};
 
 import com.famfamfam.www.silkicons.Icons;
@@ -92,7 +98,11 @@ import java.awt.datatransfer.Transferable;
 import static java.beans.BeanInfo.ICON_COLOR_16x16;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+<#if require_bigdecimal = "yes">
+import java.math.BigDecimal;
+</#if>
 import java.io.IOException;
+import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.MessageFormat;
 import java.text.ParseException;
@@ -119,10 +129,9 @@ import org.openide.util.lookup.InstanceContent;
 <#list ENTITYINFO.child![] as c>
 import static ${package}.${c.name?cap_first}Node.${c.name?upper_case}NODE_FLAVOR;
 </#list>
-import uk.theretiredprogrammer.accesscontrolmanager.topcomponents.Edit${ENTITYINFO.name};
+import ${editorpackage}.Edit${ENTITYINFO.name};
 import uk.theretiredprogrammer.nbpcglibrary.api.ApplicationLookup;
-import uk.theretiredprogrammer.nbpcglibrary.lifecycle.LibraryOnStop;
-import static uk.theretiredprogrammer.nbpcglibrary.lifecycle.LibraryOnStop.isSavableEnabled;
+import uk.theretiredprogrammer.nbpcglibrary.api.SavableTracking;
 import uk.theretiredprogrammer.nbpcglibrary.icons.SpecialIcons;
 <#if haschildren >
 import java.util.List;
@@ -130,6 +139,7 @@ import org.openide.actions.PasteAction;
 import org.openide.nodes.NodeTransfer;
 import org.openide.util.datatransfer.PasteType;
 </#if>
+import org.openide.util.Lookup;
 
 /**
  * Node for ${ENTITYINFO.name}Node.
@@ -139,7 +149,7 @@ import org.openide.util.datatransfer.PasteType;
  *
  * @author ${templateauthor}
  */
-public class ${ENTITYINFO.name}Node extends AbstractNode implements PropertyChangeListener {
+public class ${ENTITYINFO.name}Node extends AbstractNode implements PropertyChangeListener, Serializable, Lookup.Provider {
 
     /**
      * Data Flavor for Nodes of type ${ENTITYINFO.name}Node
@@ -154,8 +164,8 @@ public class ${ENTITYINFO.name}Node extends AbstractNode implements PropertyChan
     
     private final InstanceContent lookupcontent;
     private final NodeSavable savable = new NodeSavable();
-    private final ${ENTITYINFO.name}Entity entity;
-    private ${ENTITYINFO.name}Entity entitybackup;   
+    private final ${ENTITYINFO.name} entity;
+    private ${ENTITYINFO.name} entitybackup;   
 <#if haschildren >
         private final ${ENTITYINFO.name}NodeChildFactory factory;
 </#if>
@@ -165,7 +175,7 @@ public class ${ENTITYINFO.name}Node extends AbstractNode implements PropertyChan
      *
      * @param e the entity associated with this node
      */
-    public ${ENTITYINFO.name}Node(${ENTITYINFO.name}Entity e){
+    public ${ENTITYINFO.name}Node(${ENTITYINFO.name} e){
        this(e, new InstanceContent());
     }
 
@@ -173,16 +183,17 @@ public class ${ENTITYINFO.name}Node extends AbstractNode implements PropertyChan
      * Constructor
      */
     public ${ENTITYINFO.name}Node(){
-        this(new ${ENTITYINFO.name}Entity(), new InstanceContent());
+        this(new ${ENTITYINFO.name}(), new InstanceContent());
     }
 <#if haschildren >
 
-        private ${ENTITYINFO.name}Node(${ENTITYINFO.name}Entity e, InstanceContent lookupcontent) {
-            this(e, new ${ENTITYINFO.name}NodeChildFactory(e.getId(), (id) -> new Claims(id)), lookupcontent);
-        }
+        private ${ENTITYINFO.name}Node(${ENTITYINFO.name} e, InstanceContent lookupcontent) {
+<#list ENTITYINFO.child![] as c>
+            this(e, new ${ENTITYINFO.name}NodeChildFactory(e.getId(), (id) -> new ${c.name?cap_first}s(id)), lookupcontent);
+</#list>        }
 
         @SuppressWarnings("LeakingThisInConstructor")
-        private ${ENTITYINFO.name}Node(${ENTITYINFO.name}Entity e, ${ENTITYINFO.name}NodeChildFactory factory, InstanceContent lookupcontent) {
+        private ${ENTITYINFO.name}Node(${ENTITYINFO.name} e, ${ENTITYINFO.name}NodeChildFactory factory, InstanceContent lookupcontent) {
             super(Children.create(factory, true), new AbstractLookup(lookupcontent));
             entity = e;
             this.lookupcontent = lookupcontent;
@@ -196,7 +207,7 @@ public class ${ENTITYINFO.name}Node extends AbstractNode implements PropertyChan
 <#else>
    
     @SuppressWarnings("LeakingThisInConstructor")
-    private ${ENTITYINFO.name}Node(${ENTITYINFO.name}Entity e, InstanceContent lookupcontent) {
+    private ${ENTITYINFO.name}Node(${ENTITYINFO.name} e, InstanceContent lookupcontent) {
         super(Children.LEAF, new AbstractLookup(lookupcontent));
         entity = e;
         this.lookupcontent = lookupcontent;
@@ -208,17 +219,25 @@ public class ${ENTITYINFO.name}Node extends AbstractNode implements PropertyChan
     }
 </#if>
 
-    public final ${ENTITYINFO.name}Entity getEntity() {
+    public final ${ENTITYINFO.name} getEntity() {
         return entity;
     }
 
 <#if haschildren>
     /**
+     * Get the collection of ${child}s (children)
+     * @return the collection of ${child}s
+     */
+    public ${child}s get${child}s() {
+        return factory.getChildren();
+    }
+
+    /**
      * add a ${child} entity to the children model
      *
      * @param e the entity to add
      */
-    public void add${child}(${child}Entity e){
+    public void add${child}(${child} e){
         factory.add(e);
     }
 
@@ -227,7 +246,7 @@ public class ${ENTITYINFO.name}Node extends AbstractNode implements PropertyChan
      *
      * @param e the entity to remove
      */
-    public void remove${child}(${child}Entity e){
+    public void remove${child}(${child} e){
         factory.remove(e);
     }
 
@@ -292,7 +311,6 @@ public class ${ENTITYINFO.name}Node extends AbstractNode implements PropertyChan
             }
         }
     }
-<#elseif field.type = "rootref" >
 <#elseif field.type == "idx" >
 
     @Override
@@ -539,6 +557,15 @@ public class ${ENTITYINFO.name}Node extends AbstractNode implements PropertyChan
     /**
      * Save this entity to entity storage.
      *
+     * @return true if save is successful
+     */
+    public boolean save() {
+        return save(new StringBuilder());
+    }
+
+    /**
+     * Save this entity to entity storage.
+     *
      * @param sb Stringbuilder object used to collect any failure messages
      * @return true if save is successful
      */
@@ -597,7 +624,7 @@ public class ${ENTITYINFO.name}Node extends AbstractNode implements PropertyChan
         if (entity.dirty()) {
             return;
         }
-        entitybackup = new ${ENTITYINFO.name}Entity(getEntity());
+        entitybackup = new ${ENTITYINFO.name}(getEntity());
         entity.dirty(true);
         savable.add();
         fireIconChange();
@@ -627,7 +654,7 @@ public class ${ENTITYINFO.name}Node extends AbstractNode implements PropertyChan
         private boolean isRegisteredAsOutstanding = false;
 
         public void add() {
-            if (isSavableEnabled()) {
+            if (SavableTracking.isSavableEnabled()) {
                 if (getLookup().lookup(NodeSavable.class) == null) {
                     register();
                     lookupcontent.add(this);
@@ -635,19 +662,19 @@ public class ${ENTITYINFO.name}Node extends AbstractNode implements PropertyChan
                 icon = null;
             } else {
                 if (!isRegisteredAsOutstanding) {
-                    LibraryOnStop.incRegisterOutstanding();
+                    SavableTracking.incRegisterOutstanding();
                     isRegisteredAsOutstanding = true;
                 }
             }
         }
 
         public void remove() {
-            if (isSavableEnabled()) {
+            if (SavableTracking.isSavableEnabled()) {
                 lookupcontent.remove(this);
                 unregister();
             } else {
                 if (isRegisteredAsOutstanding) {
-                    LibraryOnStop.decRegisterOutstanding();
+                    SavableTracking.decRegisterOutstanding();
                     isRegisteredAsOutstanding = false;
                 }
             }
@@ -658,7 +685,7 @@ public class ${ENTITYINFO.name}Node extends AbstractNode implements PropertyChan
             StringBuilder sb = new StringBuilder();
             if (!${ENTITYINFO.name}Node.this.save(sb)) {
                 EventQueue.invokeLater(new ReRegister());
-                LibraryOnStop.incRegisterOutstanding();
+                SavableTracking.incRegisterOutstanding();
                 // TODO - should we place the error message in a visible place
             }
         }
@@ -668,7 +695,7 @@ public class ${ENTITYINFO.name}Node extends AbstractNode implements PropertyChan
             @Override
             public void run() {
                 NodeSavable.this.register();
-                LibraryOnStop.decRegisterOutstanding();
+                SavableTracking.decRegisterOutstanding();
             }
         }
 
@@ -719,6 +746,9 @@ public class ${ENTITYINFO.name}Node extends AbstractNode implements PropertyChan
     @Override
     public Action[] getActions(boolean context) {
         return new Action[]{
+<#list ENTITYINFO.action![] as action >
+            ${action.name}Action.get(${action.name}Action.class),
+</#list>
             Edit${ENTITYINFO.name}.get(Edit${ENTITYINFO.name}.class),
             Undo${ENTITYINFO.name}.get(Undo${ENTITYINFO.name}.class),
 <#if haschildren>
@@ -735,7 +765,6 @@ public class ${ENTITYINFO.name}Node extends AbstractNode implements PropertyChan
         };
     }
 
-
     @Override
     public Action getPreferredAction() {
         return Edit${ENTITYINFO.name}.get(Edit${ENTITYINFO.name}.class);
@@ -745,10 +774,10 @@ public class ${ENTITYINFO.name}Node extends AbstractNode implements PropertyChan
     public Sheet createSheet() {
         Sheet sheet = Sheet.createDefault();
         Sheet.Set set = Sheet.createPropertiesSet();
-        ${ENTITYINFO.name}Entity obj = getEntity();
+        ${ENTITYINFO.name} obj = getEntity();
         try {
 <#list ENTITYINFO.field![] as field>
-<#if !(field.hidden?? || field.type == "rootref" || field.type == "ref" || field.type == "reference" ) >
+<#if !(field.hidden?? || field.type == "ref" || field.type == "reference" ) >
             Property ${field.name}Prop = new PropertySupport.Reflection(obj, ${field.javatype}.class, "${field.name}");
             ${field.name}Prop.setName("${field.name}");
             set.put(${field.name}Prop);
@@ -807,13 +836,13 @@ public class ${ENTITYINFO.name}Node extends AbstractNode implements PropertyChan
         public Transferable paste() throws IOException {
             ${child}Node node = (${child}Node) NodeTransfer.node(t, NodeTransfer.MOVE);
             if (node != null) {
-                ((UserNode)node.getParentNode()).remove${child}(node.getEntity());
+                ((${ENTITYINFO.name}Node)node.getParentNode()).remove${child}(node.getEntity());
                 factory.add(node.getEntity());
                 return null;
             }
             node = (${child}Node) NodeTransfer.node(t, NodeTransfer.COPY);
             if (node != null) {
-                factory.add(new ${child}Entity(true, node.getEntity()));
+                factory.add(new ${child}(true, node.getEntity()));
             }
             return null;
         }

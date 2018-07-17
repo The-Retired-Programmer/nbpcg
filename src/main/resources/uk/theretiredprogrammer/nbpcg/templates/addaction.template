@@ -72,7 +72,6 @@
 <#-- Freemarker Template for any Node Add Action class -->
 <#assign templateauthor = "Richard Linsdale (richard at theretiredprogrammer.uk)" />
 <#assign ENTITYINFO = entityinfo[useentityinfo] >
-<#assign PARENTENTITYINFO = entityinfo[ENTITYINFO.parentname] >
 package ${package};
 
 import java.awt.event.ActionEvent;
@@ -83,7 +82,7 @@ import org.openide.util.ContextAwareAction;
 import org.openide.util.HelpCtx;
 import org.openide.util.Lookup;
 import org.openide.util.actions.SystemAction;
-import uk.theretiredprogrammer.accesscontrolmanager.dataobjects.${ENTITYINFO.name}Entity;
+import ${datapackage}.${ENTITYINFO.name};
 <#if editorpackage != "">
 import ${editorpackage}.${ENTITYINFO.name}Editor;
 </#if>
@@ -130,7 +129,7 @@ private static final class ContextAction extends AbstractAction {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            parent.add${ENTITYINFO.name}(new ${ENTITYINFO.name}Entity());
+            parent.add${ENTITYINFO.name}(new ${ENTITYINFO.name}());
 <#if editorpackage != "">
             // new ${ENTITYINFO.name}Editor(node).visible();
 </#if>

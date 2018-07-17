@@ -1,5 +1,5 @@
 <#--
-    Copyright 2015-2017 Richard Linsdale.
+    Copyright 2015-2018 Richard Linsdale.
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -102,9 +102,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
 import org.openide.util.WeakListeners;
-import uk.theretiredprogrammer.accesscontrolmanager.dataobjects.${ENTITYINFO.name}Entity;
-import uk.theretiredprogrammer.accesscontrolmanager.dataobjects.${ENTITYINFO.name}Rules;
-import uk.theretiredprogrammer.accesscontrolmanager.nodes.${ENTITYINFO.name}Node;
+import ${datapackage}.${ENTITYINFO.name};
+import ${datapackage}.${ENTITYINFO.name}Rules;
+import ${nodepackage}.${ENTITYINFO.name}Node;
 import uk.theretiredprogrammer.nbpcglibrary.form.*;
 import uk.theretiredprogrammer.nbpcglibrary.rules.Rule;
 <#if needDateOnlyImport = "yes">
@@ -137,7 +137,7 @@ public final class ${ENTITYINFO.name}Presenter extends FormPresenter implements 
         this.node = node;
         setSaveFunction(sb -> this.node.save(sb));
         setGetChildPresentersFunction(() -> getFieldPresenters());
-        ${ENTITYINFO.name}Entity e = node.getLookup().lookup(${ENTITYINFO.name}Entity.class);
+        ${ENTITYINFO.name} e = node.getLookup().lookup(${ENTITYINFO.name}.class);
         e.addPropertyChangeListener(WeakListeners.propertyChange(this, e));
     }
 
@@ -171,7 +171,7 @@ public final class ${ENTITYINFO.name}Presenter extends FormPresenter implements 
                 new LabelDecorator("${field.label}", new ErrorMarkerDecorator(new ChoiceField())),
                 new ${field.name?cap_first}FieldModel())
 <#assign prefix = "," >
-<#elseif field.type=="ref" || field.type = "rootref" >
+<#elseif field.type=="ref">
 <#else>
 <#if !(field.hidden??) >
 <#if field.type == "int">
@@ -242,7 +242,7 @@ public final class ${ENTITYINFO.name}Presenter extends FormPresenter implements 
         public boolean test(StringBuilder sb) {
             return ${ENTITYINFO.name}Rules.areAllRulesValid(sb,
                     ${ENTITYINFO.name}Presenter.this.node
-                            .getLookup().lookup(${ENTITYINFO.name}Entity.class)
+                            .getLookup().lookup(${ENTITYINFO.name}.class)
                     );
                 }
         }
@@ -313,7 +313,7 @@ public final class ${ENTITYINFO.name}Presenter extends FormPresenter implements 
         public boolean test(StringBuilder sb) {
             return ${ENTITYINFO.name}Rules.are${field.name?cap_first}RulesValid(sb,
                     ${ENTITYINFO.name}Presenter.this.node
-                            .getLookup().lookup(${ENTITYINFO.name}Entity.class)
+                            .getLookup().lookup(${ENTITYINFO.name}.class)
                     );
         }
 <#if field.optional??>
@@ -348,11 +348,11 @@ public final class ${ENTITYINFO.name}Presenter extends FormPresenter implements 
         public boolean test(StringBuilder sb) {
             return ${ENTITYINFO.name}Rules.are${field.name?cap_first}RulesValid(sb,
                     ${ENTITYINFO.name}Presenter.this.node
-                            .getLookup().lookup(${ENTITYINFO.name}Entity.class)
+                            .getLookup().lookup(${ENTITYINFO.name}.class)
                     );
         }
     }
-<#elseif field.type == "rootref" || field.type="idx" >
+<#elseif field.type="idx" >
 <#elseif field.type == "boolean" >
 
     private class ${field.name?cap_first}FieldModel extends EntityFieldModel<Boolean> {
@@ -371,7 +371,7 @@ public final class ${ENTITYINFO.name}Presenter extends FormPresenter implements 
         public boolean test(StringBuilder sb) {
             return ${ENTITYINFO.name}Rules.are${field.name?cap_first}RulesValid(sb,
                     ${ENTITYINFO.name}Presenter.this.node
-                            .getLookup().lookup(${ENTITYINFO.name}Entity.class)
+                            .getLookup().lookup(${ENTITYINFO.name}.class)
                     );
         }
     }
@@ -393,7 +393,7 @@ public final class ${ENTITYINFO.name}Presenter extends FormPresenter implements 
         public boolean test(StringBuilder sb) {
             return ${ENTITYINFO.name}Rules.are${field.name?cap_first}RulesValid(sb,
                     ${ENTITYINFO.name}Presenter.this.node
-                            .getLookup().lookup(${ENTITYINFO.name}Entity.class)
+                            .getLookup().lookup(${ENTITYINFO.name}.class)
                     );
         }
     }
@@ -416,7 +416,7 @@ public final class ${ENTITYINFO.name}Presenter extends FormPresenter implements 
         public boolean test(StringBuilder sb) {
             return ${ENTITYINFO.name}Rules.are${field.name?cap_first}RulesValid(sb,
                     ${ENTITYINFO.name}Presenter.this.node
-                            .getLookup().lookup(${ENTITYINFO.name}Entity.class)
+                            .getLookup().lookup(${ENTITYINFO.name}.class)
                     );
         }
     }
@@ -440,7 +440,7 @@ public final class ${ENTITYINFO.name}Presenter extends FormPresenter implements 
         public boolean test(StringBuilder sb) {
             return ${ENTITYINFO.name}Rules.are${field.name?cap_first}RulesValid(sb,
                     ${ENTITYINFO.name}Presenter.this.node
-                            .getLookup().lookup(${ENTITYINFO.name}Entity.class)
+                            .getLookup().lookup(${ENTITYINFO.name}.class)
                     );
         }
     }
@@ -464,7 +464,7 @@ public final class ${ENTITYINFO.name}Presenter extends FormPresenter implements 
         public boolean test(StringBuilder sb) {
             return ${ENTITYINFO.name}Rules.are${field.name?cap_first}RulesValid(sb,
                     ${ENTITYINFO.name}Presenter.this.node
-                            .getLookup().lookup(${ENTITYINFO.name}Entity.class)
+                            .getLookup().lookup(${ENTITYINFO.name}.class)
                     );
         }
     }
@@ -488,7 +488,7 @@ public final class ${ENTITYINFO.name}Presenter extends FormPresenter implements 
         public boolean test(StringBuilder sb) {
             return ${ENTITYINFO.name}Rules.are${field.name?cap_first}RulesValid(sb,
                     ${ENTITYINFO.name}Presenter.this.node
-                            .getLookup().lookup(${ENTITYINFO.name}Entity.class)
+                            .getLookup().lookup(${ENTITYINFO.name}.class)
                     );
         }
     }
@@ -512,7 +512,7 @@ public final class ${ENTITYINFO.name}Presenter extends FormPresenter implements 
         public boolean test(StringBuilder sb) {
             return ${ENTITYINFO.name}Rules.are${field.name?cap_first}RulesValid(sb,
                     ${ENTITYINFO.name}Presenter.this.node
-                            .getLookup().lookup(${ENTITYINFO.name}Entity.class)
+                            .getLookup().lookup(${ENTITYINFO.name}.class)
                     );
         }
     }
@@ -537,7 +537,7 @@ public final class ${ENTITYINFO.name}Presenter extends FormPresenter implements 
         public String get() {
             return ${ENTITYINFO.name}Rules.are${field.name?cap_first}RulesValid(sb,
                     ${ENTITYINFO.name}Presenter.this.node
-                            .getLookup().lookup(${ENTITYINFO.name}Entity.class)
+                            .getLookup().lookup(${ENTITYINFO.name}.class)
                     );
         }
 <#if field.optional??>
@@ -566,7 +566,7 @@ public final class ${ENTITYINFO.name}Presenter extends FormPresenter implements 
         public boolean test(StringBuilder sb) {
             return ${ENTITYINFO.name}Rules.are${field.name?cap_first}RulesValid(sb,
                     ${ENTITYINFO.name}Presenter.this.node
-                            .getLookup().lookup(${ENTITYINFO.name}Entity.class)
+                            .getLookup().lookup(${ENTITYINFO.name}.class)
                     );
             }
         }

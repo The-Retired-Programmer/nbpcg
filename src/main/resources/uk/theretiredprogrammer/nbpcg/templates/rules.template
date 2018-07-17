@@ -101,7 +101,6 @@ public class ${ENTITYINFO.name}Rules {
     private final static Rules<${ENTITYINFO.name}> ${field.name?upper_case}_RULES = new Rules<>();
 <#elseif field.type == "reference">
     private final static Rules<${ENTITYINFO.name}> ${field.name?upper_case}_RULES = new Rules<>();
-<#elseif field.type == "rootref" >
 <#else>
 <#if !field.hidden??>
     private final static Rules<${ENTITYINFO.name}> ${field.name?upper_case}_RULES = new Rules<>();
@@ -160,7 +159,6 @@ public class ${ENTITYINFO.name}Rules {
 <#list ENTITYINFO.field![] as field>
 <#if field.type == "ref" || field.type == "reference">
         res  = ${field.name?upper_case}_RULES.checkRules(sb,  be) && res;
-<#elseif field.type == "rootref" >
 <#else>
 <#if !field.hidden??>
         res  = ${field.name?upper_case}_RULES.checkRules(sb,  be) && res;
@@ -175,7 +173,6 @@ public class ${ENTITYINFO.name}Rules {
 <#list ENTITYINFO.field![] as field>
 <#if field.type == "ref" || field.type == "reference">
         res  = ${field.name?upper_case}_RULES.checkRulesAtLoad(sb,  be) && res;
-<#elseif field.type == "rootref" >
 <#else>
 <#if !field.hidden??>
         res  = ${field.name?upper_case}_RULES.checkRulesAtLoad(sb,  be) && res;
@@ -195,7 +192,6 @@ public class ${ENTITYINFO.name}Rules {
         return ${field.name?upper_case}_RULES.checkRules(sb,  be);
     }
 
-<#elseif field.type == "rootref" >
 <#else>
 <#if !field.hidden??>
     public static boolean are${field.name?cap_first}RulesValid(StringBuilder sb, ${ENTITYINFO.name} be) {

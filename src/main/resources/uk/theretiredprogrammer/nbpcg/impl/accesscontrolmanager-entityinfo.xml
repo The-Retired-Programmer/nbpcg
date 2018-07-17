@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE nbpcg-entity-info PUBLIC "-//uk/theretiredprogrammer/nbpcgentityinfo/DTD NBPCGENTITYINFO SCHEMA 1.0//EN" "nbres:/uk/theretiredprogrammer/nbpcg/nbpcgentityinfo.dtd">
 <nbpcg-entity-info name="Access Control Manager">
     <entityinfo name="User" icon="user" orderable="no" nodeorder="1" parentname="UserRoot">
-        <field name="root" references="UserRoot" type="rootref" label="Root" javatype="int" jsontype="Integer" initialisation=" = 0"/>
         <field name="username" unique="yes" min="1" max="100" fieldclass="TextField" type="String" label="Username" javatype="String" jsontype="String" initialisation=" = &quot;&quot;"/>
         <field name="encodedpassword" min="40" max="40" fieldclass="TextField" type="String" label="Encodedpassword" javatype="String" jsontype="String" initialisation=" = &quot;&quot;" useentryfield="password"/>
         <field name="moniker" unique="yes" min="1" max="4" fieldclass="TextField" type="String" label="Moniker" javatype="String" jsontype="String" initialisation=" = &quot;&quot;"/>
         <field name="enabled" fieldclass="CheckboxField" type="boolean" label="Enabled" javatype="boolean" jsontype="Boolean" initialisation=" = false"/>
-        <field name="id" hidden="yes" type="int" fieldclass="IntegerField" label="Id" javatype="int" jsontype="Integer" initialisation=" = 0"/>
+        <field name="id" hidden="yes" type="int" fieldclass="IntegerField" label="Id" javatype="int" jsontype="Int" initialisation=" = 0"/>
         <field name="createdby" hidden="yes" type="String" min="4" max="4" fieldclass="TextField" label="Created by" javatype="String" jsontype="String" initialisation=" = &quot;&quot;"/>
         <field name="createdon" final="yes" hidden="yes" type="datetime" fieldclass="DatetimeField" label="Created on" javatype="Timestamp" jsontype="String" initialisation=" = new Timestamp()"/>
         <field name="updatedby" hidden="yes" type="String" min="4" max="4" fieldclass="TextField" label="Updated by" javatype="String" jsontype="String" initialisation=" = &quot;&quot;"/>
@@ -16,12 +15,15 @@
         <displaynameformat format="{0}">
             <display field="Username"/>
         </displaynameformat>
+        <tostring format="{0}">
+            <display field="Username"/>
+        </tostring>
     </entityinfo>
     <entityinfo name="Claim" icon="key" orderable="no" parentname="User" nodeorder="1">
         <field name="claimkey" min="1" max="100" fieldclass="TextField" type="String" label="Claimkey" javatype="String" jsontype="String" initialisation=" = &quot;&quot;"/>
         <field name="value" min="1" max="200" fieldclass="TextField" type="String" label="Value" javatype="String" jsontype="String" initialisation=" = &quot;&quot;"/>
-        <field name="user" references="User" fieldclass="EntityChoiceField" type="ref" label="User" javatype="int" jsontype="Integer" initialisation=" = 0"/>
-        <field name="id" hidden="yes" type="int" fieldclass="IntegerField" label="Id" javatype="int" jsontype="Integer" initialisation=" = 0"/>
+        <field name="user" references="User" fieldclass="EntityChoiceField" type="ref" label="User" javatype="int" jsontype="Int" initialisation=""/>
+        <field name="id" hidden="yes" type="int" fieldclass="IntegerField" label="Id" javatype="int" jsontype="Int" initialisation=" = 0"/>
         <field name="createdby" hidden="yes" type="String" min="4" max="4" fieldclass="TextField" label="Created by" javatype="String" jsontype="String" initialisation=" = &quot;&quot;"/>
         <field name="createdon" final="yes" hidden="yes" type="datetime" fieldclass="DatetimeField" label="Created on" javatype="Timestamp" jsontype="String" initialisation=" = new Timestamp()"/>
         <field name="updatedby" hidden="yes" type="String" min="4" max="4" fieldclass="TextField" label="Updated by" javatype="String" jsontype="String" initialisation=" = &quot;&quot;"/>
@@ -29,17 +31,20 @@
         <displaynameformat format="{0}">
             <display field="Claimkey"/>
         </displaynameformat>
+        <tostring format="{0}">
+            <display field="Claimkey"/>
+        </tostring>
     </entityinfo>
     <entityinfo name="UserRoot" isroot="" label="Users" viewers="OPERATIONAL" icon="folder_user">
         <child name="user" references="User" hasiconview="no" orderable="no" sort="no"/>
     </entityinfo>
-    <persistencestore name="auth" location="http://localhost:8080/auth">
+    <persistencestore name="auth" type="htmlrest" location="http://localhost:8080/auth" authlocation="http://localhost:8080">
         <persistenceentity name="User">
             <persistencefield name="username" jsontype="String" min="1" max="100" createsql="VARCHAR(100) UNIQUE NOT NULL"/>
             <persistencefield name="encodedpassword" jsontype="String" min="40" max="40" createsql="CHAR(40)  NOT NULL"/>
             <persistencefield name="moniker" jsontype="String" min="1" max="4" createsql="VARCHAR(4) UNIQUE NOT NULL"/>
             <persistencefield name="enabled" jsontype="Boolean" createsql="BOOLEAN  NOT NULL"/>
-            <persistencefield name="id" sys="yes" jsontype="Integer" createsql="MEDIUMINT UNSIGNED AUTO_INCREMENT PRIMARY KEY"/>
+            <persistencefield name="id" sys="yes" jsontype="Int" createsql="MEDIUMINT UNSIGNED AUTO_INCREMENT PRIMARY KEY"/>
             <persistencefield name="createdby" sys="yes" jsontype="String" min="4" max="4" createsql="CHAR(4) NOT NULL"/>
             <persistencefield name="createdon" final="yes" sys="yes" jsontype="String" min="14" max="14" createsql="CHAR(14) NOT NULL"/>
             <persistencefield name="updatedby" sys="yes" jsontype="String" min="4" max="4" createsql="CHAR(4) NOT NULL"/>
@@ -59,15 +64,15 @@
         <persistenceentity name="Claim">
             <persistencefield name="claimkey" jsontype="String" min="1" max="100" createsql="VARCHAR(100)  NOT NULL"/>
             <persistencefield name="value" jsontype="String" min="1" max="200" createsql="VARCHAR(200)  NOT NULL"/>
-            <persistencefield name="user" jsontype="Reference" createsql="MEDIUMINT UNSIGNED NOT NULL ,FOREIGN KEY (user) REFERENCES User(id)"/>
-            <persistencefield name="id" sys="yes" jsontype="Integer" createsql="MEDIUMINT UNSIGNED AUTO_INCREMENT PRIMARY KEY"/>
+            <persistencefield name="user" jsontype="Int" createsql="MEDIUMINT UNSIGNED NOT NULL ,FOREIGN KEY (user) REFERENCES User(id)"/>
+            <persistencefield name="id" sys="yes" jsontype="Int" createsql="MEDIUMINT UNSIGNED AUTO_INCREMENT PRIMARY KEY"/>
             <persistencefield name="createdby" sys="yes" jsontype="String" min="4" max="4" createsql="CHAR(4) NOT NULL"/>
             <persistencefield name="createdon" final="yes" sys="yes" jsontype="String" min="14" max="14" createsql="CHAR(14) NOT NULL"/>
             <persistencefield name="updatedby" sys="yes" jsontype="String" min="4" max="4" createsql="CHAR(4) NOT NULL"/>
             <persistencefield name="updatedon" final="yes" sys="yes" jsontype="String" min="14" max="14" createsql="CHAR(14) NOT NULL"/>
             <insertentity>
-                <insertfield name="claimkey" quote="yes" value="trp.acm.ok"/>
-                <insertfield name="value" quote="yes" value="yes"/>
+                <insertfield name="claimkey" quote="yes" value="acm.role"/>
+                <insertfield name="value" quote="yes" value="admin"/>
                 <insertfield name="user" quote="no" value="1"/>
                 <insertfield name="createdby" quote="yes" var="USERCODE"/>
                 <insertfield name="createdon" quote="yes" var="NOW"/>

@@ -19,7 +19,6 @@ import java.io.InputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.Map.Entry;
 import javax.xml.transform.Transformer;
 import static javax.xml.transform.TransformerFactory.newInstance;
 import javax.xml.transform.dom.DOMResult;

@@ -1,5 +1,5 @@
 <#--
-     Copyright 2015-2017 Richard Linsdale.
+     Copyright 2015-2018 Richard Linsdale.
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -95,7 +95,7 @@ import org.openide.nodes.Node;
 import org.openide.util.NbBundle;
 import org.openide.util.NbBundle.Messages;
 import org.openide.windows.TopComponent;
-import uk.theretiredprogrammer.accesscontrolmanager.nodes.UserRootNode;
+import ${nodepackage}.${ENTITYINFO.name}Node;
 
 /**
  * Viewer for ${ENTITYINFO.name} (type=${type})

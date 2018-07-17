@@ -1,5 +1,5 @@
 <#--
-     Copyright 2015-2017 Richard Linsdale.
+     Copyright 2015-2018 Richard Linsdale.
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -92,7 +92,8 @@ import javax.swing.Action;
 import org.openide.actions.PasteAction;
 import org.openide.nodes.*;
 import org.openide.util.datatransfer.PasteType;
-import uk.theretiredprogrammer.accesscontrolmanager.dataobjects.${child}Entity;
+import ${datapackage}.${child};
+import ${datapackage}.${child}s;
 <#list ENTITYINFO.child![] as child>
 import static ${package}.${child.name?cap_first}Node.${child.name?upper_case}NODE_FLAVOR;
 </#list>
@@ -125,11 +126,11 @@ public class ${ENTITYINFO.name}Node extends AbstractNode {
         this.factory = factory;
     }
  
-    public void add${child}(${child}Entity e) {
+    public void add${child}(${child} e) {
         factory.add(e);
     }
 
-    public void remove${child}(${child}Entity e) {
+    public void remove${child}(${child} e) {
         factory.remove(e);
     }
 
@@ -199,7 +200,7 @@ public class ${ENTITYINFO.name}Node extends AbstractNode {
         
         @Override
         public Transferable paste() throws IOException {
-            UserNode node = (${child}Node) NodeTransfer.node(t, NodeTransfer.MOVE);
+            ${child}Node node = (${child}Node) NodeTransfer.node(t, NodeTransfer.MOVE);
             if (node != null) {
                 ((${ENTITYINFO.name}Node) node.getParentNode()).remove${child}(node.getEntity());
                 factory.add(node.getEntity());
@@ -207,7 +208,7 @@ public class ${ENTITYINFO.name}Node extends AbstractNode {
             }
             node = (${child}Node) NodeTransfer.node(t, NodeTransfer.COPY);
             if (node != null) {
-                factory.add(new ${child}Entity(true, node.getEntity()));
+                factory.add(new ${child}(true, node.getEntity()));
             }
             return null;
         }

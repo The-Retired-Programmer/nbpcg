@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+    <!DOCTYPE nbpcg-build PUBLIC "-//uk/theretiredprogrammer/nbpcgbuild/DTD NBPCGBUILD SCHEMA 1.0//EN" "nbres:/uk/theretiredprogrammer/nbpcg/nbpcgbuild.dtd">
+<nbpcg-build name="Sail Tracker" copyright="2018 Richard Linsdale (richard at theretiredprogrammer.uk)">
+    <folder project="Sail Tracker - Processing" location="resource" package="uk.theretiredprogrammer.sailtracker2.scripts.gpstrack" message="generating script files for database" license="apache20">
+        <execute template="createmysqldatabase" filename="createdb_gpstrack.sql" usepersistencestore="gpstrack"/>
+        <execute template="backupscriptmysql" filename="backupscript_gpstrack.sh" usepersistencestore="gpstrack"/>
+        <execute template="createmysqltables" filename="createtables_gpstrack.sql" usepersistencestore="gpstrack"/>
+    </folder>
+    <folder project="Sail Tracker - Processing" location="java" package="uk.theretiredprogrammer.sailtracker2.dataobjects" message="generating entity files" license="apache20">
+        <execute template="entity" filename="Location.java" useentityinfo="Location"/>
+        <execute template="entity" filename="Race.java" useentityinfo="Race"/>
+        <execute template="entity" filename="Boat.java" useentityinfo="Boat"/>
+        <execute template="entity" filename="DataSegment.java" useentityinfo="DataSegment"/>
+        <execute template="entity" filename="DataPoint.java" useentityinfo="DataPoint"/>
+        <execute template="rules" filename="LocationRules.java" useentityinfo="Location"/>
+        <execute template="rules" filename="RaceRules.java" useentityinfo="Race"/>
+        <execute template="rules" filename="BoatRules.java" useentityinfo="Boat"/>
+        <execute template="rules" filename="DataSegmentRules.java" useentityinfo="DataSegment"/>
+        <execute template="rules" filename="DataPointRules.java" useentityinfo="DataPoint"/>
+        <execute template="children" filename="Locations.java" useentityinfo="Location"/>
+        <execute template="children" filename="Races.java" useentityinfo="Race"/>
+        <execute template="children" filename="Boats.java" useentityinfo="Boat"/>
+        <execute template="children" filename="DataSegments.java" useentityinfo="DataSegment"/>
+        <execute template="children" filename="DataPoints.java" useentityinfo="DataPoint"/>
+        <execute template="tablemodel" filename="DataPointTableModel.java" useentityinfo="DataPoint"/>
+    </folder>
+    <folder project="Sail Tracker - Processing" location="java" package="uk.theretiredprogrammer.sailtracker2.dataobjects" message="generating dataaccess files" license="apache20">
+        <execute template="mysql" filename="LocationRest.java" useentityinfo="Location" usepersistencestore="gpstrack"/>
+        <execute template="mysql" filename="RaceRest.java" useentityinfo="Race" usepersistencestore="gpstrack"/>
+        <execute template="mysql" filename="BoatRest.java" useentityinfo="Boat" usepersistencestore="gpstrack"/>
+        <execute template="mysql" filename="DataSegmentRest.java" useentityinfo="DataSegment" usepersistencestore="gpstrack"/>
+        <execute template="mysql" filename="DataPointRest.java" useentityinfo="DataPoint" usepersistencestore="gpstrack"/>
+        <execute template="restcreator" filename="GpstrackRestCreator.java" usepersistencestore="gpstrack"/>
+    </folder>
+    <folder project="Sail Tracker - Processing" location="java" package="uk.theretiredprogrammer.sailtracker2.nodes" message="generating node files" license="apache20" datapackage="uk.theretiredprogrammer.sailtracker2.dataobjects" editorpackage="uk.theretiredprogrammer.sailtracker2.topcomponents">
+        <execute template="rootnode" type="" filename="LocationRootNode.java" useentityinfo="LocationRoot"/>
+        <execute template="node" type="" filename="LocationNode.java" useentityinfo="Location"/>
+        <execute template="node" type="" filename="RaceNode.java" useentityinfo="Race"/>
+        <execute template="node" type="" filename="BoatNode.java" useentityinfo="Boat"/>
+        <execute template="node" type="" filename="DataSegmentNode.java" useentityinfo="DataSegment"/>
+        <execute template="node" type="" filename="DataPointNode.java" useentityinfo="DataPoint"/>
+        <execute template="nodefactory" type="" filename="LocationRootNodeChildFactory.java" useentityinfo="LocationRoot"/>
+        <execute template="nodefactory" type="" filename="LocationNodeChildFactory.java" useentityinfo="Location"/>
+        <execute template="nodefactory" type="" filename="RaceNodeChildFactory.java" useentityinfo="Race"/>
+        <execute template="nodefactory" type="" filename="BoatNodeChildFactory.java" useentityinfo="Boat"/>
+        <execute template="nodefactory" type="" filename="DataSegmentNodeChildFactory.java" useentityinfo="DataSegment"/>
+        <execute template="undoaction" filename="UndoLocation.java" useentityinfo="Location"/>
+        <execute template="undoaction" filename="UndoRace.java" useentityinfo="Race"/>
+        <execute template="undoaction" filename="UndoBoat.java" useentityinfo="Boat"/>
+        <execute template="undoaction" filename="UndoDataSegment.java" useentityinfo="DataSegment"/>
+        <execute template="undoaction" filename="UndoDataPoint.java" useentityinfo="DataPoint"/>
+        <execute template="addaction" filename="AddLocation.java" useentityinfo="Location"/>
+        <execute template="addaction" filename="AddRace.java" useentityinfo="Race"/>
+        <execute template="addaction" filename="AddBoat.java" useentityinfo="Boat"/>
+        <execute template="addaction" filename="AddDataSegment.java" useentityinfo="DataSegment"/>
+        <execute template="addaction" filename="AddDataPoint.java" useentityinfo="DataPoint"/>
+        <execute template="action" filename="ViewRaceTracks.java" useentityinfo="Race" actionname="ViewRaceTracks" actionlabel="View Tracks"/>
+        <execute template="action" filename="ViewRaceTracksRealTime.java" useentityinfo="Race" actionname="ViewRaceTracksRealTime" actionlabel="View Tracks in Real Time"/>
+        <execute template="action" filename="ViewBoatTracks.java" useentityinfo="Boat" actionname="ViewBoatTracks" actionlabel="View Tracks"/>
+        <execute template="action" filename="ViewBoatTracksRealTime.java" useentityinfo="Boat" actionname="ViewBoatTracksRealTime" actionlabel="View Tracks in Real Time"/>
+        <execute template="action" filename="ViewTrack.java" useentityinfo="DataSegment" actionname="ViewTrack" actionlabel="View Track"/>
+        <execute template="action" filename="ViewTrackRealTime.java" useentityinfo="DataSegment" actionname="ViewTrackRealTime" actionlabel="View Track in Real Time"/>
+    </folder>
+    <folder project="Sail Tracker - Processing" location="java" package="uk.theretiredprogrammer.sailtracker2.topcomponents" message="generating node viewer files" license="apache20" datapackage="uk.theretiredprogrammer.sailtracker2.dataobjects" nodepackage="uk.theretiredprogrammer.sailtracker2.nodes">
+        <execute template="rootnodeviewer" type="Tree" filename="LocationRootNodeViewer.java" useentityinfo="LocationRoot"/>
+    </folder>
+    <folder project="Sail Tracker - Processing" location="java" package="uk.theretiredprogrammer.sailtracker2.topcomponents" message="generating editor files" license="apache20" datapackage="uk.theretiredprogrammer.sailtracker2.dataobjects" nodepackage="uk.theretiredprogrammer.sailtracker2.nodes">
+        <execute template="editor" filename="LocationEditor.java" useentityinfo="Location"/>
+        <execute template="editor" filename="RaceEditor.java" useentityinfo="Race"/>
+        <execute template="editor" filename="BoatEditor.java" useentityinfo="Boat"/>
+        <execute template="editor" filename="DataSegmentEditor.java" useentityinfo="DataSegment"/>
+        <execute template="editor" filename="DataPointEditor.java" useentityinfo="DataPoint"/>
+        <execute template="editaction" filename="EditLocation.java" useentityinfo="Location"/>
+        <execute template="editaction" filename="EditRace.java" useentityinfo="Race"/>
+        <execute template="editaction" filename="EditBoat.java" useentityinfo="Boat"/>
+        <execute template="editaction" filename="EditDataSegment.java" useentityinfo="DataSegment"/>
+        <execute template="editaction" filename="EditDataPoint.java" useentityinfo="DataPoint"/>
+        <execute template="presenter" filename="LocationPresenter.java" useentityinfo="Location"/>
+        <execute template="presenter" filename="RacePresenter.java" useentityinfo="Race"/>
+        <execute template="presenter" filename="BoatPresenter.java" useentityinfo="Boat"/>
+        <execute template="presenter" filename="DataSegmentPresenter.java" useentityinfo="DataSegment"/>
+        <execute template="presenter" filename="DataPointPresenter.java" useentityinfo="DataPoint"/>
+    </folder>
+</nbpcg-build>
+    
+        
+            
+            
+            
+                
+                
+                
+                    
+                    
+                    
+                
+            
+        
+    
+    
+        
+            
+                
+            
+            
+                
+                
+            
+            
+                
+                
+            
+            
+                
+            
+            
+                
+                
+                
+                
+                
+            
+        
+    

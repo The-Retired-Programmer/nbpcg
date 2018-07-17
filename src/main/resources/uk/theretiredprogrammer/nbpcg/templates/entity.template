@@ -72,14 +72,28 @@
 <#-- Freemarker Template for Entity class -->
 <#assign templateauthor = "Richard Linsdale (richard at theretiredprogrammer.uk)" />
 <#assign ENTITYINFO = entityinfo[useentityinfo] >
+<#assign require_bigdecimal = "no">
+<#list ENTITYINFO.field![] as field>
+<#if field.javatype = "BigDecimal" >
+<#assign require_bigdecimal = "yes" >
+</#if>
+</#list>
 package ${package};
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.StringReader;
+<#if require_bigdecimal = "yes">
+import java.math.BigDecimal;
+</#if>
 import java.text.MessageFormat;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import javax.json.Json;
+import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
+import javax.json.JsonReader;
 import uk.theretiredprogrammer.nbpcglibrary.api.IdTimestamp;
 
 /**
@@ -94,15 +108,34 @@ public class ${ENTITYINFO.name} extends IdTimestamp {
 
     private final List listeners = Collections.synchronizedList(new LinkedList());
 <#list ENTITYINFO.field![] as field>
-<#if field.type != "rootref" >
 <#if !(field.hidden??) >
-    private ${field.jsontype} ${field.name}${field.initialisation};
-</#if>
+    private ${field.javatype} ${field.name}${field.initialisation};
 </#if>
 </#list>
 
     public ${ENTITYINFO.name}() {
         super();
+    }
+
+public ${ENTITYINFO.name}(String json) {
+        JsonObject jobj;
+        try (JsonReader jsonReader = Json.createReader(new StringReader(json))) {
+            jobj = jsonReader.readObject();
+        }
+        insertValues(jobj);
+    }
+    
+    public ${ENTITYINFO.name}(JsonObject jobj){
+        insertValues(jobj);
+    }
+        
+    private void insertValues(JsonObject jobj) {
+        this.insertIdTimestamp(jobj);
+<#list ENTITYINFO.field![] as fd>
+<#if ! (fd.hidden??) >
+        ${fd.name} = jobj.${fd.jsontype};
+</#if>
+</#list>
     }
 
     public ${ENTITYINFO.name}(boolean dirtystate, ${ENTITYINFO.name} from) {
@@ -121,10 +154,8 @@ public class ${ENTITYINFO.name} extends IdTimestamp {
     public final void copy(boolean dirtystate, ${ENTITYINFO.name} from) {
         super.copy(dirtystate, from);
 <#list ENTITYINFO.field![] as field>
-<#if field.type != "rootref" >
 <#if !(field.hidden??) >
         ${field.name} = from.${field.name};
-</#if>
 </#if>
 </#list>
     }
@@ -156,7 +187,6 @@ public class ${ENTITYINFO.name} extends IdTimestamp {
     }
     
 <#list ENTITYINFO.field![] as field>
-<#if field.type != "rootref" >
 <#if !(field.hidden??) >
 
     /**
@@ -164,7 +194,7 @@ public class ${ENTITYINFO.name} extends IdTimestamp {
      *
      * @return the ${field.name}
      */
-    public final ${field.jsontype} get${field.name?cap_first}() {
+    public final ${field.javatype} get${field.name?cap_first}() {
         return ${field.name};
     }
     
@@ -173,11 +203,10 @@ public class ${ENTITYINFO.name} extends IdTimestamp {
      *
      * @param ${field.name} the ${field.name}
      */
-    public final void set${field.name?cap_first}(${field.jsontype} ${field.name}) {
+    public final void set${field.name?cap_first}(${field.javatype} ${field.name}) {
         this.${field.name} = ${field.name};
         fire("${field.name}", null, ${field.name});
     }
-</#if>
 </#if>
 </#list>
 
@@ -187,10 +216,8 @@ public class ${ENTITYINFO.name} extends IdTimestamp {
         return MessageFormat.format("${df.format}", 
 <#list df.display as dp>
 <#list ENTITYINFO.field![] as fd>
-<#if fd.name == dp.field?lower_case >
-<#if fd.type="String" ||  fd.type="enum" || fd.type="password" >
+<#if fd.name == dp.field >
             get${fd.name?cap_first}()<#if dp_has_next>, </#if>
-</#if>
 </#if>
 </#list>
 </#list>
@@ -198,4 +225,16 @@ public class ${ENTITYINFO.name} extends IdTimestamp {
 </#list>
     }
 
+    @Override
+    public JsonObject toJsonObject() {
+        JsonObjectBuilder job = Json.createObjectBuilder();
+        addIdTimestamp(job);
+        return job
+<#list ENTITYINFO.field![] as fd>
+<#if ! (fd.hidden??) >
+                .add("${fd.name}",${fd.name})
+</#if>
+</#list>
+                .build();
+    }
 }

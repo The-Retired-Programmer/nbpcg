@@ -75,8 +75,6 @@
 <#assign PSTORE = persistencestore[usepersistencestore] >
 package ${package};
 
-import java.util.List;
-import javax.ws.rs.core.GenericType;
 import uk.theretiredprogrammer.nbpcglibrary.htmlrest.HTMLRest;
 
 /**
@@ -91,8 +89,8 @@ public class ${ENTITYINFO.name}Rest extends HTMLRest<${ENTITYINFO.name}> {
     
     public ${ENTITYINFO.name}Rest(String jwtoken) {
         super("${PSTORE.location}/${ENTITYINFO.name?lower_case}s",
-            new GenericType<List<${ENTITYINFO.name}>>(){},
-            ${ENTITYINFO.name}.class, jwtoken);
+            (json) -> new ${ENTITYINFO.name}(json),
+             jwtoken);
             open();
     }
 }

@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE nbpcg-entity-info PUBLIC "-//uk/theretiredprogrammer/nbpcgentityinfo/DTD NBPCGENTITYINFO SCHEMA 1.0//EN" "nbres:/uk/theretiredprogrammer/nbpcg/nbpcgentityinfo.dtd">
+<nbpcg-entity-info name="Sail Tracker">
+    <entityinfo name="Location" icon="map" orderable="no" nodeorder="1" parentname="LocationRoot">
+        <field name="locationname" min="1" max="100" fieldclass="TextField" type="String" label="Locationname" javatype="String" jsontype="getString(&quot;locationname&quot;)" initialisation=" = &quot;&quot;"/>
+        <field name="id" hidden="yes" type="int" fieldclass="IntegerField" label="Id" javatype="int" initialisation=" = 0"/>
+        <field name="createdby" hidden="yes" type="String" min="4" max="4" fieldclass="TextField" label="Created by" javatype="String" initialisation=" = &quot;&quot;"/>
+        <field name="createdon" final="yes" hidden="yes" type="datetime" fieldclass="DatetimeField" label="Created on" javatype="Timestamp" initialisation=" = new Timestamp()"/>
+        <field name="updatedby" hidden="yes" type="String" min="4" max="4" fieldclass="TextField" label="Updated by" javatype="String" initialisation=" = &quot;&quot;"/>
+        <field name="updatedon" final="yes" hidden="yes" type="datetime" fieldclass="DatetimeField" label="Updated on" javatype="Timestamp" initialisation=" = new Timestamp()"/>
+        <child name="race" hasiconview="no" references="Race" orderable="no" sort="no"/>
+        <displaynameformat format="{0}">
+            <display field="locationname"/>
+        </displaynameformat>
+        <tostring format="{0}">
+            <display field="locationname"/>
+        </tostring>
+    </entityinfo>
+    <entityinfo name="Race" icon="medal_gold_1" orderable="no" parentname="Location" nodeorder="1">
+        <field name="racename" min="1" max="100" fieldclass="TextField" type="String" label="Racename" javatype="String" jsontype="getString(&quot;racename&quot;)" initialisation=" = &quot;&quot;"/>
+        <field name="date" min="1" max="100" fieldclass="TextField" type="String" label="Date" javatype="String" jsontype="getString(&quot;date&quot;)" initialisation=" = &quot;&quot;"/>
+        <field name="location" references="Location" fieldclass="EntityChoiceField" type="ref" label="Location" javatype="int" jsontype="getInt(&quot;Race&quot;)" initialisation=""/>
+        <field name="id" hidden="yes" type="int" fieldclass="IntegerField" label="Id" javatype="int" initialisation=" = 0"/>
+        <field name="createdby" hidden="yes" type="String" min="4" max="4" fieldclass="TextField" label="Created by" javatype="String" initialisation=" = &quot;&quot;"/>
+        <field name="createdon" final="yes" hidden="yes" type="datetime" fieldclass="DatetimeField" label="Created on" javatype="Timestamp" initialisation=" = new Timestamp()"/>
+        <field name="updatedby" hidden="yes" type="String" min="4" max="4" fieldclass="TextField" label="Updated by" javatype="String" initialisation=" = &quot;&quot;"/>
+        <field name="updatedon" final="yes" hidden="yes" type="datetime" fieldclass="DatetimeField" label="Updated on" javatype="Timestamp" initialisation=" = new Timestamp()"/>
+        <child name="boat" hasiconview="no" references="Boat" orderable="no" sort="no"/>
+        <displaynameformat format="{0}">
+            <display field="racename"/>
+        </displaynameformat>
+        <tostring format="{0}">
+            <display field="racename"/>
+        </tostring>
+        <action name="ViewRaceTracks" label="View Tracks"/>
+        <action name="ViewRaceTracksRealTime" label="View Tracks in Real Time"/>
+    </entityinfo>
+    <entityinfo name="Boat" icon="shape_flip_horizontal" orderable="no" parentname="Race" nodeorder="1">
+        <field name="boatname" min="1" max="100" fieldclass="TextField" type="String" label="Boatname" javatype="String" jsontype="getString(&quot;boatname&quot;)" initialisation=" = &quot;&quot;"/>
+        <field name="colour" min="1" max="100" fieldclass="TextField" type="String" label="Colour" javatype="String" jsontype="getString(&quot;colour&quot;)" initialisation=" = &quot;&quot;"/>
+        <field name="race" references="Race" fieldclass="EntityChoiceField" type="ref" label="Race" javatype="int" jsontype="getInt(&quot;Boat&quot;)" initialisation=""/>
+        <field name="id" hidden="yes" type="int" fieldclass="IntegerField" label="Id" javatype="int" initialisation=" = 0"/>
+        <field name="createdby" hidden="yes" type="String" min="4" max="4" fieldclass="TextField" label="Created by" javatype="String" initialisation=" = &quot;&quot;"/>
+        <field name="createdon" final="yes" hidden="yes" type="datetime" fieldclass="DatetimeField" label="Created on" javatype="Timestamp" initialisation=" = new Timestamp()"/>
+        <field name="updatedby" hidden="yes" type="String" min="4" max="4" fieldclass="TextField" label="Updated by" javatype="String" initialisation=" = &quot;&quot;"/>
+        <field name="updatedon" final="yes" hidden="yes" type="datetime" fieldclass="DatetimeField" label="Updated on" javatype="Timestamp" initialisation=" = new Timestamp()"/>
+        <child name="dataSegment" hasiconview="no" references="DataSegment" orderable="no" sort="no"/>
+        <displaynameformat format="{0}">
+            <display field="boatname"/>
+        </displaynameformat>
+        <tostring format="{0}">
+            <display field="boatname"/>
+        </tostring>
+        <action name="ViewBoatTracks" label="View Tracks"/>
+        <action name="ViewBoatTracksRealTime" label="View Tracks in Real Time"/>
+    </entityinfo>
+    <entityinfo name="DataSegment" icon="arrow_out" orderable="no" parentname="Boat" nodeorder="1">
+        <field name="segmentname" min="1" max="100" fieldclass="TextField" type="String" label="Segmentname" javatype="String" jsontype="getString(&quot;segmentname&quot;)" initialisation=" = &quot;&quot;"/>
+        <field name="boat" references="Boat" fieldclass="EntityChoiceField" type="ref" label="Boat" javatype="int" jsontype="getInt(&quot;DataSegment&quot;)" initialisation=""/>
+        <field name="id" hidden="yes" type="int" fieldclass="IntegerField" label="Id" javatype="int" initialisation=" = 0"/>
+        <field name="createdby" hidden="yes" type="String" min="4" max="4" fieldclass="TextField" label="Created by" javatype="String" initialisation=" = &quot;&quot;"/>
+        <field name="createdon" final="yes" hidden="yes" type="datetime" fieldclass="DatetimeField" label="Created on" javatype="Timestamp" initialisation=" = new Timestamp()"/>
+        <field name="updatedby" hidden="yes" type="String" min="4" max="4" fieldclass="TextField" label="Updated by" javatype="String" initialisation=" = &quot;&quot;"/>
+        <field name="updatedon" final="yes" hidden="yes" type="datetime" fieldclass="DatetimeField" label="Updated on" javatype="Timestamp" initialisation=" = new Timestamp()"/>
+        <child name="dataPoint" hasiconview="no" references="DataPoint" orderable="no" sort="no"/>
+        <displaynameformat format="{0}">
+            <display field="segmentname"/>
+        </displaynameformat>
+        <tostring format="{0}">
+            <display field="segmentname"/>
+        </tostring>
+        <action name="ViewTrack" label="View Track"/>
+        <action name="ViewTrackRealTime" label="View Track in Real Time"/>
+    </entityinfo>
+    <entityinfo name="DataPoint" icon="arrow_out" orderable="no" parentname="DataSegment" nodeorder="1">
+        <field name="position_x" tablecolumnname="E position" fieldclass="DecimalField" type="decimal" label="Position_x" javatype="BigDecimal" jsontype="getJsonNumber(&quot;position_x&quot;).bigDecimalValue()" initialisation=" = BigDecimal.ZERO"/>
+        <field name="position_y" tablecolumnname="N position" fieldclass="DecimalField" type="decimal" label="Position_y" javatype="BigDecimal" jsontype="getJsonNumber(&quot;position_y&quot;).bigDecimalValue()" initialisation=" = BigDecimal.ZERO"/>
+        <field name="time" tablecolumnname="Time" fieldclass="DecimalField" type="decimal" label="Time" javatype="BigDecimal" jsontype="getJsonNumber(&quot;time&quot;).bigDecimalValue()" initialisation=" = BigDecimal.ZERO"/>
+        <field name="speed" tablecolumnname="Speed" fieldclass="DecimalField" type="decimal" label="Speed" javatype="BigDecimal" jsontype="getJsonNumber(&quot;speed&quot;).bigDecimalValue()" initialisation=" = BigDecimal.ZERO"/>
+        <field name="direction" tablecolumnname="Direction" fieldclass="DecimalField" type="decimal" label="Direction" javatype="BigDecimal" jsontype="getJsonNumber(&quot;direction&quot;).bigDecimalValue()" initialisation=" = BigDecimal.ZERO"/>
+        <field name="dataSegment" references="DataSegment" fieldclass="EntityChoiceField" type="ref" label="DataSegment" javatype="int" jsontype="getInt(&quot;DataPoint&quot;)" initialisation=""/>
+        <field name="id" hidden="yes" type="int" fieldclass="IntegerField" label="Id" javatype="int" initialisation=" = 0"/>
+        <field name="createdby" hidden="yes" type="String" min="4" max="4" fieldclass="TextField" label="Created by" javatype="String" initialisation=" = &quot;&quot;"/>
+        <field name="createdon" final="yes" hidden="yes" type="datetime" fieldclass="DatetimeField" label="Created on" javatype="Timestamp" initialisation=" = new Timestamp()"/>
+        <field name="updatedby" hidden="yes" type="String" min="4" max="4" fieldclass="TextField" label="Updated by" javatype="String" initialisation=" = &quot;&quot;"/>
+        <field name="updatedon" final="yes" hidden="yes" type="datetime" fieldclass="DatetimeField" label="Updated on" javatype="Timestamp" initialisation=" = new Timestamp()"/>
+        <displaynameformat format="{0}">
+            <display field="position_x"/>
+        </displaynameformat>
+        <tostring format="{0}: {1} N {2} E">
+            <display field="time"/>
+            <display field="position_x"/>
+            <display field="position_y"/>
+        </tostring>
+    </entityinfo>
+    <entityinfo name="LocationRoot" isroot="" label="Locations" viewers="OPERATIONAL" icon="information">
+        <child name="location" references="Location" hasiconview="no" orderable="no" sort="no"/>
+    </entityinfo>
+    <persistencestore name="gpstrack" type="mysql" location="NONE" authlocation="NONE">
+        <persistenceentity name="Location">
+            <persistencefield name="locationname" min="1" max="100" createsql="VARCHAR(100)  NOT NULL"/>
+            <persistencefield name="id" sys="yes" jsontype="getInt(&quot;id&quot;)" createsql="MEDIUMINT UNSIGNED AUTO_INCREMENT PRIMARY KEY"/>
+            <persistencefield name="createdby" sys="yes" min="4" max="4" createsql="CHAR(4) NOT NULL"/>
+            <persistencefield name="createdon" final="yes" sys="yes" min="14" max="14" createsql="CHAR(14) NOT NULL"/>
+            <persistencefield name="updatedby" sys="yes" min="4" max="4" createsql="CHAR(4) NOT NULL"/>
+            <persistencefield name="updatedon" final="yes" sys="yes" min="14" max="14" createsql="CHAR(14) NOT NULL"/>
+        </persistenceentity>
+        <persistenceentity name="Race">
+            <persistencefield name="racename" min="1" max="100" createsql="VARCHAR(100)  NOT NULL"/>
+            <persistencefield name="date" min="1" max="100" createsql="VARCHAR(100)  NOT NULL"/>
+            <persistencefield name="location" createsql="MEDIUMINT UNSIGNED NOT NULL ,FOREIGN KEY (location) REFERENCES Location(id)"/>
+            <persistencefield name="id" sys="yes" jsontype="getInt(&quot;id&quot;)" createsql="MEDIUMINT UNSIGNED AUTO_INCREMENT PRIMARY KEY"/>
+            <persistencefield name="createdby" sys="yes" min="4" max="4" createsql="CHAR(4) NOT NULL"/>
+            <persistencefield name="createdon" final="yes" sys="yes" min="14" max="14" createsql="CHAR(14) NOT NULL"/>
+            <persistencefield name="updatedby" sys="yes" min="4" max="4" createsql="CHAR(4) NOT NULL"/>
+            <persistencefield name="updatedon" final="yes" sys="yes" min="14" max="14" createsql="CHAR(14) NOT NULL"/>
+        </persistenceentity>
+        <persistenceentity name="Boat">
+            <persistencefield name="boatname" min="1" max="100" createsql="VARCHAR(100)  NOT NULL"/>
+            <persistencefield name="colour" min="1" max="100" createsql="VARCHAR(100)  NOT NULL"/>
+            <persistencefield name="race" createsql="MEDIUMINT UNSIGNED NOT NULL ,FOREIGN KEY (race) REFERENCES Race(id)"/>
+            <persistencefield name="id" sys="yes" jsontype="getInt(&quot;id&quot;)" createsql="MEDIUMINT UNSIGNED AUTO_INCREMENT PRIMARY KEY"/>
+            <persistencefield name="createdby" sys="yes" min="4" max="4" createsql="CHAR(4) NOT NULL"/>
+            <persistencefield name="createdon" final="yes" sys="yes" min="14" max="14" createsql="CHAR(14) NOT NULL"/>
+            <persistencefield name="updatedby" sys="yes" min="4" max="4" createsql="CHAR(4) NOT NULL"/>
+            <persistencefield name="updatedon" final="yes" sys="yes" min="14" max="14" createsql="CHAR(14) NOT NULL"/>
+        </persistenceentity>
+        <persistenceentity name="DataSegment">
+            <persistencefield name="segmentname" min="1" max="100" createsql="VARCHAR(100)  NOT NULL"/>
+            <persistencefield name="boat" createsql="MEDIUMINT UNSIGNED NOT NULL ,FOREIGN KEY (boat) REFERENCES Boat(id)"/>
+            <persistencefield name="id" sys="yes" jsontype="getInt(&quot;id&quot;)" createsql="MEDIUMINT UNSIGNED AUTO_INCREMENT PRIMARY KEY"/>
+            <persistencefield name="createdby" sys="yes" min="4" max="4" createsql="CHAR(4) NOT NULL"/>
+            <persistencefield name="createdon" final="yes" sys="yes" min="14" max="14" createsql="CHAR(14) NOT NULL"/>
+            <persistencefield name="updatedby" sys="yes" min="4" max="4" createsql="CHAR(4) NOT NULL"/>
+            <persistencefield name="updatedon" final="yes" sys="yes" min="14" max="14" createsql="CHAR(14) NOT NULL"/>
+        </persistenceentity>
+        <persistenceentity name="DataPoint">
+            <persistencefield name="position_x" createsql="DECIMAL(15,2)  NOT NULL"/>
+            <persistencefield name="position_y" createsql="DECIMAL(15,2)  NOT NULL"/>
+            <persistencefield name="time" createsql="DECIMAL(15,2)  NOT NULL"/>
+            <persistencefield name="speed" createsql="DECIMAL(15,2)  NOT NULL"/>
+            <persistencefield name="direction" createsql="DECIMAL(15,2)  NOT NULL"/>
+            <persistencefield name="dataSegment" createsql="MEDIUMINT UNSIGNED NOT NULL ,FOREIGN KEY (dataSegment) REFERENCES DataSegment(id)"/>
+            <persistencefield name="id" sys="yes" jsontype="getInt(&quot;id&quot;)" createsql="MEDIUMINT UNSIGNED AUTO_INCREMENT PRIMARY KEY"/>
+            <persistencefield name="createdby" sys="yes" min="4" max="4" createsql="CHAR(4) NOT NULL"/>
+            <persistencefield name="createdon" final="yes" sys="yes" min="14" max="14" createsql="CHAR(14) NOT NULL"/>
+            <persistencefield name="updatedby" sys="yes" min="4" max="4" createsql="CHAR(4) NOT NULL"/>
+            <persistencefield name="updatedon" final="yes" sys="yes" min="14" max="14" createsql="CHAR(14) NOT NULL"/>
+        </persistenceentity>
+    </persistencestore>
+</nbpcg-entity-info>
