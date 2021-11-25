@@ -5,4 +5,4 @@ NBPCG
 
 Netbeans Platform Code Generator
 
-Project documentation can be found [here](http://www.theretiredprogrammer.uk/nbpcg/)
+Project documentation can be found [here](https://www.theretiredprogrammer.uk/topics/nbpcg/topic.html)
